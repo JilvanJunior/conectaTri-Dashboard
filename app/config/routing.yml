@@ -1,3 +1,13 @@
 app:
-    resource: '@AppBundle/Controller/'
+
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+    resource: '@AppBundle/Controller/Retailer'
+    type: annotation
+
+    resource: '@AppBundle/Controller/Admin'
+    type: annotation
+
+    resource: '@AppBundle/Controller/Supplier'
     type: annotation
