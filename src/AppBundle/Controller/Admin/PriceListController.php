@@ -18,4 +18,14 @@ class PriceListController extends Controller
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         ]);
     }
+    /**
+     * @Route("/administrador/cotacoes/criadas", name="admin_pricelist_line_createdpricelistsXtime")
+     */
+    public function cahrt1Action(Request $request)
+    {
+        // replace this example code with whatever you need
+        return $this->render('Admin/pricelist/chart_line_createdpricelistsXtime.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+        ]);
+    }
 }

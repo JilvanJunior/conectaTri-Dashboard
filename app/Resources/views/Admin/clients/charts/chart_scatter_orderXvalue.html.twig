@@ -24,7 +24,7 @@
                             <!-- BEGIN PAGE TITLE -->
                             <div class="page-title">
                                 <h1>Clientes
-                                    <small>tabela de Clientes cadastrados</small>
+                                    <small>tabela de clientes com mais pedidos por valor</small>
                                 </h1>
                             </div>
                             <!-- END PAGE TITLE -->
@@ -57,7 +57,7 @@
                                             <div class="portlet-title">
                                                 <div class="caption font-dark">
                                                     <i class="fa fa-line-chart font-dark"></i>
-                                                    <span class="caption-subject bold uppercase">Clientes com mais pedidos por cotaçao</span>
+                                                    <span class="caption-subject bold uppercase">Clientes com mais pedidos por valor</span>
                                                 </div>
                                                 <div class="tools"> </div>
                                             </div>
@@ -73,7 +73,7 @@
                                             <div class="portlet-title">
                                                 <div class="caption font-dark">
                                                     <i class="fa fa-group font-dark"></i>
-                                                    <span class="caption-subject bold uppercase">Clientes</span>
+                                                    <span class="caption-subject bold uppercase">Clientes Listados</span>
                                                 </div>
                                                 <div class="tools"> </div>
                                             </div>
@@ -85,7 +85,7 @@
                                                         <th>Nome do Cliente</th>
                                                         <th>Listas</th>
                                                         <th>Cotações Realizadas</th>
-                                                        <th>Pedidos Enviados</th>
+                                                        <th>Pedidos (Mil)</th>
                                                         <th></th>
 
                                                     </tr>
@@ -96,7 +96,7 @@
                                                         <th>Nome do Cliente</th>
                                                         <th>Listas</th>
                                                         <th>Cotações Realizadas</th>
-                                                        <th>Pedidos Enviados</th>
+                                                        <th>Pedidos (Mil)</th>
                                                         <th></th>
 
                                                     </tr>
@@ -107,7 +107,7 @@
                                                         <td>WeMind</td>
                                                         <td>40</td>
                                                         <td>200</td>
-                                                        <td>178</td>
+                                                        <td>R$ 178</td>
                                                         <td>
                                                             <a href="javascript:;" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                 <i class="fa fa-eye"></i> Ver
@@ -168,8 +168,9 @@
             },
             yAxis: {
                 title: {
-                    text: 'Pedidos'
+                    text: 'Pedidos (Mil)'
                 }
+
             },
             legend: false,
             plotOptions: {
@@ -192,7 +193,7 @@
                     },
                     tooltip: {
                         headerFormat: '<b>{series.name}</b><br>',
-                        pointFormat: '{point.y} Cotações, {point.x} Pedidos'
+                        pointFormat: 'Cotações:{point.y} <br> Pedidos: R$ {point.x} mil'
                     }
                 }
             },

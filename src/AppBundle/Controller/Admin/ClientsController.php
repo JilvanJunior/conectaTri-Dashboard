@@ -40,4 +40,27 @@ class ClientsController extends Controller
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         ]);
     }
+
+
+    /**
+     * @Route("/administrador/clientes/cadastrados", name="admin_clients_line_createdaccountsXtime")
+     */
+    public function chart3Action(Request $request)
+    {
+        // replace this example code with whatever you need
+        return $this->render('Admin/clients/charts/chart_line_createdaccountsXtime.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+        ]);
+    }
+
+    /**
+     * @Route("/administrador/clientes/pedidos/cadastrados", name="admin_clients_line_createdpricelistsXtime")
+     */
+    public function chart4Action(Request $request)
+    {
+        // replace this example code with whatever you need
+        return $this->render('Admin/clients/charts/chart_line_createdpricelistsXtime.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+        ]);
+    }
 }

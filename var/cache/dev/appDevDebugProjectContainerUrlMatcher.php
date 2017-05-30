@@ -107,14 +107,24 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         if (0 === strpos($pathinfo, '/administrador')) {
             if (0 === strpos($pathinfo, '/administrador/clientes')) {
-                // admin_clients
-                if ($pathinfo === '/administrador/clientes') {
-                    return array (  '_controller' => 'AppBundle\\Controller\\Admin\\ClientsController::indexAction',  '_route' => 'admin_clients',);
-                }
-
                 // admin_clients_scatter_pricelistXorder
                 if ($pathinfo === '/administrador/clientes/cotacoesXpedidos') {
-                    return array (  '_controller' => 'AppBundle\\Controller\\Admin\\ClientsController::chartsAction',  '_route' => 'admin_clients_scatter_pricelistXorder',);
+                    return array (  '_controller' => 'AppBundle\\Controller\\Admin\\ClientsController::chart1Action',  '_route' => 'admin_clients_scatter_pricelistXorder',);
+                }
+
+                // admin_clients_scatter_orderXvalue
+                if ($pathinfo === '/administrador/clientes/pedidosXvalor') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\Admin\\ClientsController::chart2Action',  '_route' => 'admin_clients_scatter_orderXvalue',);
+                }
+
+                // admin_clients_line_createdaccountsXtime
+                if ($pathinfo === '/administrador/clientes/cadastrados') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\Admin\\ClientsController::chart3Action',  '_route' => 'admin_clients_line_createdaccountsXtime',);
+                }
+
+                // admin_clients_line_createdpricelistsXtime
+                if ($pathinfo === '/administrador/clientes/pedidos/cadastrados') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\Admin\\ClientsController::chart4Action',  '_route' => 'admin_clients_line_createdpricelistsXtime',);
                 }
 
             }
@@ -133,9 +143,17 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                 return array (  '_controller' => 'AppBundle\\Controller\\Admin\\ListsController::indexAction',  '_route' => 'admin_listas',);
             }
 
-            // admin_cotacoes
-            if ($pathinfo === '/administrador/cotacoes') {
-                return array (  '_controller' => 'AppBundle\\Controller\\Admin\\PriceListController::indexAction',  '_route' => 'admin_cotacoes',);
+            if (0 === strpos($pathinfo, '/administrador/cotacoes')) {
+                // admin_cotacoes
+                if ($pathinfo === '/administrador/cotacoes') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\Admin\\PriceListController::indexAction',  '_route' => 'admin_cotacoes',);
+                }
+
+                // admin_pricelist_line_createdpricelistsXtime
+                if ($pathinfo === '/administrador/cotacoes/criadas') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\Admin\\PriceListController::cahrt1Action',  '_route' => 'admin_pricelist_line_createdpricelistsXtime',);
+                }
+
             }
 
             // admin_produtos
@@ -164,6 +182,15 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
             }
 
+        }
+
+        // admin_clients
+        if (rtrim($pathinfo, '/') === '') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'admin_clients');
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\Auth\\AuthController::indexAction',  '_route' => 'admin_clients',);
         }
 
         if (0 === strpos($pathinfo, '/varejista')) {
