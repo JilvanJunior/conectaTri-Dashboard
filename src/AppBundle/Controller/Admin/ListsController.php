@@ -19,4 +19,15 @@ class ListsController extends Controller
         ]);
     }
 
+    /**
+     * @Route("/administrador/listas/criadas", name="admin_lists_created")
+     */
+    public function chart1Action(Request $request)
+    {
+        // replace this example code with whatever you need
+        return $this->render('Admin/lists/charts/chart_line_createdlists.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+        ]);
+    }
+
 }

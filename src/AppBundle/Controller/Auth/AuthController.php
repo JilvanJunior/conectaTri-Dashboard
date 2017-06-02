@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 class AuthController extends Controller
 {
     /**
-     * @Route("/", name="admin_clients")
+     * @Route("/", name="login")
      */
     public function indexAction(Request $request)
     {
