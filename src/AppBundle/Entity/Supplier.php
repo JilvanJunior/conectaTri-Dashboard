@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,6 +19,16 @@ class Supplier
     private $id;
 
     /**
+     * @ORM\OneToMany(targetEntity="Representative", mappedBy="supplier")
+     */
+    private $representatives;
+
+    /**
+     * @ORM\OneToMany(targetEntity="QuoteSupplier", mappedBy="supplier")
+     */
+    private $quoteSuppliers;
+
+    /**
      * @ORM\Column(type="string", length=50)
      */
     private $cnpj;
@@ -26,31 +37,6 @@ class Supplier
      * @ORM\Column(type="string", length=100)
      */
     private $name;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $email;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $contactName;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $contactEmail;
-
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $contactPhone;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $info;
 
     /**
      * @var \DateTime
@@ -71,6 +57,15 @@ class Supplier
      */
     private $deleted = false;
 
+
+    /**
+     * Supplier constructor.
+     */
+    public function __construct()
+    {
+        $this->representatives = new ArrayCollection();
+        $this->quoteSuppliers = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -128,126 +123,6 @@ class Supplier
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return Supplier
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set contactName
-     *
-     * @param string $contactName
-     *
-     * @return Supplier
-     */
-    public function setContactName($contactName)
-    {
-        $this->contactName = $contactName;
-
-        return $this;
-    }
-
-    /**
-     * Get contactName
-     *
-     * @return string
-     */
-    public function getContactName()
-    {
-        return $this->contactName;
-    }
-
-    /**
-     * Set contactEmail
-     *
-     * @param string $contactEmail
-     *
-     * @return Supplier
-     */
-    public function setContactEmail($contactEmail)
-    {
-        $this->contactEmail = $contactEmail;
-
-        return $this;
-    }
-
-    /**
-     * Get contactEmail
-     *
-     * @return string
-     */
-    public function getContactEmail()
-    {
-        return $this->contactEmail;
-    }
-
-    /**
-     * Set contactPhone
-     *
-     * @param string $contactPhone
-     *
-     * @return Supplier
-     */
-    public function setContactPhone($contactPhone)
-    {
-        $this->contactPhone = $contactPhone;
-
-        return $this;
-    }
-
-    /**
-     * Get contactPhone
-     *
-     * @return string
-     */
-    public function getContactPhone()
-    {
-        return $this->contactPhone;
-    }
-
-    /**
-     * Set info
-     *
-     * @param string $info
-     *
-     * @return Supplier
-     */
-    public function setInfo($info)
-    {
-        $this->info = $info;
-
-        return $this;
-    }
-
-    /**
-     * Get info
-     *
-     * @return string
-     */
-    public function getInfo()
-    {
-        return $this->info;
     }
 
     /**
@@ -320,5 +195,73 @@ class Supplier
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * Add representative
+     *
+     * @param \AppBundle\Entity\Representative $representative
+     *
+     * @return Supplier
+     */
+    public function addRepresentative(\AppBundle\Entity\Representative $representative)
+    {
+        $this->representatives[] = $representative;
+
+        return $this;
+    }
+
+    /**
+     * Remove representative
+     *
+     * @param \AppBundle\Entity\Representative $representative
+     */
+    public function removeRepresentative(\AppBundle\Entity\Representative $representative)
+    {
+        $this->representatives->removeElement($representative);
+    }
+
+    /**
+     * Get representatives
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRepresentatives()
+    {
+        return $this->representatives;
+    }
+
+    /**
+     * Add quoteSupplier
+     *
+     * @param \AppBundle\Entity\QuoteSupplier $quoteSupplier
+     *
+     * @return Supplier
+     */
+    public function addQuoteSupplier(\AppBundle\Entity\QuoteSupplier $quoteSupplier)
+    {
+        $this->quoteSuppliers[] = $quoteSupplier;
+
+        return $this;
+    }
+
+    /**
+     * Remove quoteSupplier
+     *
+     * @param \AppBundle\Entity\QuoteSupplier $quoteSupplier
+     */
+    public function removeQuoteSupplier(\AppBundle\Entity\QuoteSupplier $quoteSupplier)
+    {
+        $this->quoteSuppliers->removeElement($quoteSupplier);
+    }
+
+    /**
+     * Get quoteSuppliers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuoteSuppliers()
+    {
+        return $this->quoteSuppliers;
     }
 }
