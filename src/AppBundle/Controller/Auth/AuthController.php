@@ -35,4 +35,7 @@ class AuthController extends Controller
         ));
     }
 
+    private function _isLoggedIn(){
+        return $this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY');
+    }
 }
