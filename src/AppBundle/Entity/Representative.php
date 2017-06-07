@@ -24,14 +24,15 @@ class Representative
     private $supplier;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\ManyToOne(targetEntity="Retailer", inversedBy="representatives")
+     * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
      */
-    private $firstName;
+    private $retailer;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $lastName;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -198,51 +199,27 @@ class Representative
     }
 
     /**
-     * Set firstName
+     * Set name
      *
-     * @param string $firstName
+     * @param string $name
      *
      * @return Representative
      */
-    public function setFirstName($firstName)
+    public function setName($name)
     {
-        $this->firstName = $firstName;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get firstName
+     * Get name
      *
      * @return string
      */
-    public function getFirstName()
+    public function getName()
     {
-        return $this->firstName;
-    }
-
-    /**
-     * Set lastName
-     *
-     * @param string $lastName
-     *
-     * @return Representative
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    /**
-     * Get lastName
-     *
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
+        return $this->name;
     }
 
     /**
@@ -272,11 +249,11 @@ class Representative
     /**
      * Set supplier
      *
-     * @param \AppBundle\Entity\Supplier $supplier
+     * @param Supplier $supplier
      *
      * @return Representative
      */
-    public function setSupplier(\AppBundle\Entity\Supplier $supplier = null)
+    public function setSupplier(Supplier $supplier = null)
     {
         $this->supplier = $supplier;
 
@@ -286,10 +263,34 @@ class Representative
     /**
      * Get supplier
      *
-     * @return \AppBundle\Entity\Supplier
+     * @return Supplier
      */
     public function getSupplier()
     {
         return $this->supplier;
+    }
+
+    /**
+     * Set retailer
+     *
+     * @param \AppBundle\Entity\Retailer $retailer
+     *
+     * @return Representative
+     */
+    public function setRetailer(\AppBundle\Entity\Retailer $retailer = null)
+    {
+        $this->retailer = $retailer;
+
+        return $this;
+    }
+
+    /**
+     * Get retailer
+     *
+     * @return \AppBundle\Entity\Retailer
+     */
+    public function getRetailer()
+    {
+        return $this->retailer;
     }
 }

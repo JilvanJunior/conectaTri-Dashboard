@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -17,6 +18,16 @@ class Retailer implements UserInterface, \Serializable
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Representative", mappedBy="retailer")
+     */
+    private $representatives;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Supplier", mappedBy="retailer")
+     */
+    private $suppliers;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -101,6 +112,15 @@ class Retailer implements UserInterface, \Serializable
      * @ORM\Column(type="boolean")
      */
     private $deleted = false;
+
+    /**
+     * Retailer constructor.
+     */
+    public function __construct()
+    {
+        $this->suppliers = new ArrayCollection();
+        $this->representatives = new ArrayCollection();
+    }
 
     public function getRoles()
     {
@@ -498,5 +518,73 @@ class Retailer implements UserInterface, \Serializable
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * Add representative
+     *
+     * @param \AppBundle\Entity\Representative $representative
+     *
+     * @return Retailer
+     */
+    public function addRepresentative(\AppBundle\Entity\Representative $representative)
+    {
+        $this->representatives[] = $representative;
+
+        return $this;
+    }
+
+    /**
+     * Remove representative
+     *
+     * @param \AppBundle\Entity\Representative $representative
+     */
+    public function removeRepresentative(\AppBundle\Entity\Representative $representative)
+    {
+        $this->representatives->removeElement($representative);
+    }
+
+    /**
+     * Get representatives
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRepresentatives()
+    {
+        return $this->representatives;
+    }
+
+    /**
+     * Add supplier
+     *
+     * @param \AppBundle\Entity\Supplier $supplier
+     *
+     * @return Retailer
+     */
+    public function addSupplier(\AppBundle\Entity\Supplier $supplier)
+    {
+        $this->suppliers[] = $supplier;
+
+        return $this;
+    }
+
+    /**
+     * Remove supplier
+     *
+     * @param \AppBundle\Entity\Supplier $supplier
+     */
+    public function removeSupplier(\AppBundle\Entity\Supplier $supplier)
+    {
+        $this->suppliers->removeElement($supplier);
+    }
+
+    /**
+     * Get suppliers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSuppliers()
+    {
+        return $this->suppliers;
     }
 }

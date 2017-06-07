@@ -24,6 +24,12 @@ class Supplier
     private $representatives;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Retailer", inversedBy="suppliers")
+     * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
+     */
+    private $retailer;
+
+    /**
      * @ORM\OneToMany(targetEntity="QuoteSupplier", mappedBy="supplier")
      */
     private $quoteSuppliers;
@@ -263,5 +269,29 @@ class Supplier
     public function getQuoteSuppliers()
     {
         return $this->quoteSuppliers;
+    }
+
+    /**
+     * Set retailer
+     *
+     * @param \AppBundle\Entity\Retailer $retailer
+     *
+     * @return Supplier
+     */
+    public function setRetailer(\AppBundle\Entity\Retailer $retailer = null)
+    {
+        $this->retailer = $retailer;
+
+        return $this;
+    }
+
+    /**
+     * Get retailer
+     *
+     * @return \AppBundle\Entity\Retailer
+     */
+    public function getRetailer()
+    {
+        return $this->retailer;
     }
 }
