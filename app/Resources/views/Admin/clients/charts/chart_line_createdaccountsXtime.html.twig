@@ -104,20 +104,22 @@
                                                 </tfoot>
                                                 <tbody>
                                                 <tr>
-                                                    <td>43.214.055/0001-07</td>
-                                                    <td>WeMind</td>
-                                                    <td>40</td>
-                                                    <td>200</td>
-                                                    <td>178</td>
-                                                    <td>20/05/17 16h30</td>
-                                                    <td>
-                                                        <a href="javascript:;" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                            <i class="fa fa-eye"></i> Ver
-                                                        </a>
-                                                        <a href="javascript:;" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                            <i class="fa fa-line-chart"> Cotações</i>
-                                                        </a>
-                                                    </td>
+                                                    {% for client in clients %}
+                                                        <td>{{ client.cnpj }}</td>
+                                                        <td>{{ client.company_name }}</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>{{ client.createdAt|date('dd/mm/yyyy') }}</td>
+                                                        <td>
+                                                            <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                <i class="fa fa-eye"></i> Ver
+                                                            </a>
+                                                            <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                <i class="fa fa-line-chart"> Cotações</i>
+                                                            </a>
+                                                        </td>
+                                                    {% endfor %}
                                                 </tr>
                                                 </tbody>
                                             </table>
