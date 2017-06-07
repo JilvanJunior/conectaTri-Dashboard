@@ -23,10 +23,10 @@ class ApiController extends FOSRestController
     public function loginAction(Request $request) {
         $d = $this->getDoctrine();
         $user = json_decode($request->getContent());
-        if (!isset($user->email) || !isset($user->password)) {
+        if (!isset($user->cnpj) || !isset($user->password)) {
             return View::create(new ApiError("Invalid request"), Response::HTTP_BAD_REQUEST);
         }
-        $dbUser = $d->getRepository("AppBundle:Retailer")->findOneBy(["email" => $user->email]);
+        $dbUser = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $user->cnpj]);
         if (is_null($dbUser)) {
             return View::create(new ApiError("Invalid username"/* or password"*/), Response::HTTP_UNAUTHORIZED);
         }
