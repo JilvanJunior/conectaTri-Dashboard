@@ -11,3 +11,6 @@ app:
 
     resource: '@AppBundle/Controller/Supplier'
     type: annotation
+
+    resource: '@AppBundle/Controller/Api'
+    type: annotation
