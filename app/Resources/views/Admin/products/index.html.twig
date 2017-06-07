@@ -89,21 +89,22 @@
                                                     </tfoot>
                                                     <tbody>
                                                     <tr>
-                                                        <td> 01865438 </td>
-                                                        <td> Cereal Matinal Sucrilhos KELLOGG'S Caixa 730g </td>
-                                                        <td> KELLOGG'S </td>
-                                                        <td> UN </td>
-                                                        <td> 730g</td>
-                                                        <td> R$ 19,25</td>
-                                                        <td>Atacado Martins</td>
-                                                        <td>
-                                                            <a href="javascript:;" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                                <i class="fa fa-eye"></i> Ver
-                                                            </a>
-                                                            <a href="javascript:;" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                                <i class="fa fa-line-chart"> Cotações</i>
-                                                            </a>
-                                                        </td>
+                                                        {% for product in products %}
+                                                            <td>{{ product.id }}</td>
+                                                            <td>{{ product.name }}</td>
+                                                            <td>{{ product.brand }}</td>
+                                                            <td>{{ product.unity }}</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>
+                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                    <i class="fa fa-eye"></i> Ver
+                                                                </a>
+                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                    <i class="fa fa-line-chart"> Cotações</i>
+                                                                </a>
+                                                            </td>
+                                                        {% endfor %}
                                                     </tr>
                                                     </tbody>
                                                 </table>
