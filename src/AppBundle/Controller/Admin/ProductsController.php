@@ -10,36 +10,39 @@ class ProductsController extends Controller
 {
     /**
      * @Route("/administrador/produtos", name="admin_produtos")
+     * @param Request $request
+     * @return
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('Admin/products/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['deleted' => false]);
+
+        return $this->render('Admin/products/index.html.twig', ['products' => $products]);
     }
 
     /**
      * @Route("/administrador/produtos/criados", name="admin_chart_line_createdproductsXtime")
+     * @param Request $request
+     * @return
      */
     public function chart1Action(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('Admin/products/charts/chart_line_createdproductsXtime.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['deleted' => false]);
+
+        return $this->render('Admin/products/charts/chart_line_createdproductsXtime.html.twig', ['products' => $products]);
     }
 
 
     /**
      * @Route("/administrador/produtos/historico", name="admin_table_bestprices")
+     * @param Request $request
+     * @return
      */
     public function chart2Action(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('Admin/products/charts/chart_table_bestprices.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['deleted' => false]);
+
+        return $this->render('Admin/products/charts/chart_table_bestprices.html.twig', ['products' => $products]);
     }
 
 }

@@ -10,35 +10,38 @@ class SuppliersController extends Controller
 {
     /**
      * @Route("/administrador/fornecedores", name="admin_fornecedores")
+     * @param Request $request
+     * @return
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('Admin/suppliers/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+
+        return $this->render('Admin/suppliers/index.html.twig', ['suppliers' => $suppliers]);
     }
 
     /**
      * @Route("/administrador/fornecedores/cotacoesXpedidos", name="admin_suppliers_scatter_pricelistXorder")
+     * @param Request $request
+     * @return
      */
     public function chart1Action(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('Admin/suppliers/charts/chart_scatter_pricelistXorder.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+
+        return $this->render('Admin/suppliers/charts/chart_scatter_pricelistXorder.html.twig', ['suppliers' => $suppliers]);
     }
 
     /**
      * @Route("/administrador/fornecedores/contascriadasXtempo", name="admin_suppliers_line_createdaccountsXtime")
+     * @param Request $request
+     * @return
      */
     public function chart2Action(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('Admin/suppliers/charts/chart_line_createdaccountsXtime.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+
+        return $this->render('Admin/suppliers/charts/chart_line_createdaccountsXtime.html.twig', ['suppliers' => $suppliers]);
     }
 
 }
