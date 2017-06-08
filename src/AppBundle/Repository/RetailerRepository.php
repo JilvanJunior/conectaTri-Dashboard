@@ -16,7 +16,11 @@ class RetailerRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT COUNT(r.createdAt) AS clientes, r.createdAt FROM AppBundle:Retailer r GROUP BY r.createdAt ORDER BY r.createdAt ASC'
+                'SELECT COUNT(r.createdAt) AS clients, r.createdAt 
+                  FROM AppBundle:Retailer r
+                  WHERE r.deleted = 0
+                  GROUP BY r.createdAt 
+                  ORDER BY r.createdAt ASC'
             )
             ->getResult();
 

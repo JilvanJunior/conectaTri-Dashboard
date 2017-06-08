@@ -166,7 +166,7 @@
                 var count = [];
                 data = $.parseJSON(data);
                 $.each(data, function(index, value){
-                    var clients = parseInt(value['clientes']);
+                    var clients = parseInt(value['clients']);
                     var date = new Date(value['createdAt']['date']);
                     count.push([date.getTime(), clients]);
                 });

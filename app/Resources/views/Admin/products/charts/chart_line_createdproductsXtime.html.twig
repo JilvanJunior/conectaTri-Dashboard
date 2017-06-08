@@ -94,18 +94,19 @@
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
-                                                    <tr>
-                                                        <td>20/05/17</td>
-                                                        <td>1500</td>
-                                                        <td>
-                                                            <a href="javascript:;" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                                <i class="fa fa-eye"></i> Detalhes
-                                                            </a>
-                                                        </td>
-                                                    </tr>
+                                                    {% for product in products %}
+                                                        <tr>
+                                                            <td>{{ product.createdAt|date('d/m/Y') }}</td>
+                                                            <td>{{ product.quantity }}</td>
+                                                            <td>
+                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                    <i class="fa fa-eye"></i> Detalhes
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
-
                                             </div>
                                         </div>
                                     </div>
@@ -125,51 +126,57 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{{ asset('bundles/assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script>
-        Highcharts.chart('container', {
+        $(function(){
+            //fix json to parse
+            var json = '{{ products|json_encode() }}'.replace(/&quot;/g, "\"");
+            var products = $.parseJSON(json);
 
-            title: {
-                text: ''
-            },
+            var count = [];
+            $.each(products, function(index, value){
+                var quantity = parseInt(value['quantity']);
+                var date = new Date(value['createdAt']['date']);
+                count.push([date.getTime(), quantity]);
+            });
 
-            subtitle: {
-                text: ''
-            },
-            xAxis: {
-                type: 'datetime'
-            },
+            Highcharts.chart('container', {
 
-            yAxis: {
                 title: {
-                    text: 'Produtos Criados'
+                    text: ''
                 },
 
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
-            },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    type: 'datetime'
+                },
 
-            plotOptions: {
-                series:  {
-                    pointStart: Date.UTC(2017, 4, 29),
-                    pointInterval: 24 * 3600 * 1000 // one day
-                }
-            },
+                yAxis: {
+                    title: {
+                        text: 'Produtos Criados'
+                    }
 
-            series: [{
-                name: 'Produtos',
-                data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-            }, ]
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                },
 
+                series: [{
+                    name: 'Produtos',
+                    data: count
+                } ]
+
+            });
         });
     </script>
 {% endblock %}
