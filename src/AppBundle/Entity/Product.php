@@ -23,16 +23,6 @@ class Product
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="QuoteProduct", mappedBy="product")
-     */
-    private $quoteProducts;
-
-    /**
-     * @ORM\OneToMany(targetEntity="QuoteSupplier", mappedBy="product")
-     */
-    private $quoteSuppliers;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="ean", type="string", length=255)

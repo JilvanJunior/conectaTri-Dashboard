@@ -85,8 +85,8 @@ fos_rest:
     body_listener: true
     format_listener:
         rules:
-            - { path: '^/', prefer_extension: true }
             - { path: '^/api', priorities: ['json'], fallback_format: json, prefer_extension: false }
+            - { path: '^/', prefer_extension: true }
     param_fetcher_listener: true
     view:
         view_response_listener: 'force'

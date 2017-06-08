@@ -46,11 +46,12 @@ class ApiController extends FOSRestController
     }
 
     /**
-     * @Rest\Delete("/api/logout/{token}")
+     * @Rest\Delete("/api/logout")
      */
-    public function logoutAction($token) {
+    public function logoutAction(Request $request) {
         $d = $this->getDoctrine();
         $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
             return View::create(new ApiError("Invalid token"), Response::HTTP_BAD_REQUEST);
@@ -131,7 +132,7 @@ class ApiController extends FOSRestController
             ->setFullDescription($product->fullDescription)
             ->setDepartment($product->department)
             ->setSection($product->section)
-            ->setSubCategory($product->subCategory)
+            ->setSubCategory($product->subcategory)
             ->setQuantity($product->quantity)
             ->setUnity($product->unit)
             ->setCreatedAt(new \DateTime())
@@ -160,9 +161,6 @@ class ApiController extends FOSRestController
         $dbToken->setLastUsed(new \DateTime());
 
         $product = json_decode($request->getContent());
-        if (is_null($product->id)) {
-            return View::create(new ApiError("Invalid object received"), Response::HTTP_BAD_REQUEST);
-        }
         $dbProduct = $d->getRepository("AppBundle:Product")->find($id);
         if (is_null($dbProduct)) {
             return View::create(new ApiError("Invalid object ID"), Response::HTTP_NOT_FOUND);
@@ -175,7 +173,7 @@ class ApiController extends FOSRestController
             ->setFullDescription($product->fullDescription)
             ->setDepartment($product->department)
             ->setSection($product->section)
-            ->setSubCategory($product->subCategory)
+            ->setSubCategory($product->subcategory)
             ->setQuantity($product->quantity)
             ->setUnity($product->unit)
             ->setUpdatedAt(new \DateTime())

@@ -23,15 +23,19 @@ class QuoteProduct
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="quoteProducts")
+     * @var Product
+     *
+     * @ORM\ManyToOne(targetEntity="Product")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
 
     /**
-     * @ORM\OneToMany(targetEntity="QuoteSupplierHasQuoteProduct", mappedBy="quoteProduct")
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuoteSupplier", mappedBy="quoteProduct")
      */
-    private $quoteSupplierHasQuoteProducts;
+    private $quoteSuppliers;
 
     /**
      * @var \DateTime
