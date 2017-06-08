@@ -88,8 +88,8 @@
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
-                                                    <tr>
-                                                        {% for product in products %}
+                                                    {% for product in products %}
+                                                        <tr>
                                                             <td>{{ product.id }}</td>
                                                             <td>{{ product.name }}</td>
                                                             <td>{{ product.brand }}</td>
@@ -104,8 +104,8 @@
                                                                     <i class="fa fa-line-chart"> Cotações</i>
                                                                 </a>
                                                             </td>
-                                                        {% endfor %}
-                                                    </tr>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>

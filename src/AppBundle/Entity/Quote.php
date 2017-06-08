@@ -109,5 +109,69 @@ class Quote
     {
         return $this->type;
     }
-}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->quoteProducts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
+    /**
+     * Add quoteProduct
+     *
+     * @param \AppBundle\Entity\QuoteProduct $quoteProduct
+     *
+     * @return Quote
+     */
+    public function addQuoteProduct(\AppBundle\Entity\QuoteProduct $quoteProduct)
+    {
+        $this->quoteProducts[] = $quoteProduct;
+
+        return $this;
+    }
+
+    /**
+     * Remove quoteProduct
+     *
+     * @param \AppBundle\Entity\QuoteProduct $quoteProduct
+     */
+    public function removeQuoteProduct(\AppBundle\Entity\QuoteProduct $quoteProduct)
+    {
+        $this->quoteProducts->removeElement($quoteProduct);
+    }
+
+    /**
+     * Get quoteProducts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuoteProducts()
+    {
+        return $this->quoteProducts;
+    }
+
+    /**
+     * Set retailer
+     *
+     * @param \AppBundle\Entity\Retailer $retailer
+     *
+     * @return Quote
+     */
+    public function setRetailer(\AppBundle\Entity\Retailer $retailer = null)
+    {
+        $this->retailer = $retailer;
+
+        return $this;
+    }
+
+    /**
+     * Get retailer
+     *
+     * @return \AppBundle\Entity\Retailer
+     */
+    public function getRetailer()
+    {
+        return $this->retailer;
+    }
+}

@@ -125,4 +125,3 @@ class Listing
         return $this->description;
     }
 }
-

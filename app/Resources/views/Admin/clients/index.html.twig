@@ -85,10 +85,10 @@
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
-                                                    <tr>
-                                                        {% for client in clients %}
+                                                    {% for client in clients %}
+                                                        <tr>
                                                             <td>{{ client.cnpj }}</td>
-                                                            <td>{{ client.company_name }}</td>
+                                                            <td>{{ client.companyName }}</td>
                                                             <td></td>
                                                             <td></td>
                                                             <td></td>
@@ -110,8 +110,8 @@
                                                                     <i class="fa fa-commenting-o"> Mensagem</i>
                                                                 </a>
                                                             </td>
-                                                        {% endfor %}
-                                                    </tr>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>

@@ -102,14 +102,14 @@
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
-                                                    <tr>
-                                                        {% for client in clients %}
+                                                    {% for client in clients %}
+                                                        <tr>
                                                             <td>{{ client.cnpj }}</td>
-                                                            <td>{{ client.company_name }}</td>
+                                                            <td>{{ client.companyName }}</td>
                                                             <td></td>
                                                             <td></td>
                                                             <td></td>
-                                                            <td>{{ client.createdAt|date('dd/mm/yyyy') }}</td>
+                                                            <td>{{ client.createdAt|date('d/m/Y') }}</td>
                                                             <td>
                                                                 <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-eye"></i> Ver
@@ -118,8 +118,8 @@
                                                                     <i class="fa fa-line-chart"> Cotações</i>
                                                                 </a>
                                                             </td>
-                                                        {% endfor %}
-                                                    </tr>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>

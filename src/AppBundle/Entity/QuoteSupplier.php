@@ -25,13 +25,13 @@ class QuoteSupplier
     /**
      * @var QuoteProduct
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\QuoteProduct")
+     * @ORM\ManyToOne(targetEntity="QuoteProduct")
      * @ORM\JoinColumn(name="quote_product_id", referencedColumnName="id")
      */
     private $quoteProduct;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Supplier")
+     * @ORM\ManyToOne(targetEntity="Supplier", inversedBy="quoteSuppliers")
      * @ORM\JoinColumn(name="supplier_id", referencedColumnName="id")
      */
     private $supplier;
@@ -290,5 +290,29 @@ class QuoteSupplier
     public function getQuoteSupplierHasQuoteProducts()
     {
         return $this->quoteSupplierHasQuoteProducts;
+    }
+
+    /**
+     * Set quoteProduct
+     *
+     * @param \AppBundle\Entity\QuoteProduct $quoteProduct
+     *
+     * @return QuoteSupplier
+     */
+    public function setQuoteProduct(\AppBundle\Entity\QuoteProduct $quoteProduct = null)
+    {
+        $this->quoteProduct = $quoteProduct;
+
+        return $this;
+    }
+
+    /**
+     * Get quoteProduct
+     *
+     * @return \AppBundle\Entity\QuoteProduct
+     */
+    public function getQuoteProduct()
+    {
+        return $this->quoteProduct;
     }
 }

@@ -206,4 +206,38 @@ class QuoteProduct
     {
         return $this->quoteSupplierHasQuoteProducts;
     }
+
+    /**
+     * Add quoteSupplier
+     *
+     * @param \AppBundle\Entity\QuoteSupplier $quoteSupplier
+     *
+     * @return QuoteProduct
+     */
+    public function addQuoteSupplier(\AppBundle\Entity\QuoteSupplier $quoteSupplier)
+    {
+        $this->quoteSuppliers[] = $quoteSupplier;
+
+        return $this;
+    }
+
+    /**
+     * Remove quoteSupplier
+     *
+     * @param \AppBundle\Entity\QuoteSupplier $quoteSupplier
+     */
+    public function removeQuoteSupplier(\AppBundle\Entity\QuoteSupplier $quoteSupplier)
+    {
+        $this->quoteSuppliers->removeElement($quoteSupplier);
+    }
+
+    /**
+     * Get quoteSuppliers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuoteSuppliers()
+    {
+        return $this->quoteSuppliers;
+    }
 }

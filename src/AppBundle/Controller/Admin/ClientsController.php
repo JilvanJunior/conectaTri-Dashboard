@@ -58,6 +58,20 @@ class ClientsController extends Controller
     }
 
     /**
+     * @Route("/administrador/clientes/cadastrados/data", name="admin_clients_line_createdaccountsXtime_data")
+     * @param Request $request
+     * @return string
+     */
+    public function chart3DataAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $clients = $em->getRepository('AppBundle:Retailer')->countClientByDate();
+
+        echo json_encode($clients);
+        exit();
+    }
+
+    /**
      * @Route("/administrador/clientes/pedidos/cadastrados", name="admin_clients_line_createdpricelistsXtime")
      * @param Request $request
      * @return

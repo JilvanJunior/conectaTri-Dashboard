@@ -101,8 +101,8 @@
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
-                                                    <tr>
-                                                        {% for supplier in suppliers %}
+                                                    {% for supplier in suppliers %}
+                                                        <tr>
                                                             <td class="numeric">{{ supplier.cnpj }}</td>
                                                             <td>{{ supplier.name }}</td>
                                                             <td></td>
@@ -116,8 +116,8 @@
                                                                     <i class="fa fa-line-chart"> Cotações</i>
                                                                 </a>
                                                             </td>
-                                                        {% endfor %}
-                                                    </tr>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>
