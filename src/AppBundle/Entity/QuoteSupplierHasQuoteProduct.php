@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,14 +37,14 @@ class QuoteSupplierHasQuoteProduct
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updatedAt", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
@@ -54,6 +55,13 @@ class QuoteSupplierHasQuoteProduct
      */
     private $deleted;
 
+    /**
+     * QuoteSupplierHasQuoteProduct constructor.
+     */
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
     /**
      * Get id

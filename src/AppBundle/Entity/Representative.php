@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -67,6 +68,14 @@ class Representative
      * @ORM\Column(type="boolean")
      */
     private $deleted = false;
+
+    /**
+     * Representative constructor.
+     */
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
     /**
      * Set phone
