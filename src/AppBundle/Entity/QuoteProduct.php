@@ -78,6 +78,24 @@ class QuoteProduct
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getQuoteSuppliers()
+    {
+        return $this->quoteSuppliers;
+    }
+
+    /**
+     * @param ArrayCollection $quoteSuppliers
+     * @return QuoteProduct
+     */
+    public function setQuoteSuppliers($quoteSuppliers)
+    {
+        $this->quoteSuppliers = $quoteSuppliers;
+        return $this;
+    }
+
+    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
