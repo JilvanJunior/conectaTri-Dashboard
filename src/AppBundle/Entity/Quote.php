@@ -40,14 +40,14 @@ class Quote
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuoteProduct", mappedBy="quote")
+     * @ORM\OneToMany(targetEntity="QuoteProduct", mappedBy="quote")
      */
     private $quoteProducts;
 
     /**
      * @var Retailer
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer", inversedBy="quotes")
      * @ORM\JoinColumn(name="realtor_id", referencedColumnName="id")
      */
     private $retailer;
