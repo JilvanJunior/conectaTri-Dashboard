@@ -5,12 +5,14 @@ namespace AppBundle\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * QuoteProduct
  *
  * @ORM\Table(name="quote_product")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuoteProductRepository")
+ * @Serializer\ExclusionPolicy(policy="none")
  */
 class QuoteProduct
 {
@@ -43,6 +45,7 @@ class QuoteProduct
      *
      * @ORM\ManyToOne(targetEntity="Quote", inversedBy="quoteProducts")
      * @ORM\JoinColumn(name="quote_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      */
     private $quote;
 
@@ -85,6 +88,24 @@ class QuoteProduct
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Quote
+     */
+    public function getQuote()
+    {
+        return $this->quote;
+    }
+
+    /**
+     * @param Quote $quote
+     * @return QuoteProduct
+     */
+    public function setQuote($quote)
+    {
+        $this->quote = $quote;
+        return $this;
     }
 
     /**
