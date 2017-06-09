@@ -27,9 +27,13 @@ class ProductsController extends Controller
      */
     public function chart1Action(Request $request)
     {
-        $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['deleted' => false]);
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('AppBundle:Product')->countProductByDate();
 
-        return $this->render('Admin/products/charts/chart_line_createdproductsXtime.html.twig', ['products' => $products]);
+        return $this->render('Admin/products/charts/chart_line_createdproductsXtime.html.twig', [
+            'products' => $products,
+            'productsJSON' => json_encode($products)
+        ]);
     }
 
 

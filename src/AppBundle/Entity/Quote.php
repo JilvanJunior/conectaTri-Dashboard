@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -47,7 +48,7 @@ class Quote
      * @var Retailer
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer")
-     * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="realtor_id", referencedColumnName="id")
      */
     private $retailer;
 
@@ -61,7 +62,7 @@ class Quote
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
@@ -71,6 +72,15 @@ class Quote
      * @ORM\Column(name="deleted", type="boolean")
      */
     private $deleted = false;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->quoteProducts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->createdAt = new DateTime();
+    }
 
     /**
      * Get id

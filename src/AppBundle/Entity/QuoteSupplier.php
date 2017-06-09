@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,13 +26,13 @@ class QuoteSupplier
     /**
      * @var QuoteProduct
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\QuoteProduct")
+     * @ORM\ManyToOne(targetEntity="QuoteProduct")
      * @ORM\JoinColumn(name="quote_product_id", referencedColumnName="id")
      */
     private $quoteProduct;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Supplier")
+     * @ORM\ManyToOne(targetEntity="Supplier", inversedBy="quoteSuppliers")
      * @ORM\JoinColumn(name="supplier_id", referencedColumnName="id")
      */
     private $supplier;
@@ -53,14 +54,14 @@ class QuoteSupplier
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updatedAt", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
@@ -78,6 +79,7 @@ class QuoteSupplier
     public function __construct()
     {
         $this->quoteSupplierHasQuoteProducts = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     /**
@@ -308,5 +310,29 @@ class QuoteSupplier
     public function getQuoteSupplierHasQuoteProducts()
     {
         return $this->quoteSupplierHasQuoteProducts;
+    }
+
+    /**
+     * Set quoteProduct
+     *
+     * @param \AppBundle\Entity\QuoteProduct $quoteProduct
+     *
+     * @return QuoteSupplier
+     */
+    public function setQuoteProduct(\AppBundle\Entity\QuoteProduct $quoteProduct = null)
+    {
+        $this->quoteProduct = $quoteProduct;
+
+        return $this;
+    }
+
+    /**
+     * Get quoteProduct
+     *
+     * @return \AppBundle\Entity\QuoteProduct
+     */
+    public function getQuoteProduct()
+    {
+        return $this->quoteProduct;
     }
 }

@@ -85,10 +85,10 @@
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
-                                                    <tr>
-                                                        {% for client in clients %}
+                                                    {% for client in clients %}
+                                                        <tr>
                                                             <td>{{ client.cnpj }}</td>
-                                                            <td>{{ client.company_name }}</td>
+                                                            <td>{{ client.companyName }}</td>
                                                             <td></td>
                                                             <td></td>
                                                             <td></td>
@@ -110,8 +110,8 @@
                                                                     <i class="fa fa-commenting-o"> Mensagem</i>
                                                                 </a>
                                                             </td>
-                                                        {% endfor %}
-                                                    </tr>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -133,9 +133,9 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{{ asset('bundles/assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
 {% endblock %}

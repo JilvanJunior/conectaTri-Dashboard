@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -84,7 +83,7 @@ class Listing
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
@@ -103,7 +102,6 @@ class Listing
         $this->products = new ArrayCollection();
         $this->suppliers = new ArrayCollection();
         $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
     }
 
     /**

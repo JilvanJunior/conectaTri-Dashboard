@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -53,14 +54,14 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="subCategory", type="string", length=255)
+     * @ORM\Column(name="sub_category", type="string", length=255)
      */
     private $subCategory;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fullDescription", type="text")
+     * @ORM\Column(name="full_description", type="text")
      */
     private $fullDescription;
 
@@ -95,14 +96,14 @@ class Product
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updatedAt", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
@@ -118,8 +119,7 @@ class Product
      */
     public function __construct()
     {
-        $this->quoteProducts = new ArrayCollection();
-        $this->quoteSuppliers = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     /**
@@ -444,71 +444,4 @@ class Product
         return $this->deleted;
     }
 
-    /**
-     * Add quoteProduct
-     *
-     * @param \AppBundle\Entity\QuoteProduct $quoteProduct
-     *
-     * @return Product
-     */
-    public function addQuoteProduct(\AppBundle\Entity\QuoteProduct $quoteProduct)
-    {
-        $this->quoteProducts[] = $quoteProduct;
-
-        return $this;
-    }
-
-    /**
-     * Remove quoteProduct
-     *
-     * @param \AppBundle\Entity\QuoteProduct $quoteProduct
-     */
-    public function removeQuoteProduct(\AppBundle\Entity\QuoteProduct $quoteProduct)
-    {
-        $this->quoteProducts->removeElement($quoteProduct);
-    }
-
-    /**
-     * Get quoteProducts
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getQuoteProducts()
-    {
-        return $this->quoteProducts;
-    }
-
-    /**
-     * Add quoteSupplier
-     *
-     * @param \AppBundle\Entity\QuoteSupplier $quoteSupplier
-     *
-     * @return Product
-     */
-    public function addQuoteSupplier(\AppBundle\Entity\QuoteSupplier $quoteSupplier)
-    {
-        $this->quoteSuppliers[] = $quoteSupplier;
-
-        return $this;
-    }
-
-    /**
-     * Remove quoteSupplier
-     *
-     * @param \AppBundle\Entity\QuoteSupplier $quoteSupplier
-     */
-    public function removeQuoteSupplier(\AppBundle\Entity\QuoteSupplier $quoteSupplier)
-    {
-        $this->quoteSuppliers->removeElement($quoteSupplier);
-    }
-
-    /**
-     * Get quoteSuppliers
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getQuoteSuppliers()
-    {
-        return $this->quoteSuppliers;
-    }
 }

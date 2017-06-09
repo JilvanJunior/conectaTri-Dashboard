@@ -163,4 +163,3 @@ class ApiSession
         return $this->lastUsed;
     }
 }
-

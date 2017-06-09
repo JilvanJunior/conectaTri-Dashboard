@@ -2,12 +2,13 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\RetailerRepository")
  * @ORM\Table(name="retailer")
  */
 class Retailer implements UserInterface, \Serializable
@@ -120,6 +121,7 @@ class Retailer implements UserInterface, \Serializable
     {
         $this->suppliers = new ArrayCollection();
         $this->representatives = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     public function getRoles()
