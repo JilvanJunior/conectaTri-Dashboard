@@ -39,6 +39,14 @@ class QuoteProduct
     private $quoteSuppliers;
 
     /**
+     * @var Quote
+     *
+     * @ORM\ManyToOne(targetEntity="Quote", inversedBy="quoteProducts")
+     * @ORM\JoinColumn(name="quote_id", referencedColumnName="id")
+     */
+    private $quote;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -241,5 +249,29 @@ class QuoteProduct
     public function getQuoteSuppliers()
     {
         return $this->quoteSuppliers;
+    }
+
+    /**
+     * Set quote
+     *
+     * @param \AppBundle\Entity\Quote $quote
+     *
+     * @return QuoteProduct
+     */
+    public function setQuote(\AppBundle\Entity\Quote $quote = null)
+    {
+        $this->quote = $quote;
+
+        return $this;
+    }
+
+    /**
+     * Get quote
+     *
+     * @return \AppBundle\Entity\Quote
+     */
+    public function getQuote()
+    {
+        return $this->quote;
     }
 }

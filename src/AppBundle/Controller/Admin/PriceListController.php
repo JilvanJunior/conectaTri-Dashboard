@@ -9,13 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 class PriceListController extends Controller
 {
     /**
-     * @Route("/administrador/cotacoes/emandamento", name="admin_pricelist_inprogress")
+     * @Route("/administrador/cotacoes/em-andamento", name="admin_pricelist_inprogress")
      */
     public function inprogressAction(Request $request)
     {
-        // replace this example code with whatever you need
+        $quotes = $this->getDoctrine()->getRepository('AppBundle:Quote')->findBy(['deleted' => false]);
+
         return $this->render('Admin/pricelist/pricelistinprogress.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'quotes' => $quotes
         ]);
     }
 

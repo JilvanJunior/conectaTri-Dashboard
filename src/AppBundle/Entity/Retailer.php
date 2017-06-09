@@ -31,6 +31,11 @@ class Retailer implements UserInterface, \Serializable
     private $suppliers;
 
     /**
+     * @ORM\OneToMany(targetEntity="Quote", mappedBy="retailer")
+     */
+    private $quotes;
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     private $username;
@@ -121,6 +126,7 @@ class Retailer implements UserInterface, \Serializable
     {
         $this->suppliers = new ArrayCollection();
         $this->representatives = new ArrayCollection();
+        $this->quotes = new ArrayCollection();
         $this->createdAt = new DateTime();
     }
 
@@ -588,5 +594,39 @@ class Retailer implements UserInterface, \Serializable
     public function getSuppliers()
     {
         return $this->suppliers;
+    }
+
+    /**
+     * Add quote
+     *
+     * @param \AppBundle\Entity\Quote $quote
+     *
+     * @return Retailer
+     */
+    public function addQuote(\AppBundle\Entity\Quote $quote)
+    {
+        $this->quotes[] = $quote;
+
+        return $this;
+    }
+
+    /**
+     * Remove quote
+     *
+     * @param \AppBundle\Entity\Quote $quote
+     */
+    public function removeQuote(\AppBundle\Entity\Quote $quote)
+    {
+        $this->quotes->removeElement($quote);
+    }
+
+    /**
+     * Get quotes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuotes()
+    {
+        return $this->quotes;
     }
 }

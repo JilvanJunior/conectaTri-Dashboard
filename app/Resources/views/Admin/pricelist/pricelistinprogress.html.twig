@@ -87,24 +87,21 @@
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
-                                                    <tr>
-                                                        <td>135168</td>
-                                                        <td>WeMind varejo</td>
-                                                        <td>Cotação Semanal Bomboniere</td>
-                                                        <td>35</td>
-                                                        <td>
-                                                            <ul>
-                                                                <li><a href="#">Atacado Martins</a></li>
-                                                                <li><a href="#">Aki</a></li>
-                                                            </ul>
-                                                        </td>
-                                                        <td> 25/05/17 - 29/05/17</td>
-                                                        <td>
-                                                            <a href="javascript:;" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                                <i class="fa fa-eye"></i> Detalhes
-                                                            </a>
-                                                        </td>
-                                                    </tr>
+                                                    {% for quote in quotes %}
+                                                        <tr>
+                                                            <td>{{ quote.id }}</td>
+                                                            <td>{{ quote.retailer.name }}</td>
+                                                            <td>{{ quote.name }}</td>
+                                                            <td>{{ quote.quoteProducts.length }}</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>
+                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                    <i class="fa fa-eye"></i> Detalhes
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>
