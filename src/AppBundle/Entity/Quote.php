@@ -74,6 +74,15 @@ class Quote
     private $deleted = false;
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->quoteProducts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->createdAt = new DateTime();
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -130,43 +139,9 @@ class Quote
     {
         return $this->type;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->quoteProducts = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->createdAt = new DateTime();
-    }
 
     /**
-     * Add quoteProduct
-     *
-     * @param \AppBundle\Entity\QuoteProduct $quoteProduct
-     *
-     * @return Quote
-     */
-    public function addQuoteProduct(\AppBundle\Entity\QuoteProduct $quoteProduct)
-    {
-        $this->quoteProducts[] = $quoteProduct;
-
-        return $this;
-    }
-
-    /**
-     * Remove quoteProduct
-     *
-     * @param \AppBundle\Entity\QuoteProduct $quoteProduct
-     */
-    public function removeQuoteProduct(\AppBundle\Entity\QuoteProduct $quoteProduct)
-    {
-        $this->quoteProducts->removeElement($quoteProduct);
-    }
-
-    /**
-     * Get quoteProducts
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getQuoteProducts()
     {
@@ -174,23 +149,17 @@ class Quote
     }
 
     /**
-     * Set retailer
-     *
-     * @param \AppBundle\Entity\Retailer $retailer
-     *
+     * @param ArrayCollection $quoteProducts
      * @return Quote
      */
-    public function setRetailer(\AppBundle\Entity\Retailer $retailer = null)
+    public function setQuoteProducts($quoteProducts)
     {
-        $this->retailer = $retailer;
-
+        $this->quoteProducts = $quoteProducts;
         return $this;
     }
 
     /**
-     * Get retailer
-     *
-     * @return \AppBundle\Entity\Retailer
+     * @return Retailer
      */
     public function getRetailer()
     {
@@ -198,22 +167,16 @@ class Quote
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
+     * @param Retailer $retailer
      * @return Quote
      */
-    public function setCreatedAt($createdAt)
+    public function setRetailer($retailer)
     {
-        $this->createdAt = $createdAt;
-
+        $this->retailer = $retailer;
         return $this;
     }
 
     /**
-     * Get createdAt
-     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -222,22 +185,16 @@ class Quote
     }
 
     /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
+     * @param \DateTime $createdAt
      * @return Quote
      */
-    public function setUpdatedAt($updatedAt)
+    public function setCreatedAt($createdAt)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->createdAt = $createdAt;
         return $this;
     }
 
     /**
-     * Get updatedAt
-     *
      * @return \DateTime
      */
     public function getUpdatedAt()
@@ -246,26 +203,31 @@ class Quote
     }
 
     /**
-     * Set deleted
-     *
-     * @param boolean $deleted
-     *
+     * @param \DateTime $updatedAt
+     * @return Quote
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param bool $deleted
      * @return Quote
      */
     public function setDeleted($deleted)
     {
         $this->deleted = $deleted;
-
         return $this;
     }
-
-    /**
-     * Get deleted
-     *
-     * @return boolean
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
-    }
 }
+

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\ApiSession;
+use AppBundle\Entity\Listing;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Representative;
 use AppBundle\Entity\Supplier;
@@ -343,7 +344,7 @@ class ApiController extends FOSRestController
             ->setDeleted(false);
         $em->persist($dbRepresentative);
         $em->flush();
-        return View::create("Success", Response::HTTP_OK);
+        return View::create($dbRepresentative, Response::HTTP_OK);
     }
 
     /**
@@ -375,7 +376,7 @@ class ApiController extends FOSRestController
             ->setEmail($representative->contactEmail)
             ->setUpdatedAt(new \DateTime());
         $em->flush();
-        return View::create("Success", Response::HTTP_OK);
+        return View::create($dbRepresentative, Response::HTTP_OK);
     }
 
     /**
@@ -406,6 +407,112 @@ class ApiController extends FOSRestController
             $dbRepresentative->getSupplier()->setDeleted(true);
         }
         $em->flush();
-        return View::create("Success", Response::HTTP_OK);
+        return View::create($dbRepresentative, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/api/listing")
+     */
+    public function getListings(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $dbListings = $d->getRepository("AppBundle:Listing")->findBy(["retailer" => $dbToken->getRetailer(), "deleted" => false]);
+        return View::create($dbListings, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Post("/api/listing")
+     */
+    public function postListing(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $listing = json_decode($request->getContent());
+        $dbListing = new Listing();
+        $dbListing->setName($listing->name)
+            ->setType($listing->type)
+            ->setDescription($listing->description)
+            ->setRetailer($dbToken->getRetailer());
+        foreach ($listing->products as $product) {
+            $dbProduct = $d->getRepository("AppBundle:Product")->find($product->id);
+            if (!is_null($dbListing)) $dbListing->getProducts()->add($dbProduct);
+        }
+        foreach ($listing->suppliers as $supplier) {
+            $dbSupplier = $d->getRepository("AppBundle:Supplier")->find($supplier->id);
+            if (!is_null($dbSupplier)) $dbListing->getSuppliers()->add($dbListing);
+        }
+        $em->persist($dbListing);
+        $em->flush();
+
+        return View::create($dbListing, Response::HTTP_OK);
+    }
+
+    //TODO: Implement
+    /**
+     * @Rest\Put("/api/listing/{id}")
+     */
+    public function putListing(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        return View::create(new ApiError("Method not implemented"), Response::HTTP_NOT_IMPLEMENTED);
+    }
+
+    /**
+     * @Rest\Delete("/api/listing/{id}")
+     */
+    public function deleteListing(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $dbListing = $d->getRepository("AppBundle:Listing")->find($id);
+        if (is_null($dbListing)) {
+            return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbListing->setDeleted(true)
+            ->setUpdatedAt(new \DateTime());
+        $em->flush();
+        return View::create($dbListing, Response::HTTP_OK);
     }
 }
