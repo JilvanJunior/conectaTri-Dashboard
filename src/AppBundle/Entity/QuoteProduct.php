@@ -65,7 +65,7 @@ class QuoteProduct
      */
     public function __construct()
     {
-        $this->quoteSupplierHasQuoteProducts = new ArrayCollection();
+        $this->quoteSuppliers = new ArrayCollection();
         $this->createdAt = new DateTime();
     }
 
@@ -80,6 +80,24 @@ class QuoteProduct
     }
 
     /**
+     * @return Product
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param Product $product
+     * @return QuoteProduct
+     */
+    public function setProduct($product)
+    {
+        $this->product = $product;
+        return $this;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getQuoteSuppliers()
@@ -88,33 +106,16 @@ class QuoteProduct
     }
 
     /**
-     * @param ArrayCollection $quoteSuppliers
-     * @return QuoteProduct
+     * @param QuoteSupplier $quoteSupplier
+     * @return $this
      */
-    public function setQuoteSuppliers($quoteSuppliers)
-    {
-        $this->quoteSuppliers = $quoteSuppliers;
+    public function addQuoteSupplier($quoteSupplier) {
+        if (!$this->quoteSuppliers->contains($quoteSupplier)) $this->quoteSuppliers->add($quoteSupplier);
         return $this;
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return QuoteProduct
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -122,23 +123,17 @@ class QuoteProduct
     }
 
     /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
+     * @param DateTime $createdAt
      * @return QuoteProduct
      */
-    public function setUpdatedAt($updatedAt)
+    public function setCreatedAt($createdAt)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->createdAt = $createdAt;
         return $this;
     }
 
     /**
-     * Get updatedAt
-     *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -146,118 +141,30 @@ class QuoteProduct
     }
 
     /**
-     * Set deleted
-     *
-     * @param boolean $deleted
-     *
+     * @param DateTime $updatedAt
      * @return QuoteProduct
      */
-    public function setDeleted($deleted)
+    public function setUpdatedAt($updatedAt)
     {
-        $this->deleted = $deleted;
-
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 
     /**
-     * Get deleted
-     *
      * @return bool
      */
-    public function getDeleted()
+    public function isDeleted()
     {
         return $this->deleted;
     }
 
     /**
-     * Set product
-     *
-     * @param \AppBundle\Entity\Product $product
-     *
+     * @param bool $deleted
      * @return QuoteProduct
      */
-    public function setProduct(\AppBundle\Entity\Product $product = null)
+    public function setDeleted($deleted)
     {
-        $this->product = $product;
-
+        $this->deleted = $deleted;
         return $this;
-    }
-
-    /**
-     * Get product
-     *
-     * @return \AppBundle\Entity\Product
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
-     * Add quoteSupplierHasQuoteProduct
-     *
-     * @param \AppBundle\Entity\QuoteSupplierHasQuoteProduct $quoteSupplierHasQuoteProduct
-     *
-     * @return QuoteProduct
-     */
-    public function addQuoteSupplierHasQuoteProduct(\AppBundle\Entity\QuoteSupplierHasQuoteProduct $quoteSupplierHasQuoteProduct)
-    {
-        $this->quoteSupplierHasQuoteProducts[] = $quoteSupplierHasQuoteProduct;
-
-        return $this;
-    }
-
-    /**
-     * Remove quoteSupplierHasQuoteProduct
-     *
-     * @param \AppBundle\Entity\QuoteSupplierHasQuoteProduct $quoteSupplierHasQuoteProduct
-     */
-    public function removeQuoteSupplierHasQuoteProduct(\AppBundle\Entity\QuoteSupplierHasQuoteProduct $quoteSupplierHasQuoteProduct)
-    {
-        $this->quoteSupplierHasQuoteProducts->removeElement($quoteSupplierHasQuoteProduct);
-    }
-
-    /**
-     * Get quoteSupplierHasQuoteProducts
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getQuoteSupplierHasQuoteProducts()
-    {
-        return $this->quoteSupplierHasQuoteProducts;
-    }
-
-    /**
-     * Add quoteSupplier
-     *
-     * @param \AppBundle\Entity\QuoteSupplier $quoteSupplier
-     *
-     * @return QuoteProduct
-     */
-    public function addQuoteSupplier(\AppBundle\Entity\QuoteSupplier $quoteSupplier)
-    {
-        $this->quoteSuppliers[] = $quoteSupplier;
-
-        return $this;
-    }
-
-    /**
-     * Remove quoteSupplier
-     *
-     * @param \AppBundle\Entity\QuoteSupplier $quoteSupplier
-     */
-    public function removeQuoteSupplier(\AppBundle\Entity\QuoteSupplier $quoteSupplier)
-    {
-        $this->quoteSuppliers->removeElement($quoteSupplier);
-    }
-
-    /**
-     * Get quoteSuppliers
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getQuoteSuppliers()
-    {
-        return $this->quoteSuppliers;
     }
 }

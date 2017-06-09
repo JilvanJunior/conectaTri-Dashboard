@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,17 +43,12 @@ class Listing
      */
     private $description;
 
-    //TODO: Add quantity
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Product")
-     * @ORM\JoinTable(name="listing_has_product",
-     *     joinColumns={@ORM\JoinColumn(name="listing_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")}
-     *     )
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ListingProduct", mappedBy="listing")
      */
-    private $products;
+    private $listingProducts;
 
     /**
      * @var ArrayCollection
@@ -99,7 +95,7 @@ class Listing
      */
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->listingProducts = new ArrayCollection();
         $this->suppliers = new ArrayCollection();
         $this->createdAt = new \DateTime();
     }
@@ -187,43 +183,43 @@ class Listing
     }
 
     /**
-     * @return ArrayCollection
+     * @param ListingProduct $product
+     * @return $this
      */
-    public function getProducts()
-    {
-        return $this->products;
-    }
-
-    /**
-     * @param ArrayCollection $products
-     * @return Listing
-     */
-    public function setProducts($products)
-    {
-        $this->products = $products;
+    public function addListingProduct($product) {
+        if (!$this->listingProducts->contains($product)) $this->listingProducts->add($product);
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @param ListingProduct $product
+     * @return $this
      */
-    public function getSuppliers()
-    {
-        return $this->suppliers;
-    }
-
-    /**
-     * @param ArrayCollection $suppliers
-     * @return Listing
-     */
-    public function setSuppliers($suppliers)
-    {
-        $this->suppliers = $suppliers;
+    public function removeListingProduct($product) {
+        if ($this->listingProducts->contains($product)) $this->listingProducts->remove($product);
         return $this;
     }
 
     /**
-     * @return mixed
+     * @param Supplier $supplier
+     * @return $this
+     */
+    public function addSupplier($supplier) {
+        if (!$this->suppliers->contains($supplier)) $this->suppliers->add($supplier);
+        return $this;
+    }
+
+    /**
+     * @param Supplier $supplier
+     * @return $this
+     */
+    public function removeSupplier($supplier) {
+        if ($this->suppliers->contains($supplier)) $this->suppliers->remove($supplier);
+        return $this;
+    }
+
+    /**
+     * @return Retailer
      */
     public function getRetailer()
     {
@@ -231,7 +227,7 @@ class Listing
     }
 
     /**
-     * @param mixed $retailer
+     * @param Retailer $retailer
      * @return Listing
      */
     public function setRetailer($retailer)

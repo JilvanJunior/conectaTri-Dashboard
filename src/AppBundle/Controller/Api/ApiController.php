@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\ApiSession;
 use AppBundle\Entity\Listing;
+use AppBundle\Entity\ListingProduct;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Representative;
 use AppBundle\Entity\Supplier;
@@ -455,20 +456,23 @@ class ApiController extends FOSRestController
             ->setDescription($listing->description)
             ->setRetailer($dbToken->getRetailer());
         foreach ($listing->products as $product) {
-            $dbProduct = $d->getRepository("AppBundle:Product")->find($product->id);
-            if (!is_null($dbListing)) $dbListing->getProducts()->add($dbProduct);
+            $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
+            if (is_null($dbProduct)) continue;
+            $listingProduct = new ListingProduct();
+            $listingProduct->setProduct($dbProduct);
+            $listingProduct->setQuantity($product->quantity);
+            $dbListing->addListingProduct($listingProduct);
         }
         foreach ($listing->suppliers as $supplier) {
             $dbSupplier = $d->getRepository("AppBundle:Supplier")->find($supplier->id);
-            if (!is_null($dbSupplier)) $dbListing->getSuppliers()->add($dbListing);
+            if (!is_null($dbSupplier)) $dbListing->addSupplier($dbSupplier);
         }
-        $em->persist($dbListing);
         $em->flush();
 
         return View::create($dbListing, Response::HTTP_OK);
     }
 
-    //TODO: Implement
+    // TODO: Compare
     /**
      * @Rest\Put("/api/listing/{id}")
      */
@@ -486,7 +490,12 @@ class ApiController extends FOSRestController
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        return View::create(new ApiError("Method not implemented"), Response::HTTP_NOT_IMPLEMENTED);
+        $dbListing = $d->getRepository("AppBundle:Listing")->find($id);
+        $listing = json_decode($request->getContent());
+        $dbListing->getProducts()->clear();
+        foreach ($listing->products as $product) {
+
+        }
     }
 
     /**
@@ -515,4 +524,6 @@ class ApiController extends FOSRestController
         $em->flush();
         return View::create($dbListing, Response::HTTP_OK);
     }
+
+
 }

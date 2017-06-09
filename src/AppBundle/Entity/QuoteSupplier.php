@@ -5,12 +5,14 @@ namespace AppBundle\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * QuoteSupplier
  *
  * @ORM\Table(name="quote_supplier")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuoteSupplierRepository")
+ * @Serializer\ExclusionPolicy(policy="none")
  */
 class QuoteSupplier
 {
@@ -28,6 +30,7 @@ class QuoteSupplier
      *
      * @ORM\ManyToOne(targetEntity="QuoteProduct")
      * @ORM\JoinColumn(name="quote_product_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      */
     private $quoteProduct;
 
@@ -78,7 +81,6 @@ class QuoteSupplier
      */
     public function __construct()
     {
-        $this->quoteSupplierHasQuoteProducts = new ArrayCollection();
         $this->createdAt = new DateTime();
     }
 
@@ -111,22 +113,24 @@ class QuoteSupplier
     }
 
     /**
-     * Set price
-     *
-     * @param string $price
-     *
+     * @return Supplier
+     */
+    public function getSupplier()
+    {
+        return $this->supplier;
+    }
+
+    /**
+     * @param Supplier $supplier
      * @return QuoteSupplier
      */
-    public function setPrice($price)
+    public function setSupplier($supplier)
     {
-        $this->price = $price;
-
+        $this->supplier = $supplier;
         return $this;
     }
 
     /**
-     * Get price
-     *
      * @return string
      */
     public function getPrice()
@@ -135,22 +139,16 @@ class QuoteSupplier
     }
 
     /**
-     * Set quantity
-     *
-     * @param integer $quantity
-     *
+     * @param string $price
      * @return QuoteSupplier
      */
-    public function setQuantity($quantity)
+    public function setPrice($price)
     {
-        $this->quantity = $quantity;
-
+        $this->price = $price;
         return $this;
     }
 
     /**
-     * Get quantity
-     *
      * @return int
      */
     public function getQuantity()
@@ -159,23 +157,17 @@ class QuoteSupplier
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
+     * @param int $quantity
      * @return QuoteSupplier
      */
-    public function setCreatedAt($createdAt)
+    public function setQuantity($quantity)
     {
-        $this->createdAt = $createdAt;
-
+        $this->quantity = $quantity;
         return $this;
     }
 
     /**
-     * Get createdAt
-     *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -183,23 +175,17 @@ class QuoteSupplier
     }
 
     /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
+     * @param DateTime $createdAt
      * @return QuoteSupplier
      */
-    public function setUpdatedAt($updatedAt)
+    public function setCreatedAt($createdAt)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->createdAt = $createdAt;
         return $this;
     }
 
     /**
-     * Get updatedAt
-     *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -207,132 +193,30 @@ class QuoteSupplier
     }
 
     /**
-     * Set deleted
-     *
-     * @param boolean $deleted
-     *
+     * @param DateTime $updatedAt
      * @return QuoteSupplier
      */
-    public function setDeleted($deleted)
+    public function setUpdatedAt($updatedAt)
     {
-        $this->deleted = $deleted;
-
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 
     /**
-     * Get deleted
-     *
      * @return bool
      */
-    public function getDeleted()
+    public function isDeleted()
     {
         return $this->deleted;
     }
 
     /**
-     * Set product
-     *
-     * @param \AppBundle\Entity\Product $product
-     *
+     * @param bool $deleted
      * @return QuoteSupplier
      */
-    public function setProduct(\AppBundle\Entity\Product $product = null)
+    public function setDeleted($deleted)
     {
-        $this->product = $product;
-
+        $this->deleted = $deleted;
         return $this;
-    }
-
-    /**
-     * Get product
-     *
-     * @return \AppBundle\Entity\Product
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
-     * Set supplier
-     *
-     * @param \AppBundle\Entity\Supplier $supplier
-     *
-     * @return QuoteSupplier
-     */
-    public function setSupplier(\AppBundle\Entity\Supplier $supplier = null)
-    {
-        $this->supplier = $supplier;
-
-        return $this;
-    }
-
-    /**
-     * Get supplier
-     *
-     * @return \AppBundle\Entity\Supplier
-     */
-    public function getSupplier()
-    {
-        return $this->supplier;
-    }
-
-    /**
-     * Add quoteSupplierHasQuoteProduct
-     *
-     * @param \AppBundle\Entity\QuoteSupplierHasQuoteProduct $quoteSupplierHasQuoteProduct
-     *
-     * @return QuoteSupplier
-     */
-    public function addQuoteSupplierHasQuoteProduct(\AppBundle\Entity\QuoteSupplierHasQuoteProduct $quoteSupplierHasQuoteProduct)
-    {
-        $this->quoteSupplierHasQuoteProducts[] = $quoteSupplierHasQuoteProduct;
-
-        return $this;
-    }
-
-    /**
-     * Remove quoteSupplierHasQuoteProduct
-     *
-     * @param \AppBundle\Entity\QuoteSupplierHasQuoteProduct $quoteSupplierHasQuoteProduct
-     */
-    public function removeQuoteSupplierHasQuoteProduct(\AppBundle\Entity\QuoteSupplierHasQuoteProduct $quoteSupplierHasQuoteProduct)
-    {
-        $this->quoteSupplierHasQuoteProducts->removeElement($quoteSupplierHasQuoteProduct);
-    }
-
-    /**
-     * Get quoteSupplierHasQuoteProducts
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getQuoteSupplierHasQuoteProducts()
-    {
-        return $this->quoteSupplierHasQuoteProducts;
-    }
-
-    /**
-     * Set quoteProduct
-     *
-     * @param \AppBundle\Entity\QuoteProduct $quoteProduct
-     *
-     * @return QuoteSupplier
-     */
-    public function setQuoteProduct(\AppBundle\Entity\QuoteProduct $quoteProduct = null)
-    {
-        $this->quoteProduct = $quoteProduct;
-
-        return $this;
-    }
-
-    /**
-     * Get quoteProduct
-     *
-     * @return \AppBundle\Entity\QuoteProduct
-     */
-    public function getQuoteProduct()
-    {
-        return $this->quoteProduct;
     }
 }

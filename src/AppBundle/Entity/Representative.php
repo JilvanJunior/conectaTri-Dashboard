@@ -4,10 +4,12 @@ namespace AppBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="representative")
+ * @Serializer\ExclusionPolicy(policy="none")
  */
 class Representative
 {
@@ -21,6 +23,7 @@ class Representative
     /**
      * @ORM\ManyToOne(targetEntity="Supplier", inversedBy="representatives")
      * @ORM\JoinColumn(name="supplier_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      */
     private $supplier;
 
