@@ -88,14 +88,6 @@ class QuoteProduct
     }
 
     /**
-     * @return ArrayCollection
-     */
-    public function getQuoteSuppliers()
-    {
-        return $this->quoteSuppliers;
-    }
-
-    /**
      * @param ArrayCollection $quoteSuppliers
      * @return QuoteProduct
      */

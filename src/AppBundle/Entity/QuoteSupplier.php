@@ -93,24 +93,6 @@ class QuoteSupplier
     }
 
     /**
-     * @return QuoteProduct
-     */
-    public function getQuoteProduct()
-    {
-        return $this->quoteProduct;
-    }
-
-    /**
-     * @param QuoteProduct $quoteProduct
-     * @return QuoteSupplier
-     */
-    public function setQuoteProduct($quoteProduct)
-    {
-        $this->quoteProduct = $quoteProduct;
-        return $this;
-    }
-
-    /**
      * Set price
      *
      * @param string $price
