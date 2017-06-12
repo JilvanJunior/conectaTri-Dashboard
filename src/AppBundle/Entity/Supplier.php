@@ -31,7 +31,7 @@ class Supplier
     private $retailer;
 
     /**
-     * @ORM\OneToMany(targetEntity="QuoteSupplier", mappedBy="supplier")
+     * @ORM\OneToMany(targetEntity="QuoteSupplier", mappedBy="representative")
      */
     private $quoteSuppliers;
 

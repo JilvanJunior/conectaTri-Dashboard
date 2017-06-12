@@ -6,6 +6,9 @@ use AppBundle\Entity\ApiSession;
 use AppBundle\Entity\Listing;
 use AppBundle\Entity\ListingProduct;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Quote;
+use AppBundle\Entity\QuoteProduct;
+use AppBundle\Entity\QuoteSupplier;
 use AppBundle\Entity\Representative;
 use AppBundle\Entity\Supplier;
 use AppBundle\Model\ApiError;
@@ -24,26 +27,45 @@ class ApiController extends FOSRestController
      */
     public function loginAction(Request $request) {
         $d = $this->getDoctrine();
+        $em = $d->getManager();
         $user = json_decode($request->getContent());
         if (!isset($user->cnpj) || !isset($user->password)) {
             return View::create(new ApiError("Invalid request"), Response::HTTP_BAD_REQUEST);
         }
         $dbUser = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $user->cnpj]);
         if (is_null($dbUser)) {
-            return View::create(new ApiError("Invalid username"/* or password"*/), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Invalid username or password"), Response::HTTP_UNAUTHORIZED);
         }
         $encoder = $this->get("security.password_encoder");
         if (!$encoder->isPasswordValid($dbUser, $user->password)) {
             return View::create(new ApiError("Invalid username or password"), Response::HTTP_UNAUTHORIZED);
         }
-        $session = new ApiSession();
-        $uuid = Uuid::uuid4();
-        $session->setToken($uuid->toString());
-        $session->setRetailer($dbUser);
-        $d->getManager()->persist($session);
-        $d->getManager()->flush();
+        $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
+            ->where("s.lastUsed < :yesterday")
+            ->setParameter("yesterday", new \DateTime("yesterday"))
+            ->getQuery()->getResult();
+        foreach ($oldTokens as $oldToken) {
+            $em->remove($oldToken);
+        }
+        $previousToken = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
+            ->where("s.lastUsed >= :time")
+            ->setParameter("time", new \DateTime("15 minutes ago"))
+            ->orderBy("s.lastUsed", "DESC")
+            ->getQuery()->setMaxResults(1)->getOneOrNullResult();
+        if (is_null($previousToken)) {
+            $session = new ApiSession();
+            $uuid = Uuid::uuid4();
+            $session->setToken($uuid->toString());
+            $session->setRetailer($dbUser);
+            $em->persist($session);
+            $em->flush();
+            $previousToken = $session;
+        } else {
+            $previousToken->setLastUsed(new \DateTime());
+            $em->flush();
+        }
         return View::create([
-            "token" => $uuid->toString()
+            "token" => $previousToken->getToken()
         ], Response::HTTP_OK);
     }
 
@@ -59,6 +81,13 @@ class ApiController extends FOSRestController
             return View::create(new ApiError("Invalid token"), Response::HTTP_BAD_REQUEST);
         }
         $em->remove($dbToken);
+        $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
+            ->where("s.lastUsed < :yesterday")
+            ->setParameter("yesterday", new \DateTime("yesterday"))
+            ->getQuery()->getResult();
+        foreach ($oldTokens as $oldToken) {
+            $em->remove($oldToken);
+        }
         $em->flush();
         return View::create("Success", Response::HTTP_OK);
     }
@@ -463,16 +492,15 @@ class ApiController extends FOSRestController
             $listingProduct->setQuantity($product->quantity);
             $dbListing->addListingProduct($listingProduct);
         }
-        foreach ($listing->suppliers as $supplier) {
-            $dbSupplier = $d->getRepository("AppBundle:Supplier")->find($supplier->id);
-            if (!is_null($dbSupplier)) $dbListing->addSupplier($dbSupplier);
+        foreach ($listing->representatives as $representative) {
+            $dbSupplier = $d->getRepository("AppBundle:Representative")->find($representative->id);
+            if (!is_null($dbSupplier)) $dbListing->addRepresentative($dbSupplier);
         }
         $em->flush();
 
         return View::create($dbListing, Response::HTTP_OK);
     }
 
-    // TODO: Compare
     /**
      * @Rest\Put("/api/listing/{id}")
      */
@@ -492,10 +520,41 @@ class ApiController extends FOSRestController
 
         $dbListing = $d->getRepository("AppBundle:Listing")->find($id);
         $listing = json_decode($request->getContent());
-        $dbListing->getProducts()->clear();
-        foreach ($listing->products as $product) {
-
+        $tmp = [];
+        foreach ($dbListing->getListingProducts() as $product) {
+            $rcvProduct = $this->arrayContains($listing->products, $product);
+            if ($rcvProduct == false) {
+                $dbListing->removeListingProduct($product);
+                $em->remove($product);
+            } else {
+                $product->setQuantity($rcvProduct->quantity);
+                $tmp[] = $rcvProduct;
+            }
         }
+        array_diff($listing->products, $tmp);
+        foreach ($listing->products as $product) {
+            $newProduct = new ListingProduct();
+            $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
+            $newProduct->setProduct($dbProduct)
+                ->setQuantity($product->quantity);
+            $dbListing->addListingProduct($newProduct);
+        }
+        $tmp = [];
+        foreach ($dbListing->getRepresentatives() as $representative) {
+            $rcvRepresentative = $this->arrayContains($listing->suppliers, $representative);
+            if ($rcvRepresentative == false) {
+                $dbListing->removeRepresentative($representative);
+            } else {
+                $tmp[] = $rcvRepresentative;
+            }
+        }
+        array_diff($listing->suppliers, $tmp);
+        foreach ($listing->suppliers as $representative) {
+            $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($representative->id);
+            $dbListing->addRepresentative($dbRepresentative);
+        }
+        $em->flush();
+        return View::create($dbListing, Response::HTTP_OK);
     }
 
     /**
@@ -525,5 +584,151 @@ class ApiController extends FOSRestController
         return View::create($dbListing, Response::HTTP_OK);
     }
 
+    /**
+     * @Rest\Get("/api/quote")
+     */
+    public function getQuotes(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
+            ->where("q.expiresAt > :date")
+            ->andWhere("q.deleted = FALSE")
+            ->setParameter("date", new \DateTime("15 days ago"))
+            ->getQuery()->getResult();
+        return View::create($quotes, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Post("/api/quote")
+     */
+    public function postQuote(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $quote = json_decode($request->getContent());
+        $dbQuote = new Quote();
+        $dbQuote->setName($quote->name)
+            ->setType($quote->type)
+            ->setRetailer($dbToken->getRetailer());
+        foreach ($quote->products as $product) {
+            $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
+            $quoteProduct = new QuoteProduct();
+            $quoteProduct->setProduct($dbProduct);
+            foreach ($product->suppliers as $supplier) {
+                $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->supplier->id);
+                $quoteSupplier = new QuoteSupplier();
+                $quoteSupplier->setRepresentative($dbSupplier)
+                    ->setQuantity($supplier->quantity)
+                    ->setPrice("0.00")
+                    ->setRepresentative($dbSupplier);
+                $quoteProduct->addQuoteSupplier($quoteSupplier);
+            }
+            $dbQuote->addQuoteProduct($quoteProduct);
+        }
+        $em->persist($quote);
+        $em->flush();
+
+        return View::create($dbQuote, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Put("/api/quote/{id}")
+     */
+    public function putQuote(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $dbQuote = $d->getRepository("AppBundle:Quote")->find($id);
+        $quote = json_decode($request->getContent());
+        $tmp = [];
+        foreach ($dbQuote->getQuoteProducts() as $product) {
+            $rcvProduct = $this->arrayContains($quote->quoteProducts, $product);
+            if ($rcvProduct == false) {
+                $dbQuote->removeQuoteProduct($product);
+                $product->setDeleted(true);
+            } else {
+                $tmp2 = [];
+                foreach ($product->getQuoteSuppliers() as $supplier) {
+                    $rcvSupplier = $this->arrayContains($rcvProduct->quoteSuppliers, $supplier);
+                    if ($rcvSupplier == false) {
+                        $product->removeQuoteSupplier($supplier);
+                        $supplier->setDeleted(true);
+                    } else {
+                        $supplier->setQuantity($rcvSupplier->quantity)
+                            ->setPrice($rcvSupplier->price);
+                        $tmp2[] = $supplier;
+                    }
+                }
+                // FIXME: Add new quoteSuppliers to existing products
+                $tmp[] = $rcvProduct;
+            }
+        }
+        array_diff($quote->quoteProducts, $tmp);
+        foreach ($quote->quoteProducts as $product) {
+            $newProduct = new QuoteProduct();
+            $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
+            foreach ($product->quoteSuppliers as $supplier) {
+                $newSupplier = new QuoteSupplier();
+                $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
+                $newSupplier->setPrice("0.00")
+                    ->setQuantity($supplier->quantity)
+                    ->setRepresentative($dbSupplier);
+                $newProduct->addQuoteSupplier($newSupplier);
+            }
+            $newProduct->setProduct($dbProduct);
+            $dbQuote->addQuoteProduct($newProduct);
+        }
+        $em->flush();
+        return View::create($dbQuote, Response::HTTP_OK);
+    }
+
+    //TODO: Delete quote
+
+    /**
+     * Finds one element in an array, searching by ID properties.
+     * @param $array array Array in which to search for the element.
+     * @param $element object Element whose ID to search for.
+     *
+     * @return boolean|object false if not found, the array's element otherwise.
+     */
+    private function arrayContains($array, $element) {
+        foreach ($array as $item) {
+            if ($item->id == $element->id) {
+                return $item;
+            }
+        }
+        return false;
+    }
 
 }

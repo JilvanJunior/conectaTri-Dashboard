@@ -55,6 +55,13 @@ class Quote
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="expires_at", type="datetime")
+     */
+    private $expiresAt;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
@@ -80,6 +87,7 @@ class Quote
     {
         $this->quoteProducts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->createdAt = new DateTime();
+        $this->expiresAt = new DateTime("2500-01-01");
     }
 
     /**
@@ -149,12 +157,20 @@ class Quote
     }
 
     /**
-     * @param ArrayCollection $quoteProducts
+     * @param QuoteProduct $quoteProduct
      * @return Quote
      */
-    public function setQuoteProducts($quoteProducts)
-    {
-        $this->quoteProducts = $quoteProducts;
+    public function addQuoteProduct($quoteProduct) {
+        if (!$this->quoteProducts->contains($quoteProduct)) $this->quoteProducts->add($quoteProduct);
+        return $this;
+    }
+
+    /**
+     * @param QuoteProduct $quoteProduct
+     * @return Quote
+     */
+    public function removeQuoteProduct($quoteProduct) {
+        if ($this->quoteProducts->contains($quoteProduct)) $this->quoteProducts->remove($quoteProduct);
         return $this;
     }
 
@@ -173,6 +189,24 @@ class Quote
     public function setRetailer($retailer)
     {
         $this->retailer = $retailer;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getExpiresAt()
+    {
+        return $this->expiresAt;
+    }
+
+    /**
+     * @param \DateTime $expiresAt
+     * @return Quote
+     */
+    public function setExpiresAt($expiresAt)
+    {
+        $this->expiresAt = $expiresAt;
         return $this;
     }
 

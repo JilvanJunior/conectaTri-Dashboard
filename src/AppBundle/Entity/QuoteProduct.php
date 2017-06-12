@@ -144,6 +144,15 @@ class QuoteProduct
     }
 
     /**
+     * @param QuoteSupplier $quoteSupplier
+     * @return $this
+     */
+    public function removeQuoteSupplier($quoteSupplier) {
+        if ($this->quoteSuppliers->contains($quoteSupplier)) $this->quoteSuppliers->remove($quoteSupplier);
+        return $this;
+    }
+
+    /**
      * @return DateTime
      */
     public function getCreatedAt()

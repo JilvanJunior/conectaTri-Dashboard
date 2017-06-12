@@ -59,7 +59,7 @@ class Listing
      *     inverseJoinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")}
      *     )
      */
-    private $suppliers;
+    private $representatives;
 
     /**
      * @var Retailer
@@ -96,7 +96,7 @@ class Listing
     public function __construct()
     {
         $this->listingProducts = new ArrayCollection();
-        $this->suppliers = new ArrayCollection();
+        $this->representatives = new ArrayCollection();
         $this->createdAt = new \DateTime();
     }
 
@@ -183,6 +183,14 @@ class Listing
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getListingProducts()
+    {
+        return $this->listingProducts;
+    }
+
+    /**
      * @param ListingProduct $product
      * @return $this
      */
@@ -201,20 +209,28 @@ class Listing
     }
 
     /**
-     * @param Supplier $supplier
+     * @return ArrayCollection
+     */
+    public function getRepresentatives()
+    {
+        return $this->representatives;
+    }
+
+    /**
+     * @param Representative $representative
      * @return $this
      */
-    public function addSupplier($supplier) {
-        if (!$this->suppliers->contains($supplier)) $this->suppliers->add($supplier);
+    public function addRepresentative($representative) {
+        if (!$this->representatives->contains($representative)) $this->representatives->add($representative);
         return $this;
     }
 
     /**
-     * @param Supplier $supplier
+     * @param Representative $representative
      * @return $this
      */
-    public function removeSupplier($supplier) {
-        if ($this->suppliers->contains($supplier)) $this->suppliers->remove($supplier);
+    public function removeRepresentative($representative) {
+        if ($this->representatives->contains($representative)) $this->representatives->remove($representative);
         return $this;
     }
 

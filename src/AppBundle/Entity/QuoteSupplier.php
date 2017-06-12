@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
@@ -35,10 +34,12 @@ class QuoteSupplier
     private $quoteProduct;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Supplier", inversedBy="quoteSuppliers")
+     * @var Representative
+     *
+     * @ORM\ManyToOne(targetEntity="Representative")
      * @ORM\JoinColumn(name="supplier_id", referencedColumnName="id")
      */
-    private $supplier;
+    private $representative;
 
     /**
      * @var string
@@ -81,7 +82,7 @@ class QuoteSupplier
      */
     public function __construct()
     {
-        $this->createdAt = new DateTime();
+        $this->createdAt = new \DateTime();
     }
 
     /**
@@ -113,20 +114,20 @@ class QuoteSupplier
     }
 
     /**
-     * @return Supplier
+     * @return Representative
      */
-    public function getSupplier()
+    public function getRepresentative()
     {
-        return $this->supplier;
+        return $this->representative;
     }
 
     /**
-     * @param Supplier $supplier
+     * @param Representative $representative
      * @return QuoteSupplier
      */
-    public function setSupplier($supplier)
+    public function setRepresentative($representative)
     {
-        $this->supplier = $supplier;
+        $this->representative = $representative;
         return $this;
     }
 
@@ -167,7 +168,7 @@ class QuoteSupplier
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -175,7 +176,7 @@ class QuoteSupplier
     }
 
     /**
-     * @param DateTime $createdAt
+     * @param \DateTime $createdAt
      * @return QuoteSupplier
      */
     public function setCreatedAt($createdAt)
@@ -185,7 +186,7 @@ class QuoteSupplier
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -193,7 +194,7 @@ class QuoteSupplier
     }
 
     /**
-     * @param DateTime $updatedAt
+     * @param \DateTime $updatedAt
      * @return QuoteSupplier
      */
     public function setUpdatedAt($updatedAt)
