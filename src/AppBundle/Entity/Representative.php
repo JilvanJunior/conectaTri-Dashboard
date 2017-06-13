@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * @ORM\Entity
  * @ORM\Table(name="representative")
- * @Serializer\ExclusionPolicy(policy="none")
+ * @Serializer\ExclusionPolicy("none")
  */
 class Representative
 {

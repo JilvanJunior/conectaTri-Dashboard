@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @ORM\Table(name="quote_supplier")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuoteSupplierRepository")
- * @Serializer\ExclusionPolicy(policy="none")
+ * @Serializer\ExclusionPolicy("none")
  */
 class QuoteSupplier
 {

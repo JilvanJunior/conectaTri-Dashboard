@@ -12,7 +12,7 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @ORM\Table(name="quote_product")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuoteProductRepository")
- * @Serializer\ExclusionPolicy(policy="none")
+ * @Serializer\ExclusionPolicy("none")
  */
 class QuoteProduct
 {

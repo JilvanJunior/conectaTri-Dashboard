@@ -10,7 +10,7 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @ORM\Table(name="listing_product")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ListingProductRepository")
- * @Serializer\ExclusionPolicy(policy="none")
+ * @Serializer\ExclusionPolicy("none")
  */
 class ListingProduct
 {
