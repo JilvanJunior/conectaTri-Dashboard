@@ -64,7 +64,7 @@ class Listing
     /**
      * @var Retailer
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer", inversedBy="listings")
      * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
      */
     private $retailer;
@@ -305,5 +305,14 @@ class Listing
         $this->deleted = $deleted;
         return $this;
     }
-}
 
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+}

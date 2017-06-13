@@ -31,6 +31,11 @@ class Retailer implements UserInterface, \Serializable
     private $suppliers;
 
     /**
+     * @ORM\OneToMany(targetEntity="Listing", mappedBy="retailer")
+     */
+    private $listings;
+
+    /**
      * @ORM\OneToMany(targetEntity="Quote", mappedBy="retailer")
      */
     private $quotes;
@@ -126,6 +131,7 @@ class Retailer implements UserInterface, \Serializable
     {
         $this->suppliers = new ArrayCollection();
         $this->representatives = new ArrayCollection();
+        $this->listings = new ArrayCollection();
         $this->quotes = new ArrayCollection();
         $this->createdAt = new DateTime();
     }
@@ -531,11 +537,11 @@ class Retailer implements UserInterface, \Serializable
     /**
      * Add representative
      *
-     * @param \AppBundle\Entity\Representative $representative
+     * @param Representative $representative
      *
      * @return Retailer
      */
-    public function addRepresentative(\AppBundle\Entity\Representative $representative)
+    public function addRepresentative(Representative $representative)
     {
         $this->representatives[] = $representative;
 
@@ -545,9 +551,9 @@ class Retailer implements UserInterface, \Serializable
     /**
      * Remove representative
      *
-     * @param \AppBundle\Entity\Representative $representative
+     * @param Representative $representative
      */
-    public function removeRepresentative(\AppBundle\Entity\Representative $representative)
+    public function removeRepresentative(Representative $representative)
     {
         $this->representatives->removeElement($representative);
     }
@@ -555,7 +561,7 @@ class Retailer implements UserInterface, \Serializable
     /**
      * Get representatives
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getRepresentatives()
     {
@@ -565,11 +571,11 @@ class Retailer implements UserInterface, \Serializable
     /**
      * Add supplier
      *
-     * @param \AppBundle\Entity\Supplier $supplier
+     * @param Supplier $supplier
      *
      * @return Retailer
      */
-    public function addSupplier(\AppBundle\Entity\Supplier $supplier)
+    public function addSupplier(Supplier $supplier)
     {
         $this->suppliers[] = $supplier;
 
@@ -579,9 +585,9 @@ class Retailer implements UserInterface, \Serializable
     /**
      * Remove supplier
      *
-     * @param \AppBundle\Entity\Supplier $supplier
+     * @param Supplier $supplier
      */
-    public function removeSupplier(\AppBundle\Entity\Supplier $supplier)
+    public function removeSupplier(Supplier $supplier)
     {
         $this->suppliers->removeElement($supplier);
     }
@@ -589,7 +595,7 @@ class Retailer implements UserInterface, \Serializable
     /**
      * Get suppliers
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getSuppliers()
     {
@@ -599,11 +605,11 @@ class Retailer implements UserInterface, \Serializable
     /**
      * Add quote
      *
-     * @param \AppBundle\Entity\Quote $quote
+     * @param Quote $quote
      *
      * @return Retailer
      */
-    public function addQuote(\AppBundle\Entity\Quote $quote)
+    public function addQuote(Quote $quote)
     {
         $this->quotes[] = $quote;
 
@@ -613,9 +619,9 @@ class Retailer implements UserInterface, \Serializable
     /**
      * Remove quote
      *
-     * @param \AppBundle\Entity\Quote $quote
+     * @param Quote $quote
      */
-    public function removeQuote(\AppBundle\Entity\Quote $quote)
+    public function removeQuote(Quote $quote)
     {
         $this->quotes->removeElement($quote);
     }
@@ -623,10 +629,44 @@ class Retailer implements UserInterface, \Serializable
     /**
      * Get quotes
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getQuotes()
     {
         return $this->quotes;
+    }
+
+    /**
+     * Add listing
+     *
+     * @param Listing $listing
+     *
+     * @return Retailer
+     */
+    public function addListing(Listing $listing)
+    {
+        $this->listings[] = $listing;
+
+        return $this;
+    }
+
+    /**
+     * Remove listing
+     *
+     * @param Listing $listing
+     */
+    public function removeListing(Listing $listing)
+    {
+        $this->listings->removeElement($listing);
+    }
+
+    /**
+     * Get listings
+     *
+     * @return ArrayCollection
+     */
+    public function getListings()
+    {
+        return $this->listings;
     }
 }

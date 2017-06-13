@@ -130,4 +130,3 @@ class ListingProduct
         return $this->listing;
     }
 }
-

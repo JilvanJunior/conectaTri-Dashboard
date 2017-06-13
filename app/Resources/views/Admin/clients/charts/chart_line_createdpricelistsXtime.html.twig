@@ -106,9 +106,9 @@
                                                     {% for client in clients %}
                                                         <tr>
                                                             <td>{{ client.cnpj }}</td>
-                                                            <td>{{ client.company_name }}</td>
-                                                            <td></td>
-                                                            <td></td>
+                                                            <td>{{ client.companyName }}</td>
+                                                            <td>{{ client.listings|length }}</td>
+                                                            <td>{{ client.quotes|length }}</td>
                                                             <td></td>
                                                             <td>{{ client.createdAt|date('dd/mm/yyyy') }}</td>
                                                             <td>

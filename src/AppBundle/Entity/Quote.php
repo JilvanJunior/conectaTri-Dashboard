@@ -85,7 +85,7 @@ class Quote
      */
     public function __construct()
     {
-        $this->quoteProducts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->quoteProducts = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->expiresAt = new DateTime("2500-01-01");
     }
@@ -263,5 +263,14 @@ class Quote
         $this->deleted = $deleted;
         return $this;
     }
-}
 
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+}

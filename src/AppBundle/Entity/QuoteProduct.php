@@ -205,4 +205,14 @@ class QuoteProduct
         $this->deleted = $deleted;
         return $this;
     }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
 }

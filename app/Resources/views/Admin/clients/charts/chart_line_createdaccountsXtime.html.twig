@@ -107,8 +107,8 @@
                                                         <tr>
                                                             <td>{{ client.cnpj }}</td>
                                                             <td>{{ client.companyName }}</td>
-                                                            <td></td>
-                                                            <td></td>
+                                                            <td>{{ client.listings|length }}</td>
+                                                            <td>{{ client.quotes|length }}</td>
                                                             <td></td>
                                                             <td>{{ client.createdAt|date('d/m/Y') }}</td>
                                                             <td>
