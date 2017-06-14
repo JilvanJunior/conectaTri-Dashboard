@@ -68,9 +68,9 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="unity", type="string", length=255)
+     * @ORM\Column(name="unit", type="string", length=255)
      */
-    private $unity;
+    private $unit;
 
     /**
      * @var \DateTime
@@ -258,25 +258,25 @@ class Product
     /**
      * Set unity
      *
-     * @param string $unity
+     * @param string $unit
      *
      * @return Product
      */
-    public function setUnity($unity)
+    public function setUnit($unit)
     {
-        $this->unity = $unity;
+        $this->unit = $unit;
 
         return $this;
     }
 
     /**
-     * Get unity
+     * Get unit
      *
      * @return string
      */
-    public function getUnity()
+    public function getUnit()
     {
-        return $this->unity;
+        return $this->unit;
     }
 
     /**

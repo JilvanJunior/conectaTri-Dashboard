@@ -162,7 +162,7 @@ class ApiController extends FOSRestController
             ->setEan($product->ean)
             ->setFullDescription($product->fullDescription)
             ->setQuantity($product->quantity)
-            ->setUnity($product->unit)
+            ->setUnit($product->unit)
             ->setCreatedAt(new \DateTime())
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false);
@@ -200,7 +200,7 @@ class ApiController extends FOSRestController
             ->setEan($product->ean)
             ->setFullDescription($product->fullDescription)
             ->setQuantity($product->quantity)
-            ->setUnity($product->unit)
+            ->setUnit($product->unit)
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false);
         $em->flush();
