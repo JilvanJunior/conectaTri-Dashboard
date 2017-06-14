@@ -627,7 +627,8 @@ class ApiController extends FOSRestController
     /**
      * @Rest\Post("/api/quote")
      */
-    public function postQuote(LoggerInterface $logger, Request $request) {
+    public function postQuote(Request $request) {
+        $logger = $this->get("logger");
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
