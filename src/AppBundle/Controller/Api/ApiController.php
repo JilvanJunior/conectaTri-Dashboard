@@ -12,6 +12,7 @@ use AppBundle\Entity\QuoteSupplier;
 use AppBundle\Entity\Representative;
 use AppBundle\Entity\Supplier;
 use AppBundle\Model\ApiError;
+use AppBundle\Model\ApiSupplier;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Ramsey\Uuid\Uuid;
@@ -100,11 +101,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -121,11 +122,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -145,11 +146,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
 
@@ -158,14 +159,11 @@ class ApiController extends FOSRestController
         $dbProduct
             ->setName($product->name)
             ->setBrand($product->brand)
-            ->setCategory($product->category)
+            ->setType($product->type)
             ->setEan($product->ean)
-            ->setFullDescription($product->fullDescription)
-            ->setDepartment($product->department)
-            ->setSection($product->section)
-            ->setSubCategory($product->subcategory)
+            ->setFullDescription($product->full_description)
             ->setQuantity($product->quantity)
-            ->setUnity($product->unit)
+            ->setUnit($product->unit)
             ->setCreatedAt(new \DateTime())
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false);
@@ -183,11 +181,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
 
@@ -199,14 +197,11 @@ class ApiController extends FOSRestController
         $dbProduct
             ->setName($product->name)
             ->setBrand($product->brand)
-            ->setCategory($product->category)
+            ->setType($product->type)
             ->setEan($product->ean)
-            ->setFullDescription($product->fullDescription)
-            ->setDepartment($product->department)
-            ->setSection($product->section)
-            ->setSubCategory($product->subcategory)
+            ->setFullDescription($product->full_description)
             ->setQuantity($product->quantity)
-            ->setUnity($product->unit)
+            ->setUnit($product->unit)
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false);
         $em->flush();
@@ -222,11 +217,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -249,11 +244,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -270,11 +265,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -294,17 +289,21 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $representatives = $d->getRepository("AppBundle:Representative")->findBy(["retailer" => $dbToken->getRetailer()]);
-        return View::create($representatives, Response::HTTP_OK);
+        $representatives = $d->getRepository("AppBundle:Representative")->findBy(["retailer" => $dbToken->getRetailer(), "deleted" => false]);
+        $apiRepresentatives = [];
+        foreach ($representatives as $representative) {
+            $apiRepresentatives[] = new ApiSupplier($representative);
+        }
+        return View::create($apiRepresentatives, Response::HTTP_OK);
     }
 
     /**
@@ -315,18 +314,22 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
         $supplier = $d->getRepository("AppBundle:Supplier")->find($supplierId);
-        $representatives = $d->getRepository("AppBundle:Representative")->findBy(["supplier" => $supplier]);
-        return View::create($representatives, Response::HTTP_OK);
+        $representatives = $d->getRepository("AppBundle:Representative")->findBy(["supplier" => $supplier, "deleted" => false]);
+        $apiRepresentatives = [];
+        foreach ($representatives as $representative) {
+            $apiRepresentatives[] = new ApiSupplier($representative);
+        }
+        return View::create($apiRepresentatives, Response::HTTP_OK);
     }
 
     /**
@@ -337,11 +340,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -363,10 +366,10 @@ class ApiController extends FOSRestController
             $em->persist($supplier);
         }
         $dbRepresentative = new Representative();
-        $dbRepresentative->setName($representative->contactName)
-            ->setPhone($representative->contactPhone)
-            ->setCellphone($representative->contactCellphone)
-            ->setEmail($representative->contactEmail)
+        $dbRepresentative->setName($representative->contact_name)
+            ->setPhone($representative->contact_phone)
+            ->setCellphone($representative->contact_cellphone)
+            ->setEmail($representative->contact_email)
             ->setSupplier($supplier)
             ->setRetailer($dbToken->getRetailer())
             ->setCreatedAt(new \DateTime())
@@ -374,7 +377,7 @@ class ApiController extends FOSRestController
             ->setDeleted(false);
         $em->persist($dbRepresentative);
         $em->flush();
-        return View::create($dbRepresentative, Response::HTTP_OK);
+        return View::create(new ApiSupplier($dbRepresentative), Response::HTTP_OK);
     }
 
     /**
@@ -385,11 +388,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -400,13 +403,19 @@ class ApiController extends FOSRestController
         if (is_null($dbRepresentative)) {
             return View::create(new ApiError("Este representante não está cadastrado"), Response::HTTP_NOT_ACCEPTABLE);
         }
-        $dbRepresentative->setName($representative->contactName)
-            ->setPhone($representative->contactPhone)
-            ->setCellphone($representative->contactCellphone)
-            ->setEmail($representative->contactEmail)
-            ->setUpdatedAt(new \DateTime());
+        $dbRepresentative->getSupplier()
+            ->setName($representative->name)
+            ->setCnpj($representative->cnpj)
+            ->setUpdatedAt(new \DateTime())
+            ->setDeleted(false);
+        $dbRepresentative->setName($representative->contact_name)
+            ->setPhone($representative->contact_phone)
+            ->setCellphone($representative->contact_cellphone)
+            ->setEmail($representative->contact_email)
+            ->setUpdatedAt(new \DateTime())
+            ->setDeleted(false);
         $em->flush();
-        return View::create($dbRepresentative, Response::HTTP_OK);
+        return View::create(new ApiSupplier($dbRepresentative), Response::HTTP_OK);
     }
 
     /**
@@ -417,11 +426,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -437,7 +446,7 @@ class ApiController extends FOSRestController
             $dbRepresentative->getSupplier()->setDeleted(true);
         }
         $em->flush();
-        return View::create($dbRepresentative, Response::HTTP_OK);
+        return View::create(new ApiSupplier($dbRepresentative), Response::HTTP_OK);
     }
 
     /**
@@ -448,11 +457,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -469,11 +478,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -484,7 +493,7 @@ class ApiController extends FOSRestController
             ->setType($listing->type)
             ->setDescription($listing->description)
             ->setRetailer($dbToken->getRetailer());
-        foreach ($listing->products as $product) {
+        foreach ($listing->listing_products as $product) {
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             if (is_null($dbProduct)) continue;
             $listingProduct = new ListingProduct();
@@ -509,20 +518,23 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
         $dbListing = $d->getRepository("AppBundle:Listing")->find($id);
+        if (is_null($dbListing)) {
+            return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
+        }
         $listing = json_decode($request->getContent());
         $tmp = [];
         foreach ($dbListing->getListingProducts() as $product) {
-            $rcvProduct = $this->arrayContains($listing->products, $product);
+            $rcvProduct = $this->arrayContains($listing->listing_products, $product);
             if ($rcvProduct == false) {
                 $dbListing->removeListingProduct($product);
                 $em->remove($product);
@@ -553,6 +565,8 @@ class ApiController extends FOSRestController
             $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($representative->id);
             $dbListing->addRepresentative($dbRepresentative);
         }
+        $dbListing->setUpdatedAt(new \DateTime())
+            ->setDeleted(false);
         $em->flush();
         return View::create($dbListing, Response::HTTP_OK);
     }
@@ -565,11 +579,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -592,11 +606,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -617,11 +631,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -630,23 +644,27 @@ class ApiController extends FOSRestController
         $dbQuote = new Quote();
         $dbQuote->setName($quote->name)
             ->setType($quote->type)
-            ->setRetailer($dbToken->getRetailer());
-        foreach ($quote->products as $product) {
+            ->setRetailer($dbToken->getRetailer())
+            ->setExpiresAt(new \DateTime($quote->expires_at))
+            ->setBeginsAt(new \DateTime($quote->begins_at));
+        $em->persist($dbQuote);
+        foreach ($quote->quote_products as $product) {
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             $quoteProduct = new QuoteProduct();
-            $quoteProduct->setProduct($dbProduct);
-            foreach ($product->suppliers as $supplier) {
-                $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->supplier->id);
+            $quoteProduct->setProduct($dbProduct)
+                ->setQuote($dbQuote);
+            $em->persist($quoteProduct);
+            foreach ($product->quote_suppliers as $supplier) {
+                $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                 $quoteSupplier = new QuoteSupplier();
                 $quoteSupplier->setRepresentative($dbSupplier)
                     ->setQuantity($supplier->quantity)
-                    ->setPrice("0.00")
-                    ->setRepresentative($dbSupplier);
-                $quoteProduct->addQuoteSupplier($quoteSupplier);
+                    ->setPrice(str_replace(",", ".", $supplier->price))
+                    ->setRepresentative($dbSupplier)
+                    ->setQuoteProduct($quoteProduct);
+                $em->persist($quoteSupplier);
             }
-            $dbQuote->addQuoteProduct($quoteProduct);
         }
-        $em->persist($quote);
         $em->flush();
 
         return View::create($dbQuote, Response::HTTP_OK);
@@ -660,33 +678,40 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_FORBIDDEN);
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
         $dbQuote = $d->getRepository("AppBundle:Quote")->find($id);
+        if (is_null($dbQuote)) {
+            return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
+        }
         $quote = json_decode($request->getContent());
         $tmp = [];
         foreach ($dbQuote->getQuoteProducts() as $product) {
-            $rcvProduct = $this->arrayContains($quote->quoteProducts, $product);
+            $rcvProduct = $this->arrayContains($quote->quote_products, $product);
             if ($rcvProduct == false) {
-                $dbQuote->removeQuoteProduct($product);
-                $product->setDeleted(true);
+                $product->setDeleted(true)
+                    ->setUpdatedAt(new \DateTime());
             } else {
+                $product->setDeleted(false)
+                    ->setUpdatedAt(new \DateTime());
                 $tmp2 = [];
                 foreach ($product->getQuoteSuppliers() as $supplier) {
-                    $rcvSupplier = $this->arrayContains($rcvProduct->quoteSuppliers, $supplier);
+                    $rcvSupplier = $this->arrayContains($rcvProduct->quote_suppliers, $supplier);
                     if ($rcvSupplier == false) {
-                        $product->removeQuoteSupplier($supplier);
-                        $supplier->setDeleted(true);
+                        $supplier->setDeleted(true)
+                            ->setUpdatedAt(new \DateTime());
                     } else {
                         $supplier->setQuantity($rcvSupplier->quantity)
-                            ->setPrice($rcvSupplier->price);
+                            ->setPrice($rcvSupplier->price)
+                            ->setDeleted(true)
+                            ->setUpdatedAt(new \DateTime());
                         $tmp2[] = $supplier;
                     }
                 }
@@ -709,11 +734,49 @@ class ApiController extends FOSRestController
             $newProduct->setProduct($dbProduct);
             $dbQuote->addQuoteProduct($newProduct);
         }
+        $dbQuote->setDeleted(false)
+            ->setName($quote->name)
+            ->setExpiresAt(new \DateTime($quote->expires_at))
+            ->setBeginsAt(new \DateTime($quote->begins_at));
         $em->flush();
         return View::create($dbQuote, Response::HTTP_OK);
     }
 
-    //TODO: Delete quote
+    /**
+     * @Rest\Delete("/api/quote/{id}")
+     */
+    public function deleteQuote(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $dbQuote = $d->getRepository("AppBundle:Quote")->find($id);
+        if (is_null($dbQuote)) {
+            return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
+        }
+        foreach($dbQuote->getQuoteProducts() as $product) {
+            $product->setDeleted(true)
+                ->setUpdatedAt(new \DateTime());
+            foreach($product->getQuoteSuppliers() as $supplier) {
+                $supplier->setDeleted(true)
+                    ->setUpdatedAt(new \DateTime());
+            }
+        }
+        $dbQuote->setDeleted(true)
+            ->setUpdatedAt(new \DateTime());
+        $em->flush();
+        return View::create($dbQuote, Response::HTTP_OK);
+
+    }
 
     /**
      * Finds one element in an array, searching by ID properties.

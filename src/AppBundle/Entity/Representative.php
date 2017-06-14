@@ -30,6 +30,7 @@ class Representative
     /**
      * @ORM\ManyToOne(targetEntity="Retailer", inversedBy="representatives")
      * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      */
     private $retailer;
 
@@ -49,7 +50,7 @@ class Representative
     private $phone;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $cellphone;
 
@@ -57,6 +58,7 @@ class Representative
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude()
      */
     private $createdAt;
 
@@ -64,11 +66,13 @@ class Representative
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", nullable=true)
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Serializer\Exclude()
      */
     private $deleted = false;
 

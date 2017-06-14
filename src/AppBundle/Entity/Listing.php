@@ -4,12 +4,14 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Listing
  *
  * @ORM\Table(name="listing")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ListingRepository")
+ * @Serializer\ExclusionPolicy("none")
  */
 class Listing
 {
@@ -56,7 +58,7 @@ class Listing
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Representative")
      * @ORM\JoinTable(name="listing_has_representative",
      *     joinColumns={@ORM\JoinColumn(name="listing_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")}
+     *     inverseJoinColumns={@ORM\JoinColumn(name="representative_id", referencedColumnName="id")}
      *     )
      */
     private $representatives;
@@ -66,6 +68,7 @@ class Listing
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer", inversedBy="listings")
      * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      */
     private $retailer;
 
@@ -73,6 +76,7 @@ class Listing
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Serializer\Exclude()
      */
     private $createdAt;
 
@@ -80,6 +84,7 @@ class Listing
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
@@ -87,6 +92,7 @@ class Listing
      * @var bool
      *
      * @ORM\Column(name="deleted", type="boolean")
+     * @Serializer\Exclude()
      */
     private $deleted = false;
 

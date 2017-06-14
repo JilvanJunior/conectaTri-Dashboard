@@ -5,12 +5,14 @@ namespace AppBundle\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Quote
  *
  * @ORM\Table(name="quote")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuoteRepository")
+ * @Serializer\ExclusionPolicy("none")
  */
 class Quote
 {
@@ -48,14 +50,22 @@ class Quote
      * @var Retailer
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer", inversedBy="quotes")
-     * @ORM\JoinColumn(name="realtor_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      */
     private $retailer;
 
     /**
+     * var \DateTime
+     *
+     * @ORM\Column(name="begins_at", type="datetime", nullable=true)
+     */
+    private $beginsAt;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expires_at", type="datetime")
+     * @ORM\Column(name="expires_at", type="datetime", nullable=true)
      */
     private $expiresAt;
 
@@ -63,6 +73,7 @@ class Quote
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Serializer\Exclude()
      */
     private $createdAt;
 
@@ -70,6 +81,7 @@ class Quote
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
@@ -77,6 +89,7 @@ class Quote
      * @var bool
      *
      * @ORM\Column(name="deleted", type="boolean")
+     * @Serializer\Exclude()
      */
     private $deleted = false;
 
@@ -86,8 +99,9 @@ class Quote
     public function __construct()
     {
         $this->quoteProducts = new ArrayCollection();
-        $this->createdAt = new DateTime();
-        $this->expiresAt = new DateTime("2500-01-01");
+        $this->createdAt = new \DateTime();
+        $this->expiresAt = new \DateTime("2500-01-01");
+        $this->beginsAt = new \DateTime();
     }
 
     /**
@@ -189,6 +203,24 @@ class Quote
     public function setRetailer($retailer)
     {
         $this->retailer = $retailer;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBeginsAt()
+    {
+        return $this->beginsAt;
+    }
+
+    /**
+     * @param \DateTime $beginsAt
+     * @return Quote
+     */
+    public function setBeginsAt($beginsAt)
+    {
+        $this->beginsAt = $beginsAt;
         return $this;
     }
 

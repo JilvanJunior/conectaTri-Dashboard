@@ -53,6 +53,8 @@ class QuoteProduct
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Serializer\Exclude()
+     *
      */
     private $createdAt;
 
@@ -60,6 +62,7 @@ class QuoteProduct
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
@@ -67,6 +70,7 @@ class QuoteProduct
      * @var bool
      *
      * @ORM\Column(name="deleted", type="boolean")
+     * @Serializer\Exclude()
      */
     private $deleted = false;
 

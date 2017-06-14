@@ -5,10 +5,12 @@ namespace AppBundle\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="supplier")
+ * @Serializer\ExclusionPolicy("none")
  */
 class Supplier
 {
@@ -27,13 +29,9 @@ class Supplier
     /**
      * @ORM\ManyToOne(targetEntity="Retailer", inversedBy="suppliers")
      * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      */
     private $retailer;
-
-    /**
-     * @ORM\OneToMany(targetEntity="QuoteSupplier", mappedBy="representative")
-     */
-    private $quoteSuppliers;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -49,6 +47,7 @@ class Supplier
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude()
      */
     private $createdAt;
 
@@ -56,11 +55,13 @@ class Supplier
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Serializer\Exclude()
      */
     private $deleted = false;
 
