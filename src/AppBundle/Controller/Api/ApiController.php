@@ -478,7 +478,7 @@ class ApiController extends FOSRestController
             ->setType($listing->type)
             ->setDescription($listing->description)
             ->setRetailer($dbToken->getRetailer());
-        foreach ($listing->products as $product) {
+        foreach ($listing->listing_products as $product) {
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             if (is_null($dbProduct)) continue;
             $listingProduct = new ListingProduct();
@@ -516,7 +516,7 @@ class ApiController extends FOSRestController
         $listing = json_decode($request->getContent());
         $tmp = [];
         foreach ($dbListing->getListingProducts() as $product) {
-            $rcvProduct = $this->arrayContains($listing->products, $product);
+            $rcvProduct = $this->arrayContains($listing->listing_products, $product);
             if ($rcvProduct == false) {
                 $dbListing->removeListingProduct($product);
                 $em->remove($product);
@@ -625,11 +625,11 @@ class ApiController extends FOSRestController
         $dbQuote->setName($quote->name)
             ->setType($quote->type)
             ->setRetailer($dbToken->getRetailer());
-        foreach ($quote->products as $product) {
+        foreach ($quote->quote_products as $product) {
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             $quoteProduct = new QuoteProduct();
             $quoteProduct->setProduct($dbProduct);
-            foreach ($product->suppliers as $supplier) {
+            foreach ($product->quote_suppliers as $supplier) {
                 $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->supplier->id);
                 $quoteSupplier = new QuoteSupplier();
                 $quoteSupplier->setRepresentative($dbSupplier)
@@ -667,14 +667,14 @@ class ApiController extends FOSRestController
         $quote = json_decode($request->getContent());
         $tmp = [];
         foreach ($dbQuote->getQuoteProducts() as $product) {
-            $rcvProduct = $this->arrayContains($quote->quoteProducts, $product);
+            $rcvProduct = $this->arrayContains($quote->quote_products, $product);
             if ($rcvProduct == false) {
                 $dbQuote->removeQuoteProduct($product);
                 $product->setDeleted(true);
             } else {
                 $tmp2 = [];
                 foreach ($product->getQuoteSuppliers() as $supplier) {
-                    $rcvSupplier = $this->arrayContains($rcvProduct->quoteSuppliers, $supplier);
+                    $rcvSupplier = $this->arrayContains($rcvProduct->quote_suppliers, $supplier);
                     if ($rcvSupplier == false) {
                         $product->removeQuoteSupplier($supplier);
                         $supplier->setDeleted(true);

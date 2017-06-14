@@ -49,7 +49,7 @@ class Representative
     private $phone;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $cellphone;
 
