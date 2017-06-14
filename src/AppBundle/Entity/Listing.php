@@ -58,7 +58,7 @@ class Listing
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Representative")
      * @ORM\JoinTable(name="listing_has_representative",
      *     joinColumns={@ORM\JoinColumn(name="listing_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")}
+     *     inverseJoinColumns={@ORM\JoinColumn(name="representative_id", referencedColumnName="id")}
      *     )
      */
     private $representatives;

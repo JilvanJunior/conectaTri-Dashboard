@@ -778,7 +778,6 @@ class ApiController extends FOSRestController
 
     }
 
-
     /**
      * Finds one element in an array, searching by ID properties.
      * @param $array array Array in which to search for the element.
