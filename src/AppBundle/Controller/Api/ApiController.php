@@ -160,7 +160,7 @@ class ApiController extends FOSRestController
             ->setBrand($product->brand)
             ->setType($product->type)
             ->setEan($product->ean)
-            ->setFullDescription($product->fullDescription)
+            ->setFullDescription($product->full_description)
             ->setQuantity($product->quantity)
             ->setUnit($product->unit)
             ->setCreatedAt(new \DateTime())
@@ -198,7 +198,7 @@ class ApiController extends FOSRestController
             ->setBrand($product->brand)
             ->setType($product->type)
             ->setEan($product->ean)
-            ->setFullDescription($product->fullDescription)
+            ->setFullDescription($product->full_description)
             ->setQuantity($product->quantity)
             ->setUnit($product->unit)
             ->setUpdatedAt(new \DateTime())
@@ -357,10 +357,10 @@ class ApiController extends FOSRestController
             $em->persist($supplier);
         }
         $dbRepresentative = new Representative();
-        $dbRepresentative->setName($representative->contactName)
-            ->setPhone($representative->contactPhone)
-            ->setCellphone($representative->contactCellphone)
-            ->setEmail($representative->contactEmail)
+        $dbRepresentative->setName($representative->contact_name)
+            ->setPhone($representative->contact_phone)
+            ->setCellphone($representative->contact_cellphone)
+            ->setEmail($representative->contact_email)
             ->setSupplier($supplier)
             ->setRetailer($dbToken->getRetailer())
             ->setCreatedAt(new \DateTime())
@@ -394,10 +394,10 @@ class ApiController extends FOSRestController
         if (is_null($dbRepresentative)) {
             return View::create(new ApiError("Este representante não está cadastrado"), Response::HTTP_NOT_ACCEPTABLE);
         }
-        $dbRepresentative->setName($representative->contactName)
-            ->setPhone($representative->contactPhone)
-            ->setCellphone($representative->contactCellphone)
-            ->setEmail($representative->contactEmail)
+        $dbRepresentative->setName($representative->contact_name)
+            ->setPhone($representative->contact_phone)
+            ->setCellphone($representative->contact_cellphone)
+            ->setEmail($representative->contact_email)
             ->setUpdatedAt(new \DateTime());
         $em->flush();
         return View::create($dbRepresentative, Response::HTTP_OK);
