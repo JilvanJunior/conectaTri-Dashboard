@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RetailerRepository")
