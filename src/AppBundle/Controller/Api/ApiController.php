@@ -377,7 +377,7 @@ class ApiController extends FOSRestController
             ->setDeleted(false);
         $em->persist($dbRepresentative);
         $em->flush();
-        return View::create($dbRepresentative, Response::HTTP_OK);
+        return View::create(new ApiSupplier($dbRepresentative), Response::HTTP_OK);
     }
 
     /**
@@ -415,7 +415,7 @@ class ApiController extends FOSRestController
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false);
         $em->flush();
-        return View::create($dbRepresentative, Response::HTTP_OK);
+        return View::create(new ApiSupplier($dbRepresentative), Response::HTTP_OK);
     }
 
     /**
@@ -446,7 +446,7 @@ class ApiController extends FOSRestController
             $dbRepresentative->getSupplier()->setDeleted(true);
         }
         $em->flush();
-        return View::create($dbRepresentative, Response::HTTP_OK);
+        return View::create(new ApiSupplier($dbRepresentative), Response::HTTP_OK);
     }
 
     /**
