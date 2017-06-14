@@ -15,7 +15,6 @@ use AppBundle\Model\ApiError;
 use AppBundle\Model\ApiSupplier;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
-use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -628,7 +627,6 @@ class ApiController extends FOSRestController
      * @Rest\Post("/api/quote")
      */
     public function postQuote(Request $request) {
-        $logger = $this->get("logger");
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
@@ -641,39 +639,30 @@ class ApiController extends FOSRestController
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
-        $logger->debug(__FILE__ . ":" . __LINE__);
+
         $quote = json_decode($request->getContent());
-        $logger->debug(__FILE__ . ":" . __LINE__);
         $dbQuote = new Quote();
         $dbQuote->setName($quote->name)
             ->setType($quote->type)
             ->setRetailer($dbToken->getRetailer())
             ->setExpiresAt(new \DateTime($quote->expires_at))
             ->setBeginsAt(new \DateTime($quote->begins_at));
-        $logger->debug(__FILE__ . ":" . __LINE__);
         foreach ($quote->quote_products as $product) {
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
-            $logger->debug(__FILE__ . ":" . __LINE__);
             $quoteProduct = new QuoteProduct();
             $quoteProduct->setProduct($dbProduct);
-            $logger->debug(__FILE__ . ":" . __LINE__);
             foreach ($product->quote_suppliers as $supplier) {
                 $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
-                $logger->debug(__FILE__ . ":" . __LINE__);
                 $quoteSupplier = new QuoteSupplier();
                 $quoteSupplier->setRepresentative($dbSupplier)
                     ->setQuantity($supplier->quantity)
                     ->setPrice($supplier->price)
                     ->setRepresentative($dbSupplier);
-                $logger->debug(__FILE__ . ":" . __LINE__);
                 $quoteProduct->addQuoteSupplier($quoteSupplier);
-                $logger->debug(__FILE__ . ":" . __LINE__);
             }
-            $logger->debug(__FILE__ . ":" . __LINE__);
             $dbQuote->addQuoteProduct($quoteProduct);
         }
-        $logger->debug(__FILE__ . ":" . __LINE__);
-        $em->persist($quote);
+        $em->persist($dbQuote);
         $em->flush();
 
         return View::create($dbQuote, Response::HTTP_OK);
