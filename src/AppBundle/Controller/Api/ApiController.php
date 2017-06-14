@@ -647,24 +647,24 @@ class ApiController extends FOSRestController
             ->setRetailer($dbToken->getRetailer())
             ->setExpiresAt(new \DateTime($quote->expires_at))
             ->setBeginsAt(new \DateTime($quote->begins_at));
+        $em->persist($dbQuote);
         foreach ($quote->quote_products as $product) {
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             $quoteProduct = new QuoteProduct();
-            $quoteProduct->setProduct($dbProduct);
+            $quoteProduct->setProduct($dbProduct)
+                ->setQuote($dbQuote);
+            $em->persist($quoteProduct);
             foreach ($product->quote_suppliers as $supplier) {
                 $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                 $quoteSupplier = new QuoteSupplier();
                 $quoteSupplier->setRepresentative($dbSupplier)
                     ->setQuantity($supplier->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price))
-                    ->setRepresentative($dbSupplier);
+                    ->setRepresentative($dbSupplier)
+                    ->setQuoteProduct($quoteProduct);
                 $em->persist($quoteSupplier);
-                $quoteProduct->addQuoteSupplier($quoteSupplier);
             }
-            $em->persist($quoteProduct);
-            $dbQuote->addQuoteProduct($quoteProduct);
         }
-        $em->persist($dbQuote);
         $em->flush();
 
         return View::create($dbQuote, Response::HTTP_OK);
