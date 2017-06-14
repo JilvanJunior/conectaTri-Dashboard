@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="listing")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ListingRepository")
+ * @Serializer\ExclusionPolicy("none")
  */
 class Listing
 {
@@ -66,6 +67,7 @@ class Listing
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer", inversedBy="listings")
      * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      */
     private $retailer;
 
@@ -73,6 +75,7 @@ class Listing
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Serializer\Exclude()
      */
     private $createdAt;
 
@@ -80,6 +83,7 @@ class Listing
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
@@ -87,6 +91,7 @@ class Listing
      * @var bool
      *
      * @ORM\Column(name="deleted", type="boolean")
+     * @Serializer\Exclude()
      */
     private $deleted = false;
 

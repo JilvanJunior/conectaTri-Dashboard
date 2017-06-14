@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="quote")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuoteRepository")
+ * @Serializer\ExclusionPolicy("none")
  */
 class Quote
 {
@@ -48,9 +49,17 @@ class Quote
      * @var Retailer
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer", inversedBy="quotes")
-     * @ORM\JoinColumn(name="realtor_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      */
     private $retailer;
+
+    /**
+     * var \DateTime
+     *
+     * @ORM\Column(name="begins_at", type="datetime")
+     */
+    private $beginsAt;
 
     /**
      * @var \DateTime
@@ -63,6 +72,7 @@ class Quote
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Serializer\Exclude()
      */
     private $createdAt;
 
@@ -70,6 +80,7 @@ class Quote
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
@@ -77,6 +88,7 @@ class Quote
      * @var bool
      *
      * @ORM\Column(name="deleted", type="boolean")
+     * @Serializer\Exclude()
      */
     private $deleted = false;
 
@@ -189,6 +201,24 @@ class Quote
     public function setRetailer($retailer)
     {
         $this->retailer = $retailer;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBeginsAt()
+    {
+        return $this->beginsAt;
+    }
+
+    /**
+     * @param \DateTime $beginsAt
+     * @return Quote
+     */
+    public function setBeginsAt($beginsAt)
+    {
+        $this->beginsAt = $beginsAt;
         return $this;
     }
 

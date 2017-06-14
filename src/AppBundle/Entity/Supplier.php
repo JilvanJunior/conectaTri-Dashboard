@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="supplier")
+ * @Serializer\ExclusionPolicy("none")
  */
 class Supplier
 {
@@ -27,6 +28,7 @@ class Supplier
     /**
      * @ORM\ManyToOne(targetEntity="Retailer", inversedBy="suppliers")
      * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
+     * @Serializer\Exclude()
      */
     private $retailer;
 
@@ -44,6 +46,7 @@ class Supplier
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude()
      */
     private $createdAt;
 
@@ -51,11 +54,13 @@ class Supplier
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Serializer\Exclude()
      */
     private $deleted = false;
 

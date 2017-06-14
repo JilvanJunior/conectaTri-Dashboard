@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductRepository")
+ * @Serializer\ExclusionPolicy("none")
  */
 class Product
 {
@@ -76,6 +77,7 @@ class Product
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Serializer\Exclude()
      */
     private $createdAt;
 
@@ -83,6 +85,7 @@ class Product
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
@@ -90,6 +93,7 @@ class Product
      * @var bool
      *
      * @ORM\Column(name="deleted", type="boolean")
+     * @Serializer\Exclude()
      */
     private $deleted = false;
 

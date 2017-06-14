@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RetailerRepository")
  * @ORM\Table(name="retailer")
+ * @Serializer\ExclusionPolicy("none")
  */
 class Retailer implements UserInterface, \Serializable
 {
