@@ -33,30 +33,9 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="department", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=255)
      */
-    private $department;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="section", type="string", length=255)
-     */
-    private $section;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="category", type="string", length=255)
-     */
-    private $category;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="sub_category", type="string", length=255)
-     */
-    private $subCategory;
+    private $type;
 
     /**
      * @var string
@@ -157,99 +136,27 @@ class Product
     }
 
     /**
-     * Set department
+     * Set type
      *
-     * @param string $department
+     * @param string $type
      *
      * @return Product
      */
-    public function setDepartment($department)
+    public function setType($type)
     {
-        $this->department = $department;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get department
+     * Get type
      *
      * @return string
      */
-    public function getDepartment()
+    public function getType()
     {
-        return $this->department;
-    }
-
-    /**
-     * Set section
-     *
-     * @param string $section
-     *
-     * @return Product
-     */
-    public function setSection($section)
-    {
-        $this->section = $section;
-
-        return $this;
-    }
-
-    /**
-     * Get section
-     *
-     * @return string
-     */
-    public function getSection()
-    {
-        return $this->section;
-    }
-
-    /**
-     * Set category
-     *
-     * @param string $category
-     *
-     * @return Product
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return string
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * Set subCategory
-     *
-     * @param string $subCategory
-     *
-     * @return Product
-     */
-    public function setSubCategory($subCategory)
-    {
-        $this->subCategory = $subCategory;
-
-        return $this;
-    }
-
-    /**
-     * Get subCategory
-     *
-     * @return string
-     */
-    public function getSubCategory()
-    {
-        return $this->subCategory;
+        return $this->type;
     }
 
     /**
