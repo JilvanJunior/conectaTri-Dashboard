@@ -763,7 +763,17 @@ class ApiController extends FOSRestController
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
         }
-
+        foreach($dbQuote->getQuoteProducts() as $product) {
+            $product->setDeleted(true)
+                ->setUpdatedAt(new \DateTime());
+            foreach($product->getQuoteSuppliers() as $supplier) {
+                $supplier->setDeleted(true)
+                    ->setUpdatedAt(new \DateTime());
+            }
+        }
+        $dbQuote->setDeleted(true)
+            ->setUpdatedAt(new \DateTime());
+        $em->flush();
         return View::create($dbQuote, Response::HTTP_OK);
 
     }
