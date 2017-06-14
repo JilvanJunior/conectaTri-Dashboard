@@ -99,8 +99,9 @@ class Quote
     public function __construct()
     {
         $this->quoteProducts = new ArrayCollection();
-        $this->createdAt = new DateTime();
-        $this->expiresAt = new DateTime("2500-01-01");
+        $this->createdAt = new \DateTime();
+        $this->expiresAt = new \DateTime("2500-01-01");
+        $this->beginsAt = new \DateTime();
     }
 
     /**
