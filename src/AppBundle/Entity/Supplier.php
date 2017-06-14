@@ -31,11 +31,6 @@ class Supplier
     private $retailer;
 
     /**
-     * @ORM\OneToMany(targetEntity="QuoteSupplier", mappedBy="representative")
-     */
-    private $quoteSuppliers;
-
-    /**
      * @ORM\Column(type="string", length=50)
      */
     private $cnpj;

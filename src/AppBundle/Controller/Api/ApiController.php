@@ -12,6 +12,7 @@ use AppBundle\Entity\QuoteSupplier;
 use AppBundle\Entity\Representative;
 use AppBundle\Entity\Supplier;
 use AppBundle\Model\ApiError;
+use AppBundle\Model\ApiSupplier;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Ramsey\Uuid\Uuid;
@@ -298,7 +299,11 @@ class ApiController extends FOSRestController
         $em->flush();
 
         $representatives = $d->getRepository("AppBundle:Representative")->findBy(["retailer" => $dbToken->getRetailer()]);
-        return View::create($representatives, Response::HTTP_OK);
+        $apiRepresentatives = [];
+        foreach ($representatives as $representative) {
+            $apiRepresentatives[] = new ApiSupplier($representative);
+        }
+        return View::create($apiRepresentatives, Response::HTTP_OK);
     }
 
     /**
@@ -320,7 +325,11 @@ class ApiController extends FOSRestController
 
         $supplier = $d->getRepository("AppBundle:Supplier")->find($supplierId);
         $representatives = $d->getRepository("AppBundle:Representative")->findBy(["supplier" => $supplier]);
-        return View::create($representatives, Response::HTTP_OK);
+        $apiRepresentatives = [];
+        foreach ($representatives as $representative) {
+            $apiRepresentatives[] = new ApiSupplier($representative);
+        }
+        return View::create($apiRepresentatives, Response::HTTP_OK);
     }
 
     /**
