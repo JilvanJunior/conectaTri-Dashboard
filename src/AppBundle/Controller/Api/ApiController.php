@@ -298,7 +298,7 @@ class ApiController extends FOSRestController
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $representatives = $d->getRepository("AppBundle:Representative")->findBy(["retailer" => $dbToken->getRetailer()]);
+        $representatives = $d->getRepository("AppBundle:Representative")->findBy(["retailer" => $dbToken->getRetailer(), "deleted" => false]);
         $apiRepresentatives = [];
         foreach ($representatives as $representative) {
             $apiRepresentatives[] = new ApiSupplier($representative);
@@ -324,7 +324,7 @@ class ApiController extends FOSRestController
         $em->flush();
 
         $supplier = $d->getRepository("AppBundle:Supplier")->find($supplierId);
-        $representatives = $d->getRepository("AppBundle:Representative")->findBy(["supplier" => $supplier]);
+        $representatives = $d->getRepository("AppBundle:Representative")->findBy(["supplier" => $supplier, "deleted" => false]);
         $apiRepresentatives = [];
         foreach ($representatives as $representative) {
             $apiRepresentatives[] = new ApiSupplier($representative);
