@@ -528,6 +528,9 @@ class ApiController extends FOSRestController
         $em->flush();
 
         $dbListing = $d->getRepository("AppBundle:Listing")->find($id);
+        if (is_null($dbListing)) {
+            return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
+        }
         $listing = json_decode($request->getContent());
         $tmp = [];
         foreach ($dbListing->getListingProducts() as $product) {
@@ -562,6 +565,8 @@ class ApiController extends FOSRestController
             $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($representative->id);
             $dbListing->addRepresentative($dbRepresentative);
         }
+        $dbListing->setUpdatedAt(new \DateTime())
+            ->setDeleted(false);
         $em->flush();
         return View::create($dbListing, Response::HTTP_OK);
     }
@@ -651,7 +656,7 @@ class ApiController extends FOSRestController
                 $quoteSupplier = new QuoteSupplier();
                 $quoteSupplier->setRepresentative($dbSupplier)
                     ->setQuantity($supplier->quantity)
-                    ->setPrice("0.00")
+                    ->setPrice($supplier->price)
                     ->setRepresentative($dbSupplier);
                 $quoteProduct->addQuoteSupplier($quoteSupplier);
             }
@@ -681,7 +686,81 @@ class ApiController extends FOSRestController
         $em->flush();
 
         $dbQuote = $d->getRepository("AppBundle:Quote")->find($id);
+        if (is_null($dbQuote)) {
+            return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
+        }
         $quote = json_decode($request->getContent());
+        $tmp = [];
+        foreach ($dbQuote->getQuoteProducts() as $product) {
+            $rcvProduct = $this->arrayContains($quote->quote_products, $product);
+            if ($rcvProduct == false) {
+                $product->setDeleted(true)
+                    ->setUpdatedAt(new \DateTime());
+            } else {
+                $product->setDeleted(false)
+                    ->setUpdatedAt(new \DateTime());
+                $tmp2 = [];
+                foreach ($product->getQuoteSuppliers() as $supplier) {
+                    $rcvSupplier = $this->arrayContains($rcvProduct->quote_suppliers, $supplier);
+                    if ($rcvSupplier == false) {
+                        $supplier->setDeleted(true)
+                            ->setUpdatedAt(new \DateTime());
+                    } else {
+                        $supplier->setQuantity($rcvSupplier->quantity)
+                            ->setPrice($rcvSupplier->price)
+                            ->setDeleted(true)
+                            ->setUpdatedAt(new \DateTime());
+                        $tmp2[] = $supplier;
+                    }
+                }
+                // FIXME: Add new quoteSuppliers to existing products
+                $tmp[] = $rcvProduct;
+            }
+        }
+        array_diff($quote->quoteProducts, $tmp);
+        foreach ($quote->quoteProducts as $product) {
+            $newProduct = new QuoteProduct();
+            $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
+            foreach ($product->quoteSuppliers as $supplier) {
+                $newSupplier = new QuoteSupplier();
+                $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
+                $newSupplier->setPrice("0.00")
+                    ->setQuantity($supplier->quantity)
+                    ->setRepresentative($dbSupplier);
+                $newProduct->addQuoteSupplier($newSupplier);
+            }
+            $newProduct->setProduct($dbProduct);
+            $dbQuote->addQuoteProduct($newProduct);
+        }
+        $dbQuote->setDeleted(false)
+            ->setName($quote->name)
+            ->setExpiresAt(new \DateTime($quote->expires_at))
+            ->setBeginsAt(new \DateTime($quote->begins_at));
+        $em->flush();
+        return View::create($dbQuote, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Delete("/api/quote/{id}")
+     */
+    public function deleteQuote(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $dbQuote = $d->getRepository("AppBundle:Quote")->find($id);
+        if (is_null($dbQuote)) {
+            return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
+        }
         $tmp = [];
         foreach ($dbQuote->getQuoteProducts() as $product) {
             $rcvProduct = $this->arrayContains($quote->quote_products, $product);
@@ -726,9 +805,8 @@ class ApiController extends FOSRestController
             ->setBeginsAt(new \DateTime($quote->begins_at));
         $em->flush();
         return View::create($dbQuote, Response::HTTP_OK);
-    }
 
-    //TODO: Delete quote
+    }
 
 
     /**

@@ -45,7 +45,7 @@ class QuoteSupplier
      * @var string
      *
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2)
-     * @Serializer\Type("double")
+     * @Serializer\Type("string")
      */
     private $price;
 
