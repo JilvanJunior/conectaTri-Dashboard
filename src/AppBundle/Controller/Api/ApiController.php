@@ -658,8 +658,10 @@ class ApiController extends FOSRestController
                     ->setQuantity($supplier->quantity)
                     ->setPrice($supplier->price)
                     ->setRepresentative($dbSupplier);
+                $em->persist($quoteSupplier);
                 $quoteProduct->addQuoteSupplier($quoteSupplier);
             }
+            $em->persist($quoteProduct);
             $dbQuote->addQuoteProduct($quoteProduct);
         }
         $em->persist($dbQuote);
@@ -761,49 +763,7 @@ class ApiController extends FOSRestController
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
         }
-        $tmp = [];
-        foreach ($dbQuote->getQuoteProducts() as $product) {
-            $rcvProduct = $this->arrayContains($quote->quote_products, $product);
-            if ($rcvProduct == false) {
-                $dbQuote->removeQuoteProduct($product);
-                $product->setDeleted(true);
-            } else {
-                $tmp2 = [];
-                foreach ($product->getQuoteSuppliers() as $supplier) {
-                    $rcvSupplier = $this->arrayContains($rcvProduct->quote_suppliers, $supplier);
-                    if ($rcvSupplier == false) {
-                        $product->removeQuoteSupplier($supplier);
-                        $supplier->setDeleted(true);
-                    } else {
-                        $supplier->setQuantity($rcvSupplier->quantity)
-                            ->setPrice($rcvSupplier->price);
-                        $tmp2[] = $supplier;
-                    }
-                }
-                // FIXME: Add new quoteSuppliers to existing products
-                $tmp[] = $rcvProduct;
-            }
-        }
-        array_diff($quote->quoteProducts, $tmp);
-        foreach ($quote->quoteProducts as $product) {
-            $newProduct = new QuoteProduct();
-            $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
-            foreach ($product->quoteSuppliers as $supplier) {
-                $newSupplier = new QuoteSupplier();
-                $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
-                $newSupplier->setPrice("0.00")
-                    ->setQuantity($supplier->quantity)
-                    ->setRepresentative($dbSupplier);
-                $newProduct->addQuoteSupplier($newSupplier);
-            }
-            $newProduct->setProduct($dbProduct);
-            $dbQuote->addQuoteProduct($newProduct);
-        }
-        $dbQuote->setDeleted(false)
-            ->setName($quote->name)
-            ->setExpiresAt(new \DateTime($quote->expires_at))
-            ->setBeginsAt(new \DateTime($quote->begins_at));
-        $em->flush();
+        
         return View::create($dbQuote, Response::HTTP_OK);
 
     }
