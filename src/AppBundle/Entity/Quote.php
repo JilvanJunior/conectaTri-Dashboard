@@ -58,14 +58,14 @@ class Quote
     /**
      * var \DateTime
      *
-     * @ORM\Column(name="begins_at", type="datetime")
+     * @ORM\Column(name="begins_at", type="datetime", nullable=true)
      */
     private $beginsAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expires_at", type="datetime")
+     * @ORM\Column(name="expires_at", type="datetime", nullable=true)
      */
     private $expiresAt;
 
