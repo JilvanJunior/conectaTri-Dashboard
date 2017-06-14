@@ -656,7 +656,7 @@ class ApiController extends FOSRestController
                 $quoteSupplier = new QuoteSupplier();
                 $quoteSupplier->setRepresentative($dbSupplier)
                     ->setQuantity($supplier->quantity)
-                    ->setPrice($supplier->price)
+                    ->setPrice(str_replace(",", ".", $supplier->price))
                     ->setRepresentative($dbSupplier);
                 $em->persist($quoteSupplier);
                 $quoteProduct->addQuoteSupplier($quoteSupplier);
@@ -763,7 +763,7 @@ class ApiController extends FOSRestController
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
         }
-        
+
         return View::create($dbQuote, Response::HTTP_OK);
 
     }
