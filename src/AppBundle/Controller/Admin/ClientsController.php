@@ -22,7 +22,7 @@ class ClientsController extends Controller
     }
 
     /**
-     * @Route("/administrador/clientes/cotacoesXpedidos", name="admin_clients_scatter_pricelistXorder")
+     * @Route("/administrador/clientes/clientesXregiao", name="admin_clients_pie_clientsXregion")
      * @param Request $request
      * @return
      */
@@ -30,11 +30,11 @@ class ClientsController extends Controller
     {
         $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false]);
 
-        return $this->render('Admin/clients/charts/chart_scatter_pricelistXorder.html.twig', ['clients' => $clients]);
+        return $this->render('Admin/clients/charts/chart_pie_clientXregion.html.twig', ['clients' => $clients]);
     }
 
     /**
-     * @Route("/administrador/clientes/pedidosXvalor", name="admin_clients_scatter_orderXvalue")
+     * @Route("/administrador/clientes/clientesXestado", name="admin_clients_pie_clientsXstate")
      * @param Request $request
      * @return
      */
@@ -42,7 +42,7 @@ class ClientsController extends Controller
     {
         $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false]);
 
-        return $this->render('Admin/clients/charts/chart_scatter_orderXvalue.html.twig', ['clients' => $clients]);
+        return $this->render('Admin/clients/charts/chart_pie_clientXstate.html.twig', ['clients' => $clients]);
     }
 
 
