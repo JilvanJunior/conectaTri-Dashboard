@@ -10,6 +10,7 @@ use AppBundle\Entity\Quote;
 use AppBundle\Entity\QuoteProduct;
 use AppBundle\Entity\QuoteSupplier;
 use AppBundle\Entity\Representative;
+use AppBundle\Entity\Retailer;
 use AppBundle\Entity\Supplier;
 use AppBundle\Model\ApiError;
 use AppBundle\Model\ApiSupplier;
@@ -800,6 +801,29 @@ class ApiController extends FOSRestController
             ->setUpdatedAt(new \DateTime());
         $em->flush();
         return View::create($dbQuote, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Post("/api/retailer")
+     */
+    public function postRetailer(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $retailer = json_decode($request->getContent());
+        $dbRetailer = new Retailer();
+        $dbRetailer->setUsername($retailer->cnpj)
+            ->setCnpj($retailer->cnpj)
+            ->setEmail($retailer->email)
+            ->setAddress($retailer->address)
+            ->setCity($retailer->city)
+            ->setState($retailer->state)
+            ->setAddress($retailer->address)
+            ->setPhone($retailer->phone)
+            ->setCellphone($retailer->cellphone);
+        $sec = $this->get('security.password_encoder');
+        $dbRetailer->setPassword($sec->encodePassword($dbRetailer, $retailer->password))
+            ->setRoles("ROLE_USER");
+        $em->persist($dbRetailer);
+        return View::create(new ApiError("Cadastrado com sucesso"), Response::HTTP_CREATED);
     }
 
     /**
