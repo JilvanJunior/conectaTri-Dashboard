@@ -76,7 +76,6 @@ class QuoteSupplier
      * @var bool
      *
      * @ORM\Column(name="deleted", type="boolean")
-     * @Serializer\Exclude()
      */
     private $deleted = false;
 
