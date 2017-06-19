@@ -160,7 +160,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a href="{{ path('admin_listas') }}" class="nav-link  "> Lista de Listas</a>
                                         </li>
                                         <li aria-haspopup="true" class=" dropdown-submenu  ">
-                                            <a href="#" class="nav-link  "> <i class="fa fa-line-chart"></i> Gráficos </a>
+                                            <a href="#" class="nav-link  "> <i class="fa fa-line-chart"></i> Gráficos</a>
                                             <ul class="dropdown-menu">
                                                 <li aria-haspopup="true" class=" ">
                                                     <a href="{{ path('admin_lists_created') }}" class="nav-link "> Listas Criadas</a>
@@ -178,7 +178,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a href="{{ path('admin_produtos') }}" class="nav-link  "> Lista de Produtos</a>
                                         </li>
                                         <li aria-haspopup="true" class=" dropdown-submenu  ">
-                                            <a href="#" class="nav-link  "> <i class="fa fa-line-chart"></i> Gráficos </a>
+                                            <a href="#" class="nav-link  "> <i class="fa fa-line-chart"></i> Gráficos</a>
                                             <ul class="dropdown-menu">
                                                 <li aria-haspopup="true" class=" ">
                                                     <a href="#" class="nav-link "> Produtos Mais Cotados</a>
@@ -188,6 +188,12 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 </li>
                                                 <li aria-haspopup="true" class=" ">
                                                     <a href="{{ path('admin_chart_line_createdproductsXtime') }}" class="nav-link "> Produtos Criados</a>
+                                                </li>
+                                                <li aria-haspopup="true" class=" ">
+                                                    <a href="{{ path ('admin_clients_pie_clientsXregion') }}" class="nav-link "> Produtos Ativos por Região</a>
+                                                </li>
+                                                <li aria-haspopup="true" class=" ">
+                                                    <a href="{{ path ('admin_clients_pie_clientsXstate') }}" class="nav-link "> Produtos Ativos por Estado</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -204,11 +210,17 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <li aria-haspopup="true" class=" dropdown-submenu  ">
                                             <a href="#" class="nav-link  "> <i class="fa fa-line-chart"></i> Gráficos </a>
                                             <ul class="dropdown-menu">
-                                                <li aria-haspopup="true" class=" ">
+                                               <li aria-haspopup="true" class=" ">
                                                     <a href="{{ path('admin_suppliers_scatter_pricelistXorder') }}" class="nav-link "> Fornecedores Com mais Pedidos por Cotação</a>
                                                 </li>
                                                 <li aria-haspopup="true" class=" ">
                                                     <a href="{{ path('admin_suppliers_line_createdaccountsXtime') }}" class="nav-link "> Fornecedores Criados</a>
+                                                </li>
+                                                <li aria-haspopup="true" class=" ">
+                                                    <a href="{{ path ('admin_clients_pie_clientsXregion') }}" class="nav-link "> Fornecedores Ativos por Região</a>
+                                                </li>
+                                                <li aria-haspopup="true" class=" ">
+                                                    <a href="{{ path ('admin_clients_pie_clientsXstate') }}" class="nav-link "> Fornecedores Ativos por Estado</a>
                                                 </li>
                                             </ul>
                                         </li>
