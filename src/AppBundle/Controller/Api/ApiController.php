@@ -812,6 +812,8 @@ class ApiController extends FOSRestController
         $dbRetailer = new Retailer();
         $dbRetailer->setUsername($retailer->cnpj)
             ->setCnpj($retailer->cnpj)
+            ->setCompanyName($retailer->company_name)
+            ->setFantasyName($retailer->fantasy_name)
             ->setEmail($retailer->email)
             ->setAddress($retailer->address)
             ->setCity($retailer->city)
