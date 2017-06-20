@@ -804,6 +804,26 @@ class ApiController extends FOSRestController
     }
 
     /**
+     * @Rest\Get("/api/retailer")
+     */
+    public function getRetailer(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        return View::create($dbToken->getRetailer(), Response::HTTP_OK);
+    }
+
+    /**
      * @Rest\Post("/api/retailer")
      */
     public function postRetailer(Request $request) {
@@ -826,6 +846,47 @@ class ApiController extends FOSRestController
             ->setRoles("ROLE_USER");
         $em->persist($dbRetailer);
         return View::create(new ApiError("Cadastrado com sucesso"), Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Rest\Put("/api/retailer")
+     */
+    public function putRetailer(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $sec = $this->get("security.password_encoder");
+
+        $jsonRequest = json_decode($request);
+        $dbRetailer = $dbToken->getRetailer();
+        $retailer = $jsonRequest->retailer;
+        if (!isset($jsonRequest->password) || !$sec->isPasswordValid($dbRetailer, $jsonRequest->password)) {
+            return View::create(new ApiError("Senha incorreta"), Response::HTTP_BAD_REQUEST);
+        }
+        $dbRetailer
+            ->setCompanyName($retailer->company_name)
+            ->setFantasyName($retailer->fantasy_name)
+            ->setEmail($retailer->email)
+            ->setAddress($retailer->address)
+            ->setCity($retailer->city)
+            ->setState($retailer->state)
+            ->setAddress($retailer->address)
+            ->setPhone($retailer->phone)
+            ->setCellphone($retailer->cellphone)
+            ->setPassword($sec->encodePassword($dbRetailer, $retailer->password))
+            ->setUpdatedAt(new \DateTime());
+        $em->flush();
+        return View::create($dbRetailer, Response::HTTP_OK);
     }
 
     /**
@@ -869,7 +930,7 @@ class ApiController extends FOSRestController
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
-        
+
         $search = json_decode($request);
         $results = $d->getRepository("AppBundle:Listing")->createQueryBuilder("l")
             ->where("l.name like :listing")
