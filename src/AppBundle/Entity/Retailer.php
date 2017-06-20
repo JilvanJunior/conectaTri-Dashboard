@@ -35,6 +35,12 @@ class Retailer implements UserInterface, \Serializable
     private $suppliers;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Region", inversedBy="retailers")
+     * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
+     */
+    private $region;
+
+    /**
      * @ORM\OneToMany(targetEntity="Listing", mappedBy="retailer")
      * @Serializer\Exclude()
      */
@@ -679,5 +685,29 @@ class Retailer implements UserInterface, \Serializable
     public function getListings()
     {
         return $this->listings;
+    }
+
+    /**
+     * Set region
+     *
+     * @param Region $region
+     *
+     * @return Retailer
+     */
+    public function setRegion(Region $region = null)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return Region
+     */
+    public function getRegion()
+    {
+        return $this->region;
     }
 }

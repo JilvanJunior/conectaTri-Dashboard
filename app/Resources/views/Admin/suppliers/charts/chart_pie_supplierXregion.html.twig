@@ -1,8 +1,8 @@
 {% extends 'Admin/base.html.twig' %}
 
-{% block title %}Clientes{% endblock %}
+{% block title %}Fornecedores{% endblock %}
 {% block description %}{% endblock %}
-{% block menu_clients %} active {% endblock %}
+{% block menu_suppliers %} active {% endblock %}
 
 {% block page_plugins %}
     <link href="{{ asset('assets/global/plugins/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
@@ -23,8 +23,8 @@
                         <div class="container">
                             <!-- BEGIN PAGE TITLE -->
                             <div class="page-title">
-                                <h1>Clientes
-                                    <small>tabela de Clientes por Região</small>
+                                <h1>Fornecedores
+                                    <small>tabela de Fornecedores por Região</small>
                                 </h1>
                             </div>
                             <!-- END PAGE TITLE -->
@@ -41,7 +41,7 @@
                                     <i class="fa fa-circle"></i>
                                 </li>
                                 <li>
-                                    <a href="#">Clientes</a>
+                                    <a href="#">Fornecedores</a>
                                     <i class="fa fa-circle"></i>
                                 </li>
                                 <li>
@@ -57,7 +57,7 @@
                                             <div class="portlet-title">
                                                 <div class="caption font-dark">
                                                     <i class="fa fa-line-chart font-dark"></i>
-                                                    <span class="caption-subject bold uppercase">Clientes por Região</span>
+                                                    <span class="caption-subject bold uppercase">Fornecedores por Região</span>
                                                 </div>
                                                 <div class="tools"> </div>
                                             </div>
@@ -73,7 +73,7 @@
                                             <div class="portlet-title">
                                                 <div class="caption font-dark">
                                                     <i class="fa fa-group font-dark"></i>
-                                                    <span class="caption-subject bold uppercase">Clientes</span>
+                                                    <span class="caption-subject bold uppercase">Fornecedores</span>
                                                 </div>
                                                 <div class="tools"> </div>
                                             </div>
@@ -82,32 +82,30 @@
                                                     <thead>
                                                     <tr>
                                                         <th>CNPJ</th>
-                                                        <th>Nome do Cliente</th>
-                                                        <th>Listas</th>
-                                                        <th>Cotações Realizadas</th>
-                                                        <th>Pedidos Enviados</th>
+                                                        <th>Nome do Fornecedor</th>
+                                                        <th>Representantes</th>
+                                                        <th>Cotações Recebidas</th>
+                                                        <th>Pedidos Recebidos</th>
                                                         <th></th>
-
                                                     </tr>
                                                     </thead>
                                                     <tfoot>
                                                     <tr>
                                                         <th>CNPJ</th>
-                                                        <th>Nome do Cliente</th>
-                                                        <th>Listas</th>
-                                                        <th>Cotações Realizadas</th>
-                                                        <th>Pedidos Enviados</th>
+                                                        <th>Nome do Fornecedor</th>
+                                                        <th>Representantes</th>
+                                                        <th>Cotações Recebidas</th>
+                                                        <th>Pedidos Recebidos</th>
                                                         <th></th>
-
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
-                                                    {% for client in clients %}
+                                                    {% for supplier in suppliers %}
                                                         <tr>
-                                                            <td>{{ client.cnpj }}</td>
-                                                            <td>{{ client.companyName }}</td>
-                                                            <td>{{ client.listings|length }}</td>
-                                                            <td>{{ client.quotes|length }}</td>
+                                                            <td class="numeric">{{ supplier.cnpj }}</td>
+                                                            <td>{{ supplier.name }}</td>
+                                                            <td>{{ supplier.representatives|length }}</td>
+                                                            <td></td>
                                                             <td></td>
                                                             <td>
                                                                 <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
@@ -149,7 +147,7 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script>
         $(function(){
-            $.ajax("{{ path('admin_clients_pie_clientsXregion_data') }}", {
+            $.ajax("{{ path('admin_suppliers_pie_suppliersXregion_data') }}", {
                 success: function(data) {
                     startHighchart(data);
                 },
@@ -161,7 +159,6 @@
             function startHighchart(data) {
 
                 data = $.parseJSON(data);
-
 
                 Highcharts.chart('container', {
                     chart: {

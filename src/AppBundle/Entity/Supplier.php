@@ -34,6 +34,12 @@ class Supplier
     private $retailer;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Region", inversedBy="suppliers")
+     * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
+     */
+    private $region;
+
+    /**
      * @ORM\Column(type="string", length=50)
      */
     private $cnpj;
@@ -72,7 +78,6 @@ class Supplier
     public function __construct()
     {
         $this->representatives = new ArrayCollection();
-        $this->quoteSuppliers = new ArrayCollection();
         $this->createdAt = new DateTime();
     }
 
@@ -241,40 +246,6 @@ class Supplier
     }
 
     /**
-     * Add quoteSupplier
-     *
-     * @param \AppBundle\Entity\QuoteSupplier $quoteSupplier
-     *
-     * @return Supplier
-     */
-    public function addQuoteSupplier(\AppBundle\Entity\QuoteSupplier $quoteSupplier)
-    {
-        $this->quoteSuppliers[] = $quoteSupplier;
-
-        return $this;
-    }
-
-    /**
-     * Remove quoteSupplier
-     *
-     * @param \AppBundle\Entity\QuoteSupplier $quoteSupplier
-     */
-    public function removeQuoteSupplier(\AppBundle\Entity\QuoteSupplier $quoteSupplier)
-    {
-        $this->quoteSuppliers->removeElement($quoteSupplier);
-    }
-
-    /**
-     * Get quoteSuppliers
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getQuoteSuppliers()
-    {
-        return $this->quoteSuppliers;
-    }
-
-    /**
      * Set retailer
      *
      * @param \AppBundle\Entity\Retailer $retailer
@@ -296,5 +267,29 @@ class Supplier
     public function getRetailer()
     {
         return $this->retailer;
+    }
+
+    /**
+     * Set region
+     *
+     * @param \AppBundle\Entity\Region $region
+     *
+     * @return Supplier
+     */
+    public function setRegion(\AppBundle\Entity\Region $region = null)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \AppBundle\Entity\Region
+     */
+    public function getRegion()
+    {
+        return $this->region;
     }
 }
