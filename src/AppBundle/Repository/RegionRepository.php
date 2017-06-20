@@ -19,10 +19,26 @@ class RegionRepository extends \Doctrine\ORM\EntityRepository
                 'SELECT r.name, 
                   (SELECT COUNT(s.id)
                   FROM AppBundle:Supplier s
-                  WHERE s.region = r.id
+                  WHERE s.region = r.id AND s.deleted = 0
                   ) AS y
                   FROM AppBundle:Region r  
-                  GROUP BY r.name'
+                  GROUP BY r.id'
+            )
+            ->getResult();
+
+    }
+
+    public function countRetailerByRegion()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT rg.name, 
+                  (SELECT COUNT(re.id)
+                  FROM AppBundle:Retailer re
+                  WHERE re.region = rg.id AND re.deleted = 0
+                  ) AS y
+                  FROM AppBundle:Region rg  
+                  GROUP BY rg.id'
             )
             ->getResult();
 

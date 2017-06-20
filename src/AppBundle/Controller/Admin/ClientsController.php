@@ -34,6 +34,21 @@ class ClientsController extends Controller
     }
 
     /**
+     * @Route("/administrador/clientes/clientesXregiao/data", name="admin_clients_pie_clientsXregion_data")
+     * @param Request $request
+     */
+    public function chart1DataAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $regions = $em->getRepository('AppBundle:Region')->countRetailerByRegion();
+        foreach ($regions as $k => $region){
+            $regions[$k]['y'] = (int)$region['y'];
+        }
+        echo json_encode($regions);
+        exit();
+    }
+
+    /**
      * @Route("/administrador/clientes/clientesXestado", name="admin_clients_pie_clientsXstate")
      * @param Request $request
      * @return

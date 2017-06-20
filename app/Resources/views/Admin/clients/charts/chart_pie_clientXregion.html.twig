@@ -24,7 +24,7 @@
                             <!-- BEGIN PAGE TITLE -->
                             <div class="page-title">
                                 <h1>Clientes
-                                    <small>tabela de Clientes cadastrados</small>
+                                    <small>tabela de Clientes por Região</small>
                                 </h1>
                             </div>
                             <!-- END PAGE TITLE -->
@@ -57,7 +57,7 @@
                                             <div class="portlet-title">
                                                 <div class="caption font-dark">
                                                     <i class="fa fa-line-chart font-dark"></i>
-                                                    <span class="caption-subject bold uppercase">Clientes Ativos por Região</span>
+                                                    <span class="caption-subject bold uppercase">Clientes por Região</span>
                                                 </div>
                                                 <div class="tools"> </div>
                                             </div>
@@ -109,7 +109,6 @@
                                                             <td>{{ client.listings|length }}</td>
                                                             <td>{{ client.quotes|length }}</td>
                                                             <td></td>
-                                                            <td>{{ client.createdAt|date('d/m/Y') }}</td>
                                                             <td>
                                                                 <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-eye"></i> Ver
@@ -149,53 +148,54 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script>
-        Highcharts.chart('container', {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                        }
-                    }
+        $(function(){
+            $.ajax("{{ path('admin_clients_pie_clientsXregion_data') }}", {
+                success: function(data) {
+                    startHighchart(data);
+                },
+                error: function() {
+                    alert("Um problema ocorreu ao gerar o gráfico");
                 }
-            },
-            series: [{
-                name: 'Estado',
-                colorByPoint: true,
-                data: [{
-                    name: 'Sudeste',
-                    y: 800,
+            });
 
-                }, {
-                    name: 'Centro-Oeste',
-                    y: 300,
-                }, {
-                    name: 'Nordeste',
-                    y: 250
-                }, {
-                    name: 'Sul',
-                    y: 240
-                }, {
-                    name: 'Norte',
-                    y: 200
-                },]
-            }]
+            function startHighchart(data) {
+
+                data = $.parseJSON(data);
+
+
+                Highcharts.chart('container', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Estado',
+                        colorByPoint: true,
+                        data: data
+                    }]
+                });
+            }
         });
     </script>
 {% endblock %}

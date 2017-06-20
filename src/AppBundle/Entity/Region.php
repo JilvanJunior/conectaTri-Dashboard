@@ -33,6 +33,10 @@ class Region
      */
     private $suppliers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Retailer", mappedBy="region")
+     */
+    private $retailers;
 
     /**
      * Region constructor.
@@ -40,6 +44,7 @@ class Region
     public function __construct()
     {
         $this->suppliers = new ArrayCollection();
+        $this->retailers = new ArrayCollection();
     }
 
     /**
@@ -79,11 +84,11 @@ class Region
     /**
      * Add supplier
      *
-     * @param \AppBundle\Entity\Supplier $supplier
+     * @param Supplier $supplier
      *
      * @return Region
      */
-    public function addSupplier(\AppBundle\Entity\Supplier $supplier)
+    public function addSupplier(Supplier $supplier)
     {
         $this->suppliers[] = $supplier;
 
@@ -93,9 +98,9 @@ class Region
     /**
      * Remove supplier
      *
-     * @param \AppBundle\Entity\Supplier $supplier
+     * @param Supplier $supplier
      */
-    public function removeSupplier(\AppBundle\Entity\Supplier $supplier)
+    public function removeSupplier(Supplier $supplier)
     {
         $this->suppliers->removeElement($supplier);
     }
@@ -108,5 +113,39 @@ class Region
     public function getSuppliers()
     {
         return $this->suppliers;
+    }
+
+    /**
+     * Add retailer
+     *
+     * @param Retailer $retailer
+     *
+     * @return Region
+     */
+    public function addRetailer(Retailer $retailer)
+    {
+        $this->retailers[] = $retailer;
+
+        return $this;
+    }
+
+    /**
+     * Remove retailer
+     *
+     * @param Retailer $retailer
+     */
+    public function removeRetailer(Retailer $retailer)
+    {
+        $this->retailers->removeElement($retailer);
+    }
+
+    /**
+     * Get suppliers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRetailers()
+    {
+        return $this->retailers;
     }
 }
