@@ -829,6 +829,56 @@ class ApiController extends FOSRestController
     }
 
     /**
+     * @Rest\Patch("/api/product")
+     */
+    public function searchProduct(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $search = json_decode($request);
+        $query = $d->getRepository("AppBundle:Product")->createQueryBuilder("p");
+        $results = $query->where("p.name like :product")
+            ->setParameter("product", "%$request->query%")
+            ->getQuery()->getResult();
+        return View::create($results, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Patch("/api/listing")
+     */
+    public function searchListing(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+        
+        $search = json_decode($request);
+        $results = $d->getRepository("AppBundle:Listing")->createQueryBuilder("l")
+            ->where("l.name like :listing")
+            ->setParameter("listing", "%$search->query")
+            ->getQuery()->getResult();
+        return View::create($results, Response::HTTP_OK);
+    }
+
+    /**
      * Finds one element in an array, searching by ID properties.
      * @param $array array Array in which to search for the element.
      * @param $element object Element whose ID to search for.
