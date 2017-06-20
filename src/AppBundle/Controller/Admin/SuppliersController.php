@@ -5,6 +5,9 @@ namespace AppBundle\Controller\Admin;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 class SuppliersController extends Controller
 {
@@ -44,4 +47,30 @@ class SuppliersController extends Controller
         return $this->render('Admin/suppliers/charts/chart_line_createdaccountsXtime.html.twig', ['suppliers' => $suppliers]);
     }
 
+    /**
+     * @Route("/administrador/fornecedores/fornecedoresXregiao", name="admin_suppliers_pie_suppliersXregion")
+     * @param Request $request
+     * @return
+     */
+    public function chart3Action(Request $request)
+    {
+        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+
+        return $this->render('Admin/suppliers/charts/chart_pie_supplierXregion.html.twig', ['suppliers' => $suppliers]);
+    }
+
+    /**
+     * @Route("/administrador/fornecedores/fornecedoresXregiao/data", name="admin_suppliers_pie_suppliersXregion_data")
+     * @param Request $request
+     */
+    public function chart3DataAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $regions = $em->getRepository('AppBundle:Region')->countSupplierByRegion();
+        foreach ($regions as $k => $region){
+            $regions[$k]['y'] = (int)$region['y'];
+        }
+        echo json_encode($regions);
+        exit();
+    }
 }
