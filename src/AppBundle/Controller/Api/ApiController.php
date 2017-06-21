@@ -963,7 +963,7 @@ class ApiController extends FOSRestController
      */
     private function arrayContains($array, $element) {
         foreach ($array as $item) {
-            if ($item->id == $element->id) {
+            if ($item->getId() == $element->id) {
                 return $item;
             }
         }
