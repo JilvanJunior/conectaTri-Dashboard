@@ -1,19 +1,16 @@
-retailer:
+app:
+
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
     resource: '@AppBundle/Controller/Retailer'
     type: annotation
 
-admin:
     resource: '@AppBundle/Controller/Admin'
     type: annotation
 
-supplier:
     resource: '@AppBundle/Controller/Supplier'
     type: annotation
 
-api:
     resource: '@AppBundle/Controller/Api'
-    type: annotation
-
-quote:
-    resource: '@AppBundle/Controller/Quote'
     type: annotation
