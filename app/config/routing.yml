@@ -14,3 +14,6 @@ app:
 
     resource: '@AppBundle/Controller/Api'
     type: annotation
+
+    resource: '@AppBundle/Controller/Quote'
+    type: annotation

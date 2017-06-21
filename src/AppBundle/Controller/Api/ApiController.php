@@ -641,6 +641,14 @@ class ApiController extends FOSRestController
     }
 
     /**
+    * @Rest\Get("/api/quote/{id}/link")
+    */
+    public function getQuoteLink(Request $request, $id) {
+        $url = $this->get('router')->generate('quote-index', ['id' => $id]);
+        return View::create($url, Response::HTTP_OK);
+    }
+
+    /**
      * @Rest\Post("/api/quote")
      */
     public function postQuote(Request $request) {
@@ -838,6 +846,7 @@ class ApiController extends FOSRestController
             ->setAddress($retailer->address)
             ->setCity($retailer->city)
             ->setState($retailer->state)
+            ->setCep($retailer->cep)
             ->setAddress($retailer->address)
             ->setPhone($retailer->phone)
             ->setCellphone($retailer->cellphone);
@@ -882,6 +891,7 @@ class ApiController extends FOSRestController
             ->setCity($retailer->city)
             ->setState($retailer->state)
             ->setAddress($retailer->address)
+            ->setCep($retailer->cep)
             ->setPhone($retailer->phone)
             ->setCellphone($retailer->cellphone)
             ->setPassword($sec->encodePassword($dbRetailer, $retailer->password))
