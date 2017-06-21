@@ -73,4 +73,31 @@ class SuppliersController extends Controller
         echo json_encode($regions);
         exit();
     }
+
+    /**
+     * @Route("/administrador/fornecedores/fornecedoresXestado", name="admin_suppliers_pie_suppliersXstate")
+     * @param Request $request
+     * @return
+     */
+    public function chart4Action(Request $request)
+    {
+        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+
+        return $this->render('Admin/suppliers/charts/chart_pie_supplierXstate.html.twig', ['suppliers' => $suppliers]);
+    }
+
+    /**
+     * @Route("/administrador/fornecedores/fornecedoresXestado/data", name="admin_suppliers_pie_suppliersXstate_data")
+     * @param Request $request
+     */
+    public function chart4DataAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $states = $em->getRepository('AppBundle:State')->countSupplierByState();
+        foreach ($states as $k => $state){
+            $states[$k]['y'] = (int)$state['y'];
+        }
+        echo json_encode($states);
+        exit();
+    }
 }

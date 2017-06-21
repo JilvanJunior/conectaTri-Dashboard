@@ -40,6 +40,12 @@ class Supplier
     private $region;
 
     /**
+     * @ORM\ManyToOne(targetEntity="State", inversedBy="suppliers")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
+     */
+    private $state;
+
+    /**
      * @ORM\Column(type="string", length=50)
      */
     private $cnpj;
@@ -214,11 +220,11 @@ class Supplier
     /**
      * Add representative
      *
-     * @param \AppBundle\Entity\Representative $representative
+     * @param Representative $representative
      *
      * @return Supplier
      */
-    public function addRepresentative(\AppBundle\Entity\Representative $representative)
+    public function addRepresentative(Representative $representative)
     {
         $this->representatives[] = $representative;
 
@@ -228,9 +234,9 @@ class Supplier
     /**
      * Remove representative
      *
-     * @param \AppBundle\Entity\Representative $representative
+     * @param Representative $representative
      */
-    public function removeRepresentative(\AppBundle\Entity\Representative $representative)
+    public function removeRepresentative(Representative $representative)
     {
         $this->representatives->removeElement($representative);
     }
@@ -248,11 +254,11 @@ class Supplier
     /**
      * Set retailer
      *
-     * @param \AppBundle\Entity\Retailer $retailer
+     * @param Retailer $retailer
      *
      * @return Supplier
      */
-    public function setRetailer(\AppBundle\Entity\Retailer $retailer = null)
+    public function setRetailer(Retailer $retailer = null)
     {
         $this->retailer = $retailer;
 
@@ -262,7 +268,7 @@ class Supplier
     /**
      * Get retailer
      *
-     * @return \AppBundle\Entity\Retailer
+     * @return Retailer
      */
     public function getRetailer()
     {
@@ -272,11 +278,11 @@ class Supplier
     /**
      * Set region
      *
-     * @param \AppBundle\Entity\Region $region
+     * @param Region $region
      *
      * @return Supplier
      */
-    public function setRegion(\AppBundle\Entity\Region $region = null)
+    public function setRegion(Region $region = null)
     {
         $this->region = $region;
 
@@ -286,10 +292,34 @@ class Supplier
     /**
      * Get region
      *
-     * @return \AppBundle\Entity\Region
+     * @return Region
      */
     public function getRegion()
     {
         return $this->region;
+    }
+
+    /**
+     * Set state
+     *
+     * @param State $state
+     *
+     * @return Supplier
+     */
+    public function setState(State $state = null)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return State
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }
