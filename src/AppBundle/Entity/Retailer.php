@@ -39,6 +39,12 @@ class Retailer implements UserInterface, \Serializable
     private $region;
 
     /**
+     * @ORM\ManyToOne(targetEntity="State", inversedBy="retailers")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
+     */
+    private $state;
+
+    /**
      * @ORM\OneToMany(targetEntity="Listing", mappedBy="retailer")
      */
     private $listings;
@@ -92,11 +98,6 @@ class Retailer implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=255)
      */
     private $city;
-
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $state;
 
     /**
      * @ORM\Column(type="string", length=20)
@@ -372,30 +373,6 @@ class Retailer implements UserInterface, \Serializable
     public function getCity()
     {
         return $this->city;
-    }
-
-    /**
-     * Set state
-     *
-     * @param string $state
-     *
-     * @return Retailer
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return string
-     */
-    public function getState()
-    {
-        return $this->state;
     }
 
     /**
@@ -700,5 +677,29 @@ class Retailer implements UserInterface, \Serializable
     public function getRegion()
     {
         return $this->region;
+    }
+
+    /**
+     * Set state
+     *
+     * @param State $state
+     *
+     * @return Retailer
+     */
+    public function setState(State $state = null)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return State
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }

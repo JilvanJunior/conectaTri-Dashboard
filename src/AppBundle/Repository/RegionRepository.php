@@ -22,7 +22,7 @@ class RegionRepository extends \Doctrine\ORM\EntityRepository
                   WHERE s.region = r.id AND s.deleted = 0
                   ) AS y
                   FROM AppBundle:Region r  
-                  GROUP BY r.id'
+                  GROUP BY r.id HAVING y > 0'
             )
             ->getResult();
 
@@ -38,7 +38,7 @@ class RegionRepository extends \Doctrine\ORM\EntityRepository
                   WHERE re.region = rg.id AND re.deleted = 0
                   ) AS y
                   FROM AppBundle:Region rg  
-                  GROUP BY rg.id'
+                  GROUP BY rg.id HAVING y > 0'
             )
             ->getResult();
 

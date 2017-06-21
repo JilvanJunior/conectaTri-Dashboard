@@ -60,6 +60,21 @@ class ClientsController extends Controller
         return $this->render('Admin/clients/charts/chart_pie_clientXstate.html.twig', ['clients' => $clients]);
     }
 
+    /**
+     * @Route("/administrador/clientes/clientesXestado/data", name="admin_clients_pie_clientsXstate_data")
+     * @param Request $request
+     */
+    public function chart2DataAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $states = $em->getRepository('AppBundle:State')->countRetailerByState();
+        foreach ($states as $k => $state){
+            $states[$k]['y'] = (int)$state['y'];
+        }
+        echo json_encode($states);
+        exit();
+    }
+
 
     /**
      * @Route("/administrador/clientes/cadastrados", name="admin_clients_line_createdaccountsXtime")
