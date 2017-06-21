@@ -14,6 +14,6 @@ class QuoteController extends Controller
     public function indexAction(Request $request, $id)
     {
         $quote = $this->getDoctrine()->getRepository("AppBundle:Quote")->find($id);
-        return $this->render(':Quote:quote_placeholder.html.twig', array('quote' => $quote));
+        return $this->render(':Quote:quote_placeholder.html.twig', array('quote' => json_encode($quote)));
     }
 }
