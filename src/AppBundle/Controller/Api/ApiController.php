@@ -508,6 +508,7 @@ class ApiController extends FOSRestController
             $dbSupplier = $d->getRepository("AppBundle:Representative")->find($representative->id);
             if (!is_null($dbSupplier)) $dbListing->addRepresentative($dbSupplier);
         }
+        $em->persist($dbListing);
         $em->flush();
 
         return View::create($dbListing, Response::HTTP_OK);
