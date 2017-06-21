@@ -549,7 +549,7 @@ class ApiController extends FOSRestController
                 $tmp[] = $rcvProduct;
             }
         }
-        array_diff($listing->listing_products, $tmp);
+        $this->array_diff($listing->listing_products, $tmp);
         foreach ($listing->listing_products as $product) {
             $newProduct = new ListingProduct();
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
@@ -566,7 +566,7 @@ class ApiController extends FOSRestController
                 $tmp[] = $rcvRepresentative;
             }
         }
-        array_diff($listing->suppliers, $tmp);
+        $this->array_diff($listing->suppliers, $tmp);
         foreach ($listing->suppliers as $representative) {
             $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($representative->id);
             $dbListing->addRepresentative($dbRepresentative);
@@ -747,7 +747,7 @@ class ApiController extends FOSRestController
                         $tmp2[] = $supplier;
                     }
                 }
-                array_diff($rcvProduct->quote_suppliers, $tmp2);
+                $this->array_diff($rcvProduct->quote_suppliers, $tmp2);
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
                     $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                     $quoteSupplier = new QuoteSupplier();
@@ -760,7 +760,7 @@ class ApiController extends FOSRestController
                 $tmp[] = $rcvProduct;
             }
         }
-        array_diff($quote->quote_products, $tmp);
+        $this->array_diff($quote->quote_products, $tmp);
         foreach ($quote->quote_products as $product) {
             $newProduct = new QuoteProduct();
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
@@ -924,10 +924,10 @@ class ApiController extends FOSRestController
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $search = json_decode($request);
+        $search = json_decode($request->getContent());
         $query = $d->getRepository("AppBundle:Product")->createQueryBuilder("p");
         $results = $query->where("p.name like :product")
-            ->setParameter("product", "%$request->query%")
+            ->setParameter("product", "%$search->query%")
             ->getQuery()->getResult();
         return View::create($results, Response::HTTP_OK);
     }
@@ -949,10 +949,10 @@ class ApiController extends FOSRestController
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $search = json_decode($request);
+        $search = json_decode($request->getContent());
         $results = $d->getRepository("AppBundle:Listing")->createQueryBuilder("l")
             ->where("l.name like :listing")
-            ->setParameter("listing", "%$search->query")
+            ->setParameter("listing", "%$search->query%")
             ->getQuery()->getResult();
         return View::create($results, Response::HTTP_OK);
     }
@@ -995,6 +995,48 @@ class ApiController extends FOSRestController
             }
         }
         return false;
+    }
+
+    private function array_diff(&$array, $diff) {
+        $arrayProp = false;
+        try {
+            $var = $array[0]->id;
+            $arrayProp = true;
+        } catch (\Throwable $x) {}
+        $eleProp = false;
+        try {
+            $var = $diff[0]->id;
+            $eleProp = true;
+        } catch (\Throwable $x) {}
+        $ret = [];
+        foreach ($array as $aEle) {
+            $contains = false;
+            foreach ($diff as $dEle) {
+                if ($arrayProp && $eleProp) {
+                    if ($aEle->id == $dEle->id) {
+                        $contains = true;
+                        break;
+                    }
+                } elseif ($arrayProp) {
+                    if ($aEle->id == $dEle->getId()) {
+                        $contains = true;
+                        break;
+                    }
+                } elseif ($eleProp) {
+                    if ($aEle->getId() == $dEle->id) {
+                        $contains = true;
+                        break;
+                    }
+                } else {
+                    if ($aEle->getId() == $dEle->getId()) {
+                        $contains = true;
+                        break;
+                    }
+                }
+            }
+            if (!$contains) $ret[] = $aEle;
+        }
+        $array = $ret;
     }
 
 }
