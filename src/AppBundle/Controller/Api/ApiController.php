@@ -572,6 +572,8 @@ class ApiController extends FOSRestController
             $dbListing->addRepresentative($dbRepresentative);
         }
         $dbListing->setUpdatedAt(new \DateTime())
+            ->setName($listing->name)
+            ->setDescription($listing->description)
             ->setDeleted(false);
         $em->flush();
         return View::create($dbListing, Response::HTTP_OK);
