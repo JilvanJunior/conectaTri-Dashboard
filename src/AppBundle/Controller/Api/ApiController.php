@@ -51,7 +51,9 @@ class ApiController extends FOSRestController
         }
         $previousToken = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
             ->where("s.lastUsed >= :time")
+            ->andWhere("s.retailer = :retailer")
             ->setParameter("time", new \DateTime("15 minutes ago"))
+            ->setParameter("retailer", $dbUser)
             ->orderBy("s.lastUsed", "DESC")
             ->getQuery()->setMaxResults(1)->getOneOrNullResult();
         if (is_null($previousToken)) {
