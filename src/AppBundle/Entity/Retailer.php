@@ -24,11 +24,13 @@ class Retailer implements UserInterface, \Serializable
 
     /**
      * @ORM\OneToMany(targetEntity="Representative", mappedBy="retailer")
+     * @Serializer\Exclude()
      */
     private $representatives;
 
     /**
      * @ORM\OneToMany(targetEntity="Supplier", mappedBy="retailer")
+     * @Serializer\Exclude()
      */
     private $suppliers;
 
@@ -46,16 +48,19 @@ class Retailer implements UserInterface, \Serializable
 
     /**
      * @ORM\OneToMany(targetEntity="Listing", mappedBy="retailer")
+     * @Serializer\Exclude()
      */
     private $listings;
 
     /**
      * @ORM\OneToMany(targetEntity="Quote", mappedBy="retailer")
+     * @Serializer\Exclude()
      */
     private $quotes;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Serializer\Exclude()
      */
     private $username;
 
@@ -66,6 +71,7 @@ class Retailer implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Exclude()
      */
     private $password;
 
@@ -118,6 +124,7 @@ class Retailer implements UserInterface, \Serializable
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude()
      */
     private $createdAt;
 
@@ -125,11 +132,13 @@ class Retailer implements UserInterface, \Serializable
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Serializer\Exclude()
      */
     private $deleted = false;
 
@@ -143,6 +152,7 @@ class Retailer implements UserInterface, \Serializable
         $this->listings = new ArrayCollection();
         $this->quotes = new ArrayCollection();
         $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     public function getRoles()
