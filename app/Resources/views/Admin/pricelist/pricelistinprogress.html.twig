@@ -90,9 +90,9 @@
                                                     {% for quote in quotes %}
                                                         <tr>
                                                             <td>{{ quote.id }}</td>
-                                                            <td>{{ quote.retailer.name }}</td>
+                                                            <td>{{ quote.retailer.companyName }}</td>
                                                             <td>{{ quote.name }}</td>
-                                                            <td>{{ quote.quoteProducts.length }}</td>
+                                                            <td>{{ quote.quoteProducts|length }}</td>
                                                             <td></td>
                                                             <td></td>
                                                             <td>
