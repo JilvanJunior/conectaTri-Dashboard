@@ -969,12 +969,12 @@ class ApiController extends FOSRestController
         try {
             $var = $array[0]->id;
             $arrayProp = true;
-        } catch (\Exception $x) {}
+        } catch (\Throwable $x) {}
         $eleProp = false;
         try {
             $var = $element->id;
             $eleProp = true;
-        } catch (\Exception $x) {}
+        } catch (\Throwable $x) {}
         foreach ($array as $item) {
             if ($arrayProp && $eleProp) {
                 if ($item->id == $element->id) {
