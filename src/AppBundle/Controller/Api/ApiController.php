@@ -619,7 +619,9 @@ class ApiController extends FOSRestController
         $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
             ->where("q.expiresAt > :date")
             ->andWhere("q.deleted = FALSE")
+            ->andWhere("q.retailer = :retailer")
             ->setParameter("date", new \DateTime("15 days ago"))
+            ->setParameter("retailer", $dbToken->getRetailer())
             ->getQuery()->getResult();
         $responseArray = [];
         foreach($quotes as $quote) {
