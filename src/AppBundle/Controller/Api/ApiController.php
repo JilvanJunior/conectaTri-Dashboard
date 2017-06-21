@@ -554,7 +554,9 @@ class ApiController extends FOSRestController
             $newProduct = new ListingProduct();
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             $newProduct->setProduct($dbProduct)
-                ->setQuantity($product->quantity);
+                ->setQuantity($product->quantity)
+                ->setListing($dbListing);
+            $em->persist($newProduct);
             $dbListing->addListingProduct($newProduct);
         }
         $tmp = [];
