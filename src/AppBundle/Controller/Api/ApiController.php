@@ -502,6 +502,7 @@ class ApiController extends FOSRestController
             $listingProduct = new ListingProduct();
             $listingProduct->setProduct($dbProduct);
             $listingProduct->setQuantity($product->quantity);
+            $em->persist($listingProduct);
             $dbListing->addListingProduct($listingProduct);
         }
         foreach ($listing->representatives as $representative) {
