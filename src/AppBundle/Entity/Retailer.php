@@ -151,6 +151,7 @@ class Retailer implements UserInterface, \Serializable
         $this->listings = new ArrayCollection();
         $this->quotes = new ArrayCollection();
         $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     public function getRoles()
