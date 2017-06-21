@@ -845,6 +845,7 @@ class ApiController extends FOSRestController
         $dbRetailer->setPassword($sec->encodePassword($dbRetailer, $retailer->password))
             ->setRoles("ROLE_USER");
         $em->persist($dbRetailer);
+        $em->flush();
         return View::create(new ApiError("Cadastrado com sucesso"), Response::HTTP_CREATED);
     }
 
