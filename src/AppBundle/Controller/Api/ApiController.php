@@ -962,9 +962,33 @@ class ApiController extends FOSRestController
      * @return boolean|object false if not found, the array's element otherwise.
      */
     private function arrayContains($array, $element) {
+        $arrayProp = false;
+        try {
+            $var = $array[0]->id;
+            $arrayProp = true;
+        } catch (\Exception $x) {}
+        $eleProp = false;
+        try {
+            $var = $element->id;
+            $eleProp = true;
+        } catch (\Exception $x) {}
         foreach ($array as $item) {
-            if ($item->getId() == $element->id) {
-                return $item;
+            if ($arrayProp && $eleProp) {
+                if ($item->id == $element->id) {
+                    return $item;
+                }
+            } elseif ($arrayProp) {
+                if ($item->id == $element->getId()) {
+                    return $item;
+                }
+            } elseif ($eleProp) {
+                if ($item->getId() == $element->id) {
+                    return $item;
+                }
+            } else {
+                if ($item->getId() == $element->getId()) {
+                    return $item;
+                }
             }
         }
         return false;
