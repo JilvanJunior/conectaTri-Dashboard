@@ -681,8 +681,8 @@ class ApiController extends FOSRestController
         $dbQuote->setName($quote->name)
             ->setType($quote->type)
             ->setRetailer($dbToken->getRetailer())
-            ->setExpiresAt(new \DateTime($quote->expires_at))
-            ->setBeginsAt(new \DateTime($quote->begins_at));
+            ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
+            ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
         $em->persist($dbQuote);
         foreach ($quote->quote_products as $product) {
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
@@ -781,8 +781,8 @@ class ApiController extends FOSRestController
         }
         $dbQuote->setDeleted(false)
             ->setName($quote->name)
-            ->setExpiresAt(new \DateTime($quote->expires_at))
-            ->setBeginsAt(new \DateTime($quote->begins_at));
+            ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
+            ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
         $em->flush();
         return View::create($dbQuote, Response::HTTP_OK);
     }
