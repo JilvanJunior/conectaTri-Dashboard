@@ -699,7 +699,9 @@ class ApiController extends FOSRestController
                     ->setRepresentative($dbSupplier)
                     ->setQuoteProduct($quoteProduct);
                 $em->persist($quoteSupplier);
+                $quoteProduct->addQuoteSupplier($quoteSupplier);
             }
+            $dbQuote->addQuoteProduct($quoteProduct);
         }
         $em->flush();
 
