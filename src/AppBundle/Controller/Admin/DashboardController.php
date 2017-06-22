@@ -13,9 +13,16 @@ class DashboardController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
+        $em = $this->getDoctrine()->getManager();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+        $activeRetailers = $em->getRepository('AppBundle:ActiveRetailer')->findAll();
+        $qtyRetailer = ($activeRetailers == null ? 0 : end($activeRetailers)->getQuantity());
+        $activeQuotes = $em->getRepository('AppBundle:Quote')->countActives();
+
         return $this->render('Admin/dashboard/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'qtySuppliers' => count($suppliers),
+            'qtyRetailer' => $qtyRetailer,
+            'qtyQuotes' => $activeQuotes
         ]);
     }
 }

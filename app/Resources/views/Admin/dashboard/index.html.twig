@@ -10,8 +10,6 @@
     <link href="{{ asset('assets/global/plugins/jqvmap/jqvmap/jqvmap.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
-
-
 {% block page %}
     <div class="page-wrapper-row full-height">
         <div class="page-wrapper-middle">
@@ -53,7 +51,7 @@
                                                 <i class="fa fa-briefcase fa-icon-medium"></i>
                                             </div>
                                             <div class="details">
-                                                <div class="number"> 12.492 </div>
+                                                <div class="number"> {{ qtySuppliers }} </div>
                                                 <div class="desc"> Fornecedores </div>
                                             </div>
                                             <a class="more" href="{{ path('admin_fornecedores') }}"> Ver Mais
@@ -67,7 +65,7 @@
                                                 <i class="fa fa-shopping-cart"></i>
                                             </div>
                                             <div class="details">
-                                                <div class="number"> 150.127 </div>
+                                                <div class="number"> {{ qtyQuotes }} </div>
                                                 <div class="desc"> Cotações Em Andamento </div>
                                             </div>
                                             <a class="more" href="{{ path('admin_pricelist_inprogress') }}"> Ver Mais
@@ -81,7 +79,7 @@
                                                 <i class="fa fa-group fa-icon-medium"></i>
                                             </div>
                                             <div class="details">
-                                                <div class="number"> 90.587 </div>
+                                                <div class="number"> {{ qtyRetailer }} </div>
                                                 <div class="desc"> Clientes Ativos </div>
                                             </div>
                                             <a class="more" href="{{ path('admin_clients') }}"> Ver Mais
@@ -224,22 +222,22 @@
                                                 </div>
                                                 <div class="actions">
                                                     <div class="btn-group">
-                                                        <a class="btn blue btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Ações
+                                                        <a class="btn blue btn-circle btn-sm" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Ações
                                                             <i class="fa fa-angle-down"></i>
                                                         </a>
                                                         <ul class="dropdown-menu pull-right">
                                                             <li>
-                                                                <a href="javascript:;"> Pesquisar Produtos </a>
+                                                                <a href="#"> Pesquisar Produtos </a>
                                                             </li>
                                                             <li>
-                                                                <a href="javascript:;"> Lista completa </a>
+                                                                <a href="#"> Lista completa </a>
                                                             </li>
                                                             <li class="divider"> </li>
                                                             <li>
-                                                                <a href="javascript:;"> Pesquisar Fornecedores </a>
+                                                                <a href="#"> Pesquisar Fornecedores </a>
                                                             </li>
                                                             <li>
-                                                                <a href="javascript:;"> Lista Completa </a>
+                                                                <a href="#"> Lista Completa </a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -270,111 +268,111 @@
                                                                     <tbody>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Produto </a>
+                                                                            <a href="#"> Produto </a>
                                                                         </td>
                                                                         <td> R$625,50 </td>
                                                                         <td> Atacado Martins </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Produto</a>
+                                                                            <a href="#"> Produto</a>
                                                                         </td>
                                                                         <td> R$625,50 </td>
                                                                         <td> Atacado Martins </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Produto </a>
+                                                                            <a href="#"> Produto </a>
                                                                         </td>
                                                                         <td> R$625,50 </td>
                                                                         <td> Atacado Martins </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Produto </a>
+                                                                            <a href="#"> Produto </a>
                                                                         </td>
                                                                         <td> R$625,50 </td>
                                                                         <td> Atacado Martins </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Produto </a>
+                                                                            <a href="#"> Produto </a>
                                                                         </td>
                                                                         <td> R$625,50 </td>
                                                                         <td> Atacado Martins </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Produto </a>
+                                                                            <a href="#"> Produto </a>
                                                                         </td>
                                                                         <td> R$625,50 </td>
                                                                         <td> Atacado Martins </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Produto </a>
+                                                                            <a href="#"> Produto </a>
                                                                         </td>
                                                                         <td> R$625,50 </td>
                                                                         <td> Atacado Martins </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Produto </a>
+                                                                            <a href="#"> Produto </a>
                                                                         </td>
                                                                         <td> R$625,50 </td>
                                                                         <td> Atacado Martins </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Produto </a>
+                                                                            <a href="#"> Produto </a>
                                                                         </td>
                                                                         <td> R$625,50 </td>
                                                                         <td> Atacado Martins </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Produto </a>
+                                                                            <a href="#"> Produto </a>
                                                                         </td>
                                                                         <td> R$625,50 </td>
                                                                         <td> Atacado Martins </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
@@ -397,67 +395,67 @@
                                                                     <tbody>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Atacado Martins </a>
+                                                                            <a href="#"> Atacado Martins </a>
                                                                         </td>
                                                                         <td> 15 </td>
                                                                         <td> 11.190 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Atacado Martins </a>
+                                                                            <a href="#"> Atacado Martins </a>
                                                                         </td>
                                                                         <td> 15 </td>
                                                                         <td> 11.190 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Atacado Martins </a>
+                                                                            <a href="#"> Atacado Martins </a>
                                                                         </td>
                                                                         <td> 15 </td>
                                                                         <td> 11.190 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Atacado Martins </a>
+                                                                            <a href="#"> Atacado Martins </a>
                                                                         </td>
                                                                         <td> 15 </td>
                                                                         <td> 11.190 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Atacado Martins </a>
+                                                                            <a href="#"> Atacado Martins </a>
                                                                         </td>
                                                                         <td> 15 </td>
                                                                         <td> 11.190 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Atacado Martins </a>
+                                                                            <a href="#"> Atacado Martins </a>
                                                                         </td>
                                                                         <td> 15 </td>
                                                                         <td> 11.190 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
