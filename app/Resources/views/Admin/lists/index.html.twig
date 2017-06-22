@@ -69,7 +69,7 @@
                                                         <th>Nome da Lista</th>
                                                         <th>Itens</th>
                                                         <th>Tipo</th>
-                                                        <th>Cotaçõe</th>
+                                                        <th>Cotações</th>
                                                         <th>Valor total</th>
                                                         <th></th>
                                                     </tr>
@@ -85,25 +85,26 @@
                                                         <th></th>
                                                     </tr>
                                                     </tfoot>
-                                                   <tbody>
-                                                    <tr>
-                                                        <td>Wemind Varejos</td>
-                                                        <td>Lista de cereais</td>
-                                                        <td>230</td>
-                                                        <td>Lista Comum</td>
-                                                        <td>27</td>
-                                                        <td>R$ 27.300,00</td>
-                                                        <td>
-                                                            <a href="javascript:;" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                                <i class="fa fa-eye"></i> Ver
-                                                            </a>
-                                                            <a href="javascript:;" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                                <i class="fa fa-line-chart"> Cotações</i>
-                                                            </a>
-                                                        </td>
-
-                                                    </tr>
-                                                   </tbody>
+                                                    <tbody>
+                                                    {% for listing in listings %}
+                                                        <tr>
+                                                            <td>{{ listing.retailer.companyName }}</td>
+                                                            <td>{{ listing.name }}</td>
+                                                            <td>{{ listing.listingProducts|length }}</td>
+                                                            <td>{{ listing.type }}</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>
+                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                    <i class="fa fa-eye"></i> Ver
+                                                                </a>
+                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                    <i class="fa fa-line-chart"> Cotações</i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
                                                 </table>
                                             </div>
                                         </div>

@@ -13,9 +13,10 @@ class ListsController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
+        $listings = $this->getDoctrine()->getRepository('AppBundle:Listing')->findBy(['deleted' => false]);
+
         return $this->render('Admin/lists/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'listings' => $listings
         ]);
     }
 
