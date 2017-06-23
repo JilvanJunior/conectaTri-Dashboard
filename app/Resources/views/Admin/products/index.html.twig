@@ -90,12 +90,12 @@
                                                     <tbody>
                                                     {% for product in products %}
                                                         <tr>
-                                                            <td>{{ product.id }}</td>
-                                                            <td>{{ product.name }}</td>
-                                                            <td>{{ product.brand }}</td>
-                                                            <td>{{ product.unit }}</td>
-                                                            <td>{{ product.quantity }}</td>
-                                                            <td></td>
+                                                            <td>{{ product.0.id }}</td>
+                                                            <td>{{ product.0.name }}</td>
+                                                            <td>{{ product.0.brand }}</td>
+                                                            <td>{{ product.0.unit }}</td>
+                                                            <td>{{ product.0.quantity }}</td>
+                                                            <td>{{ product.minPrice }}</td>
                                                             <td>
                                                                 <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-eye"></i> Ver

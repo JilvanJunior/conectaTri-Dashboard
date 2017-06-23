@@ -25,4 +25,26 @@ class ProductRepository extends EntityRepository
             ->getResult();
 
     }
+
+    public function productWithMinPrice()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT p, (
+                    SELECT MIN(qs.price)
+                    FROM AppBundle:QuoteSupplier qs
+                    WHERE qs.quoteProduct IN (
+                      SELECT qp.id
+                      FROM AppBundle:QuoteProduct qp
+                      WHERE qp.product = p.id
+                    ) 
+                  ) AS minPrice
+                  FROM AppBundle:Product p 
+                  WHERE p.deleted = 0 
+                  GROUP BY p.createdAt 
+                  ORDER BY p.createdAt ASC'
+            )
+            ->getResult();
+
+    }
 }
