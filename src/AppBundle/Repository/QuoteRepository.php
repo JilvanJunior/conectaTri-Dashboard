@@ -14,16 +14,27 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
 {
     public function countActives()
     {
-        return count($this->getActives());
+        return count($this->getInProgress());
     }
 
-    public function getActives()
+    public function getInProgress()
     {
         return $this->getEntityManager()
             ->createQuery(
                 'SELECT q
                   FROM AppBundle:Quote q
-                  WHERE q.expiresAt > CURRENT_TIMESTAMP()'
+                  WHERE q.expiresAt > CURRENT_TIMESTAMP() AND q.deleted = 0'
+            )
+            ->getResult();
+    }
+
+    public function getEnded()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                  FROM AppBundle:Quote q
+                  WHERE q.expiresAt < CURRENT_TIMESTAMP() AND q.deleted = 0'
             )
             ->getResult();
     }

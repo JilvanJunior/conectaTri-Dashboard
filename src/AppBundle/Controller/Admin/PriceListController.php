@@ -13,7 +13,8 @@ class PriceListController extends Controller
      */
     public function inprogressAction(Request $request)
     {
-        $quotes = $this->getDoctrine()->getRepository('AppBundle:Quote')->findBy(['deleted' => false]);
+        $em = $this->getDoctrine()->getManager();
+        $quotes = $em->getRepository('AppBundle:Quote')->getInProgress();
 
         return $this->render('Admin/pricelist/pricelistinprogress.html.twig', [
             'quotes' => $quotes
@@ -25,9 +26,11 @@ class PriceListController extends Controller
      */
     public function endedPricelistAction(Request $request)
     {
-        // replace this example code with whatever you need
+        $em = $this->getDoctrine()->getManager();
+        $quotes = $em->getRepository('AppBundle:Quote')->getEnded();
+
         return $this->render('Admin/pricelist/endedpricelist.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'quotes' => $quotes
         ]);
     }
 
