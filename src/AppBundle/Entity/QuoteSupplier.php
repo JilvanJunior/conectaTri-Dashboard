@@ -27,7 +27,7 @@ class QuoteSupplier
     /**
      * @var QuoteProduct
      *
-     * @ORM\ManyToOne(targetEntity="QuoteProduct")
+     * @ORM\ManyToOne(targetEntity="QuoteProduct", inversedBy="quoteSuppliers")
      * @ORM\JoinColumn(name="quote_product_id", referencedColumnName="id")
      * @Serializer\Exclude()
      */
@@ -37,7 +37,7 @@ class QuoteSupplier
      * @var Representative
      *
      * @ORM\ManyToOne(targetEntity="Representative")
-     * @ORM\JoinColumn(name="supplier_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="representative_id", referencedColumnName="id")
      */
     private $representative;
 

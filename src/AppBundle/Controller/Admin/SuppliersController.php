@@ -18,7 +18,8 @@ class SuppliersController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+        $em = $this->getDoctrine()->getManager();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->groupByCnpj();
 
         return $this->render('Admin/suppliers/index.html.twig', ['suppliers' => $suppliers]);
     }

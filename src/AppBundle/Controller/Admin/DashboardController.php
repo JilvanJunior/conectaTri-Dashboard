@@ -32,7 +32,7 @@ class DashboardController extends Controller
     public function remotesQuotesDataAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $quotes = $em->getRepository('AppBundle:Quote')->findBy(['deleted' => false]);
+        $quotes = $em->getRepository('AppBundle:Quote')->findBy(['type' => 1, 'deleted' => false]);
 
         echo json_encode($quotes);
         exit();
@@ -44,7 +44,7 @@ class DashboardController extends Controller
     public function presentialQuotesDataAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $quotes = $em->getRepository('AppBundle:Quote')->findBy(['deleted' => false]);
+        $quotes = $em->getRepository('AppBundle:Quote')->findBy(['type' => 2, 'deleted' => false]);
 
         echo json_encode($quotes);
         exit();
