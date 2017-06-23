@@ -17,7 +17,7 @@ class RegionRepository extends \Doctrine\ORM\EntityRepository
         return $this->getEntityManager()
             ->createQuery(
                 'SELECT r.name, 
-                  (SELECT COUNT(s.id)
+                  (SELECT COUNT(DISTINCT (s.cnpj))
                   FROM AppBundle:Supplier s
                   WHERE s.region = r.id AND s.deleted = 0
                   ) AS y

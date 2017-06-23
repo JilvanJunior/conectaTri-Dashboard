@@ -17,7 +17,7 @@ class StateRepository extends \Doctrine\ORM\EntityRepository
         return $this->getEntityManager()
             ->createQuery(
                 'SELECT st.name, 
-                    (SELECT COUNT(su.id)
+                    (SELECT COUNT(DISTINCT (su.cnpj))
                       FROM AppBundle:Supplier su
                       WHERE su.state = st.id AND su.deleted = 0 
                     ) AS y

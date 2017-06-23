@@ -31,7 +31,8 @@ class SuppliersController extends Controller
      */
     public function chart1Action(Request $request)
     {
-        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+        $em = $this->getDoctrine()->getManager();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->groupByCnpj();
 
         return $this->render('Admin/suppliers/charts/chart_scatter_pricelistXorder.html.twig', ['suppliers' => $suppliers]);
     }
@@ -43,7 +44,8 @@ class SuppliersController extends Controller
      */
     public function chart2Action(Request $request)
     {
-        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+        $em = $this->getDoctrine()->getManager();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->groupByCnpj();
 
         return $this->render('Admin/suppliers/charts/chart_line_createdaccountsXtime.html.twig', ['suppliers' => $suppliers]);
     }
@@ -55,7 +57,8 @@ class SuppliersController extends Controller
      */
     public function chart3Action(Request $request)
     {
-        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+        $em = $this->getDoctrine()->getManager();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->groupByCnpj();
 
         return $this->render('Admin/suppliers/charts/chart_pie_supplierXregion.html.twig', ['suppliers' => $suppliers]);
     }
@@ -82,7 +85,8 @@ class SuppliersController extends Controller
      */
     public function chart4Action(Request $request)
     {
-        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
+        $em = $this->getDoctrine()->getManager();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->groupByCnpj();
 
         return $this->render('Admin/suppliers/charts/chart_pie_supplierXstate.html.twig', ['suppliers' => $suppliers]);
     }
