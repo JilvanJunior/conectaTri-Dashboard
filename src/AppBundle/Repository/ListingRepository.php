@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
+
 /**
  * ListingRepository
  *
@@ -10,4 +12,17 @@ namespace AppBundle\Repository;
  */
 class ListingRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function countListingsByDate()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT COUNT(l.id) AS listings, l.createdAt 
+                  FROM AppBundle:Listing l
+                  WHERE l.deleted = 0
+                  GROUP BY l.createdAt 
+                  ORDER BY l.createdAt ASC'
+            )
+            ->getResult();
+
+    }
 }

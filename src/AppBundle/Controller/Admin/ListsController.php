@@ -25,10 +25,23 @@ class ListsController extends Controller
      */
     public function chart1Action(Request $request)
     {
-        // replace this example code with whatever you need
+        $em = $this->getDoctrine()->getManager();
+        $listings = $em->getRepository('AppBundle:Listing')->countListingsByDate();
+
         return $this->render('Admin/lists/charts/chart_line_createdlists.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'listings' => $listings,
         ]);
     }
 
+    /**
+     * @Route("/administrador/listas/criadas/data", name="admin_lists_created_data")
+     */
+    public function chart1DataAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $listings = $em->getRepository('AppBundle:Listing')->countListingsByDate();
+
+        echo json_encode($listings);
+        exit();
+    }
 }
