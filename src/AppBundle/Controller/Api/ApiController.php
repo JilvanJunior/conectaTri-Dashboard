@@ -747,7 +747,7 @@ class ApiController extends FOSRestController
                             ->setUpdatedAt(new \DateTime());
                     } else {
                         $supplier->setQuantity($rcvSupplier->quantity)
-                            ->setPrice($rcvSupplier->price)
+                            ->setPrice(str_replace(",", ".", $supplier->price))
                             ->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
                         $tmp2[] = $supplier;
