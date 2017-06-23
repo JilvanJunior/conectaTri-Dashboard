@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
+
 /**
  * QuoteRepository
  *
@@ -10,4 +12,20 @@ namespace AppBundle\Repository;
  */
 class QuoteRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function countActives()
+    {
+        return count($this->getActives());
+    }
+
+    public function getActives()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                  FROM AppBundle:Quote q
+                  WHERE q.expiresAt > CURRENT_TIMESTAMP()'
+            )
+            ->getResult();
+    }
+
 }
