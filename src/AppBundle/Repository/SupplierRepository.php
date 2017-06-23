@@ -49,4 +49,18 @@ class SupplierRepository extends EntityRepository
             ->getResult();
     }
 
+    public function countSupplierByDate()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT COUNT(s.id) AS suppliers, s.createdAt, YEAR(s.createdAt) AS y,
+                  MONTH(s.createdAt) AS m, DAY(s.createdAt) as d
+                  FROM AppBundle:Supplier s
+                  WHERE s.deleted = 0
+                  GROUP BY y, m, d
+                  ORDER BY s.createdAt ASC'
+            )
+            ->getResult();
+    }
+
 }
