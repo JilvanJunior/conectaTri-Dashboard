@@ -1001,6 +1001,11 @@ class ApiController extends FOSRestController
         ];
         $hash = $data->z;
         $pwd = $data->p;
+        ob_start();
+        var_dump($data);
+        $test = ob_get_clean();
+        ob_end_clean();
+        $this->get("logger")->debug($test);
         $cmpHash = hash_hmac("sha512", json_encode($newData), $this->key);
         $time = new \DateTime("yesterday");
         $dataTime = new \DateTime();
