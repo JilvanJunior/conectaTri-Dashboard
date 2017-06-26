@@ -24,6 +24,8 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 
 class ApiController extends FOSRestController
 {
+    private $key = 'NuZ^?*(7)NWcbl8S+*_m.Bhti<I+L>Y:Yhvy05*o^%mi*OC;.J/vhT]QeCw*uIy9%"NYx(hRrM$D(IKvn{e;ut`-e:[c>89~Ia*xTB!?<HS:8/{O#8sT]xw1\'}^+w83HFUFl12p@NY%^FG_z+C8nk.e$pYNp"J3o+>S4#mY!#/Q-v!ez\']$i%QkvGhhofDOf$xe)lr0_Z\=S{V4np>z>4rkvhP!Qi#GDNuntwg$/u6c.r>)hW+(6:5qd{5kH^6&6';
+
     /**
      * @Rest\Post("/api/login")
      */
@@ -961,6 +963,85 @@ class ApiController extends FOSRestController
             ->setParameter("listing", "%$search->query%")
             ->getQuery()->getResult();
         return View::create($results, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Post("/api/recovery/begin")
+     */
+    public function postBeginPasswordRecovery(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $cnpj = $request->get("cnpj");
+        $retailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $cnpj]);
+        if (is_null($retailer)) {
+            return View::create(new ApiError("E-mail não encontrado"), Response::HTTP_NOT_FOUND);
+        }
+
+        $rest = $this->get('circle.restclient');
+        $data = [
+            "i" => $retailer->getId(),
+            "j" => (new \DateTime())->getTimestamp()
+        ];
+        $data['z'] = hash_hmac("sha512", json_encode($data), $this->key);
+        $encoded = $this->base64url_encode(json_encode($data));
+        if (!$encoded) {
+            return View::create(new ApiError("Unknown error ocurred"), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        $link = "ctri://" . $encoded;
+
+        // FIXME: Implement via SMTP
+        $user = 'api:key-c4cd2035ff1535c1088cfca7940c7ef5';
+        $payload =
+            "from=".urlencode("'ConectaTri <conectatri@sandboxccc2a9a821d54f0a9db1e7d310bdafc2.mailgun.org>'")."&".
+            "to=".urlencode($retailer->getEmail())."&".
+            "subject=".urlencode("'Recuperação de Senha ConectaTri'")."&".
+            "text=".urlencode("'<a href=\"$link\">$link</a>'");
+        $rest->post("https://api.mailgun.net/v3/sandboxccc2a9a821d54f0a9db1e7d310bdafc2.mailgun.org/messages", $payload, [CURLOPT_USERPWD => $user]);
+
+
+        return View::create(new ApiError("E-mail enviado com sucesso"), Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Post("/api/recovery/end")
+     */
+    private function postEndPasswordRecovery(Request $request) {
+        $d = $this->getDoctrine();
+        $pe = $this->get("security.password_encoder");
+        $em = $d->getManager();
+        $data = json_decode($request->getContent());
+        $hash = $data['z'];
+        $pwd = $data['p'];
+        unset($data['z']);
+        unset($data['p']);
+        ksort($data);
+        $cmpHash = hash_hmac("sha512", json_encode($data), $this->key);
+        $time = new \DateTime("yesterday");
+        $dataTime = new \DateTime();
+        $dataTime->setTimestamp($data['j']);
+        if ($cmpHash != $hash || $dataTime < $time) {
+            return View::create(new ApiError("Dados inválidos para recuperação"), Response::HTTP_BAD_REQUEST);
+        }
+        $retailer = $d->getRepository("AppBundle:Retailer")->find($data['i']);
+        $retailer->setPassword($pe->encodePassword($retailer, $pwd));
+        $em->flush();
+        return View::create(new ApiError("Senha alterada com sucesso"), Response::HTTP_OK);
+    }
+
+    /**
+     * Encodes the given $data with base64 URL variant.
+     *
+     * This encoding is designed to make binary data survive transport through transport layers that are not 8-bit clean, such as mail bodies.
+     *
+     * Base64-encoded data takes about 33% more space than the original data.
+     *
+     * @param $data string The data to encode.
+     * @return string|boolean The encoded data, as a string or FALSE on failure.
+     */
+    private function base64url_encode($data) {
+        $encoded = base64_encode($data);
+        if (!$encoded) return false;
+        return rtrim(strtr($encoded, '+/', '-_'), '=');
     }
 
     /**

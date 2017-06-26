@@ -92,3 +92,10 @@ fos_rest:
         view_response_listener: 'force'
         formats:
             json: true
+
+# Temporary CircleRestClient
+circle_rest_client:
+    curl:
+      defaults:
+        CURLOPT_HTTPHEADER:     [ 'Content-Type: application/x-www-form-urlencoded' ]
+        CURLOPT_FOLLOWLOCATION: true
