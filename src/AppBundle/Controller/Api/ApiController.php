@@ -983,6 +983,8 @@ class ApiController extends FOSRestController
         ];
         $data['z'] = hash_hmac("sha512", json_encode($data), $this->key);
         $encoded = $this->base64url_encode(json_encode($data));
+
+        // TODO: Send email
         $link = "https://rs.conectatri.com.br/" . $encoded;
         return View::create(new ApiError($link), Response::HTTP_OK);
     }
@@ -1001,11 +1003,6 @@ class ApiController extends FOSRestController
         ];
         $hash = $data->z;
         $pwd = $data->p;
-        ob_start();
-        var_dump($data);
-        $test = ob_get_clean();
-        ob_end_clean();
-        $this->get("logger")->debug($test);
         $cmpHash = hash_hmac("sha512", json_encode($newData), $this->key);
         $time = new \DateTime("yesterday");
         $dataTime = new \DateTime();
