@@ -969,12 +969,13 @@ class ApiController extends FOSRestController
      * @Rest\Post("/api/recovery/begin")
      */
     public function postBeginPasswordRecovery(Request $request) {
+        $log = $this->get('logger');
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $cnpj = $request->get("cnpj");
         $retailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $cnpj]);
         if (is_null($retailer)) {
-            return View::create(new ApiError("E-mail não encontrado"), Response::HTTP_NOT_FOUND);
+            return View::create(new ApiError("CNPJ não encontrado"), Response::HTTP_NOT_FOUND);
         }
 
         $rest = $this->get('circle.restclient');
@@ -993,6 +994,8 @@ class ApiController extends FOSRestController
             "to=".urlencode($retailer->getEmail())."&".
             "subject=".urlencode("'Recuperação de Senha ConectaTri'")."&".
             "text=".urlencode("'<a href=\"$link\">$link</a>'");
+        $log->debug("asdf");
+
         $rest->post("https://api.mailgun.net/v3/sandboxccc2a9a821d54f0a9db1e7d310bdafc2.mailgun.org/messages", $payload, [CURLOPT_USERPWD => $user]);
 
 
