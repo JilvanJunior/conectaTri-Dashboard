@@ -969,7 +969,6 @@ class ApiController extends FOSRestController
      * @Rest\Post("/api/recovery/begin")
      */
     public function postBeginPasswordRecovery(Request $request) {
-        $log = $this->get('logger');
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $cnpj = $request->get("cnpj");
@@ -978,9 +977,6 @@ class ApiController extends FOSRestController
             return View::create(new ApiError("CNPJ não encontrado"), Response::HTTP_NOT_FOUND);
         }
 
-        $log->debug("ppap");
-        $rest = $this->container->get('circle.restclient');
-        $log->debug("moyase");
         $data = [
             "i" => $retailer->getId(),
             "j" => (new \DateTime())->getTimestamp()
@@ -988,20 +984,7 @@ class ApiController extends FOSRestController
         $data['z'] = hash_hmac("sha512", json_encode($data), $this->key);
         $encoded = $this->base64url_encode(json_encode($data));
         $link = "ctri://" . $encoded;
-
-        // FIXME: Implement via SMTP
-        $user = 'api:key-c4cd2035ff1535c1088cfca7940c7ef5';
-        $payload =
-            "from=".urlencode("'ConectaTri <conectatri@sandboxccc2a9a821d54f0a9db1e7d310bdafc2.mailgun.org>'")."&".
-            "to=".urlencode($retailer->getEmail())."&".
-            "subject=".urlencode("'Recuperação de Senha ConectaTri'")."&".
-            "text=".urlencode("'<a href=\"$link\">$link</a>'");
-        $log->debug("asdf");
-
-        $rest->post("https://api.mailgun.net/v3/sandboxccc2a9a821d54f0a9db1e7d310bdafc2.mailgun.org/messages", $payload, [CURLOPT_USERPWD => $user]);
-
-
-        return View::create(new ApiError("E-mail enviado com sucesso"), Response::HTTP_OK);
+        return View::create(new ApiError($link), Response::HTTP_OK);
     }
 
     /**
