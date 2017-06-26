@@ -990,7 +990,7 @@ class ApiController extends FOSRestController
     /**
      * @Rest\Post("/api/recovery/end")
      */
-    private function postEndPasswordRecovery(Request $request) {
+    public function postEndPasswordRecovery(Request $request) {
         $d = $this->getDoctrine();
         $pe = $this->get("security.password_encoder");
         $em = $d->getManager();
