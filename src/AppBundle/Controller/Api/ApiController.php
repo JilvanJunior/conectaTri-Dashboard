@@ -983,7 +983,7 @@ class ApiController extends FOSRestController
         ];
         $data['z'] = hash_hmac("sha512", json_encode($data), $this->key);
         $encoded = $this->base64url_encode(json_encode($data));
-        $link = "ctri://" . $encoded;
+        $link = "https://rs.conectatri.com.br/" . $encoded;
         return View::create(new ApiError($link), Response::HTTP_OK);
     }
 
@@ -999,16 +999,16 @@ class ApiController extends FOSRestController
             'i' => $data->i,
             'j' => $data->j
         ];
-        $hash = $data['z'];
-        $pwd = $data['p'];
+        $hash = $data->z;
+        $pwd = $data->p;
         $cmpHash = hash_hmac("sha512", json_encode($newData), $this->key);
         $time = new \DateTime("yesterday");
         $dataTime = new \DateTime();
-        $dataTime->setTimestamp($data['j']);
+        $dataTime->setTimestamp($data->j);
         if ($cmpHash != $hash || $dataTime < $time) {
             return View::create(new ApiError("Dados inválidos para recuperação"), Response::HTTP_BAD_REQUEST);
         }
-        $retailer = $d->getRepository("AppBundle:Retailer")->find($data['i']);
+        $retailer = $d->getRepository("AppBundle:Retailer")->find($data->i);
         $retailer->setPassword($pe->encodePassword($retailer, $pwd));
         $em->flush();
         return View::create(new ApiError("Senha alterada com sucesso"), Response::HTTP_OK);
