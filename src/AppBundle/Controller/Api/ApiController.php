@@ -984,9 +984,6 @@ class ApiController extends FOSRestController
         ];
         $data['z'] = hash_hmac("sha512", json_encode($data), $this->key);
         $encoded = $this->base64url_encode(json_encode($data));
-        if (!$encoded) {
-            return View::create(new ApiError("Unknown error ocurred"), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
         $link = "ctri://" . $encoded;
 
         // FIXME: Implement via SMTP
@@ -1040,7 +1037,6 @@ class ApiController extends FOSRestController
      */
     private function base64url_encode($data) {
         $encoded = base64_encode($data);
-        if (!$encoded) return false;
         return rtrim(strtr($encoded, '+/', '-_'), '=');
     }
 
