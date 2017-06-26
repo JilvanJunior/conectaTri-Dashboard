@@ -979,7 +979,7 @@ class ApiController extends FOSRestController
         }
 
         $log->debug("ppap");
-        $rest = $this->get('circle.restclient');
+        $rest = $this->container->get('circle.restclient');
         $log->debug("moyase");
         $data = [
             "i" => $retailer->getId(),
