@@ -995,12 +995,13 @@ class ApiController extends FOSRestController
         $pe = $this->get("security.password_encoder");
         $em = $d->getManager();
         $data = json_decode($request->getContent());
+        $newData = [
+            'i' => $data->i,
+            'j' => $data->j
+        ];
         $hash = $data['z'];
         $pwd = $data['p'];
-        unset($data['z']);
-        unset($data['p']);
-        ksort($data);
-        $cmpHash = hash_hmac("sha512", json_encode($data), $this->key);
+        $cmpHash = hash_hmac("sha512", json_encode($newData), $this->key);
         $time = new \DateTime("yesterday");
         $dataTime = new \DateTime();
         $dataTime->setTimestamp($data['j']);
