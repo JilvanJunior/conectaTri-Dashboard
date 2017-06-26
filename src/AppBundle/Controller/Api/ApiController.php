@@ -978,6 +978,7 @@ class ApiController extends FOSRestController
             return View::create(new ApiError("CNPJ não encontrado"), Response::HTTP_NOT_FOUND);
         }
 
+        $log->debug("ppap");
         $rest = $this->get('circle.restclient');
         $data = [
             "i" => $retailer->getId(),
