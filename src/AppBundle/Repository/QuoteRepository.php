@@ -39,4 +39,23 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    public function getQuoteByRepresentative($email, $id)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                  FROM AppBundle:Quote q
+                  WHERE q.id = :id
+                  AND q.deleted = 0
+                  AND q.retailer IN (
+                    SELECT IDENTITY(r.retailer)
+                    FROM AppBundle:Representative r
+                    WHERE r.email = :email
+                  )'
+            )
+            ->setParameters(array('id' => $id, 'email' => $email))
+            ->setMaxResults(1)
+            ->getResult();
+    }
+
 }

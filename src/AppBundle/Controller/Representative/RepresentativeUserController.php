@@ -13,8 +13,22 @@ class RepresentativeUserController extends Controller
      */
     public function indexAction(Request $request, $id)
     {
-        $quote = $this->getDoctrine()->getRepository("AppBundle:Quote")->find($id);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        return $this->render('Representative/quote.html.twig', array('quote' => $quote));
+        $em = $this->getDoctrine()->getManager();
+        $quote = $em->getRepository('AppBundle:Quote')->getQuoteByRepresentative($user->getEmail(), $id);
+        if($quote == null)
+            return $this->redirectToRoute('access_denied');
+
+        $representative = $em->getRepository('AppBundle:Representative')
+            ->getRepresentativeByQuote($user->getEmail(), $id);
+
+        $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $quote]);
+
+        return $this->render('Representative/quote.html.twig', array(
+            'quote' => $quote[0],
+            'quoteProducts' => $quoteProducts,
+            'representative' => $representative[0],
+        ));
     }
 }
