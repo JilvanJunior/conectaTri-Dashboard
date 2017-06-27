@@ -5,11 +5,15 @@ namespace AppBundle\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RepresentativeUserRepository")
+ * @UniqueEntity(fields="email", message="E-mail já cadastrado")
+ * @UniqueEntity(fields="username", message="Usuário já cadastrado")
  * @ORM\Table(name="representative_user")
  * @Serializer\ExclusionPolicy("none")
  */
@@ -32,6 +36,9 @@ class RepresentativeUser implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=100)
      */
     private $email;
+
+
+    private $plainPassword;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -71,7 +78,9 @@ class RepresentativeUser implements UserInterface, \Serializable
      */
     public function __construct()
     {
-        $this->createdAt = new DateTime();
+        $this->roles = 'ROLE_REPRESENTATIVE';
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getRoles()
@@ -120,6 +129,16 @@ class RepresentativeUser implements UserInterface, \Serializable
         return $this->username;
     }
 
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+    }
+
     public function getPassword()
     {
         return $this->password;
@@ -155,7 +174,7 @@ class RepresentativeUser implements UserInterface, \Serializable
     public function setEmail($email)
     {
         $this->email = $email;
-
+        $this->username = $email;
         return $this;
     }
 
