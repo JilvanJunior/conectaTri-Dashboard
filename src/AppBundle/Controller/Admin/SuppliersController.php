@@ -51,6 +51,23 @@ class SuppliersController extends Controller
     }
 
     /**
+     * @Route("/administrador/fornecedores/contascriadasXtempo/data", name="admin_suppliers_line_createdaccountsXtime_data")
+     * @param Request $request
+     */
+    public function chart2DataAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->countSupplierByDate();
+
+        //TODO
+        $data['suppliers'] = $suppliers;
+//        $data['representatives'] = $representatives;
+
+        echo json_encode($data);
+        exit();
+    }
+
+    /**
      * @Route("/administrador/fornecedores/fornecedoresXregiao", name="admin_suppliers_pie_suppliersXregion")
      * @param Request $request
      * @return

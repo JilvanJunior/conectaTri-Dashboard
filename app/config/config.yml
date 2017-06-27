@@ -58,8 +58,15 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+        entity_managers:
+            default:
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                auto_mapping: true
+                dql:
+                    datetime_functions:
+                        day: DoctrineExtensions\Query\Mysql\Day
+                        month: DoctrineExtensions\Query\Mysql\Month
+                        year: DoctrineExtensions\Query\Mysql\Year
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -92,10 +99,3 @@ fos_rest:
         view_response_listener: 'force'
         formats:
             json: true
-
-# Temporary CircleRestClient
-circle_rest_client:
-    curl:
-      defaults:
-        CURLOPT_HTTPHEADER:     [ 'Content-Type: application/x-www-form-urlencoded' ]
-        CURLOPT_FOLLOWLOCATION: true

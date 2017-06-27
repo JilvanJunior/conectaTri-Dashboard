@@ -10,14 +10,25 @@ class AuthController extends Controller
 {
     /**
      * @Route("/", name="index")
+     * @param Request $request
+     * @return
      */
     public function indexAction(Request $request)
     {
-        return $this->redirectToRoute('login');
+        if(!$this->_isLoggedIn())
+            return $this->redirectToRoute('login');
+
+        if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
+            return $this->redirectToRoute('admin_dashboard');
+
+        if($this->get('security.authorization_checker')->isGranted('ROLE_REPRESENTATIVE'))
+            return $this->redirectToRoute('quote_representative', array('id' => $request->get('id')));
     }
 
     /**
      * @Route("/login", name="login")
+     * @param Request $request
+     * @return
      */
     public function loginAction(Request $request)
     {
@@ -33,6 +44,19 @@ class AuthController extends Controller
             'last_username' => $lastUsername,
             'error'         => $error,
         ));
+    }
+
+    /**
+     * @Route("/acesso-negado", name="access_denied")
+     * @param Request $request
+     * @return
+     */
+    public function accessDeniedAction(Request $request)
+    {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
+            return $this->redirectToRoute('admin_dashboard');
+        else
+            return $this->render('security/403.html.twig', array());
     }
 
     private function _isLoggedIn(){
