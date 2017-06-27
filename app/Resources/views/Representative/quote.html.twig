@@ -1,8 +1,48 @@
 <html>
-    <head>
-        <title>{% block title %}Cotação{% endblock %}</title>
-    </head>
-    <body>
-        <p>{{ dump(quote) }}</p>
-    </body>
+<head>
+    <title>{% block title %}Cotação{% endblock %}</title>
+</head>
+<body>
+<h2>Cotação: {{ quote.name }}</h2>
+<form action="#" method="POST">
+{% for quoteProduct in quoteProducts %}
+    <input type="hidden" name="representative" value="{{ representative.id }}">
+    <input type="hidden" name="quote" value="{{ quote.id }}">
+    <h4>Produto</h4>
+    <div>
+        Nome: {{ quoteProduct.product.name }}
+    </div>
+    <div>
+        Marca: {{ quoteProduct.product.brand }}
+    </div>
+    <div>
+        Descrição: {{ quoteProduct.product.fullDescription }}
+    </div>
+    <div>
+        Quantidade: {{ quoteProduct.product.quantity }}
+    </div>
+    <div>
+        Unidade: {{ quoteProduct.product.unit }}
+    </div>
+
+    {% for quoteSupplier in quoteProduct.quoteSuppliers
+        if quoteSupplier.deleted == false and quoteSupplier.representative.id == representative.id %}
+            <div>
+                Preço do Produto: <input type="text" name="price[{{ quoteProduct.id }}]" value="{{ quoteSupplier.price }}"  />
+            </div>
+            <div>
+                Quantidade do Produto: <input type="text" name="quantity[{{ quoteProduct.id }}]" value="{{ quoteSupplier.quantity }}" />
+            </div>
+    {% else %}
+        <div>
+            Preço do Produto: <input type="text" name="price[{{ quoteProduct.id }}]" />
+        </div>
+        <div>
+            Quantidade do Produto: <input type="text" name="quantity[{{ quoteProduct.id }}]" />
+        </div>
+    {% endfor %}
+{% endfor %}
+    <button type="submit">Salvar</button>
+</form>
+</body>
 </html>

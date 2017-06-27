@@ -194,7 +194,7 @@
                 <form action="{{ path('login') }}" method="post">
                     <div class="field">
                         <input type="text" id="username" name="_username" class="input" required pattern=.*\S.* />
-                        <label for="username" class="label">CNPJ</label>
+                        <label for="username" class="label">E-mail</label>
                     </div>
                     <div class="field">
                         <input type="password" id="password" name="_password" class="input" required pattern=.*\S.* />
@@ -205,6 +205,7 @@
                         is redirected to on success (more details below)
                         <input type="hidden" name="_target_path" value="/account" />
                     #}
+                    <div>Primeiro acesso? <a href="{{ path('representative_user_registration') }}">Clique aqui</a></div>
                     <div class="profile__footer">
                         <button class="btn" type="submit">Entrar</button>
                     </div>
