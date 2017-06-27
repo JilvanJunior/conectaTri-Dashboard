@@ -51,6 +51,7 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
                     SELECT IDENTITY(r.retailer)
                     FROM AppBundle:Representative r
                     WHERE r.email = :email
+                    AND r.deleted = 0
                   )'
             )
             ->setParameters(array('id' => $id, 'email' => $email))

@@ -24,6 +24,7 @@ class RepresentativeRepository extends EntityRepository
                     SELECT IDENTITY(q.retailer)
                     FROM AppBundle:Quote q
                     WHERE q.id = :id
+                    AND q.deleted = 0
                   )'
             )
             ->setParameters(array('id' => $id, 'email' => $email))

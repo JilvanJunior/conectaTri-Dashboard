@@ -4,8 +4,10 @@
 </head>
 <body>
 <h2>Cotação: {{ quote.name }}</h2>
-<form action="#">
+<form action="#" method="POST">
 {% for quoteProduct in quoteProducts %}
+    <input type="hidden" name="representative" value="{{ representative.id }}">
+    <input type="hidden" name="quote" value="{{ quote.id }}">
     <h4>Produto</h4>
     <div>
         Nome: {{ quoteProduct.product.name }}
@@ -23,19 +25,20 @@
         Unidade: {{ quoteProduct.product.unit }}
     </div>
 
-    {% for quoteSupplier in quoteProduct.quoteSuppliers if quoteSupplier.representative.id == representative.id %}
+    {% for quoteSupplier in quoteProduct.quoteSuppliers
+        if quoteSupplier.deleted == false and quoteSupplier.representative.id == representative.id %}
             <div>
-                Preço do Produto: <input type="text" value="{{ quoteSupplier.price }}" />
+                Preço do Produto: <input type="text" name="price[{{ quoteProduct.id }}]" value="{{ quoteSupplier.price }}"  />
             </div>
             <div>
-                Quantidade do Produto: <input type="text" value="{{ quoteSupplier.quantity }}" />
+                Quantidade do Produto: <input type="text" name="quantity[{{ quoteProduct.id }}]" value="{{ quoteSupplier.quantity }}" />
             </div>
     {% else %}
         <div>
-            Preço do Produto: <input type="text" />
+            Preço do Produto: <input type="text" name="price[{{ quoteProduct.id }}]" />
         </div>
         <div>
-            Quantidade do Produto: <input type="text" />
+            Quantidade do Produto: <input type="text" name="quantity[{{ quoteProduct.id }}]" />
         </div>
     {% endfor %}
 {% endfor %}
