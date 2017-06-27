@@ -986,7 +986,7 @@ class ApiController extends FOSRestController
         $mailer = $this->get('swiftmailer.mailer.default');
         $msg = new \Swift_Message(
             "Recuperação de Senha ConectaTri",
-            "Por favor, utilize o app ConectaTri quando questionado para abrir o link abaixo:\n<a href=\"$link\">$link</a>",
+            "Por favor, utilize o app ConectaTri quando questionado para abrir o link abaixo:<br/><a href=\"$link\">$link</a>",
             "text/html",
             "utf-8"
         );
