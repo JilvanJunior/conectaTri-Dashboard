@@ -988,7 +988,8 @@ class ApiController extends FOSRestController
             "Recuperação de Senha ConectaTri",
             "Por favor, utilize o app ConectaTri quando questionado para abrir o link abaixo:\n<a href=\"$link\">$link</a>"
         );
-        $msg->setTo([$retailer->getEmail()]);
+        $msg->setFrom(["postmaster@sandboxccc2a9a821d54f0a9db1e7d310bdafc2.mailgun.org" => "ConectaTri"])
+            ->setTo([$retailer->getEmail()]);
         $result = $mailer->send($msg);
         if ($result > 0) {
             return View::create(new ApiError("E-mail enviado com sucesso"), Response::HTTP_OK);
