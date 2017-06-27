@@ -976,17 +976,27 @@ class ApiController extends FOSRestController
         if (is_null($retailer)) {
             return View::create(new ApiError("CNPJ não encontrado"), Response::HTTP_NOT_FOUND);
         }
-
         $data = [
             "i" => $retailer->getId(),
             "j" => (new \DateTime())->getTimestamp()
         ];
         $data['z'] = hash_hmac("sha512", json_encode($data), $this->key);
         $encoded = $this->base64url_encode(json_encode($data));
-
-        // TODO: Send email
         $link = "https://rs.conectatri.com.br/" . $encoded;
-        return View::create(new ApiError($link), Response::HTTP_OK);
+        $mailer = $this->get('swiftmailer.mailer.default');
+        $msg = new \Swift_Message(
+            "Recuperação de Senha ConectaTri",
+            "Por favor, utilize o app ConectaTri quando questionado para abrir o link abaixo:<br/><a href=\"$link\">$link</a>",
+            "text/html",
+            "utf-8"
+        );
+        $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"])
+            ->setTo([$retailer->getEmail()]);
+        $result = $mailer->send($msg);
+        if ($result > 0) {
+            return View::create(new ApiError("E-mail enviado com sucesso"), Response::HTTP_OK);
+        }
+        return View::create(new ApiError("Houve algum problema ao tentar\nenviar o e-mail de recuperação"), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
