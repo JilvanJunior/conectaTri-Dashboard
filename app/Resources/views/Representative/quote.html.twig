@@ -23,15 +23,13 @@
         Unidade: {{ quoteProduct.product.unit }}
     </div>
 
-    {% for quoteSupplier in quoteProduct.quoteSuppliers %}
-        {% if quoteSupplier.representative.id == representative.id %}
+    {% for quoteSupplier in quoteProduct.quoteSuppliers if quoteSupplier.representative.id == representative.id %}
             <div>
                 Preço do Produto: <input type="text" value="{{ quoteSupplier.price }}" />
             </div>
             <div>
                 Quantidade do Produto: <input type="text" value="{{ quoteSupplier.quantity }}" />
             </div>
-        {% endif %}
     {% else %}
         <div>
             Preço do Produto: <input type="text" />
