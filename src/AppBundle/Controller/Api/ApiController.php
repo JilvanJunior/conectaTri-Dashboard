@@ -990,7 +990,7 @@ class ApiController extends FOSRestController
             "text/html",
             "utf-8"
         );
-        $msg->setFrom(["postmaster@triapp.com.br" => "ConectaTri"])
+        $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"])
             ->setTo([$retailer->getEmail()]);
         $result = $mailer->send($msg);
         if ($result > 0) {
