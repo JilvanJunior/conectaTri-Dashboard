@@ -850,8 +850,10 @@ class ApiController extends FOSRestController
      * @Rest\Post("/api/retailer")
      */
     public function postRetailer(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
         $retailer = json_decode($request->getContent());
+        $dbState = $d->getRepository("AppBundle:State")->findOneBy(["uf" => $retailer->state]);
         $dbRetailer = new Retailer();
         $dbRetailer->setUsername($retailer->cnpj)
             ->setCnpj($retailer->cnpj)
@@ -860,7 +862,7 @@ class ApiController extends FOSRestController
             ->setEmail($retailer->email)
             ->setAddress($retailer->address)
             ->setCity($retailer->city)
-            ->setState($retailer->state)
+            ->setState($dbState)
             ->setCep($retailer->cep)
             ->setAddress($retailer->address)
             ->setPhone($retailer->phone)
@@ -1024,6 +1026,15 @@ class ApiController extends FOSRestController
         $retailer->setPassword($pe->encodePassword($retailer, $pwd));
         $em->flush();
         return View::create(new ApiError("Senha alterada com sucesso"), Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/api/state")
+     */
+    public function getStates() {
+        $d = $this->getDoctrine();
+        $states = $d->getRepository("AppBundle:State")->findAll();
+        return View::create($states, Response::HTTP_OK);
     }
 
     /**
