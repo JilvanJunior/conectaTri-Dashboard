@@ -34,15 +34,15 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $user = json_decode($request->getContent());
         if (!isset($user->cnpj) || !isset($user->password)) {
-            return View::create(new ApiError("Invalid request"), Response::HTTP_BAD_REQUEST);
+            return View::create(new ApiError("Usuário ou senha inválidos"), Response::HTTP_BAD_REQUEST);
         }
         $dbUser = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $user->cnpj]);
         if (is_null($dbUser)) {
-            return View::create(new ApiError("Invalid username or password"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Usuário ou senha inválidos"), Response::HTTP_BAD_REQUEST);
         }
         $encoder = $this->get("security.password_encoder");
         if (!$encoder->isPasswordValid($dbUser, $user->password)) {
-            return View::create(new ApiError("Invalid username or password"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Usuário ou senha inválidos"), Response::HTTP_BAD_REQUEST);
         }
         $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
             ->where("s.lastUsed < :yesterday")
@@ -84,7 +84,7 @@ class ApiController extends FOSRestController
         $token = $request->headers->get("Api-Token");
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_BAD_REQUEST);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_BAD_REQUEST);
         }
         $em->remove($dbToken);
         $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
@@ -95,7 +95,7 @@ class ApiController extends FOSRestController
             $em->remove($oldToken);
         }
         $em->flush();
-        return View::create("Success", Response::HTTP_OK);
+        return View::create(null, Response::HTTP_OK);
     }
 
     /**
@@ -106,11 +106,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -127,18 +127,18 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
         $product = $d->getRepository("AppBundle:Product")->find($id);
         if (is_null($product)) {
-            return View::create(new ApiError("Invalid object ID"), Response::HTTP_NOT_FOUND);
+            return View::create(new ApiError("Este produto não está cadastrado"), Response::HTTP_NOT_FOUND);
         }
         return View::create($product, Response::HTTP_OK);
     }
@@ -151,11 +151,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
 
@@ -186,18 +186,18 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
 
         $product = json_decode($request->getContent());
         $dbProduct = $d->getRepository("AppBundle:Product")->find($id);
         if (is_null($dbProduct)) {
-            return View::create(new ApiError("Invalid object ID"), Response::HTTP_NOT_FOUND);
+            return View::create(new ApiError("Este produto não está cadastrado"), Response::HTTP_NOT_FOUND);
         }
         $dbProduct
             ->setName($product->name)
@@ -222,18 +222,18 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
         $product = $d->getRepository("AppBundle:Product")->find($id);
         if (is_null($product)) {
-            return View::create(new ApiError("Invalid object ID"), Response::HTTP_NOT_FOUND);
+            return View::create(new ApiError("Este produto não está cadastrado"), Response::HTTP_NOT_FOUND);
         }
         $product->setUpdatedAt(new \DateTime())
             ->setDeleted(true);
@@ -249,11 +249,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -270,18 +270,18 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
         $supplier = $d->getRepository("AppBundle:Supplier")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
         if (is_null($supplier)) {
-            return View::create(new ApiError("Invalid object ID"), Response::HTTP_NOT_FOUND);
+            return View::create(new ApiError("Fornecedor não encontrado"), Response::HTTP_NOT_FOUND);
         }
         return View::create($supplier, Response::HTTP_OK);
     }
@@ -294,11 +294,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -319,11 +319,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -345,11 +345,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -357,7 +357,7 @@ class ApiController extends FOSRestController
         $representative = json_decode($request->getContent());
         $dbRepresentative = $d->getRepository("AppBundle:Representative")->findOneBy(["email" => $representative->contactEmail, "retailer" => $dbToken->getRetailer()]);
         if (!is_null($dbRepresentative)) {
-            return View::create(new ApiError("Já existe um representante com o mesmo email"), Response::HTTP_NOT_ACCEPTABLE);
+            return View::create(new ApiError("Já existe um representante com o mesmo email"), Response::HTTP_CONFLICT);
         }
         $supplier = $d->getRepository("AppBundle:Supplier")->findOneBy(["cnpj" => $representative->cnpj, "deleted" => false]);
         if (is_null($supplier)) {
@@ -393,11 +393,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -406,12 +406,12 @@ class ApiController extends FOSRestController
         $dbRepresentative = $d->getRepository("AppBundle:Representative")->findOneBy(["email" => $representative->contactEmail, "retailer" => $dbToken->getRetailer()]);
         if (!is_null($dbRepresentative)) {
             if ($dbRepresentative->getId() != $id)
-                return View::create(new ApiError("Já existe um representante com o mesmo email"), Response::HTTP_NOT_ACCEPTABLE);
+                return View::create(new ApiError("Já existe um representante com o mesmo email"), Response::HTTP_CONFLICT);
         }
 
         $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($id);
         if (is_null($dbRepresentative)) {
-            return View::create(new ApiError("Este representante não está cadastrado"), Response::HTTP_NOT_ACCEPTABLE);
+            return View::create(new ApiError("Este representante não está cadastrado"), Response::HTTP_NOT_FOUND);
         }
         $dbRepresentative->getSupplier()
             ->setName($representative->name)
@@ -436,18 +436,18 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
         $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($id);
         if (is_null($dbRepresentative)) {
-            return View::create(new ApiError("Este representante não está cadastrado"), Response::HTTP_NOT_ACCEPTABLE);
+            return View::create(new ApiError("Este representante não está cadastrado"), Response::HTTP_NOT_FOUND);
         }
         $dbRepresentative->setDeleted(true)
             ->setUpdatedAt(new \DateTime());
@@ -467,11 +467,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -488,11 +488,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -531,11 +531,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -596,18 +596,18 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
         $dbListing = $d->getRepository("AppBundle:Listing")->find($id);
         if (is_null($dbListing)) {
-            return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_ACCEPTABLE);
+            return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
         }
         $dbListing->setDeleted(true)
             ->setUpdatedAt(new \DateTime());
@@ -623,11 +623,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -674,11 +674,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -723,11 +723,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -804,11 +804,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -839,11 +839,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -890,11 +890,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -936,11 +936,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -961,11 +961,11 @@ class ApiController extends FOSRestController
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
-            return View::create(new ApiError("Invalid token"), Response::HTTP_UNAUTHORIZED);
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
@@ -1009,7 +1009,7 @@ class ApiController extends FOSRestController
         if ($result > 0) {
             return View::create(new ApiError("E-mail enviado com sucesso"), Response::HTTP_OK);
         }
-        return View::create(new ApiError("Houve algum problema ao tentar\nenviar o e-mail de recuperação"), Response::HTTP_INTERNAL_SERVER_ERROR);
+        return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de recuperação"), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -1031,7 +1031,7 @@ class ApiController extends FOSRestController
         $dataTime = new \DateTime();
         $dataTime->setTimestamp($data->j);
         if ($cmpHash != $hash || $dataTime < $time) {
-            return View::create(new ApiError("Dados inválidos para recuperação"), Response::HTTP_BAD_REQUEST);
+            return View::create(new ApiError("Dados inválidos para recuperação de senha"), Response::HTTP_BAD_REQUEST);
         }
         $retailer = $d->getRepository("AppBundle:Retailer")->find($data->i);
         $retailer->setPassword($pe->encodePassword($retailer, $pwd));
