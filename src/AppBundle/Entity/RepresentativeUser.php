@@ -50,7 +50,21 @@ class RepresentativeUser implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=100)
      */
     private $roles;
-    
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Serializer\Exclude()
+     */
+    private $confirmationToken;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Serializer\Exclude()
+     */
+    private $passwordRequestedAt;
+
     /**
      * @var \DateTime
      *
@@ -62,7 +76,7 @@ class RepresentativeUser implements UserInterface, \Serializable
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      * @Serializer\Exclude()
      */
     private $updatedAt;
@@ -200,6 +214,53 @@ class RepresentativeUser implements UserInterface, \Serializable
         $this->password = $password;
 
         return $this;
+    }
+
+    /**
+     * Set confirmationToken
+     *
+     * @param string $confirmationToken
+     *
+     * @return RepresentativeUser
+     */
+    public function setConfirmationToken($confirmationToken)
+    {
+        $this->confirmationToken = $confirmationToken;
+        return $this;
+    }
+
+    /**
+     * Get confirmationToken
+     *
+     * @return string
+     */
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
+    }
+
+    /**
+     * Set passwordRequestedAt
+     *
+     * @param \DateTime $passwordRequestedAt
+     *
+     * @return RepresentativeUser
+     */
+    public function setPasswordRequestedAt($passwordRequestedAt)
+    {
+        $this->passwordRequestedAt = $passwordRequestedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get passwordRequestedAt
+     *
+     * @return \DateTime
+     */
+    public function getPasswordRequestedAt()
+    {
+        return $this->passwordRequestedAt;
     }
 
     /**
