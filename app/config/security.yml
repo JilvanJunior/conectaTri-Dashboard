@@ -52,6 +52,7 @@ security:
     access_control:
          - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/cadastro, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/recuperacao-senha, role: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/administrador, roles: ROLE_ADMIN }
          - { path: ^/varejista, roles: ROLE_RETAILER }
          - { path: ^/representante, roles: ROLE_REPRESENTATIVE }

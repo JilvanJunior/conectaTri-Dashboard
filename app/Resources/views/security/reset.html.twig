@@ -1,0 +1,6 @@
+{{ form_start(form, { 'action': path('recover_password_token', {'token': token})} }) }}
+    {{ form_widget(form) }}
+<div>
+    <input type="submit" value="Renovar Senha" />
+</div>
+{{ form_end(form) }}
