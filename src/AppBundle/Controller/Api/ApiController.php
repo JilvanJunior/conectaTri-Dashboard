@@ -403,6 +403,11 @@ class ApiController extends FOSRestController
         $em->flush();
 
         $representative = json_decode($request->getContent());
+        $dbRepresentative = $d->getRepository("AppBundle:Representative")->findOneBy(["email" => $representative->contactEmail, "retailer" => $dbToken->getRetailer()]);
+        if (!is_null($dbRepresentative)) {
+            if ($dbRepresentative->getId() != $id)
+                return View::create(new ApiError("Já existe um representante com o mesmo email"), Response::HTTP_NOT_ACCEPTABLE);
+        }
 
         $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($id);
         if (is_null($dbRepresentative)) {
