@@ -924,6 +924,7 @@ class ApiController extends FOSRestController
                 ->setPassword($sec->encodePassword($dbRetailer, $retailer->password));
         }
         $em->flush();
+        $dbRetailer->setPassword("");
         return View::create($dbRetailer, Response::HTTP_OK);
     }
 
