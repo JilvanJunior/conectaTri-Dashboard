@@ -911,8 +911,11 @@ class ApiController extends FOSRestController
             ->setCep($retailer->cep)
             ->setPhone($retailer->phone)
             ->setCellphone($retailer->cellphone)
-            ->setPassword($sec->encodePassword($dbRetailer, $retailer->password))
             ->setUpdatedAt(new \DateTime());
+        if (isset($retailer->password)) {
+            $dbRetailer
+                ->setPassword($sec->encodePassword($dbRetailer, $retailer->password));
+        }
         $em->flush();
         return View::create($dbRetailer, Response::HTTP_OK);
     }
