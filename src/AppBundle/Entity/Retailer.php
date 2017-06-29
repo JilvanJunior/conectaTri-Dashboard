@@ -59,7 +59,7 @@ class Retailer implements UserInterface, \Serializable
     private $quotes;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=50, unique=true)
      * @Serializer\Exclude()
      */
     private $username;
@@ -76,7 +76,7 @@ class Retailer implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
     private $cnpj;
 

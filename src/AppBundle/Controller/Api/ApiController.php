@@ -95,7 +95,7 @@ class ApiController extends FOSRestController
             $em->remove($oldToken);
         }
         $em->flush();
-        return View::create(null, Response::HTTP_OK);
+        return View::create(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -175,7 +175,7 @@ class ApiController extends FOSRestController
         $em->persist($dbProduct);
         $em->flush();
 
-        return View::create($dbProduct, Response::HTTP_OK);
+        return View::create($dbProduct, Response::HTTP_CREATED);
     }
 
     /**
@@ -211,7 +211,7 @@ class ApiController extends FOSRestController
             ->setDeleted(false);
         $em->flush();
 
-        return View::create($dbProduct, Response::HTTP_OK);
+        return View::create($dbProduct, Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -382,7 +382,7 @@ class ApiController extends FOSRestController
             ->setDeleted(false);
         $em->persist($dbRepresentative);
         $em->flush();
-        return View::create(new ApiSupplier($dbRepresentative), Response::HTTP_OK);
+        return View::create(new ApiSupplier($dbRepresentative), Response::HTTP_CREATED);
     }
 
     /**
@@ -425,7 +425,7 @@ class ApiController extends FOSRestController
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false);
         $em->flush();
-        return View::create(new ApiSupplier($dbRepresentative), Response::HTTP_OK);
+        return View::create(new ApiSupplier($dbRepresentative), Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -520,7 +520,7 @@ class ApiController extends FOSRestController
         $em->persist($dbListing);
         $em->flush();
 
-        return View::create($dbListing, Response::HTTP_OK);
+        return View::create($dbListing, Response::HTTP_CREATED);
     }
 
     /**
@@ -585,7 +585,7 @@ class ApiController extends FOSRestController
             ->setDescription($listing->description)
             ->setDeleted(false);
         $em->flush();
-        return View::create($dbListing, Response::HTTP_OK);
+        return View::create($dbListing, Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -712,7 +712,7 @@ class ApiController extends FOSRestController
         }
         $em->flush();
 
-        return View::create($dbQuote, Response::HTTP_OK);
+        return View::create($dbQuote, Response::HTTP_CREATED);
     }
 
     /**
@@ -793,7 +793,7 @@ class ApiController extends FOSRestController
             ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
             ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
         $em->flush();
-        return View::create($dbQuote, Response::HTTP_OK);
+        return View::create($dbQuote, Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -859,6 +859,10 @@ class ApiController extends FOSRestController
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $retailer = json_decode($request->getContent());
+        $dbRetailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["username" => $retailer->cnpj]);
+        if (!is_null($dbRetailer)) {
+            return View::create(new ApiError("Este CNPJ já está cadastrado"), Response::HTTP_CONFLICT);
+        }
         $dbState = $d->getRepository("AppBundle:State")->findOneBy(["uf" => $retailer->state]);
         $dbRetailer = new Retailer();
         $dbRetailer->setUsername($retailer->cnpj)
@@ -925,7 +929,7 @@ class ApiController extends FOSRestController
         }
         $em->flush();
         $dbRetailer->setPassword("");
-        return View::create($dbRetailer, Response::HTTP_OK);
+        return View::create($dbRetailer, Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -1007,7 +1011,7 @@ class ApiController extends FOSRestController
             ->setTo([$retailer->getEmail()]);
         $result = $mailer->send($msg);
         if ($result > 0) {
-            return View::create(new ApiError("E-mail enviado com sucesso"), Response::HTTP_OK);
+            return View::create(new ApiError("E-mail enviado para\n".preg_replace('(\w{2}).+(\w{2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $retailer->getEmail())), Response::HTTP_OK);
         }
         return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de recuperação"), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
@@ -1036,7 +1040,7 @@ class ApiController extends FOSRestController
         $retailer = $d->getRepository("AppBundle:Retailer")->find($data->i);
         $retailer->setPassword($pe->encodePassword($retailer, $pwd));
         $em->flush();
-        return View::create(new ApiError("Senha alterada com sucesso"), Response::HTTP_OK);
+        return View::create(new ApiError("Senha alterada com sucesso"), Response::HTTP_ACCEPTED);
     }
 
     /**
