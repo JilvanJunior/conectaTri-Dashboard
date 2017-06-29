@@ -911,13 +911,14 @@ class ApiController extends FOSRestController
         if (!isset($jsonRequest->password) || !$sec->isPasswordValid($dbRetailer, $jsonRequest->password)) {
             return View::create(new ApiError("Senha incorreta"), Response::HTTP_BAD_REQUEST);
         }
+        $dbState = $d->getRepository("AppBundle:State")->findOneBy(["uf" => $retailer->state]);
         $dbRetailer
             ->setCompanyName($retailer->company_name)
             ->setFantasyName($retailer->fantasy_name)
             ->setEmail($retailer->email)
             ->setAddress($retailer->address)
             ->setCity($retailer->city)
-            ->setState($retailer->state)
+            ->setState($dbState)
             ->setAddress($retailer->address)
             ->setCep($retailer->cep)
             ->setPhone($retailer->phone)
