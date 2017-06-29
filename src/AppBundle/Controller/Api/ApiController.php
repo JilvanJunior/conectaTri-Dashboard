@@ -238,7 +238,7 @@ class ApiController extends FOSRestController
         $product->setUpdatedAt(new \DateTime())
             ->setDeleted(true);
         $em->flush();
-        return View::create("Success", Response::HTTP_OK);
+        return View::create($product, Response::HTTP_OK);
     }
 
     /**
@@ -847,6 +847,7 @@ class ApiController extends FOSRestController
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
+        $dbToken->getRetailer()->setPassword("");
 
         return View::create($dbToken->getRetailer(), Response::HTTP_OK);
     }
@@ -877,7 +878,8 @@ class ApiController extends FOSRestController
             ->setRoles("ROLE_USER");
         $em->persist($dbRetailer);
         $em->flush();
-        return View::create(new ApiError("Cadastrado com sucesso"), Response::HTTP_CREATED);
+        $dbRetailer->setPassword("");
+        return View::create($dbRetailer, Response::HTTP_CREATED);
     }
 
     /**
