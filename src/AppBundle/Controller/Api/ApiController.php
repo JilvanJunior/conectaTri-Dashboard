@@ -923,7 +923,7 @@ class ApiController extends FOSRestController
             ->setPhone($retailer->phone)
             ->setCellphone($retailer->cellphone)
             ->setUpdatedAt(new \DateTime());
-        if (isset($retailer->password) && strlen($retailer->password) > 8) {
+        if (isset($retailer->password) && strlen($retailer->password) >= 8) {
             $dbRetailer
                 ->setPassword($sec->encodePassword($dbRetailer, $retailer->password));
         }
