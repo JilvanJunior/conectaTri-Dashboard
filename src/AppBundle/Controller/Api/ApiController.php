@@ -907,7 +907,7 @@ class ApiController extends FOSRestController
         $jsonRequest = json_decode($request->getContent());
         $dbRetailer = $dbToken->getRetailer();
         $retailer = $jsonRequest->retailer;
-        if (isset($retailer->password) && strlen($retailer->password) >= 8 && strlen($retailer->password) > 0) {
+        if (isset($retailer->password) && strlen($retailer->password) < 8 && strlen($retailer->password) > 0) {
             return View::create(new ApiError("A senha deve ter no mínimo 8 caracteres"), Response::HTTP_BAD_REQUEST);
         }
         if (!isset($jsonRequest->password) || !$sec->isPasswordValid($dbRetailer, $jsonRequest->password)) {
