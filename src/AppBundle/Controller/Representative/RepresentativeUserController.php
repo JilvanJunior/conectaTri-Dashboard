@@ -21,17 +21,44 @@ class RepresentativeUserController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $quote = $em->getRepository('AppBundle:Quote')->getQuoteByRepresentative($user->getEmail(), $id);
-        if($quote == null)
+        $now = new \DateTime();
+        if($quote == null || $now > $quote[0]->getExpiresAt())
             return $this->redirectToRoute('access_denied');
 
         $representative = $em->getRepository('AppBundle:Representative')
             ->getRepresentativeByQuote($user->getEmail(), $id);
 
+        $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $quote]);
+
+        return $this->render('Representative/quote.html.twig', array(
+            'quote' => $quote[0],
+            'quoteProducts' => $quoteProducts,
+            'representative' => $representative[0],
+            'email' => $user->getEmail(),
+        ));
+    }
+
+    /**
+     * @Route("/representante/cotacao/{id}/{email}/data", name="quote_representative_data")
+     * @param Request $request
+     * @param $id
+     */
+    public function quoteDataAction(Request $request, $id, $email)
+    {
+        $data = [];
+
+        $em = $this->getDoctrine()->getManager();
+
+        $quote = $em->getRepository('AppBundle:Quote')->getQuoteByRepresentative($email, $id);
+        $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $quote]);
+
+        $representative = $em->getRepository('AppBundle:Representative')
+            ->getRepresentativeByQuote($email, $id);
+
         if($request->getMethod() == "POST"){
 
-            $prices = $request->get('price');
-            $quantities = $request->get('quantity');
-            foreach ($prices as $k => $price){
+            $data = $request->get('data');
+            foreach ($data as $k => $item){
                 $quoteSupplier = $em->getRepository('AppBundle:QuoteSupplier')->findOneBy(
                     ['quoteProduct' => $k, 'representative' => $representative[0], 'deleted' => false]);
 
@@ -46,20 +73,36 @@ class RepresentativeUserController extends Controller
                     $quoteSupplier->setUpdatedAt(new \DateTime());
                 }
 
-                $quoteSupplier->setPrice($price);
-                $quoteSupplier->setQuantity($quantities[$k]);
+                $quoteSupplier->setPrice($item['price']);
+                $quoteSupplier->setQuantity($item['quantity']);
 
                 $em->persist($quoteSupplier);
             }
             $em->flush();
         }
 
-        $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $quote]);
+        foreach ($quoteProducts as $quoteProduct) {
+            $tmp = [];
+            $product = $quoteProduct->getProduct();
+            $tmp['id'] = $quoteProduct->getId();
+            $tmp['name'] = $product->getName();
+            $tmp['brand'] = $product->getBrand();
+            $tmp['description'] = $product->getFullDescription();
+            $tmp['quantity_unit'] = $product->getQuantity() . ' ' . $product->getUnit();
+            $quoteSuppliers = $quoteProduct->getQuoteSuppliers();
+            $tmp['price'] = '';
+            $tmp['quantity'] = '';
+            foreach ($quoteSuppliers as $quoteSupplier) {
+                if (!$quoteSupplier->getDeleted() && $quoteSupplier->getRepresentative()->getId() == $representative[0]->getId()) {
+                    $tmp['price'] = $quoteSupplier->getPrice();
+                    $tmp['quantity'] = $quoteSupplier->getQuantity();
+                }
+            }
+            $data['data'][] = $tmp;
+        }
 
-        return $this->render('Representative/quote.html.twig', array(
-            'quote' => $quote[0],
-            'quoteProducts' => $quoteProducts,
-            'representative' => $representative[0],
-        ));
+        echo json_encode($data);
+        exit();
     }
+
 }

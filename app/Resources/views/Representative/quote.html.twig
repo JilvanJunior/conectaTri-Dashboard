@@ -1,48 +1,298 @@
-<html>
-<head>
-    <title>{% block title %}Cotação{% endblock %}</title>
-</head>
-<body>
-<h2>Cotação: {{ quote.name }}</h2>
-<form action="#" method="POST">
-{% for quoteProduct in quoteProducts %}
-    <input type="hidden" name="representative" value="{{ representative.id }}">
-    <input type="hidden" name="quote" value="{{ quote.id }}">
-    <h4>Produto</h4>
-    <div>
-        Nome: {{ quoteProduct.product.name }}
-    </div>
-    <div>
-        Marca: {{ quoteProduct.product.brand }}
-    </div>
-    <div>
-        Descrição: {{ quoteProduct.product.fullDescription }}
-    </div>
-    <div>
-        Quantidade: {{ quoteProduct.product.quantity }}
-    </div>
-    <div>
-        Unidade: {{ quoteProduct.product.unit }}
-    </div>
+{% extends 'Representative/base.html.twig' %}
 
-    {% for quoteSupplier in quoteProduct.quoteSuppliers
-        if quoteSupplier.deleted == false and quoteSupplier.representative.id == representative.id %}
+{% block title %}Cotação{% endblock %}
+{% block description %}{% endblock %}
+
+{% block page_plugins %}
+    <link href="{{ asset('assets/global/plugins/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page %}
+    <div class="page-wrapper-row full-height">
+        <div class="page-wrapper-middle">
+            <!-- BEGIN CONTAINER -->
+            <div class="page-container">
+                <!-- BEGIN CONTENT -->
+                <div class="page-content-wrapper">
+                    <!-- BEGIN CONTENT BODY -->
+                    <!-- BEGIN PAGE HEAD-->
+                    <div class="page-head">
+                        <div class="container">
+                            <!-- BEGIN PAGE TITLE -->
+                            <div class="page-title">
+                                <h1>{{ quote.name }}
+                                    <small>cotação</small>
+                                </h1>
+                            </div>
+                            <!-- END PAGE TITLE -->
+                        </div>
+                    </div>
+                    <!-- END PAGE HEAD-->
+                    <!-- BEGIN PAGE CONTENT BODY -->
+                    <div class="page-content">
+                        <div class="container">
+                            <!-- BEGIN PAGE CONTENT INNER -->
+                            <div class="page-content-inner">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                        <div class="portlet light portlet-fit ">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="icon-settings font-red"></i>
+                                                    <span class="caption-subject font-red sbold uppercase">Cotação</span>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="table-toolbar">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="btn-group pull-right">
+                                                                <button class="btn green btn-outline dropdown-toggle" data-toggle="dropdown">Opções
+                                                                    <i class="fa fa-angle-down"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu pull-right">
+                                                                    <li>
+                                                                        <a href="#"> Imprimir </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#"> Salvar como PDF </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#"> Exportar para Excel </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
+                                                    <thead>
+                                                    <tr>
+                                                        <th> Produto </th>
+                                                        <th> Marca </th>
+                                                        <th> Descrição </th>
+                                                        <th> Quantidade / Unidade </th>
+                                                        <th> Preço </th>
+                                                        <th> Quantidade </th>
+                                                        {#<th> Editar </th>#}
+                                                        {#<th>  </th>#}
+                                                    </tr>
+                                                    </thead>
+                                                    {#{% for quoteProduct in quoteProducts %}
+                                                        <input type="hidden" name="representative" value="{{ representative.id }}">
+                                                        <input type="hidden" name="quote" value="{{ quote.id }}">
+                                                        <h4>Produto</h4>
+                                                        <div>
+                                                            Nome: {{ quoteProduct.product.name }}
+                                                        </div>
+                                                        <div>
+                                                            Marca: {{ quoteProduct.product.brand }}
+                                                        </div>
+                                                        <div>
+                                                            Descrição: {{ quoteProduct.product.fullDescription }}
+                                                        </div>
+                                                        <div>
+                                                            Quantidade: {{ quoteProduct.product.quantity }}
+                                                        </div>
+                                                        <div>
+                                                            Unidade: {{ quoteProduct.product.unit }}
+                                                        </div>
+
+                                                        {% for quoteSupplier in quoteProduct.quoteSuppliers
+                                                        if quoteSupplier.deleted == false and quoteSupplier.representative.id == representative.id %}
+                                                            <div>
+                                                                Preço do Produto: <input type="text" name="price[{{ quoteProduct.id }}]" value="{{ quoteSupplier.price }}"  />
+                                                            </div>
+                                                            <div>
+                                                                Quantidade do Produto: <input type="text" name="quantity[{{ quoteProduct.id }}]" value="{{ quoteSupplier.quantity }}" />
+                                                            </div>
+                                                        {% else %}
+                                                            <div>
+                                                                Preço do Produto: <input type="text" name="price[{{ quoteProduct.id }}]" />
+                                                            </div>
+                                                            <div>
+                                                                Quantidade do Produto: <input type="text" name="quantity[{{ quoteProduct.id }}]" />
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endfor %}#}
+                                                    {#<tbody>
+                                                    {% for quoteProduct in quoteProducts %}
+                                                    <tr>
+                                                        <td> {{ quoteProduct.product.name }} </td>
+                                                        <td> {{ quoteProduct.product.brand }} </td>
+                                                        <td> {{ quoteProduct.product.fullDescription }} </td>
+                                                        <td> {{ quoteProduct.product.quantity }} {{ quoteProduct.product.unit }} </td>
+                                                        {% for quoteSupplier in quoteProduct.quoteSuppliers
+                                                        if quoteSupplier.deleted == false and quoteSupplier.representative.id == representative.id %}
+                                                            <td> {{ quoteSupplier.price }} </td>
+                                                            <td> {{ quoteSupplier.quantity }} </td>
+                                                        {% else %}
+                                                            <td>  </td>
+                                                            <td>  </td>
+                                                        {% endfor %}
+                                                        #}{#<td>#}{#
+                                                            #}{#<a class="edit" href="#"> Editar </a>#}{#
+                                                        #}{#</td>#}{#
+                                                        #}{#<td>#}{#
+                                                            #}{#<a class="delete" href="#"> Delete </a>#}{#
+                                                        #}{#</td>#}{#
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>#}
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- END EXAMPLE TABLE PORTLET-->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END PAGE CONTENT INNER -->
+                        </div>
+                    </div>
+                    <!-- END PAGE CONTENT BODY -->
+                    <!-- END CONTENT BODY -->
+                </div>
+                <!-- END CONTENT -->
+            </div>
+            <!-- END CONTAINER -->
+        </div>
+    </div>
+    {#<h2>Cotação: {{ quote.name }}</h2>
+    <form action="#" method="POST">
+        {% for quoteProduct in quoteProducts %}
+            <input type="hidden" name="representative" value="{{ representative.id }}">
+            <input type="hidden" name="quote" value="{{ quote.id }}">
+            <h4>Produto</h4>
             <div>
-                Preço do Produto: <input type="text" name="price[{{ quoteProduct.id }}]" value="{{ quoteSupplier.price }}"  />
+                Nome: {{ quoteProduct.product.name }}
             </div>
             <div>
-                Quantidade do Produto: <input type="text" name="quantity[{{ quoteProduct.id }}]" value="{{ quoteSupplier.quantity }}" />
+                Marca: {{ quoteProduct.product.brand }}
             </div>
-    {% else %}
-        <div>
-            Preço do Produto: <input type="text" name="price[{{ quoteProduct.id }}]" />
-        </div>
-        <div>
-            Quantidade do Produto: <input type="text" name="quantity[{{ quoteProduct.id }}]" />
-        </div>
-    {% endfor %}
-{% endfor %}
-    <button type="submit">Salvar</button>
-</form>
-</body>
-</html>
+            <div>
+                Descrição: {{ quoteProduct.product.fullDescription }}
+            </div>
+            <div>
+                Quantidade: {{ quoteProduct.product.quantity }}
+            </div>
+            <div>
+                Unidade: {{ quoteProduct.product.unit }}
+            </div>
+
+            {% for quoteSupplier in quoteProduct.quoteSuppliers
+            if quoteSupplier.deleted == false and quoteSupplier.representative.id == representative.id %}
+                <div>
+                    Preço do Produto: <input type="text" name="price[{{ quoteProduct.id }}]" value="{{ quoteSupplier.price }}"  />
+                </div>
+                <div>
+                    Quantidade do Produto: <input type="text" name="quantity[{{ quoteProduct.id }}]" value="{{ quoteSupplier.quantity }}" />
+                </div>
+            {% else %}
+                <div>
+                    Preço do Produto: <input type="text" name="price[{{ quoteProduct.id }}]" />
+                </div>
+                <div>
+                    Quantidade do Produto: <input type="text" name="quantity[{{ quoteProduct.id }}]" />
+                </div>
+            {% endfor %}
+        {% endfor %}
+        <button type="submit">Salvar</button>
+    </form>#}
+{% endblock %}
+
+{% block script %}
+    <script src="{{ asset('assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/scripts/dataTables.editor.min.js') }}" type="text/javascript"></script>
+    <script>
+        (function($){
+
+            $(document).ready(function() {
+
+                var editor = new $.fn.dataTable.Editor( {
+                    ajax: '{{ path('quote_representative_data', {'id': quote.id, 'email': email}) }}',
+                    table: '#sample_editable_1',
+                    idSrc:  'id',
+                    fields: [
+                        {
+                            "name": "id",
+                            "type": "hidden"
+                        },
+                        {
+                            "label": "Produto",
+                            "name": "name",
+                            "type": "readonly"
+                        },
+                        {
+                            "label": "Marca",
+                            "name": "brand",
+                            "type": "readonly"
+                        },
+                        {
+                            "label": "Descrição",
+                            "name": "description",
+                            "type": "readonly"
+                        },
+                        {
+                            "label": "Quantidade / Unidade",
+                            "name": "quantity_unit",
+                            "type": "readonly"
+                        },
+                        {
+                            "label": "Preço",
+                            "name": "price"
+                        },
+                        {
+                            "label": "Quantidade",
+                            "name": "quantity"
+                        }
+                    ]
+                } );
+
+                $('#sample_editable_1').on( 'click', 'tbody td.editable', function (e) {
+                    editor.inline( this, {
+                        submit: 'allIfChanged'
+                    } );
+                } );
+
+                var table = $('#sample_editable_1').DataTable( {
+                    dom: 'Bfrtip',
+                    ajax: '{{ path('quote_representative_data', {'id': quote.id, 'email': email}) }}',
+                    columns: [
+                        {
+                            "data": "name"
+                        },
+                        {
+                            "data": "brand"
+                        },
+                        {
+                            "data": "description"
+                        },
+                        {
+                            "data": "quantity_unit"
+                        },
+                        {
+                            "data": "price", className: 'editable'
+                        },
+                        {
+                            "data": "quantity", className: 'editable'
+                        }
+                    ],
+                    select: true,
+                    lengthChange: false,
+                    buttons: [
+//                        { extend: 'create', editor: editor },
+//                        { extend: 'edit',   editor: editor },
+//                        { extend: 'remove', editor: editor }
+                    ]
+                } );
+            } );
+
+        }(jQuery));
+    </script>
+{% endblock %}
