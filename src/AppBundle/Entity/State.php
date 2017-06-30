@@ -2,13 +2,16 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * State
  *
  * @ORM\Table(name="state")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\StateRepository")
+ * @Serializer\ExclusionPolicy("none")
  */
 class State
 {
@@ -37,11 +40,13 @@ class State
 
     /**
      * @ORM\OneToMany(targetEntity="Supplier", mappedBy="state")
+     * @Serializer\Exclude()
      */
     private $suppliers;
 
     /**
      * @ORM\OneToMany(targetEntity="Retailer", mappedBy="state")
+     * @Serializer\Exclude()
      */
     private $retailers;
 

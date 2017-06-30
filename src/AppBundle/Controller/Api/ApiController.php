@@ -904,26 +904,29 @@ class ApiController extends FOSRestController
         $em->flush();
 
         $sec = $this->get("security.password_encoder");
-
-        $jsonRequest = json_decode($request);
+        $jsonRequest = json_decode($request->getContent());
         $dbRetailer = $dbToken->getRetailer();
         $retailer = $jsonRequest->retailer;
+        if (isset($retailer->password) && strlen($retailer->password) < 8 && strlen($retailer->password) > 0) {
+            return View::create(new ApiError("A senha deve ter no mínimo 8 caracteres"), Response::HTTP_BAD_REQUEST);
+        }
         if (!isset($jsonRequest->password) || !$sec->isPasswordValid($dbRetailer, $jsonRequest->password)) {
             return View::create(new ApiError("Senha incorreta"), Response::HTTP_BAD_REQUEST);
         }
+        $dbState = $d->getRepository("AppBundle:State")->findOneBy(["uf" => $retailer->state]);
         $dbRetailer
             ->setCompanyName($retailer->company_name)
             ->setFantasyName($retailer->fantasy_name)
             ->setEmail($retailer->email)
             ->setAddress($retailer->address)
             ->setCity($retailer->city)
-            ->setState($retailer->state)
+            ->setState($dbState)
             ->setAddress($retailer->address)
             ->setCep($retailer->cep)
             ->setPhone($retailer->phone)
             ->setCellphone($retailer->cellphone)
             ->setUpdatedAt(new \DateTime());
-        if (isset($retailer->password)) {
+        if (isset($retailer->password) && strlen($retailer->password) >= 8) {
             $dbRetailer
                 ->setPassword($sec->encodePassword($dbRetailer, $retailer->password));
         }
