@@ -904,8 +904,7 @@ class ApiController extends FOSRestController
         $em->flush();
 
         $sec = $this->get("security.password_encoder");
-
-        $jsonRequest = json_decode($request);
+        $jsonRequest = json_decode($request->getContent());
         $dbRetailer = $dbToken->getRetailer();
         $retailer = $jsonRequest->retailer;
         if (!isset($jsonRequest->password) || !$sec->isPasswordValid($dbRetailer, $jsonRequest->password)) {
