@@ -701,9 +701,9 @@ class ApiController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/api/quote/expired")
+     * @Rest\Get("/api/quote/closed")
      */
-    public function getExpiredQuotes(Request $request) {
+    public function getClosedQuotes(Request $request) {
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
