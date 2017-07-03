@@ -22,8 +22,13 @@ class RepresentativeUserController extends Controller
 
         $quote = $em->getRepository('AppBundle:Quote')->getQuoteByRepresentative($user->getEmail(), $id);
         $now = new \DateTime();
-        if($quote == null || $now > $quote[0]->getExpiresAt())
+        if($quote == null || $now > $quote[0]->getExpiresAt() || $quote[0]->isClosed()) {
+            if ($now > $quote[0]->getExpiresAt() && !$quote[0]->isClosed()) {
+                $quote[0]->setClosed(true);
+                $em->flush();
+            }
             return $this->redirectToRoute('access_denied');
+        }
 
         $representative = $em->getRepository('AppBundle:Representative')
             ->getRepresentativeByQuote($user->getEmail(), $id);
@@ -75,6 +80,7 @@ class RepresentativeUserController extends Controller
 
                 $quoteSupplier->setPrice($item['price']);
                 $quoteSupplier->setQuantity($item['quantity']);
+                $quoteSupplier->setFilledIn(true);
 
                 $em->persist($quoteSupplier);
             }
