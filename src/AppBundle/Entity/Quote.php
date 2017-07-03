@@ -70,6 +70,13 @@ class Quote
     private $expiresAt;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="closed", type="boolean")
+     */
+    private $closed = false;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -239,6 +246,24 @@ class Quote
     public function setExpiresAt($expiresAt)
     {
         $this->expiresAt = $expiresAt;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isClosed()
+    {
+        return $this->closed;
+    }
+
+    /**
+     * @param bool $closed
+     * @return Quote
+     */
+    public function setClosed($closed)
+    {
+        $this->closed = $closed;
         return $this;
     }
 

@@ -79,6 +79,13 @@ class QuoteSupplier
      */
     private $deleted = false;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="filled_in", type="boolean")
+     */
+    private $filledIn = false;
+
 
     /**
      * QuoteSupplier constructor.
@@ -232,5 +239,23 @@ class QuoteSupplier
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFilledIn()
+    {
+        return $this->filledIn;
+    }
+
+    /**
+     * @param bool $filledIn
+     * @return QuoteSupplier
+     */
+    public function setFilledIn($filledIn)
+    {
+        $this->filledIn = $filledIn;
+        return $this;
     }
 }

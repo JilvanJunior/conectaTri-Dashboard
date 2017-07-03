@@ -618,7 +618,92 @@ class ApiController extends FOSRestController
     /**
      * @Rest\Get("/api/quote")
      */
-    public function getQuotes(Request $request) {
+    public function getAllQuotes(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
+            ->where("q.deleted = FALSE")
+            ->andWhere("q.retailer = :retailer")
+            ->setParameter("retailer", $dbToken->getRetailer())
+            ->getQuery()->getResult();
+        $responseArray = [];
+        foreach($quotes as $quote) {
+            if ($quote->isDeleted() == false) {
+                foreach ($quote->getQuoteProducts() as $product) {
+                    if ($product->isDeleted() == false) {
+                        foreach ($product->getQuoteSuppliers() as $supplier) {
+                            if ($supplier->isDeleted() == true)
+                                $product->removeQuoteSupplier($supplier);
+                        }
+                    } else {
+                        $quote->removeQuoteProduct($product);
+                    }
+                }
+                $responseArray[] = $quote;
+            }
+        }
+        return View::create($responseArray, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/api/quote/current")
+     */
+    public function getCurrentQuotes(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
+            ->where("q.expiresAt > :date")
+            ->andWhere("q.deleted = FALSE")
+            ->andWhere("q.closed = FALSE")
+            ->andWhere("q.retailer = :retailer")
+            ->setParameter("date", new \DateTime())
+            ->setParameter("retailer", $dbToken->getRetailer())
+            ->getQuery()->getResult();
+        $responseArray = [];
+        foreach($quotes as $quote) {
+            if ($quote->isDeleted() == false) {
+                foreach ($quote->getQuoteProducts() as $product) {
+                    if ($product->isDeleted() == false) {
+                        foreach ($product->getQuoteSuppliers() as $supplier) {
+                            if ($supplier->isDeleted() == true)
+                                $product->removeQuoteSupplier($supplier);
+                        }
+                    } else {
+                        $quote->removeQuoteProduct($product);
+                    }
+                }
+                $responseArray[] = $quote;
+            }
+        }
+        return View::create($responseArray, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/api/quote/expired")
+     */
+    public function getExpiredQuotes(Request $request) {
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
@@ -636,6 +721,9 @@ class ApiController extends FOSRestController
             ->where("q.expiresAt > :date")
             ->andWhere("q.deleted = FALSE")
             ->andWhere("q.retailer = :retailer")
+            ->orWhere("q.closed = TRUE")
+            ->andWhere("q.retailer = :retailer")
+            ->andWhere("q.deleted = FALSE")
             ->setParameter("date", new \DateTime("15 days ago"))
             ->setParameter("retailer", $dbToken->getRetailer())
             ->getQuery()->getResult();
@@ -688,6 +776,7 @@ class ApiController extends FOSRestController
         $dbQuote->setName($quote->name)
             ->setType($quote->type)
             ->setRetailer($dbToken->getRetailer())
+            ->setClosed(false)
             ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
             ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
         $em->persist($dbQuote);
@@ -791,6 +880,7 @@ class ApiController extends FOSRestController
         $dbQuote->setDeleted(false)
             ->setName($quote->name)
             ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
+            ->setClosed($quote->closed)
             ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
         $em->flush();
         return View::create($dbQuote, Response::HTTP_ACCEPTED);
