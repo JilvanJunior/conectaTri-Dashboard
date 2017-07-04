@@ -163,13 +163,13 @@
                 data = $.parseJSON(data);
                 $.each(data['suppliers'], function(index, value){
                     var suppliers = parseInt(value['suppliers']);
-                    var date = new Date(value['y'] + '-' + value['m'] + '-' + value['d']);
+                    var date = new Date(value['y'], value['m'], value['d'], -3);
                     countSuppliers.push([date.getTime(), suppliers]);
                 });
 
                 $.each(data['representatives'], function(index, value){
                     var representatives = parseInt(value['representatives']);
-                    var date = new Date(value['y'] + '-' + value['m'] + '-' + value['d']);
+                    var date = new Date(value['y'], value['m'], value['d'], -3);
                     countRepresentatives.push([date.getTime(), representatives]);
                 });
 

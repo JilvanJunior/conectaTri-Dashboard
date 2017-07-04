@@ -156,13 +156,13 @@
             data = $.parseJSON(data);
             $.each(data['quotes'], function(index, value){
                 var quotes = parseInt(value['quotes']);
-                var date = new Date(value['y'] + '-' + value['m'] + '-' + value['d']);
+                var date = new Date(value['y'], value['m'], value['d'], -3);
                 countQuotes.push([date.getTime(), quotes]);
             });
 
             $.each(data['orders'], function(index, value){
                 var orders = parseInt(value['orders']);
-                var date = new Date(value['y'] + '-' + value['m'] + '-' + value['d']);
+                var date = new Date(value['y'], value['m'], value['d'], -3);
                 countOrders.push([date.getTime(), orders]);
             });
 
