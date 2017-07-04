@@ -47,6 +47,16 @@ class AuthController extends Controller
     }
 
     /**
+     * @Route("/logout", name="logout")
+     * @param Request $request
+     * @return
+     */
+    public function logoutAction(Request $request)
+    {
+        return $this->redirectToRoute('login');
+    }
+
+    /**
      * @Route("/acesso-negado", name="access_denied")
      * @param Request $request
      * @return
