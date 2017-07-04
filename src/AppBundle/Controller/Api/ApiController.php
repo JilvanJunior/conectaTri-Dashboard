@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ApiController extends FOSRestController
 {
@@ -750,7 +751,7 @@ class ApiController extends FOSRestController
     * @Rest\Get("/api/quote/{id}/link")
     */
     public function getQuoteLink(Request $request, $id) {
-        $url = $this->get('router')->generate('quote_representative', ['id' => $id], true);
+        $url = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
         return View::create($url, Response::HTTP_OK);
     }
 
@@ -775,7 +776,7 @@ class ApiController extends FOSRestController
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Cotação não encontrada"), Response::HTTP_NOT_FOUND);
         }
-        $link = $this->get('router')->generate('quote_representative', ['id' => $id], true);
+        $link = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
         $mailer = $this->get('swiftmailer.mailer.default');
         $msg = new \Swift_Message(
             'Cotação no ConectaTri',
