@@ -750,7 +750,7 @@ class ApiController extends FOSRestController
     * @Rest\Get("/api/quote/{id}/link")
     */
     public function getQuoteLink(Request $request, $id) {
-        $url = $this->get('router')->generate('quote_representative', ['id' => $id]);
+        $url = $this->get('router')->generate('quote_representative', ['id' => $id], true);
         return View::create($url, Response::HTTP_OK);
     }
 
@@ -775,7 +775,7 @@ class ApiController extends FOSRestController
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Cotação não encontrada"), Response::HTTP_NOT_FOUND);
         }
-        $link = $this->get('router')->generate('quote_representative', ['id' => $id]);
+        $link = $this->get('router')->generate('quote_representative', ['id' => $id], true);
         $mailer = $this->get('swiftmailer.mailer.default');
         $msg = new \Swift_Message(
             'Cotação no ConectaTri',
