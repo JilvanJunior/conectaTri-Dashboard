@@ -59,4 +59,18 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    public function countQuotesByDate()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT COUNT(q.id) AS quotes, q.createdAt, YEAR(q.createdAt) AS y,
+                  MONTH(q.createdAt) AS m, DAY(q.createdAt) as d
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  GROUP BY y, m, d
+                  ORDER BY q.createdAt ASC'
+            )
+            ->getResult();
+    }
+
 }
