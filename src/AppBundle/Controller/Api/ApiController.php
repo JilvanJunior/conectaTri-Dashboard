@@ -787,7 +787,8 @@ class ApiController extends FOSRestController
         $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
         $to = [];
         foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
-            $to[$quoteSupplier->getRepresentative()->getEmail()] = $quoteSupplier->getRepresentative()->getName();
+            if (!$quoteSupplier->isDeleted())
+                $to[$quoteSupplier->getRepresentative()->getEmail()] = $quoteSupplier->getRepresentative()->getName();
         }
         $msg->setTo($to);
         $result = $mailer->send($msg);
