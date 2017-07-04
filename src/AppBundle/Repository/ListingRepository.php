@@ -16,10 +16,11 @@ class ListingRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT COUNT(l.id) AS listings, l.createdAt 
+                'SELECT COUNT(l.id) AS listings, l.createdAt, YEAR(l.createdAt) AS y,
+                  MONTH(l.createdAt) AS m, DAY(l.createdAt) AS d
                   FROM AppBundle:Listing l
                   WHERE l.deleted = 0
-                  GROUP BY l.createdAt 
+                  GROUP BY y, m, d 
                   ORDER BY l.createdAt ASC'
             )
             ->getResult();
