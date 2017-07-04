@@ -1,16 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kmkraiker
- * Date: 13/06/2017
- * Time: 23:28
- */
-
 namespace AppBundle\Model;
 
-
 use AppBundle\Entity\Representative;
+use JMS\Serializer\Annotation as Serializer;
 
+/**
+ * Class ApiSupplier
+ * @package AppBundle\Model
+ * @Serializer\AccessType("public_method")
+ */
 class ApiSupplier
 {
     /**
