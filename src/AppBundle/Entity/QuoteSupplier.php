@@ -34,7 +34,7 @@ class QuoteSupplier
     private $quoteProduct;
 
     /**
-     * @var Representative
+     * @var mixed
      *
      * @ORM\ManyToOne(targetEntity="Representative")
      * @ORM\JoinColumn(name="representative_id", referencedColumnName="id")
@@ -124,7 +124,7 @@ class QuoteSupplier
     }
 
     /**
-     * @return Representative
+     * @return mixed
      */
     public function getRepresentative()
     {
@@ -132,7 +132,7 @@ class QuoteSupplier
     }
 
     /**
-     * @param Representative $representative
+     * @param mixed $representative
      * @return QuoteSupplier
      */
     public function setRepresentative($representative)
