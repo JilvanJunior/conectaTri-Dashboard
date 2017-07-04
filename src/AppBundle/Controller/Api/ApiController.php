@@ -646,6 +646,8 @@ class ApiController extends FOSRestController
                         foreach ($product->getQuoteSuppliers() as $supplier) {
                             if ($supplier->isDeleted() == true)
                                 $product->removeQuoteSupplier($supplier);
+                            else
+                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
                         }
                     } else {
                         $quote->removeQuoteProduct($product);
@@ -690,6 +692,8 @@ class ApiController extends FOSRestController
                         foreach ($product->getQuoteSuppliers() as $supplier) {
                             if ($supplier->isDeleted() == true)
                                 $product->removeQuoteSupplier($supplier);
+                            else
+                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
                         }
                     } else {
                         $quote->removeQuoteProduct($product);
@@ -736,6 +740,8 @@ class ApiController extends FOSRestController
                         foreach ($product->getQuoteSuppliers() as $supplier) {
                             if ($supplier->isDeleted() == true)
                                 $product->removeQuoteSupplier($supplier);
+                            else
+                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
                         }
                     } else {
                         $quote->removeQuoteProduct($product);
@@ -924,7 +930,7 @@ class ApiController extends FOSRestController
         $dbQuote->setDeleted(false)
             ->setName($quote->name)
             ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
-            ->setClosed($quote->closed)
+            ->setClosed(isset($quote->closed) ? $quote->closed : false)
             ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
         $em->flush();
         return View::create($dbQuote, Response::HTTP_ACCEPTED);

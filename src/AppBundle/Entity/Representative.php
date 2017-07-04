@@ -36,21 +36,25 @@ class Representative
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\SerializedName("contact_name")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Serializer\SerializedName("contact_email")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Serializer\SerializedName("contact_phone")
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
+     * @Serializer\SerializedName("contact_cellphone")
      */
     private $cellphone;
 
