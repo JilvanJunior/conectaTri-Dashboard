@@ -15,8 +15,16 @@ class ListsController extends Controller
     {
         $listings = $this->getDoctrine()->getRepository('AppBundle:Listing')->findBy(['deleted' => false]);
 
+        //type of listings
+        $types = [];
+        $types['0'] = 'Não Informado';
+        $types['1'] = 'Comum';
+        $types['2'] = 'Sazonal';
+        $types['3'] = 'Semanal';
+
         return $this->render('Admin/lists/index.html.twig', [
-            'listings' => $listings
+            'listings' => $listings,
+            'types' => $types,
         ]);
     }
 
