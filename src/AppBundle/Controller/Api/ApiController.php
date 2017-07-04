@@ -750,8 +750,50 @@ class ApiController extends FOSRestController
     * @Rest\Get("/api/quote/{id}/link")
     */
     public function getQuoteLink(Request $request, $id) {
-        $url = $this->get('router')->generate('quote-index', ['id' => $id]);
+        $url = $this->get('router')->generate('quote_representative', ['id' => $id]);
         return View::create($url, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Patch("/api/quote/{id}")
+     */
+    public function sendQuoteLink(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $dbQuote = $d->getRepository("AppBundle:Quote")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
+        if (is_null($dbQuote)) {
+            return View::create(new ApiError("Cotação não encontrada"), Response::HTTP_NOT_FOUND);
+        }
+        $link = $this->get('router')->generate('quote_representative', ['id' => $id]);
+        $mailer = $this->get('swiftmailer.mailer.default');
+        $msg = new \Swift_Message(
+            'Cotação no ConectaTri',
+            "<b>$dbToken->getRetailer()->getFantasyName()</b> lhe enviou um pedido de cotação no ConectaTri.<br><br>Para preencher esta cotação, clique <a href='$link'>aqui</a> ou acesse: $link<br><br>Caso este e-mail tenha sido enviado por acidente, pedimos que o desconsidere.<br><br>Obrigado",
+            "text/html",
+            "utf-8"
+        );
+        $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+        $to = [];
+        foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
+            $to[$quoteSupplier->getRepresentative()->getName()] = $quoteSupplier->getRepresentative()->getEmail();
+        }
+        $msg->setTo($to);
+        $result = $mailer->send($msg);
+        if ($result > 0) {
+            return View::create(new ApiError("E-mails enviados com sucesso"), Response::HTTP_OK);
+        }
+        return View::create(new ApiError("Houve um problema ao enviar os e-mails."), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -1104,7 +1146,7 @@ class ApiController extends FOSRestController
             ->setTo([$retailer->getEmail()]);
         $result = $mailer->send($msg);
         if ($result > 0) {
-            return View::create(new ApiError("E-mail enviado para\n".preg_replace('(\w{2}).+(\w{2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $retailer->getEmail())), Response::HTTP_OK);
+            return View::create(new ApiError("E-mail enviado para\n".preg_replace('(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $retailer->getEmail())), Response::HTTP_OK);
         }
         return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de recuperação"), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
