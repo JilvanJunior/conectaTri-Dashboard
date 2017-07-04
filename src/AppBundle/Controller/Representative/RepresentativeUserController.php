@@ -30,6 +30,20 @@ class RepresentativeUserController extends Controller
             return $this->redirectToRoute('access_denied');
         }
 
+        $isIncluded = false;
+        foreach ($quote[0]->getQuoteProducts() as $quoteProduct) {
+            foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                if ($quoteSupplier->getRepresentative()->getEmail() == $user->getEmail() && !$quoteSupplier->isDeleted()) {
+                    $isIncluded = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$isIncluded) {
+            return $this->redirectToRoute('access_denied');
+        }
+
         $representative = $em->getRepository('AppBundle:Representative')
             ->getRepresentativeByQuote($user->getEmail(), $id);
 
