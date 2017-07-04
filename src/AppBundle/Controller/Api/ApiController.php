@@ -779,14 +779,14 @@ class ApiController extends FOSRestController
         $mailer = $this->get('swiftmailer.mailer.default');
         $msg = new \Swift_Message(
             'Cotação no ConectaTri',
-            "<b>$dbToken->getRetailer()->getFantasyName()</b> lhe enviou um pedido de cotação no ConectaTri.<br><br>Para preencher esta cotação, clique <a href='$link'>aqui</a> ou acesse: $link<br><br>Caso este e-mail tenha sido enviado por acidente, pedimos que o desconsidere.<br><br>Obrigado",
+            "<b>".$dbToken->getRetailer()->getFantasyName()."</b> lhe enviou um pedido de cotação no ConectaTri.<br><br>Para preencher esta cotação, clique <a href='$link'>aqui</a> ou acesse: $link<br><br>Caso este e-mail tenha sido enviado por acidente, pedimos que o desconsidere.<br><br>Obrigado",
             "text/html",
             "utf-8"
         );
         $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
         $to = [];
         foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
-            $to[$quoteSupplier->getRepresentative()->getName()] = $quoteSupplier->getRepresentative()->getEmail();
+            $to[$quoteSupplier->getRepresentative()->getEmail()] = $quoteSupplier->getRepresentative()->getName();
         }
         $msg->setTo($to);
         $result = $mailer->send($msg);
