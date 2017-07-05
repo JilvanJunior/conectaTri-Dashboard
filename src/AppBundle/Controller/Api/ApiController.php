@@ -1055,8 +1055,9 @@ class ApiController extends FOSRestController {
                     ->setCnpj($dbRetailer->getCnpj() . uniqid("_", true))
                     ->setDeleted(true)
                     ->setVerified(false);
+            } else {
+                return View::create(new ApiError("Este CNPJ já está cadastrado"), Response::HTTP_CONFLICT);
             }
-            return View::create(new ApiError("Este CNPJ já está cadastrado"), Response::HTTP_CONFLICT);
         }
         $dbState = $d->getRepository("AppBundle:State")->findOneBy(["uf" => $retailer->state]);
         $dbRetailer = new Retailer();
