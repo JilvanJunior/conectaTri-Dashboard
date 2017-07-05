@@ -87,6 +87,22 @@ class PriceListController extends Controller
     }
 
     /**
+     * @Route("/administrador/cotacoes/por-produto/{id}", name="admin_pricelist_product")
+     * @param Request $request
+     * @param $id
+     * @return
+     */
+    public function productAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $quotes = $em->getRepository('AppBundle:Quote')->findByProduct($id);
+
+        return $this->render('Admin/pricelist/endedpricelist.html.twig', [
+            'quotes' => $quotes
+        ]);
+    }
+
+    /**
      * @Route("/administrador/cotacoes/por-data/{date}", name="admin_pricelist_date")
      * @param Request $request
      * @param $date

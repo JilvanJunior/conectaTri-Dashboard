@@ -110,6 +110,23 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    public function findByProduct($id)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.id IN (
+                    SELECT IDENTITY(qp.quote)
+                    FROM AppBundle:QuoteProduct qp
+                    WHERE qp.product = :id
+                  )'
+            )
+            ->setParameters(array('id' => $id))
+            ->getResult();
+    }
+
     public function findByDate($date)
     {
         $date = explode('-', $date);
