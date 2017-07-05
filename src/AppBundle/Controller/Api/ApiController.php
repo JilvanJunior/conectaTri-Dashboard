@@ -844,13 +844,37 @@ class ApiController extends FOSRestController {
         );
         $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
         $to = [];
+        $failed = "<ul>";
+        $hasFailed = false;
+        $total = 0;
         foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
-            if (!$quoteSupplier->isDeleted() && \Swift_Validate::email($quoteSupplier->getRepresentative()->getEmail()))
+            if (!$quoteSupplier->isDeleted() && \Swift_Validate::email($quoteSupplier->getRepresentative()->getEmail())) {
                 $to[$quoteSupplier->getRepresentative()->getEmail()] = $quoteSupplier->getRepresentative()->getName();
+                $msg->setTo($to);
+                if (!$mailer->send($msg)) {
+                    $hasFailed = true;
+                    $failed .= "<li>".$quoteSupplier->getRepresentative()->getName()." &lt;".$quoteSupplier->getRepresentative()->getEmail()."&gt;</li>";
+                } else {
+                    $total++;
+                }
+            } else if (!$quoteSupplier->isDeleted()) {
+                $hasFailed = true;
+                $failed .= "<li>".$quoteSupplier->getRepresentative()->getName()." &lt;".$quoteSupplier->getRepresentative()->getEmail()."&gt;</li>";
+            }
         }
-        $msg->setTo($to);
-        $result = $mailer->send($msg);
-        if ($result > 0) {
+        $failed .= "</ul>";
+        if ($hasFailed && \Swift_Validate::email($dbToken->getRetailer()->getEmail())) {
+            $msg = new \Swift_Message(
+                'Envio de Cotação no ConectaTri',
+                "Os e-mails contendo o endereço de acesso à cotação foram enviados a alguns dos destinatários. Porém, não foi possível enviar aos seguintes: <br>$failed<br><br>Caso este e-mail tenha sido enviado por acidente, pedimos que o desconsidere.<br><br>Obrigado",
+                "text/html",
+                "utf-8"
+            );
+            $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+            $msg->setTo([$dbToken->getRetailer()->getEmail() => $dbToken->getRetailer()->getFantasyName()]);
+            $mailer->send($msg);
+        }
+        if ($total > 0) {
             return View::create(new ApiError("E-mails enviados com sucesso"), Response::HTTP_OK);
         }
         return View::create(new ApiError("Houve um problema ao enviar os e-mails."), Response::HTTP_INTERNAL_SERVER_ERROR);
