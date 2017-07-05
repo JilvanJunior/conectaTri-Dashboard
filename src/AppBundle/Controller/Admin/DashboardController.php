@@ -19,10 +19,13 @@ class DashboardController extends Controller
         $qtyRetailer = ($activeRetailers == null ? 0 : end($activeRetailers)->getQuantity());
         $activeQuotes = $em->getRepository('AppBundle:Quote')->countActives();
 
+        $topSuppliers = $em->getRepository('AppBundle:Supplier')->findTopSuppliers();
+
         return $this->render('Admin/dashboard/index.html.twig', [
             'qtySuppliers' => count($suppliers),
             'qtyRetailer' => $qtyRetailer,
-            'qtyQuotes' => $activeQuotes
+            'qtyQuotes' => $activeQuotes,
+            'topSuppliers' => $topSuppliers,
         ]);
     }
 

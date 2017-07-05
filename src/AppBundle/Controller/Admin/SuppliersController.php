@@ -38,6 +38,19 @@ class SuppliersController extends Controller
     }
 
     /**
+     * @Route("/administrador/fornecedores/cotacoesXpedidos/data", name="admin_suppliers_scatter_pricelistXorder_data")
+     * @param Request $request
+     */
+    public function chart1DataAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $topSuppliers = $em->getRepository('AppBundle:Supplier')->findSuppliersQuotesAndOrders();
+
+        echo json_encode($topSuppliers);
+        exit();
+    }
+
+    /**
      * @Route("/administrador/fornecedores/contascriadasXtempo", name="admin_suppliers_line_createdaccountsXtime")
      * @param Request $request
      * @return
