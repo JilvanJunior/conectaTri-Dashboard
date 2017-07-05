@@ -49,6 +49,19 @@ class PriceListController extends Controller
     }
 
     /**
+     * @Route("/administrador/cotacoes/por-cliente/{id}", name="admin_pricelist_client")
+     */
+    public function clientAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $quotes = $em->getRepository('AppBundle:Quote')->findBy(['retailer' => $id, 'deleted' => false]);
+
+        return $this->render('Admin/pricelist/endedpricelist.html.twig', [
+            'quotes' => $quotes
+        ]);
+    }
+
+    /**
      * @Route("/administrador/cotacoes/criadas", name="admin_pricelist_line_createdpricelistsXtime")
      */
     public function chart1Action(Request $request)
