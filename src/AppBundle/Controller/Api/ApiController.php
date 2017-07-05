@@ -1052,7 +1052,7 @@ class ApiController extends FOSRestController {
         $retailer = json_decode($request->getContent());
         $dbRetailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $retailer->cnpj]);
         if (!is_null($dbRetailer)) {
-            if (!$dbRetailer->isVerified()) {
+            if (!$dbRetailer->isVerified() || $dbRetailer->isDeleted()) {
                 $dbRetailer
                     ->setCnpj($dbRetailer->getCnpj() . uniqid("_", true))
                     ->setDeleted(true)
