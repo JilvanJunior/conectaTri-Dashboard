@@ -138,7 +138,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Get("api/email/{email}")
+     * @Rest\Get("/api/email/{email}")
      */
     public function getVerifyEmail($email) {
         $valid = \Swift_Validate::email($email);
@@ -1172,8 +1172,11 @@ class ApiController extends FOSRestController {
                 $em->flush();
                 return View::create($dbRetailer, Response::HTTP_ACCEPTED);
             }
+            return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de verificação, portanto os dados não foram alterados."), Response::HTTP_INTERNAL_SERVER_ERROR);
+        } else {
+            $em->flush();
+            return View::create($dbRetailer, Response::HTTP_ACCEPTED);
         }
-        return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de verificação, portanto os dados não foram alterados."), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
