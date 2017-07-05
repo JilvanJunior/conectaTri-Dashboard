@@ -1055,6 +1055,7 @@ class ApiController extends FOSRestController {
                     ->setCnpj($dbRetailer->getCnpj() . uniqid("_", true))
                     ->setDeleted(true)
                     ->setVerified(false);
+                $em->flush();
             } else {
                 return View::create(new ApiError("Este CNPJ já está cadastrado"), Response::HTTP_CONFLICT);
             }
