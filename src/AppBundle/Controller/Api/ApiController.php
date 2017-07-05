@@ -14,6 +14,7 @@ use AppBundle\Entity\Retailer;
 use AppBundle\Entity\Supplier;
 use AppBundle\Model\ApiError;
 use AppBundle\Model\ApiSupplier;
+use AppBundle\Utils\Utils;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Ramsey\Uuid\Uuid;
@@ -23,9 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ApiController extends FOSRestController
-{
-    private $key = 'NuZ^?*(7)NWcbl8S+*_m.Bhti<I+L>Y:Yhvy05*o^%mi*OC;.J/vhT]QeCw*uIy9%"NYx(hRrM$D(IKvn{e;ut`-e:[c>89~Ia*xTB!?<HS:8/{O#8sT]xw1\'}^+w83HFUFl12p@NY%^FG_z+C8nk.e$pYNp"J3o+>S4#mY!#/Q-v!ez\']$i%QkvGhhofDOf$xe)lr0_Z\=S{V4np>z>4rkvhP!Qi#GDNuntwg$/u6c.r>)hW+(6:5qd{5kH^6&6';
+class ApiController extends FOSRestController {
 
     /**
      * @Rest\Post("/api/login")
@@ -45,6 +44,8 @@ class ApiController extends FOSRestController
         if (!$encoder->isPasswordValid($dbUser, $user->password)) {
             return View::create(new ApiError("Usuário ou senha inválidos"), Response::HTTP_BAD_REQUEST);
         }
+
+        // TODO: Cronjob instead of this
         $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
             ->where("s.lastUsed < :yesterday")
             ->setParameter("yesterday", new \DateTime("yesterday"))
@@ -52,6 +53,38 @@ class ApiController extends FOSRestController
         foreach ($oldTokens as $oldToken) {
             $em->remove($oldToken);
         }
+
+        if (!$dbUser->isVerified()) {
+            if (\Swift_Validate::email($dbUser->getEmail())) {
+                $data = [
+                    "h" => $dbUser->getId(),
+                    "j" => (new \DateTime())->getTimestamp(),
+                    "p" => $dbUser->getEmail()
+                ];
+                $data['t'] = hash_hmac("sha512", json_encode($data), $this->getParameter('internal_key'));
+                $encoded = Utils::base64url_encode(gzcompress(json_encode($data), 2));
+                $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
+                $mailer = $this->get('swiftmailer.mailer.default');
+                $msg = new \Swift_Message(
+                    "Verificação de E-Mail ConectaTri",
+                    "Por favor, acesse o seguinte link para confirmar seu endereço de email: <br/><a href=\"$link\">$link</a>",
+                    "text/html",
+                    "utf-8"
+                );
+                $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+                if (\Swift_Validate::email($dbUser->getEmail())) {
+                    $msg->setTo([$dbUser->getEmail()]);
+                } else {
+                    return View::create(new ApiError("O e-mail cadastrado parece ser inválido. Tente se recadastrar utilizando outro e-mail."), Response::HTTP_FAILED_DEPENDENCY);
+                }
+                $result = $mailer->send($msg);
+                if ($result > 0) {
+                    return View::create(new ApiError("É necessário verificar seu endereço de email.\nE-mail de verificação reenviado para\n".preg_replace('(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $dbUser->getEmail())), Response::HTTP_OK);
+                }
+                return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de verificação"), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
         $previousToken = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
             ->where("s.lastUsed >= :time")
             ->andWhere("s.retailer = :retailer")
@@ -88,6 +121,8 @@ class ApiController extends FOSRestController
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_BAD_REQUEST);
         }
         $em->remove($dbToken);
+
+        // TODO: Cronjob instead of this
         $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
             ->where("s.lastUsed < :yesterday")
             ->setParameter("yesterday", new \DateTime("yesterday"))
@@ -95,8 +130,17 @@ class ApiController extends FOSRestController
         foreach ($oldTokens as $oldToken) {
             $em->remove($oldToken);
         }
+
         $em->flush();
         return View::create(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Rest\Get("api/email/{email}")
+     */
+    public function getVerifyEmail($email) {
+        $valid = \Swift_Validate::email($email);
+        return View::create($valid, Response::HTTP_OK);
     }
 
     /**
@@ -799,7 +843,7 @@ class ApiController extends FOSRestController
         $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
         $to = [];
         foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
-            if (!$quoteSupplier->isDeleted())
+            if (!$quoteSupplier->isDeleted() && \Swift_Validate::email($quoteSupplier->getRepresentative()->getEmail()))
                 $to[$quoteSupplier->getRepresentative()->getEmail()] = $quoteSupplier->getRepresentative()->getName();
         }
         $msg->setTo($to);
@@ -1146,8 +1190,8 @@ class ApiController extends FOSRestController
             "i" => $retailer->getId(),
             "j" => (new \DateTime())->getTimestamp()
         ];
-        $data['z'] = hash_hmac("sha512", json_encode($data), $this->key);
-        $encoded = $this->base64url_encode(json_encode($data));
+        $data['z'] = hash_hmac("sha512", json_encode($data), $this->getParameter('internal_key'));
+        $encoded = Utils::base64url_encode(json_encode($data));
         $link = "https://rs.conectatri.com.br/" . $encoded;
         $mailer = $this->get('swiftmailer.mailer.default');
         $msg = new \Swift_Message(
@@ -1156,8 +1200,12 @@ class ApiController extends FOSRestController
             "text/html",
             "utf-8"
         );
-        $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"])
-            ->setTo([$retailer->getEmail()]);
+        $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+        if (\Swift_Validate::email($retailer->getEmail())) {
+            $msg->setTo([$retailer->getEmail()]);
+        } else {
+            return View::create(new ApiError("O e-mail cadastrado parece ser inválido. Tente se recadastrar utilizando outro e-mail."), Response::HTTP_FAILED_DEPENDENCY);
+        }
         $result = $mailer->send($msg);
         if ($result > 0) {
             return View::create(new ApiError("E-mail enviado para\n".preg_replace('(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $retailer->getEmail())), Response::HTTP_OK);
@@ -1179,7 +1227,7 @@ class ApiController extends FOSRestController
         ];
         $hash = $data->z;
         $pwd = $data->p;
-        $cmpHash = hash_hmac("sha512", json_encode($newData), $this->key);
+        $cmpHash = hash_hmac("sha512", json_encode($newData), $this->getParameter('internal_key'));
         $time = new \DateTime("yesterday");
         $dataTime = new \DateTime();
         $dataTime->setTimestamp($data->j);
@@ -1199,21 +1247,6 @@ class ApiController extends FOSRestController
         $d = $this->getDoctrine();
         $states = $d->getRepository("AppBundle:State")->findAll();
         return View::create($states, Response::HTTP_OK);
-    }
-
-    /**
-     * Encodes the given $data with base64 URL variant.
-     *
-     * This encoding is designed to make binary data survive transport through transport layers that are not 8-bit clean, such as mail bodies.
-     *
-     * Base64-encoded data takes about 33% more space than the original data.
-     *
-     * @param $data string The data to encode.
-     * @return string|boolean The encoded data, as a string or FALSE on failure.
-     */
-    private function base64url_encode($data) {
-        $encoded = base64_encode($data);
-        return rtrim(strtr($encoded, '+/', '-_'), '=');
     }
 
     /**

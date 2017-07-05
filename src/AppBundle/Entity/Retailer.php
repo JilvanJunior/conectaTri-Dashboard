@@ -121,6 +121,13 @@ class Retailer implements UserInterface, \Serializable
     private $cellphone;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     * @Serializer\Exclude()
+     */
+    private $verified = false;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -711,5 +718,23 @@ class Retailer implements UserInterface, \Serializable
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVerified()
+    {
+        return $this->verified;
+    }
+
+    /**
+     * @param bool $verified
+     * @return Retailer
+     */
+    public function setVerified($verified)
+    {
+        $this->verified = $verified;
+        return $this;
     }
 }

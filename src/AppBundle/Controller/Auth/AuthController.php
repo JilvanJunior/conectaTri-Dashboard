@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller\Auth;
 
+use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class AuthController extends Controller
 {
@@ -44,6 +46,29 @@ class AuthController extends Controller
             'last_username' => $lastUsername,
             'error'         => $error,
         ));
+    }
+
+    /**
+     * @Route("/verificar/{data}", name="verify-email")
+     */
+    public function verifyEmailAction($data) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $objData = json_decode(gzuncompress(Utils::base64url_decode($data)));
+        $newData = [
+            "h" => $objData->h,
+            "j" => $objData->j,
+            "p" => $objData->p
+        ];
+        $rcvdHash = $objData->t;
+        $calcHash = hash_hmac("sha512", json_encode($newData), $this->getParameter("internal_key"));
+        $dbRetailer = $d->getRepository("AppBundle:Retailer")->find($objData->h);
+        if ($dbRetailer == null || $dbRetailer->isVerified() || $rcvdHash != $calcHash || $dbRetailer->getEmail() != $objData->p) {
+            return $this->redirectToRoute("access_denied");
+        }
+        $dbRetailer->setVerified(true);
+        $em->flush();
+        return $this->render("security/verified_email.html.twig", array());
     }
 
     /**
