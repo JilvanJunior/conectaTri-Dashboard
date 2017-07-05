@@ -1048,7 +1048,7 @@ class ApiController extends FOSRestController {
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $retailer = json_decode($request->getContent());
-        $dbRetailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["username" => $retailer->cnpj, "cnpj" => $retailer->cnpj]);
+        $dbRetailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $retailer->cnpj]);
         if (!is_null($dbRetailer)) {
             if (!$dbRetailer->isVerified()) {
                 $dbRetailer
