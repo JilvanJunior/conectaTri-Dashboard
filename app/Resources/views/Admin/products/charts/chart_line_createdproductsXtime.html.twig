@@ -99,7 +99,7 @@
                                                             <td>{{ product.createdAt|date('d/m/Y') }}</td>
                                                             <td>{{ product.quantity }}</td>
                                                             <td>
-                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                <a href="{{ path('admin_produtos_date', {'date': product.createdAt|date('Y-m-d')}) }}" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-eye"></i> Detalhes
                                                                 </a>
                                                             </td>

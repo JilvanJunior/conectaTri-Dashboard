@@ -98,4 +98,29 @@ class ProductRepository extends EntityRepository
             ->setParameters(array('id' => $id))
             ->getResult();
     }
+
+    public function findByDate($date)
+    {
+        $date = explode('-', $date);
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT p.id, p.name, p.brand, p.quantity, p.unit, (
+                    SELECT MIN(qs.price)
+                    FROM AppBundle:QuoteSupplier qs
+                    WHERE qs.quoteProduct IN (
+                      SELECT qp.id
+                      FROM AppBundle:QuoteProduct qp
+                      WHERE qp.product = p.id
+                    ) 
+                  ) AS minPrice
+                  FROM AppBundle:Product p
+                  WHERE p.deleted = 0
+                  AND YEAR(p.createdAt) = :y
+                  AND MONTH(p.createdAt) = :m
+                  AND DAY(p.createdAt) = :d'
+            )
+            ->setParameters(array('y' => $date[0], 'm' => $date[1], 'd' => $date[2]))
+            ->getResult();
+
+    }
 }

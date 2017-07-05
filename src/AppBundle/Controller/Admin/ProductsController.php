@@ -24,6 +24,7 @@ class ProductsController extends Controller
     /**
      * @Route("/administrador/produtos/por-cotacao/{id}", name="admin_produtos_quote")
      * @param Request $request
+     * @param $id
      * @return
      */
     public function productsByQuoteAction(Request $request, $id)
@@ -37,12 +38,27 @@ class ProductsController extends Controller
     /**
      * @Route("/administrador/produtos/por-lista/{id}", name="admin_produtos_list")
      * @param Request $request
+     * @param $id
      * @return
      */
     public function productsByListAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('AppBundle:Product')->findByList($id);
+
+        return $this->render('Admin/products/index.html.twig', ['products' => $products]);
+    }
+
+    /**
+     * @Route("/administrador/produtos/por-data/{date}", name="admin_produtos_date")
+     * @param Request $request
+     * @param $date
+     * @return
+     */
+    public function productsByDateAction(Request $request, $date)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('AppBundle:Product')->findByDate($date);
 
         return $this->render('Admin/products/index.html.twig', ['products' => $products]);
     }
