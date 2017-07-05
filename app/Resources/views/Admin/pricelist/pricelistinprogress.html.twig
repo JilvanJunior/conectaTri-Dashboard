@@ -93,7 +93,13 @@
                                                             <td>{{ quote.retailer.companyName }}</td>
                                                             <td>{{ quote.name }}</td>
                                                             <td>{{ quote.quoteProducts|length }}</td>
-                                                            <td></td>
+                                                            <td>
+                                                                <ul>
+                                                                    {% for quoteSupplier in quote.quoteProducts.0.quoteSuppliers %}
+                                                                        <li><a href="#">{{ quoteSupplier.representative.supplier.name }}</a></li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </td>
                                                             <td></td>
                                                             <td>
                                                                 <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">

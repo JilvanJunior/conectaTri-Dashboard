@@ -49,7 +49,7 @@ class SupplierRepository extends EntityRepository
             ->getResult();
     }
 
-    public function countSupplierByDate()
+    public function countSuppliersByDate()
     {
         return $this->getEntityManager()
             ->createQuery(

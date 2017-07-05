@@ -31,4 +31,18 @@ class RepresentativeRepository extends EntityRepository
             ->setMaxResults(1)
             ->getResult();
     }
+
+    public function countRepresentativesByDate()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT COUNT(r.id) AS representatives, r.createdAt, YEAR(r.createdAt) AS y,
+                  MONTH(r.createdAt) AS m, DAY(r.createdAt) as d
+                  FROM AppBundle:Representative r
+                  WHERE r.deleted = 0
+                  GROUP BY y, m, d
+                  ORDER BY r.createdAt ASC'
+            )
+            ->getResult();
+    }
 }

@@ -142,7 +142,7 @@
             var count = [];
             $.each(products, function(index, value){
                 var quantity = parseInt(value['quantity']);
-                var date = new Date(value['createdAt']['date']);
+                var date = new Date(value['y'], value['m'], value['d'], -3);
                 count.push([date.getTime(), quantity]);
             });
 

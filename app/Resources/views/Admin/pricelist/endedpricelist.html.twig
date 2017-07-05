@@ -70,7 +70,7 @@
                                                         <th>Nome da Cotação</th>
                                                         <th>Itens</th>
                                                         <th>Fornecedor</th>
-                                                        <th>Total Pedido</th>
+                                                        <th>Período</th>
                                                         <th></th>
                                                     </tr>
                                                     </thead>
@@ -81,7 +81,7 @@
                                                         <th>Nome da Cotação</th>
                                                         <th>Itens</th>
                                                         <th>Fornecedor</th>
-                                                        <th>Total Pedido</th>
+                                                        <th>Período</th>
                                                         <th></th>
                                                     </tr>
                                                     </tfoot>
@@ -94,7 +94,9 @@
                                                             <td>{{ quote.quoteProducts|length }}</td>
                                                             <td>
                                                                 <ul>
-                                                                    <li><a href="#"></a></li>
+                                                                    {% for quoteSupplier in quote.quoteProducts.0.quoteSuppliers %}
+                                                                        <li><a href="#">{{ quoteSupplier.representative.supplier.name }}</a></li>
+                                                                    {% endfor %}
                                                                 </ul>
                                                             </td>
                                                             <td>{{ quote.beginsAt|date('d/m/Y') }} - {{ quote.expiresAt|date('d/m/Y') }}</td>

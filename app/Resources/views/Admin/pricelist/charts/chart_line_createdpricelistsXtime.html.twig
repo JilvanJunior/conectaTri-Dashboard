@@ -98,16 +98,18 @@
                                                 </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                <tr>
-                                                    <td>20/05/17</td>
-                                                    <td>1500</td>
-                                                    <td>930</td>
-                                                    <td>
-                                                        <a href="javascript:;" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                            <i class="fa fa-eye"></i> Detalhes
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                {% for quote in quotes %}
+                                                    <tr>
+                                                        <td>{{ quote.createdAt|date('d/m/Y') }}</td>
+                                                        <td>{{ quote.quotes }}</td>
+                                                        <td></td>
+                                                        <td>
+                                                            <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                <i class="fa fa-eye"></i> Detalhes
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -137,46 +139,69 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script>
-    Highcharts.chart('container', {
-
-        title: {
-            text: ''
-        },
-
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-
-        yAxis: {
-            title: {
-                text: 'Contas Criadas'
+    $(function(){
+        $.ajax("{{ path('admin_pricelist_line_createdpricelistsXtime_data') }}", {
+            success: function(data) {
+                startHighchart(data);
             },
-
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle'
-        },
-
-        plotOptions: {
-            series:  {
-                pointStart: Date.UTC(2017, 4, 29),
-                pointInterval: 24 * 3600 * 1000 // one day
+            error: function() {
+                alert("Um problema ocorreu ao gerar o gráfico");
             }
-        },
+        });
 
-        series: [{
-            name: 'Cotações',
-            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-        }, {
-            name: 'Pedidos',
-            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-        } ]
+        function startHighchart(data) {
 
+            var countQuotes = [];
+            var countOrders = [];
+            data = $.parseJSON(data);
+            $.each(data['quotes'], function(index, value){
+                var quotes = parseInt(value['quotes']);
+                var date = new Date(value['y'], value['m'], value['d'], -3);
+                countQuotes.push([date.getTime(), quotes]);
+            });
+
+            $.each(data['orders'], function(index, value){
+                var orders = parseInt(value['orders']);
+                var date = new Date(value['y'], value['m'], value['d'], -3);
+                countOrders.push([date.getTime(), orders]);
+            });
+
+            Highcharts.chart('container', {
+
+                title: {
+                    text: ''
+                },
+
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    type: 'datetime'
+                },
+
+                yAxis: {
+                    title: {
+                        text: 'Quantidade Criada'
+                    }
+
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                },
+
+                series: [{
+                    name: 'Cotações',
+                    data: countQuotes
+                }, {
+                    name: 'Pedidos',
+                    data: countOrders
+                } ]
+
+            });
+        }
     });
+
 </script>
 {% endblock %}

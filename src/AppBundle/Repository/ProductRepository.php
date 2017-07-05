@@ -16,10 +16,11 @@ class ProductRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT COUNT(p.createdAt) AS quantity, p.createdAt 
+                'SELECT COUNT(p.createdAt) AS quantity, p.createdAt, YEAR(p.createdAt) as y,
+                  MONTH(p.createdAt) as m, DAY(p.createdAt) as d
                   FROM AppBundle:Product p 
                   WHERE p.deleted = 0 
-                  GROUP BY p.createdAt 
+                  GROUP BY y, m, d 
                   ORDER BY p.createdAt ASC'
             )
             ->getResult();

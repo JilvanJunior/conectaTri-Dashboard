@@ -57,11 +57,11 @@ class SuppliersController extends Controller
     public function chart2DataAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $suppliers = $em->getRepository('AppBundle:Supplier')->countSupplierByDate();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->countSuppliersByDate();
+        $representatives = $em->getRepository('AppBundle:Representative')->countRepresentativesByDate();
 
-        //TODO
         $data['suppliers'] = $suppliers;
-//        $data['representatives'] = $representatives;
+        $data['representatives'] = $representatives;
 
         echo json_encode($data);
         exit();

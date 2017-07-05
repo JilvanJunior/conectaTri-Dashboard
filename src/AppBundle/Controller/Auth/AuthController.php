@@ -49,6 +49,16 @@ class AuthController extends Controller
     }
 
     /**
+     * @Route("/logout", name="logout")
+     * @param Request $request
+     * @return
+     */
+    public function logoutAction(Request $request)
+    {
+        return $this->redirectToRoute('login');
+    }
+
+    /**
      * @Route("/verificar/{data}", name="verify-email")
      */
     public function verifyEmailAction($data) {

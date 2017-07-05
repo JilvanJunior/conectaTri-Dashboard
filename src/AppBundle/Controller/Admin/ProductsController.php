@@ -17,9 +17,7 @@ class ProductsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('AppBundle:Product')->productWithMinPrice();
-//        $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['deleted' => false]);
 
-//        echo "<pre>";print_r($products);exit();
         return $this->render('Admin/products/index.html.twig', ['products' => $products]);
     }
 
