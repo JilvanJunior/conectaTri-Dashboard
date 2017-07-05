@@ -22,6 +22,19 @@ class ProductsController extends Controller
     }
 
     /**
+     * @Route("/administrador/produtos/por-cotacao/{id}", name="admin_produtos_quote")
+     * @param Request $request
+     * @return
+     */
+    public function productsByQuoteAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('AppBundle:Product')->findByQuote($id);
+
+        return $this->render('Admin/products/index.html.twig', ['products' => $products]);
+    }
+
+    /**
      * @Route("/administrador/produtos/criados", name="admin_chart_line_createdproductsXtime")
      * @param Request $request
      * @return

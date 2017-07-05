@@ -70,7 +70,6 @@
                                                         <th> Fabricante </th>
                                                         <th> Quantidade / Unidade </th>
                                                         <th> Menor Preço </th>
-                                                        <th> Fornecedor </th>
                                                         <th> </th>
                                                     </tr>
                                                     </thead>
@@ -81,17 +80,16 @@
                                                         <th> Fabricante </th>
                                                         <th> Quantidade / Unidade </th>
                                                         <th> Menor Preço </th>
-                                                        <th> Fornecedor </th>
                                                         <th> </th>
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
                                                     {% for product in products %}
                                                         <tr>
-                                                            <td>{{ product.0.id }}</td>
-                                                            <td>{{ product.0.name }}</td>
-                                                            <td>{{ product.0.brand }}</td>
-                                                            <td>{{ product.0.quantity }} {{ product.0.unit }}</td>
+                                                            <td>{{ product.id }}</td>
+                                                            <td>{{ product.name }}</td>
+                                                            <td>{{ product.brand }}</td>
+                                                            <td>{{ product.quantity }} {{ product.unit }}</td>
                                                             <td>{{ product.minPrice }}</td>
                                                             <td>
                                                                 <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
