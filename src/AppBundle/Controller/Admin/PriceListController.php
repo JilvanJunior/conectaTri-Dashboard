@@ -87,6 +87,22 @@ class PriceListController extends Controller
     }
 
     /**
+     * @Route("/administrador/cotacoes/por-data/{date}", name="admin_pricelist_date")
+     * @param Request $request
+     * @param $date
+     * @return
+     */
+    public function dateAction(Request $request, $date)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $quotes = $em->getRepository('AppBundle:Quote')->findByDate($date);
+
+        return $this->render('Admin/pricelist/endedpricelist.html.twig', [
+            'quotes' => $quotes
+        ]);
+    }
+
+    /**
      * @Route("/administrador/cotacoes/criadas", name="admin_pricelist_line_createdpricelistsXtime")
      * @param Request $request
      * @return

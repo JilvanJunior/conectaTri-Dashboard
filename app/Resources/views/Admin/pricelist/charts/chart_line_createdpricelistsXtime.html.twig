@@ -104,7 +104,7 @@
                                                         <td>{{ quote.quotes }}</td>
                                                         <td></td>
                                                         <td>
-                                                            <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                            <a href="{{ path('admin_pricelist_date', {'date': quote.createdAt|date('Y-m-d')}) }}" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                 <i class="fa fa-eye"></i> Detalhes
                                                             </a>
                                                         </td>

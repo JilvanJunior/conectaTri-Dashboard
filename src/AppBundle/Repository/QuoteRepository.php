@@ -110,4 +110,19 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    public function findByDate($date)
+    {
+        $date = explode('-', $date);
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND YEAR(q.createdAt) = :y
+                  AND MONTH(q.createdAt) = :m
+                  AND DAY(q.createdAt) = :d'
+            )
+            ->setParameters(array('y' => $date[0], 'm' => $date[1], 'd' => $date[2]))
+            ->getResult();
+    }
 }
