@@ -73,4 +73,41 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    public function findBySupplier($id)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.id IN (
+                    SELECT DISTINCT(qp.quote)
+                    FROM AppBundle:QuoteProduct qp
+                    WHERE qp.deleted = 0  
+                    AND qp.product IN (
+                      SELECT IDENTITY(qs.quoteProduct)
+                      FROM AppBundle:QuoteSupplier qs
+                      WHERE qs.deleted = 0 
+                      AND qs.representative IN (
+                        SELECT r.id
+                        FROM AppBundle:Representative r
+                        WHERE r.deleted = 0
+                        AND r.supplier IN (
+                          SELECT s.id
+                          FROM AppBundle:Supplier s
+                          WHERE s.deleted = 0
+                          AND s.cnpj = (
+                            SELECT s2.cnpj
+                            FROM AppBundle:Supplier s2
+                            WHERE s2.id = :id
+                          )
+                        )
+                      )
+                    )
+                  )'
+            )
+            ->setParameters(array('id' => $id))
+            ->getResult();
+    }
+
 }

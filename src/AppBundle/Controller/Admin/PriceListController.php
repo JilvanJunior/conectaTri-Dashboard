@@ -10,6 +10,8 @@ class PriceListController extends Controller
 {
     /**
      * @Route("/administrador/cotacoes/em-andamento", name="admin_pricelist_inprogress")
+     * @param Request $request
+     * @return
      */
     public function inprogressAction(Request $request)
     {
@@ -23,6 +25,8 @@ class PriceListController extends Controller
 
     /**
      * @Route("/administrador/cotacoes/finalizadas", name="admin_pricelist_ended")
+     * @param Request $request
+     * @return
      */
     public function endedPricelistAction(Request $request)
     {
@@ -37,8 +41,10 @@ class PriceListController extends Controller
 
     /**
      * @Route("/administrador/cotacoes/pedidos", name="admin_pricelist_sentorders")
+     * @param Request $request
+     * @return
      */
-    public function sentordersAction(Request $request)
+    public function sentOrdersAction(Request $request)
     {
         //TODO get orders
 
@@ -50,6 +56,9 @@ class PriceListController extends Controller
 
     /**
      * @Route("/administrador/cotacoes/por-cliente/{id}", name="admin_pricelist_client")
+     * @param Request $request
+     * @param $id
+     * @return
      */
     public function clientAction(Request $request, $id)
     {
@@ -62,7 +71,25 @@ class PriceListController extends Controller
     }
 
     /**
+     * @Route("/administrador/cotacoes/por-fornecedor/{id}", name="admin_pricelist_supplier")
+     * @param Request $request
+     * @param $id
+     * @return
+     */
+    public function supplierAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $quotes = $em->getRepository('AppBundle:Quote')->findBySupplier($id);
+
+        return $this->render('Admin/pricelist/endedpricelist.html.twig', [
+            'quotes' => $quotes
+        ]);
+    }
+
+    /**
      * @Route("/administrador/cotacoes/criadas", name="admin_pricelist_line_createdpricelistsXtime")
+     * @param Request $request
+     * @return
      */
     public function chart1Action(Request $request)
     {
@@ -77,6 +104,7 @@ class PriceListController extends Controller
 
     /**
      * @Route("/administrador/cotacoes/criadas/datas", name="admin_pricelist_line_createdpricelistsXtime_data")
+     * @param Request $request
      */
     public function chart1DataAction(Request $request)
     {
