@@ -73,4 +73,29 @@ class ProductRepository extends EntityRepository
             ->setParameters(array('id' => $id))
             ->getResult();
     }
+
+    public function findByList($id)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT p.id, p.name, p.brand, p.quantity, p.unit, (
+                    SELECT MIN(qs.price)
+                    FROM AppBundle:QuoteSupplier qs
+                    WHERE qs.quoteProduct IN (
+                      SELECT qp.id
+                      FROM AppBundle:QuoteProduct qp
+                      WHERE qp.product = p.id
+                    ) 
+                  ) AS minPrice
+                  FROM AppBundle:Product p 
+                  WHERE p.deleted = 0 AND p IN (
+                    SELECT IDENTITY(lp.product)
+                      FROM AppBundle:ListingProduct lp
+                      WHERE lp.listing = :id 
+                  )
+                  ORDER BY p.createdAt ASC'
+            )
+            ->setParameters(array('id' => $id))
+            ->getResult();
+    }
 }

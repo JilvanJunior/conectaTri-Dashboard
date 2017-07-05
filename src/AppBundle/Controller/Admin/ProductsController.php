@@ -35,6 +35,19 @@ class ProductsController extends Controller
     }
 
     /**
+     * @Route("/administrador/produtos/por-lista/{id}", name="admin_produtos_list")
+     * @param Request $request
+     * @return
+     */
+    public function productsByListAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('AppBundle:Product')->findByList($id);
+
+        return $this->render('Admin/products/index.html.twig', ['products' => $products]);
+    }
+
+    /**
      * @Route("/administrador/produtos/criados", name="admin_chart_line_createdproductsXtime")
      * @param Request $request
      * @return
