@@ -1077,7 +1077,28 @@ class ApiController extends FOSRestController {
             ->setRoles("ROLE_USER");
         $em->persist($dbRetailer);
         $em->flush();
-        return View::create($dbRetailer, Response::HTTP_CREATED);
+        $data = [
+            "h" => $dbRetailer->getId(),
+            "j" => (new \DateTime())->getTimestamp(),
+            "p" => $dbRetailer->getEmail()
+        ];
+        $data['t'] = hash_hmac("sha512", json_encode($data), $this->getParameter('internal_key'));
+        $encoded = Utils::base64url_encode(gzcompress(json_encode($data), 2));
+        $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
+        $mailer = $this->get('swiftmailer.mailer.default');
+        $msg = new \Swift_Message(
+            "Verificação de E-Mail ConectaTri",
+            "Por favor, acesse o seguinte link para confirmar seu endereço de email: <br/><a href=\"$link\">$link</a>",
+            "text/html",
+            "utf-8"
+        );
+        $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+        $msg->setTo([$dbRetailer->getEmail()]);
+        $result = $mailer->send($msg);
+        if ($result > 0) {
+            return View::create($dbRetailer, Response::HTTP_CREATED);
+        }
+        return View::create(new ApiError("Usuário cadastrado com sucesso, porém houve um problema ao tentar enviar o e-mail de verificação."), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -1111,7 +1132,6 @@ class ApiController extends FOSRestController {
         $dbRetailer
             ->setCompanyName($retailer->company_name)
             ->setFantasyName($retailer->fantasy_name)
-            ->setEmail($retailer->email)
             ->setAddress($retailer->address)
             ->setCity($retailer->city)
             ->setState($dbState)
@@ -1124,9 +1144,32 @@ class ApiController extends FOSRestController {
             $dbRetailer
                 ->setPassword($sec->encodePassword($dbRetailer, $retailer->password));
         }
-        $em->flush();
-        $dbRetailer->setPassword("");
-        return View::create($dbRetailer, Response::HTTP_ACCEPTED);
+        if (isset($retailer->email) && strlen($retailer->email) > 0) {
+            $dbRetailer->setVerified(false);
+            $data = [
+                "h" => $dbRetailer->getId(),
+                "j" => (new \DateTime())->getTimestamp(),
+                "p" => $dbRetailer->getEmail()
+            ];
+            $data['t'] = hash_hmac("sha512", json_encode($data), $this->getParameter('internal_key'));
+            $encoded = Utils::base64url_encode(gzcompress(json_encode($data), 2));
+            $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
+            $mailer = $this->get('swiftmailer.mailer.default');
+            $msg = new \Swift_Message(
+                "Verificação de E-Mail ConectaTri",
+                "Por favor, acesse o seguinte link para confirmar seu endereço de email: <br/><a href=\"$link\">$link</a>",
+                "text/html",
+                "utf-8"
+            );
+            $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+            $msg->setTo([$dbRetailer->getEmail()]);
+            $result = $mailer->send($msg);
+            if ($result > 0) {
+                $em->flush();
+                return View::create($dbRetailer, Response::HTTP_ACCEPTED);
+            }
+        }
+        return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de verificação, portanto os dados não foram alterados."), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
