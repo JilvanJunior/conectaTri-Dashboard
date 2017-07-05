@@ -68,10 +68,9 @@
                                                         <th> Código </th>
                                                         <th> Nome do Produto </th>
                                                         <th> Fabricante </th>
-                                                        <th> Únidade </th>
-                                                        <th> Peso </th>
-                                                        <th> Menor Preço</th>
-                                                        <th>Fornecedor</th>
+                                                        <th> Quantidade / Unidade </th>
+                                                        <th> Menor Preço </th>
+                                                        <th> Fornecedor </th>
                                                         <th> </th>
                                                     </tr>
                                                     </thead>
@@ -80,10 +79,9 @@
                                                         <th> Código </th>
                                                         <th> Nome do Produto </th>
                                                         <th> Fabricante </th>
-                                                        <th> Únidade </th>
-                                                        <th> Peso </th>
-                                                        <th> Menor Preço</th>
-                                                        <th>Fornecedor</th>
+                                                        <th> Quantidade / Unidade </th>
+                                                        <th> Menor Preço </th>
+                                                        <th> Fornecedor </th>
                                                         <th> </th>
                                                     </tr>
                                                     </tfoot>
@@ -93,8 +91,7 @@
                                                             <td>{{ product.0.id }}</td>
                                                             <td>{{ product.0.name }}</td>
                                                             <td>{{ product.0.brand }}</td>
-                                                            <td>{{ product.0.unit }}</td>
-                                                            <td>{{ product.0.quantity }}</td>
+                                                            <td>{{ product.0.quantity }} {{ product.0.unit }}</td>
                                                             <td>{{ product.minPrice }}</td>
                                                             <td>
                                                                 <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">

@@ -156,7 +156,8 @@ class ClientsController extends Controller
             $quotes = $client->getQuotes();
 
             if(count($quotes) > 0) {
-                $quote = end($quotes);
+
+                $quote = $quotes[sizeof($quotes) - 1];
 
                 if ($quote->getCreatedAt() > $date)
                     $total++;
