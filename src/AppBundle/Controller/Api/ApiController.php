@@ -79,7 +79,7 @@ class ApiController extends FOSRestController {
                 }
                 $result = $mailer->send($msg);
                 if ($result > 0) {
-                    return View::create(new ApiError("É necessário verificar seu endereço de email.\nE-mail de verificação reenviado para\n".preg_replace('(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $dbUser->getEmail())), Response::HTTP_OK);
+                    return View::create(new ApiError("É necessário verificar seu endereço de email.\nE-mail de verificação reenviado para\n".preg_replace('(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $dbUser->getEmail())), Response::HTTP_FAILED_DEPENDENCY);
                 }
                 return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de verificação"), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
@@ -1037,7 +1037,6 @@ class ApiController extends FOSRestController {
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
-        $dbToken->getRetailer()->setPassword("");
 
         return View::create($dbToken->getRetailer(), Response::HTTP_OK);
     }
@@ -1049,13 +1048,19 @@ class ApiController extends FOSRestController {
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $retailer = json_decode($request->getContent());
-        $dbRetailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["username" => $retailer->cnpj]);
+        $dbRetailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["username" => $retailer->cnpj, "cnpj" => $retailer->cnpj]);
         if (!is_null($dbRetailer)) {
+            if (!$dbRetailer->isVerified()) {
+                $dbRetailer
+                    ->setCnpj($dbRetailer->getCnpj() . uniqid("_", true))
+                    ->setDeleted(true)
+                    ->setVerified(false);
+            }
             return View::create(new ApiError("Este CNPJ já está cadastrado"), Response::HTTP_CONFLICT);
         }
         $dbState = $d->getRepository("AppBundle:State")->findOneBy(["uf" => $retailer->state]);
         $dbRetailer = new Retailer();
-        $dbRetailer->setUsername($retailer->cnpj)
+        $dbRetailer
             ->setCnpj($retailer->cnpj)
             ->setCompanyName($retailer->company_name)
             ->setFantasyName($retailer->fantasy_name)
@@ -1072,7 +1077,6 @@ class ApiController extends FOSRestController {
             ->setRoles("ROLE_USER");
         $em->persist($dbRetailer);
         $em->flush();
-        $dbRetailer->setPassword("");
         return View::create($dbRetailer, Response::HTTP_CREATED);
     }
 

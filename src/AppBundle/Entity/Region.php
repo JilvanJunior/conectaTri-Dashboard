@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="region")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RegionRepository")
+ * @Serializer\ExclusionPolicy("none")
  */
 class Region
 {
@@ -29,22 +31,19 @@ class Region
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Supplier", mappedBy="region")
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\State", mappedBy="region")
+     * @Serializer\Exclude()
      */
-    private $suppliers;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Retailer", mappedBy="region")
-     */
-    private $retailers;
+    private $states;
 
     /**
      * Region constructor.
      */
     public function __construct()
     {
-        $this->suppliers = new ArrayCollection();
-        $this->retailers = new ArrayCollection();
+        $this->states = new ArrayCollection();
     }
 
     /**
@@ -82,70 +81,42 @@ class Region
     }
 
     /**
-     * Add supplier
-     *
-     * @param Supplier $supplier
-     *
-     * @return Region
+     * @return ArrayCollection
      */
-    public function addSupplier(Supplier $supplier)
+    public function getStates()
     {
-        $this->suppliers[] = $supplier;
-
-        return $this;
-    }
-
-    /**
-     * Remove supplier
-     *
-     * @param Supplier $supplier
-     */
-    public function removeSupplier(Supplier $supplier)
-    {
-        $this->suppliers->removeElement($supplier);
+        return $this->states;
     }
 
     /**
      * Get suppliers
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getSuppliers()
     {
-        return $this->suppliers;
-    }
-
-    /**
-     * Add retailer
-     *
-     * @param Retailer $retailer
-     *
-     * @return Region
-     */
-    public function addRetailer(Retailer $retailer)
-    {
-        $this->retailers[] = $retailer;
-
-        return $this;
-    }
-
-    /**
-     * Remove retailer
-     *
-     * @param Retailer $retailer
-     */
-    public function removeRetailer(Retailer $retailer)
-    {
-        $this->retailers->removeElement($retailer);
+        $suppliers = new ArrayCollection();
+        foreach ($this->states->toArray() as $state) {
+            foreach ($state->getSuppliers() as $supplier) {
+                $suppliers->add($supplier);
+            }
+        }
+        return $suppliers;
     }
 
     /**
      * Get suppliers
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getRetailers()
     {
-        return $this->retailers;
+        $retailers = new ArrayCollection();
+        foreach ($this->states->toArray() as $state) {
+            foreach ($state->getRetailers() as $retailer) {
+                $retailers->add($retailer);
+            }
+        }
+        return $retailers;
     }
 }

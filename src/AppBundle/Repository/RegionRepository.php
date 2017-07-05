@@ -19,7 +19,7 @@ class RegionRepository extends \Doctrine\ORM\EntityRepository
                 'SELECT r.name, 
                   (SELECT COUNT(DISTINCT (s.cnpj))
                   FROM AppBundle:Supplier s
-                  WHERE s.region = r.id AND s.deleted = 0
+                  WHERE s.state.region = r.id AND s.deleted = 0
                   ) AS y
                   FROM AppBundle:Region r  
                   GROUP BY r.id HAVING y > 0'
@@ -35,7 +35,7 @@ class RegionRepository extends \Doctrine\ORM\EntityRepository
                 'SELECT rg.name, 
                   (SELECT COUNT(re.id)
                   FROM AppBundle:Retailer re
-                  WHERE re.region = rg.id AND re.deleted = 0
+                  WHERE re.state.region = rg.id AND re.deleted = 0 AND re.verified = 1
                   ) AS y
                   FROM AppBundle:Region rg  
                   GROUP BY rg.id HAVING y > 0'

@@ -39,6 +39,14 @@ class State
     private $uf;
 
     /**
+     * @var Region
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Region", inversedBy="states")
+     * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
+     */
+    private $region;
+
+    /**
      * @ORM\OneToMany(targetEntity="Supplier", mappedBy="state")
      * @Serializer\Exclude()
      */
@@ -116,6 +124,14 @@ class State
     public function getUf()
     {
         return $this->uf;
+    }
+
+    /**
+     * @return Region
+     */
+    public function getRegion()
+    {
+        return $this->region;
     }
 
     /**
