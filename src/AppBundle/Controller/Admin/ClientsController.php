@@ -16,7 +16,7 @@ class ClientsController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false]);
+        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false, 'verified' => true]);
 
         return $this->render('Admin/clients/index.html.twig', ['clients' => $clients]);
     }
@@ -28,7 +28,7 @@ class ClientsController extends Controller
      */
     public function chart1Action(Request $request)
     {
-        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false]);
+        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false, 'verified' => true]);
 
         return $this->render('Admin/clients/charts/chart_pie_clientXregion.html.twig', ['clients' => $clients]);
     }
@@ -55,7 +55,7 @@ class ClientsController extends Controller
      */
     public function chart2Action(Request $request)
     {
-        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false]);
+        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false, 'verified' => true]);
 
         return $this->render('Admin/clients/charts/chart_pie_clientXstate.html.twig', ['clients' => $clients]);
     }
@@ -83,7 +83,7 @@ class ClientsController extends Controller
      */
     public function chart3Action(Request $request)
     {
-        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false]);
+        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false, 'verified' => true]);
 
         return $this->render('Admin/clients/charts/chart_line_createdaccountsXtime.html.twig', ['clients' => $clients]);
     }
@@ -109,7 +109,7 @@ class ClientsController extends Controller
      */
     public function chart4Action(Request $request)
     {
-        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false]);
+        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false, 'verified' => true]);
 
         return $this->render('Admin/clients/charts/chart_line_createdpricelistsXtime.html.twig', ['clients' => $clients]);
     }
@@ -144,7 +144,7 @@ class ClientsController extends Controller
     public function chart4DataSaveAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $clients = $em->getRepository('AppBundle:Retailer')->findBy(['deleted' => 0]);
+        $clients = $em->getRepository('AppBundle:Retailer')->findBy(['deleted' => 0, 'verified' => true]);
 
         $today = new \DateTime();
         $interval = new \DateInterval("P1M"); // 1 month
