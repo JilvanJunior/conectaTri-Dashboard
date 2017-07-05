@@ -1148,8 +1148,8 @@ class ApiController extends FOSRestController {
             $dbRetailer
                 ->setPassword($sec->encodePassword($dbRetailer, $retailer->password));
         }
-        if (isset($retailer->email) && strlen($retailer->email) > 0) {
-            $dbRetailer->setVerified(false);
+        if (isset($retailer->email) && $retailer->email != $dbRetailer->getEmail() && strlen($retailer->email) > 0) {
+            $dbRetailer->setVerified(false)->setEmail($retailer->email);
             $data = [
                 "h" => $dbRetailer->getId(),
                 "j" => (new \DateTime())->getTimestamp(),
