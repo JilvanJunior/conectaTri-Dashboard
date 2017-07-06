@@ -863,6 +863,8 @@ class ApiController extends FOSRestController {
             }
         }
         $failed .= "</ul>";
+        $this->get('logger')->warn((string)$hasFailed." : ".$failed);
+        $this->get('logger')->warn((string)\Swift_Validate::email($dbToken->getRetailer()->getEmail()));
         if ($hasFailed && \Swift_Validate::email($dbToken->getRetailer()->getEmail())) {
             $msg = new \Swift_Message(
                 'Envio de Cotação no ConectaTri',
@@ -872,7 +874,7 @@ class ApiController extends FOSRestController {
             );
             $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
             $msg->setTo([$dbToken->getRetailer()->getEmail() => $dbToken->getRetailer()->getFantasyName()]);
-            $mailer->send($msg);
+            $this->get('logger')->warn((string)$mailer->send($msg));
         }
         if ($total > 0) {
             return View::create(new ApiError("E-mails enviados com sucesso"), Response::HTTP_OK);
