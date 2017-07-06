@@ -847,7 +847,9 @@ class ApiController extends FOSRestController {
         $hasFailed = false;
         $total = 0;
         foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
+            $this->get('logger')->crit("Email: ".$quoteSupplier->getRepresentative()->getEmail());
             if (!$quoteSupplier->isDeleted() && \Swift_Validate::email($quoteSupplier->getRepresentative()->getEmail())) {
+                $this->get('logger')->crit("Valid: ".$quoteSupplier->getRepresentative()->getEmail());
                 $msg->setTo([$quoteSupplier->getRepresentative()->getEmail() => $quoteSupplier->getRepresentative()->getName()]);
                 if (!$mailer->send($msg)) {
                     $hasFailed = true;
@@ -861,8 +863,6 @@ class ApiController extends FOSRestController {
             }
         }
         $failed .= "</ul>";
-        $this->get('logger')->crit((string)$hasFailed." : ".$failed);
-        $this->get('logger')->crit((string)\Swift_Validate::email($dbToken->getRetailer()->getEmail()));
         if ($hasFailed && \Swift_Validate::email($dbToken->getRetailer()->getEmail())) {
             $msg = new \Swift_Message(
                 'Envio de Cotação no ConectaTri',
@@ -872,7 +872,6 @@ class ApiController extends FOSRestController {
             );
             $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
             $msg->setTo([$dbToken->getRetailer()->getEmail() => $dbToken->getRetailer()->getFantasyName()]);
-            $this->get('logger')->crit((string)$mailer->send($msg));
         }
         if ($total > 0) {
             return View::create(new ApiError("E-mails enviados com sucesso"), Response::HTTP_OK);
