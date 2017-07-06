@@ -95,7 +95,9 @@
                                                             <td>
                                                                 <ul>
                                                                     {% for quoteSupplier in quote.quoteProducts.0.quoteSuppliers %}
-                                                                        <li><a href="#">{{ quoteSupplier.representative.supplier.name }}</a></li>
+                                                                        <li><a href="{{ path('admin_fornecedor', {'id': quoteSupplier.representative.supplier.id }) }}">
+                                                                                {{ quoteSupplier.representative.supplier.name }}
+                                                                            </a></li>
                                                                     {% endfor %}
                                                                 </ul>
                                                             </td>
