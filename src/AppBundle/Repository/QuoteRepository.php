@@ -73,6 +73,36 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    public function countRemote()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT COUNT(q.id) AS quotes, q.createdAt, YEAR(q.createdAt) AS y,
+                  MONTH(q.createdAt) AS m, DAY(q.createdAt) as d
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.type = 1
+                  GROUP BY y, m, d
+                  ORDER BY q.createdAt ASC'
+            )
+            ->getResult();
+    }
+
+    public function countPresential()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT COUNT(q.id) AS quotes, q.createdAt, YEAR(q.createdAt) AS y,
+                  MONTH(q.createdAt) AS m, DAY(q.createdAt) as d
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.type = 2
+                  GROUP BY y, m, d
+                  ORDER BY q.createdAt ASC'
+            )
+            ->getResult();
+    }
+
     public function findBySupplier($id)
     {
         return $this->getEntityManager()
