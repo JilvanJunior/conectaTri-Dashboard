@@ -34,12 +34,6 @@ class Supplier
     private $retailer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Region", inversedBy="suppliers")
-     * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
-     */
-    private $region;
-
-    /**
      * @ORM\ManyToOne(targetEntity="State", inversedBy="suppliers")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
@@ -273,30 +267,6 @@ class Supplier
     public function getRetailer()
     {
         return $this->retailer;
-    }
-
-    /**
-     * Set region
-     *
-     * @param Region $region
-     *
-     * @return Supplier
-     */
-    public function setRegion(Region $region = null)
-    {
-        $this->region = $region;
-
-        return $this;
-    }
-
-    /**
-     * Get region
-     *
-     * @return Region
-     */
-    public function getRegion()
-    {
-        return $this->region;
     }
 
     /**

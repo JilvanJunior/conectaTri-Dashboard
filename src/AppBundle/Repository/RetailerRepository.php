@@ -19,7 +19,7 @@ class RetailerRepository extends EntityRepository
                 'SELECT COUNT(r.createdAt) AS clients, YEAR(r.createdAt) AS y, 
                   MONTH(r.createdAt) AS m, DAY(r.createdAt) AS d
                   FROM AppBundle:Retailer r
-                  WHERE r.deleted = 0
+                  WHERE r.deleted = 0 AND r.verified = 1
                   GROUP BY y, m, d
                   ORDER BY r.createdAt ASC'
             )

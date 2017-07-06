@@ -16,6 +16,8 @@ use JMS\Serializer\Annotation as Serializer;
 class Retailer implements UserInterface, \Serializable
 {
     /**
+     * @var int
+     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -23,105 +25,127 @@ class Retailer implements UserInterface, \Serializable
     private $id;
 
     /**
+     * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Representative", mappedBy="retailer")
      * @Serializer\Exclude()
      */
     private $representatives;
 
     /**
+     * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Supplier", mappedBy="retailer")
      * @Serializer\Exclude()
      */
     private $suppliers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Region", inversedBy="retailers")
-     * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
-     */
-    private $region;
-
-    /**
+     * @var State
+     *
      * @ORM\ManyToOne(targetEntity="State", inversedBy="retailers")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
     private $state;
 
     /**
+     * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Listing", mappedBy="retailer")
      * @Serializer\Exclude()
      */
     private $listings;
 
     /**
+     * @var string
+     *
      * @ORM\OneToMany(targetEntity="Quote", mappedBy="retailer")
      * @Serializer\Exclude()
      */
     private $quotes;
 
     /**
-     * @ORM\Column(type="string", length=50, unique=true)
-     * @Serializer\Exclude()
-     */
-    private $username;
-
-    /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=100)
      */
     private $email;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      * @Serializer\Exclude()
      */
     private $password;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=50, unique=true)
      */
     private $cnpj;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=100)
+     * @Serializer\Exclude()
      */
     private $roles;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $companyName;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $fantasyName;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $address;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $city;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=20)
      */
     private $cep;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=20)
      */
     private $phone;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=20)
      */
     private $cellphone;
 
     /**
      * @var bool
+     *
      * @ORM\Column(type="boolean")
      * @Serializer\Exclude()
      */
@@ -144,6 +168,8 @@ class Retailer implements UserInterface, \Serializable
     private $updatedAt;
 
     /**
+     * @var bool
+     *
      * @ORM\Column(type="boolean")
      * @Serializer\Exclude()
      */
@@ -179,7 +205,7 @@ class Retailer implements UserInterface, \Serializable
     {
         return serialize(array(
             $this->id,
-            $this->username,
+            $this->cnpj,
             $this->password,
         ));
     }
@@ -191,26 +217,9 @@ class Retailer implements UserInterface, \Serializable
     {
         list (
             $this->id,
-            $this->username,
+            $this->cnpj,
             $this->password,
             ) = unserialize($serialized);
-    }
-
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
     }
 
     public function eraseCredentials()
@@ -222,7 +231,10 @@ class Retailer implements UserInterface, \Serializable
         return null;
     }
 
-
+    public function getUsername()
+    {
+        return $this->cnpj;
+    }
 
     /**
      * Get id
@@ -235,22 +247,24 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set email
-     *
-     * @param string $email
-     *
+     * @return State
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param State $state
      * @return Retailer
      */
-    public function setEmail($email)
+    public function setState($state)
     {
-        $this->email = $email;
-
+        $this->state = $state;
         return $this;
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -259,36 +273,34 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set password
-     *
+     * @param string $email
+     * @return Retailer
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
      * @param string $password
-     *
      * @return Retailer
      */
     public function setPassword($password)
     {
         $this->password = $password;
-
         return $this;
     }
 
     /**
-     * Set cnpj
-     *
-     * @param string $cnpj
-     *
-     * @return Retailer
-     */
-    public function setCnpj($cnpj)
-    {
-        $this->cnpj = $cnpj;
-
-        return $this;
-    }
-
-    /**
-     * Get cnpj
-     *
      * @return string
      */
     public function getCnpj()
@@ -297,22 +309,16 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set companyName
-     *
-     * @param string $companyName
-     *
+     * @param string $cnpj
      * @return Retailer
      */
-    public function setCompanyName($companyName)
+    public function setCnpj($cnpj)
     {
-        $this->companyName = $companyName;
-
+        $this->cnpj = $cnpj;
         return $this;
     }
 
     /**
-     * Get companyName
-     *
      * @return string
      */
     public function getCompanyName()
@@ -321,22 +327,16 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set fantasyName
-     *
-     * @param string $fantasyName
-     *
+     * @param string $companyName
      * @return Retailer
      */
-    public function setFantasyName($fantasyName)
+    public function setCompanyName($companyName)
     {
-        $this->fantasyName = $fantasyName;
-
+        $this->companyName = $companyName;
         return $this;
     }
 
     /**
-     * Get fantasyName
-     *
      * @return string
      */
     public function getFantasyName()
@@ -345,22 +345,16 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set address
-     *
-     * @param string $address
-     *
+     * @param string $fantasyName
      * @return Retailer
      */
-    public function setAddress($address)
+    public function setFantasyName($fantasyName)
     {
-        $this->address = $address;
-
+        $this->fantasyName = $fantasyName;
         return $this;
     }
 
     /**
-     * Get address
-     *
      * @return string
      */
     public function getAddress()
@@ -369,22 +363,16 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set city
-     *
-     * @param string $city
-     *
+     * @param string $address
      * @return Retailer
      */
-    public function setCity($city)
+    public function setAddress($address)
     {
-        $this->city = $city;
-
+        $this->address = $address;
         return $this;
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
     public function getCity()
@@ -393,22 +381,16 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set cep
-     *
-     * @param string $cep
-     *
+     * @param string $city
      * @return Retailer
      */
-    public function setCep($cep)
+    public function setCity($city)
     {
-        $this->cep = $cep;
-
+        $this->city = $city;
         return $this;
     }
 
     /**
-     * Get cep
-     *
      * @return string
      */
     public function getCep()
@@ -417,22 +399,16 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set phone
-     *
-     * @param string $phone
-     *
+     * @param string $cep
      * @return Retailer
      */
-    public function setPhone($phone)
+    public function setCep($cep)
     {
-        $this->phone = $phone;
-
+        $this->cep = $cep;
         return $this;
     }
 
     /**
-     * Get phone
-     *
      * @return string
      */
     public function getPhone()
@@ -441,22 +417,16 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set cellphone
-     *
-     * @param string $cellphone
-     *
+     * @param string $phone
      * @return Retailer
      */
-    public function setCellphone($cellphone)
+    public function setPhone($phone)
     {
-        $this->cellphone = $cellphone;
-
+        $this->phone = $phone;
         return $this;
     }
 
     /**
-     * Get cellphone
-     *
      * @return string
      */
     public function getCellphone()
@@ -465,23 +435,17 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
+     * @param string $cellphone
      * @return Retailer
      */
-    public function setCreatedAt($createdAt)
+    public function setCellphone($cellphone)
     {
-        $this->createdAt = $createdAt;
-
+        $this->cellphone = $cellphone;
         return $this;
     }
 
     /**
-     * Get createdAt
-     *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -489,23 +453,17 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
+     * @param DateTime $createdAt
      * @return Retailer
      */
-    public function setUpdatedAt($updatedAt)
+    public function setCreatedAt($createdAt)
     {
-        $this->updatedAt = $updatedAt;
-
+        $this->createdAt = $createdAt;
         return $this;
     }
 
     /**
-     * Get updatedAt
-     *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -513,27 +471,31 @@ class Retailer implements UserInterface, \Serializable
     }
 
     /**
-     * Set deleted
-     *
-     * @param boolean $deleted
-     *
+     * @param DateTime $updatedAt
+     * @return Retailer
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param bool $deleted
      * @return Retailer
      */
     public function setDeleted($deleted)
     {
         $this->deleted = $deleted;
-
         return $this;
-    }
-
-    /**
-     * Get deleted
-     *
-     * @return boolean
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
     }
 
     /**
@@ -670,54 +632,6 @@ class Retailer implements UserInterface, \Serializable
     public function getListings()
     {
         return $this->listings;
-    }
-
-    /**
-     * Set region
-     *
-     * @param Region $region
-     *
-     * @return Retailer
-     */
-    public function setRegion(Region $region = null)
-    {
-        $this->region = $region;
-
-        return $this;
-    }
-
-    /**
-     * Get region
-     *
-     * @return Region
-     */
-    public function getRegion()
-    {
-        return $this->region;
-    }
-
-    /**
-     * Set state
-     *
-     * @param State $state
-     *
-     * @return Retailer
-     */
-    public function setState(State $state = null)
-    {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return State
-     */
-    public function getState()
-    {
-        return $this->state;
     }
 
     /**

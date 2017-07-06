@@ -79,9 +79,11 @@ class ApiController extends FOSRestController {
                 }
                 $result = $mailer->send($msg);
                 if ($result > 0) {
-                    return View::create(new ApiError("É necessário verificar seu endereço de email.\nE-mail de verificação reenviado para\n".preg_replace('(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $dbUser->getEmail())), Response::HTTP_OK);
+                    return View::create(new ApiError("É necessário verificar seu endereço de email.\nE-mail de verificação reenviado para\n".preg_replace('(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $dbUser->getEmail())), Response::HTTP_EXPECTATION_FAILED);
                 }
                 return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de verificação"), Response::HTTP_INTERNAL_SERVER_ERROR);
+            } else {
+                return View::create(new ApiError("O e-mail cadastrado parece ser inválido. Tente se recadastrar utilizando outro e-mail."), Response::HTTP_FAILED_DEPENDENCY);
             }
         }
 
@@ -136,7 +138,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Get("api/email/{email}")
+     * @Rest\Get("/api/email/{email}")
      */
     public function getVerifyEmail($email) {
         $valid = \Swift_Validate::email($email);
@@ -841,14 +843,35 @@ class ApiController extends FOSRestController {
             "utf-8"
         );
         $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
-        $to = [];
+        $failed = "<ul>";
+        $hasFailed = false;
+        $total = 0;
         foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
-            if (!$quoteSupplier->isDeleted() && \Swift_Validate::email($quoteSupplier->getRepresentative()->getEmail()))
-                $to[$quoteSupplier->getRepresentative()->getEmail()] = $quoteSupplier->getRepresentative()->getName();
+            if (!$quoteSupplier->isDeleted() && \Swift_Validate::email($quoteSupplier->getRepresentative()->getEmail())) {
+                $msg->setTo([$quoteSupplier->getRepresentative()->getEmail() => $quoteSupplier->getRepresentative()->getName()]);
+                if (!$mailer->send($msg)) {
+                    $hasFailed = true;
+                    $failed .= "<li>".$quoteSupplier->getRepresentative()->getName()." &lt;".$quoteSupplier->getRepresentative()->getEmail()."&gt;</li>";
+                } else {
+                    $total++;
+                }
+            } else if (!$quoteSupplier->isDeleted()) {
+                $hasFailed = true;
+                $failed .= "<li>".$quoteSupplier->getRepresentative()->getName()." &lt;".$quoteSupplier->getRepresentative()->getEmail()."&gt;</li>";
+            }
         }
-        $msg->setTo($to);
-        $result = $mailer->send($msg);
-        if ($result > 0) {
+        $failed .= "</ul>";
+        if ($hasFailed && \Swift_Validate::email($dbToken->getRetailer()->getEmail())) {
+            $msg = new \Swift_Message(
+                'Envio de Cotação no ConectaTri',
+                "Os e-mails contendo o endereço de acesso à cotação foram enviados a alguns dos destinatários. Porém, não foi possível enviar aos seguintes: <br>$failed<br><br>Caso este e-mail tenha sido enviado por acidente, pedimos que o desconsidere.<br><br>Obrigado",
+                "text/html",
+                "utf-8"
+            );
+            $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+            $msg->setTo([$dbToken->getRetailer()->getEmail() => $dbToken->getRetailer()->getFantasyName()]);
+        }
+        if ($total > 0) {
             return View::create(new ApiError("E-mails enviados com sucesso"), Response::HTTP_OK);
         }
         return View::create(new ApiError("Houve um problema ao enviar os e-mails."), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -1037,7 +1060,6 @@ class ApiController extends FOSRestController {
         }
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
-        $dbToken->getRetailer()->setPassword("");
 
         return View::create($dbToken->getRetailer(), Response::HTTP_OK);
     }
@@ -1049,13 +1071,21 @@ class ApiController extends FOSRestController {
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $retailer = json_decode($request->getContent());
-        $dbRetailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["username" => $retailer->cnpj]);
+        $dbRetailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $retailer->cnpj]);
         if (!is_null($dbRetailer)) {
-            return View::create(new ApiError("Este CNPJ já está cadastrado"), Response::HTTP_CONFLICT);
+            if (!$dbRetailer->isVerified() || $dbRetailer->isDeleted()) {
+                $dbRetailer
+                    ->setCnpj($dbRetailer->getCnpj() . uniqid("_", true))
+                    ->setDeleted(true)
+                    ->setVerified(false);
+                $em->flush();
+            } else {
+                return View::create(new ApiError("Este CNPJ já está cadastrado"), Response::HTTP_CONFLICT);
+            }
         }
         $dbState = $d->getRepository("AppBundle:State")->findOneBy(["uf" => $retailer->state]);
         $dbRetailer = new Retailer();
-        $dbRetailer->setUsername($retailer->cnpj)
+        $dbRetailer
             ->setCnpj($retailer->cnpj)
             ->setCompanyName($retailer->company_name)
             ->setFantasyName($retailer->fantasy_name)
@@ -1072,8 +1102,28 @@ class ApiController extends FOSRestController {
             ->setRoles("ROLE_USER");
         $em->persist($dbRetailer);
         $em->flush();
-        $dbRetailer->setPassword("");
-        return View::create($dbRetailer, Response::HTTP_CREATED);
+        $data = [
+            "h" => $dbRetailer->getId(),
+            "j" => (new \DateTime())->getTimestamp(),
+            "p" => $dbRetailer->getEmail()
+        ];
+        $data['t'] = hash_hmac("sha512", json_encode($data), $this->getParameter('internal_key'));
+        $encoded = Utils::base64url_encode(gzcompress(json_encode($data), 2));
+        $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
+        $mailer = $this->get('swiftmailer.mailer.default');
+        $msg = new \Swift_Message(
+            "Verificação de E-Mail ConectaTri",
+            "Por favor, acesse o seguinte link para confirmar seu endereço de email: <br/><a href=\"$link\">$link</a>",
+            "text/html",
+            "utf-8"
+        );
+        $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+        $msg->setTo([$dbRetailer->getEmail()]);
+        $result = $mailer->send($msg);
+        if ($result > 0) {
+            return View::create($dbRetailer, Response::HTTP_CREATED);
+        }
+        return View::create(new ApiError("Usuário cadastrado com sucesso, porém houve um problema ao tentar enviar o e-mail de verificação."), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -1107,7 +1157,6 @@ class ApiController extends FOSRestController {
         $dbRetailer
             ->setCompanyName($retailer->company_name)
             ->setFantasyName($retailer->fantasy_name)
-            ->setEmail($retailer->email)
             ->setAddress($retailer->address)
             ->setCity($retailer->city)
             ->setState($dbState)
@@ -1120,9 +1169,35 @@ class ApiController extends FOSRestController {
             $dbRetailer
                 ->setPassword($sec->encodePassword($dbRetailer, $retailer->password));
         }
-        $em->flush();
-        $dbRetailer->setPassword("");
-        return View::create($dbRetailer, Response::HTTP_ACCEPTED);
+        if (isset($retailer->email) && $retailer->email != $dbRetailer->getEmail() && strlen($retailer->email) > 0) {
+            $dbRetailer->setVerified(false)->setEmail($retailer->email);
+            $data = [
+                "h" => $dbRetailer->getId(),
+                "j" => (new \DateTime())->getTimestamp(),
+                "p" => $dbRetailer->getEmail()
+            ];
+            $data['t'] = hash_hmac("sha512", json_encode($data), $this->getParameter('internal_key'));
+            $encoded = Utils::base64url_encode(gzcompress(json_encode($data), 2));
+            $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
+            $mailer = $this->get('swiftmailer.mailer.default');
+            $msg = new \Swift_Message(
+                "Verificação de E-Mail ConectaTri",
+                "Por favor, acesse o seguinte link para confirmar seu endereço de email: <br/><a href=\"$link\">$link</a>",
+                "text/html",
+                "utf-8"
+            );
+            $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+            $msg->setTo([$dbRetailer->getEmail()]);
+            $result = $mailer->send($msg);
+            if ($result > 0) {
+                $em->flush();
+                return View::create($dbRetailer, Response::HTTP_ACCEPTED);
+            }
+            return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de verificação, portanto os dados não foram alterados."), Response::HTTP_INTERNAL_SERVER_ERROR);
+        } else {
+            $em->flush();
+            return View::create($dbRetailer, Response::HTTP_ACCEPTED);
+        }
     }
 
     /**
