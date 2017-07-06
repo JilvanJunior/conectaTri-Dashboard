@@ -49,6 +49,49 @@ class SupplierRepository extends EntityRepository
             ->getResult();
     }
 
+    public function groupByCnpjAndId($id)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT s.id, s.cnpj, s.name, 
+                  (SELECT COUNT(r.id)
+                    FROM AppBundle:Representative r
+                    WHERE r.supplier IN (
+                      SELECT s2.id 
+                      FROM AppBundle:Supplier s2
+                      WHERE s2.cnpj = s.cnpj 
+                    ) 
+                  ) AS qtyRepresentatives,
+                  (SELECT COUNT(qp.id)
+                   FROM AppBundle:QuoteProduct qp
+                   WHERE qp.id IN (
+                    SELECT qs.id
+                    FROM AppBundle:QuoteSupplier qs
+                    WHERE qs.representative IN (
+                      SELECT r2.id
+                      FROM AppBundle:Representative r2
+                      WHERE r2.supplier IN (
+                        SELECT s3.id 
+                        FROM AppBundle:Supplier s3
+                        WHERE s3.cnpj = s.cnpj 
+                        ) 
+                      )
+                    ) 
+                  ) AS qtyQuotes
+                  FROM AppBundle:Supplier s
+                  WHERE s.deleted = 0 
+                  AND s.cnpj = (
+                    SELECT s4.cnpj
+                    FROM AppBundle:Supplier s4
+                    WHERE s4.id = :id
+                  )
+                  GROUP BY s.cnpj
+                  ORDER BY s.createdAt ASC'
+            )
+            ->setParameters(array('id' => $id))
+            ->getResult();
+    }
+
     public function countSuppliersByDate()
     {
         return $this->getEntityManager()
