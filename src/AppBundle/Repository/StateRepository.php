@@ -35,7 +35,7 @@ class StateRepository extends \Doctrine\ORM\EntityRepository
                 'SELECT s.name, 
                     (SELECT COUNT(r.id)
                       FROM AppBundle:Retailer r
-                      WHERE r.state = s.id AND r.deleted = 0
+                      WHERE r.state = s.id AND r.deleted = 0 AND r.verified = 1
                     ) AS y
                   FROM AppBundle:State s
                   GROUP BY s.id HAVING y > 0'

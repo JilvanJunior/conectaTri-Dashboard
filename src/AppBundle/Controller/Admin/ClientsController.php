@@ -124,14 +124,18 @@ class ClientsController extends Controller
         $clients = $em->getRepository('AppBundle:Retailer')->countClientByDate();
         $actives = $em->getRepository('AppBundle:ActiveRetailer')->getQuantityAndDate();
 
-        $clients[0]['total'] = $clients[0]['clients'];
-        for($i = 1; count($clients) > $i; $i++){
-            $clients[$i]['total'] = $clients[$i-1]['total'] + $clients[$i]['clients'];
-        }
-
         $res = [];
-        $res['clients'] = $clients;
-        $res['actives'] = $actives;
+        $res['clients'] = '';
+        $res['actives'] = '';
+        if($clients != null) {
+            $clients[0]['total'] = $clients[0]['clients'];
+            for($i = 1; count($clients) > $i; $i++){
+                $clients[$i]['total'] = $clients[$i-1]['total'] + $clients[$i]['clients'];
+            }
+
+            $res['clients'] = $clients;
+            $res['actives'] = $actives;
+        }
 
         echo json_encode($res);
         exit();

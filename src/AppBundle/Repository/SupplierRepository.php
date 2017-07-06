@@ -67,7 +67,7 @@ class SupplierRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT s.id, s.name, 
+                'SELECT s.id, s.cnpj, s.name, 
                   (SELECT COUNT(r.id)
                     FROM AppBundle:Representative r
                     WHERE r.supplier IN (
@@ -105,7 +105,7 @@ class SupplierRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT s.name, 
+                'SELECT s.name, s.cnpj, 
                   (SELECT COUNT(qp.id)
                    FROM AppBundle:QuoteProduct qp
                    WHERE qp.id IN (
