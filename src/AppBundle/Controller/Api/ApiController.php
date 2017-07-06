@@ -847,9 +847,7 @@ class ApiController extends FOSRestController {
         $hasFailed = false;
         $total = 0;
         foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
-            $this->get('logger')->crit("Email: ".$quoteSupplier->getRepresentative()->getEmail());
             if (!$quoteSupplier->isDeleted() && \Swift_Validate::email($quoteSupplier->getRepresentative()->getEmail())) {
-                $this->get('logger')->crit("Valid: ".$quoteSupplier->getRepresentative()->getEmail());
                 $msg->setTo([$quoteSupplier->getRepresentative()->getEmail() => $quoteSupplier->getRepresentative()->getName()]);
                 if (!$mailer->send($msg)) {
                     $hasFailed = true;
