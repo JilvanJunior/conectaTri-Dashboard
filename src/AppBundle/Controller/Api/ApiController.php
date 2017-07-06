@@ -843,14 +843,12 @@ class ApiController extends FOSRestController {
             "utf-8"
         );
         $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
-        $to = [];
         $failed = "<ul>";
         $hasFailed = false;
         $total = 0;
         foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
             if (!$quoteSupplier->isDeleted() && \Swift_Validate::email($quoteSupplier->getRepresentative()->getEmail())) {
-                $to[$quoteSupplier->getRepresentative()->getEmail()] = $quoteSupplier->getRepresentative()->getName();
-                $msg->setTo($to);
+                $msg->setTo([$quoteSupplier->getRepresentative()->getEmail() => $quoteSupplier->getRepresentative()->getName()]);
                 if (!$mailer->send($msg)) {
                     $hasFailed = true;
                     $failed .= "<li>".$quoteSupplier->getRepresentative()->getName()." &lt;".$quoteSupplier->getRepresentative()->getEmail()."&gt;</li>";
