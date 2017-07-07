@@ -13,9 +13,11 @@ class SuppliersController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('retailer/suppliers/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
+
+        return $this->render('Retailer/suppliers/index.html.twig', [
+            'suppliers' => $suppliers,
         ]);
     }
 
@@ -25,7 +27,7 @@ class SuppliersController extends Controller
     public function addSupplierAction(Request $request)
     {
         // replace this example code with whatever you need
-        return $this->render('retailer/suppliers/addSuppliers.html.twig', [
+        return $this->render('Retailer/suppliers/addSuppliers.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         ]);
     }
