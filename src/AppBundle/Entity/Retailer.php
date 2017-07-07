@@ -190,7 +190,7 @@ class Retailer implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        return $this->roles;
+        return array($this->roles);
     }
 
     public function setRoles($roles)
