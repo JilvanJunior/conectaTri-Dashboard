@@ -13,9 +13,11 @@ class ListsController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $listings = $this->getDoctrine()->getRepository('AppBundle:Listing')->findBy(['retailer' => $user, 'deleted' => false]);
+
         return $this->render('Retailer/lists/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'listings' => $listings,
         ]);
     }
 
