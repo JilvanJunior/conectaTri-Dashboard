@@ -73,4 +73,103 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    public function countRemote()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT COUNT(q.id) AS quotes, q.createdAt, YEAR(q.createdAt) AS y,
+                  MONTH(q.createdAt) AS m, DAY(q.createdAt) as d
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.type = 1
+                  GROUP BY y, m, d
+                  ORDER BY q.createdAt ASC'
+            )
+            ->getResult();
+    }
+
+    public function countPresential()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT COUNT(q.id) AS quotes, q.createdAt, YEAR(q.createdAt) AS y,
+                  MONTH(q.createdAt) AS m, DAY(q.createdAt) as d
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.type = 2
+                  GROUP BY y, m, d
+                  ORDER BY q.createdAt ASC'
+            )
+            ->getResult();
+    }
+
+    public function findBySupplier($id)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.id IN (
+                    SELECT DISTINCT(qp.quote)
+                    FROM AppBundle:QuoteProduct qp
+                    WHERE qp.deleted = 0  
+                    AND qp.product IN (
+                      SELECT IDENTITY(qs.quoteProduct)
+                      FROM AppBundle:QuoteSupplier qs
+                      WHERE qs.deleted = 0 
+                      AND qs.representative IN (
+                        SELECT r.id
+                        FROM AppBundle:Representative r
+                        WHERE r.deleted = 0
+                        AND r.supplier IN (
+                          SELECT s.id
+                          FROM AppBundle:Supplier s
+                          WHERE s.deleted = 0
+                          AND s.cnpj = (
+                            SELECT s2.cnpj
+                            FROM AppBundle:Supplier s2
+                            WHERE s2.id = :id
+                          )
+                        )
+                      )
+                    )
+                  )'
+            )
+            ->setParameters(array('id' => $id))
+            ->getResult();
+    }
+
+    public function findByProduct($id)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.id IN (
+                    SELECT IDENTITY(qp.quote)
+                    FROM AppBundle:QuoteProduct qp
+                    WHERE qp.product = :id
+                  )'
+            )
+            ->setParameters(array('id' => $id))
+            ->getResult();
+    }
+
+    public function findByDate($date)
+    {
+        $date = explode('-', $date);
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND YEAR(q.createdAt) = :y
+                  AND MONTH(q.createdAt) = :m
+                  AND DAY(q.createdAt) = :d'
+            )
+            ->setParameters(array('y' => $date[0], 'm' => $date[1], 'd' => $date[2]))
+            ->getResult();
+    }
 }

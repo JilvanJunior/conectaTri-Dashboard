@@ -16,7 +16,8 @@ class ActiveRetailerRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT a.quantity, a.createdAt 
+                'SELECT a.quantity, a.createdAt, YEAR(a.createdAt) AS y,
+                  MONTH(a.createdAt) AS m, DAY(a.createdAt) AS d
                   FROM AppBundle:ActiveRetailer a
                   ORDER BY a.createdAt ASC'
             )

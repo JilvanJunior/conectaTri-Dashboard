@@ -68,10 +68,8 @@
                                                         <th> Código </th>
                                                         <th> Nome do Produto </th>
                                                         <th> Fabricante </th>
-                                                        <th> Únidade </th>
-                                                        <th> Peso </th>
-                                                        <th> Menor Preço</th>
-                                                        <th>Fornecedor</th>
+                                                        <th> Quantidade / Unidade </th>
+                                                        <th> Menor Preço </th>
                                                         <th> </th>
                                                     </tr>
                                                     </thead>
@@ -80,27 +78,24 @@
                                                         <th> Código </th>
                                                         <th> Nome do Produto </th>
                                                         <th> Fabricante </th>
-                                                        <th> Únidade </th>
-                                                        <th> Peso </th>
-                                                        <th> Menor Preço</th>
-                                                        <th>Fornecedor</th>
+                                                        <th> Quantidade / Unidade </th>
+                                                        <th> Menor Preço </th>
                                                         <th> </th>
                                                     </tr>
                                                     </tfoot>
                                                     <tbody>
                                                     {% for product in products %}
                                                         <tr>
-                                                            <td>{{ product.0.id }}</td>
-                                                            <td>{{ product.0.name }}</td>
-                                                            <td>{{ product.0.brand }}</td>
-                                                            <td>{{ product.0.unit }}</td>
-                                                            <td>{{ product.0.quantity }}</td>
+                                                            <td>{{ product.id }}</td>
+                                                            <td>{{ product.name }}</td>
+                                                            <td>{{ product.brand }}</td>
+                                                            <td>{{ product.quantity }} {{ product.unit }}</td>
                                                             <td>{{ product.minPrice }}</td>
                                                             <td>
-                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                {#<a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-eye"></i> Ver
-                                                                </a>
-                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                </a>#}
+                                                                <a href="{{ path('admin_pricelist_product', {'id': product.id}) }}" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-line-chart"> Cotações</i>
                                                                 </a>
                                                             </td>

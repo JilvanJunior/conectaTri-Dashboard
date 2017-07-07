@@ -19,10 +19,13 @@ class DashboardController extends Controller
         $qtyRetailer = ($activeRetailers == null ? 0 : end($activeRetailers)->getQuantity());
         $activeQuotes = $em->getRepository('AppBundle:Quote')->countActives();
 
+        $topSuppliers = $em->getRepository('AppBundle:Supplier')->findTopSuppliers();
+
         return $this->render('Admin/dashboard/index.html.twig', [
             'qtySuppliers' => count($suppliers),
             'qtyRetailer' => $qtyRetailer,
-            'qtyQuotes' => $activeQuotes
+            'qtyQuotes' => $activeQuotes,
+            'topSuppliers' => $topSuppliers,
         ]);
     }
 
@@ -32,7 +35,7 @@ class DashboardController extends Controller
     public function remotesQuotesDataAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $quotes = $em->getRepository('AppBundle:Quote')->findBy(['type' => 1, 'deleted' => false]);
+        $quotes = $em->getRepository('AppBundle:Quote')->countRemote();
 
         echo json_encode($quotes);
         exit();
@@ -44,7 +47,7 @@ class DashboardController extends Controller
     public function presentialQuotesDataAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $quotes = $em->getRepository('AppBundle:Quote')->findBy(['type' => 2, 'deleted' => false]);
+        $quotes = $em->getRepository('AppBundle:Quote')->countPresential();
 
         echo json_encode($quotes);
         exit();

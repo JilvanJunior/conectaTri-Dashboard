@@ -25,6 +25,20 @@ class SuppliersController extends Controller
     }
 
     /**
+     * @Route("/administrador/fornecedor/{id}", name="admin_fornecedor")
+     * @param Request $request
+     * @param $id
+     * @return
+     */
+    public function supplierAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->groupByCnpjAndId($id);
+
+        return $this->render('Admin/suppliers/index.html.twig', ['suppliers' => $suppliers]);
+    }
+
+    /**
      * @Route("/administrador/fornecedores/cotacoesXpedidos", name="admin_suppliers_scatter_pricelistXorder")
      * @param Request $request
      * @return
@@ -35,6 +49,19 @@ class SuppliersController extends Controller
         $suppliers = $em->getRepository('AppBundle:Supplier')->groupByCnpj();
 
         return $this->render('Admin/suppliers/charts/chart_scatter_pricelistXorder.html.twig', ['suppliers' => $suppliers]);
+    }
+
+    /**
+     * @Route("/administrador/fornecedores/cotacoesXpedidos/data", name="admin_suppliers_scatter_pricelistXorder_data")
+     * @param Request $request
+     */
+    public function chart1DataAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $topSuppliers = $em->getRepository('AppBundle:Supplier')->findSuppliersQuotesAndOrders();
+
+        echo json_encode($topSuppliers);
+        exit();
     }
 
     /**

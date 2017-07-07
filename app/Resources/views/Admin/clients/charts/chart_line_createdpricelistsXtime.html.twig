@@ -112,10 +112,10 @@
                                                             <td></td>
                                                             <td>{{ client.createdAt|date('d/m/Y') }}</td>
                                                             <td>
-                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                {#<a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-eye"></i> Ver
-                                                                </a>
-                                                                <a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                </a>#}
+                                                                <a href="{{ path('admin_pricelist_client', {'id': client.id}) }}" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-line-chart"> Cotações</i>
                                                                 </a>
                                                             </td>
@@ -168,13 +168,13 @@
                 console.log(data);
                 $.each(data['clients'], function (index, value) {
                     var total = parseInt(value['total']);
-                    var date = new Date(value['createdAt']['date']);
+                    var date = new Date(value['y'], value['m'], value['d'], -3);
                     count.push([date.getTime(), total]);
                 });
 
                 $.each(data['actives'], function (index, value) {
                     var qty = parseInt(value['quantity']);
-                    var date = new Date(value['createdAt']['date']);
+                    var date = new Date(value['y'], value['m'], value['d'], -3);
                     active.push([date.getTime(), qty]);
                 });
 
