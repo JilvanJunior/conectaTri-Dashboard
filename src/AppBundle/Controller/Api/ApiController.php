@@ -773,8 +773,7 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
-            ->where("q.expiresAt < :date and q.deleted = FALSE and q.retailer = :retailer")
-            ->orWhere("q.closed = TRUE and q.retailer = :retailer and q.deleted = FALSE")
+            ->where("(q.expiresAt < :date and q.deleted = FALSE and q.retailer = :retailer) or (q.closed = TRUE and q.retailer = :retailer and q.deleted = FALSE)")
             ->setParameter("date", new \DateTime("15 days ago"))
             ->setParameter("retailer", $dbToken->getRetailer())
             ->getQuery()->getResult();
