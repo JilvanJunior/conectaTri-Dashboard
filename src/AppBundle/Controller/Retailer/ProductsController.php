@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Retailer;
 
+use AppBundle\Entity\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +11,8 @@ class ProductsController extends Controller
 {
     /**
      * @Route("/varejista/produtos", name="produtos")
+     * @param Request $request
+     * @return
      */
     public function indexAction(Request $request)
     {
@@ -23,12 +26,33 @@ class ProductsController extends Controller
 
     /**
      * @Route("/varejista/listas/novoproduto", name="novoproduto")
+     * @param Request $request
+     * @return
      */
     public function addProductAction(Request $request)
     {
-        // replace this example code with whatever you need
+
+        if($request->getMethod() == "POST"){
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+
+            $em = $this->getDoctrine()->getManager();
+
+            $product = new Product();
+            $product->setEan('');
+            $product->setName($request->get('name'));
+            $product->setBrand($request->get('brand'));
+            $product->setQuantity($request->get('quantity'));
+            $product->setUnit($request->get('unit'));
+            $product->setType($request->get('type'));
+            $product->setFullDescription($request->get('full-description'));
+            $product->setRetailer($user);
+
+            $em->persist($product);
+
+            $em->flush();
+        }
+
         return $this->render('Retailer/products/addProducts.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         ]);
     }
 }

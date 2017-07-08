@@ -126,6 +126,25 @@ class Product
     }
 
     /**
+     * @return Retailer
+     */
+    public function getRetailer()
+    {
+        return $this->retailer;
+    }
+
+    /**
+     * @param Retailer $retailer
+     * @return Product
+     */
+    public function setRetailer($retailer)
+    {
+        $this->retailer = $retailer;
+
+        return $this;
+    }
+
+    /**
      * Set ean
      *
      * @param string $ean
