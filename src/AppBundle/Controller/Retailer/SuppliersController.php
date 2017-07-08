@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Retailer;
 
+use AppBundle\Entity\Representative;
 use AppBundle\Entity\Supplier;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -25,7 +26,7 @@ class SuppliersController extends Controller
     }
 
     /**
-     * @Route("/varejista/novofornecedor", name="novofornecedor")
+     * @Route("/varejista/novo-fornecedor", name="novofornecedor")
      * @param Request $request
      * @return
      */
@@ -51,6 +52,38 @@ class SuppliersController extends Controller
 
         return $this->render('Retailer/suppliers/addSuppliers.html.twig', [
             'states' => $states,
+        ]);
+    }
+
+    /**
+     * @Route("/varejista/novo-representante", name="novorepresentante")
+     * @param Request $request
+     * @return
+     */
+    public function addRepresentativeAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user]);
+
+        if($request->getMethod() == "POST"){
+
+            $supplier = $em->getRepository('AppBundle:Supplier')->findOneById($request->get('supplier'));
+
+            $representative = new Representative();
+            $representative->setName($request->get('name'));
+            $representative->setEmail($request->get('email'));
+            $representative->setPhone($request->get('phone'));
+            $representative->setSupplier($supplier);
+            $representative->setRetailer($user);
+
+            $em->persist($representative);
+
+            $em->flush();
+        }
+
+        return $this->render('Retailer/suppliers/addRepresentatives.html.twig', [
+            'suppliers' => $suppliers,
         ]);
     }
 }
