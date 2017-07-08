@@ -13,9 +13,11 @@ class ProductsController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $products = $user->getProducts();
+
         return $this->render('Retailer/products/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'products' => $products,
         ]);
     }
 
