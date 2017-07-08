@@ -26,6 +26,15 @@ class Product
     private $id;
 
     /**
+     * @var Retailer
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer", inversedBy="products")
+     * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
+     * @Serializer\Exclude()
+     */
+    private $retailer;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ean", type="string", length=255)
