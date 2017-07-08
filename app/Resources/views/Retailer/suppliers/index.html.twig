@@ -97,6 +97,18 @@
                                                                         <i class="fa fa-edit"></i> Editar </a>
                                                                 </td>
                                                             </tr>
+                                                        {% else %}
+                                                            <tr>
+                                                                <td> {{ supplier.name }} </td>
+                                                                <td>  </td>
+                                                                <td class="numeric">  </td>
+                                                                <td class="numeric"> {{ supplier.cnpj }} </td>
+                                                                <td class="numeric">  </td>
+                                                                <td>
+                                                                    <a href="#" class="btn btn-outline btn-circle btn-sm purple">
+                                                                        <i class="fa fa-edit"></i> Editar </a>
+                                                                </td>
+                                                            </tr>
                                                         {% endfor %}
                                                     {% endfor %}
                                                     </tbody>
