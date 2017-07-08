@@ -58,16 +58,16 @@
                                                 <tr>
                                                     <th width="20%"> Nome </th>
                                                     <th> Descrição </th>
-                                                    <th> Departamento </th>
+                                                    <th> Tipo </th>
                                                     <th> Ação </th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 {% for listing in listings %}
                                                     <tr>
-                                                        <td>{{ listings.name }}</td>
-                                                        <td>{{ listings.description }}</td>
-                                                        <td>{{ listings.department }}</td>
+                                                        <td>{{ listing.name }}</td>
+                                                        <td>{{ listing.description }}</td>
+                                                        <td>{{ types[listing.type] }}</td>
                                                         <td></td>
                                                     </tr>
                                                 {% endfor %}
