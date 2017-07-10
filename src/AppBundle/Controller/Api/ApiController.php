@@ -1283,7 +1283,7 @@ class ApiController extends FOSRestController {
         }
         $result = $mailer->send($msg);
         if ($result > 0) {
-            return View::create(new ApiError("E-mail enviado para\n".preg_replace('(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $retailer->getEmail())), Response::HTTP_OK);
+            return View::create(new ApiError("E-mail enviado para\n".preg_replace('/(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)/', '$1***$2@$3$5***$4', $retailer->getEmail())), Response::HTTP_OK);
         }
         return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de recuperação"), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
