@@ -1250,7 +1250,7 @@ class ApiController extends FOSRestController {
         $results = $query->where("p.name like :product")
             ->andWhere("p.deleted = FALSE")
             ->setParameter("product", "%$search->query%")
-            ->distinct(true)
+            ->groupBy("p.name")
             ->getQuery()->getResult();
         return View::create($results, Response::HTTP_OK);
     }
