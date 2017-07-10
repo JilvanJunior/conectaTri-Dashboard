@@ -162,7 +162,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $products = $d->getRepository("AppBundle:Product")->findAll();
+        $products = $d->getRepository("AppBundle:Product")->findBy(["retailer" => $dbToken->getRetailer()]);
         return View::create($products, Response::HTTP_OK);
     }
 
@@ -183,7 +183,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $product = $d->getRepository("AppBundle:Product")->find($id);
+        $product = $d->getRepository("AppBundle:Product")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
         if (is_null($product)) {
             return View::create(new ApiError("Este produto não está cadastrado"), Response::HTTP_NOT_FOUND);
         }
@@ -218,7 +218,8 @@ class ApiController extends FOSRestController {
             ->setUnit($product->unit)
             ->setCreatedAt(new \DateTime())
             ->setUpdatedAt(new \DateTime())
-            ->setDeleted(false);
+            ->setDeleted(false)
+            ->setRetailer($dbToken->getRetailer());
         $em->persist($dbProduct);
         $em->flush();
 
@@ -242,7 +243,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
 
         $product = json_decode($request->getContent());
-        $dbProduct = $d->getRepository("AppBundle:Product")->find($id);
+        $dbProduct = $d->getRepository("AppBundle:Product")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
         if (is_null($dbProduct)) {
             return View::create(new ApiError("Este produto não está cadastrado"), Response::HTTP_NOT_FOUND);
         }
@@ -278,7 +279,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $product = $d->getRepository("AppBundle:Product")->find($id);
+        $product = $d->getRepository("AppBundle:Product")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
         if (is_null($product)) {
             return View::create(new ApiError("Este produto não está cadastrado"), Response::HTTP_NOT_FOUND);
         }
@@ -1245,7 +1246,9 @@ class ApiController extends FOSRestController {
         $search = json_decode($request->getContent());
         $results = $d->getRepository("AppBundle:Listing")->createQueryBuilder("l")
             ->where("l.name like :listing")
+            ->andWhere("l.retailer = :retailer")
             ->setParameter("listing", "%$search->query%")
+            ->setParameter("retailer", $dbToken->getRetailer())
             ->getQuery()->getResult();
         return View::create($results, Response::HTTP_OK);
     }
