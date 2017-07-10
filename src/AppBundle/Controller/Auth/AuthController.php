@@ -20,6 +20,9 @@ class AuthController extends Controller
         if(!$this->_isLoggedIn())
             return $this->redirectToRoute('login');
 
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER'))
+            return $this->redirectToRoute('dashboard', array('id' => $request->get('id')));
+
         if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->redirectToRoute('admin_dashboard');
 

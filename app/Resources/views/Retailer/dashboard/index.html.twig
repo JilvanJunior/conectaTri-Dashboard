@@ -10,8 +10,6 @@
     <link href="{{ asset('assets/global/plugins/jqvmap/jqvmap/jqvmap.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
-
-
 {% block page %}
     <div class="page-wrapper-row full-height">
         <div class="page-wrapper-middle">
@@ -56,7 +54,7 @@
                                                 <div class="number"> R$168.492,54 </div>
                                                 <div class="desc"> Pedidos </div>
                                             </div>
-                                            <a class="more" href="javascript:;"> Ver Mais
+                                            <a class="more" href="#"> Ver Mais
                                                 <i class="m-icon-swapright m-icon-white"></i>
                                             </a>
                                         </div>
@@ -67,10 +65,10 @@
                                                 <i class="fa fa-shopping-cart"></i>
                                             </div>
                                             <div class="details">
-                                                <div class="number"> 1.127.390 </div>
+                                                <div class="number"> {{ quotes|length }} </div>
                                                 <div class="desc"> Cotações </div>
                                             </div>
-                                            <a class="more" href="javascript:;"> Ver Mais
+                                            <a class="more" href="#"> Ver Mais
                                                 <i class="m-icon-swapright m-icon-white"></i>
                                             </a>
                                         </div>
@@ -84,14 +82,14 @@
                                                 <div class="number"> R$670,54 </div>
                                                 <div class="desc"> Pedido Médio </div>
                                             </div>
-                                            <a class="more" href="javascript:;"> Ver Mais
+                                            <a class="more" href="#"> Ver Mais
                                                 <i class="m-icon-swapright m-icon-white"></i>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    {#<div class="col-md-6">
                                         <!-- Begin: life time stats -->
                                         <div class="portlet light ">
                                             <div class="portlet-title">
@@ -102,36 +100,36 @@
                                                 </div>
                                                 <div class="actions">
                                                     <div class="btn-group">
-                                                        <a class="btn blue btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Ações
+                                                        <a class="btn blue btn-circle btn-sm" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Ações
                                                             <i class="fa fa-angle-down"></i>
                                                         </a>
                                                         <ul class="dropdown-menu pull-right">
                                                             <li>
-                                                                <a href="javascript:;"> All Project </a>
+                                                                <a href="#"> All Project </a>
                                                             </li>
                                                             <li class="divider"> </li>
                                                             <li>
-                                                                <a href="javascript:;"> AirAsia </a>
+                                                                <a href="#"> AirAsia </a>
                                                             </li>
                                                             <li>
-                                                                <a href="javascript:;"> Cruise </a>
+                                                                <a href="#"> Cruise </a>
                                                             </li>
                                                             <li>
-                                                                <a href="javascript:;"> HSBC </a>
+                                                                <a href="#"> HSBC </a>
                                                             </li>
                                                             <li class="divider"> </li>
                                                             <li>
-                                                                <a href="javascript:;"> Pending
+                                                                <a href="#"> Pending
                                                                     <span class="badge badge-danger"> 4 </span>
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a href="javascript:;"> Completed
+                                                                <a href="#"> Completed
                                                                     <span class="badge badge-success"> 12 </span>
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a href="javascript:;"> Overdue
+                                                                <a href="#"> Overdue
                                                                     <span class="badge badge-warning"> 9 </span>
                                                                 </a>
                                                             </li>
@@ -152,7 +150,7 @@
                                                             <a href="#overview_3" data-toggle="tab"> Opção 3 </a>
                                                         </li>
                                                         <li class="dropdown">
-                                                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"> Orders
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Orders
                                                                 <i class="fa fa-angle-down"></i>
                                                             </a>
                                                             <ul class="dropdown-menu pull-right">
@@ -191,67 +189,67 @@
                                                                     <tbody>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Apple iPhone 4s - 16GB - Black </a>
+                                                                            <a href="#"> Apple iPhone 4s - 16GB - Black </a>
                                                                         </td>
                                                                         <td> $625.50 </td>
                                                                         <td> 809 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Samsung Galaxy S III SGH-I747 - 16GB </a>
+                                                                            <a href="#"> Samsung Galaxy S III SGH-I747 - 16GB </a>
                                                                         </td>
                                                                         <td> $915.50 </td>
                                                                         <td> 6709 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Motorola Droid 4 XT894 - 16GB - Black </a>
+                                                                            <a href="#"> Motorola Droid 4 XT894 - 16GB - Black </a>
                                                                         </td>
                                                                         <td> $878.50 </td>
                                                                         <td> 784 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Samsung Galaxy Note 4 </a>
+                                                                            <a href="#"> Samsung Galaxy Note 4 </a>
                                                                         </td>
                                                                         <td> $925.50 </td>
                                                                         <td> 21245 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Regatta Luca 3 in 1 Jacket </a>
+                                                                            <a href="#"> Regatta Luca 3 in 1 Jacket </a>
                                                                         </td>
                                                                         <td> $25.50 </td>
                                                                         <td> 1245 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Samsung Galaxy Note 3 </a>
+                                                                            <a href="#"> Samsung Galaxy Note 3 </a>
                                                                         </td>
                                                                         <td> $925.50 </td>
                                                                         <td> 21245 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
@@ -273,67 +271,67 @@
                                                                     <tbody>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Metronic - Responsive Admin + Frontend Theme </a>
+                                                                            <a href="#"> Metronic - Responsive Admin + Frontend Theme </a>
                                                                         </td>
                                                                         <td> $20.00 </td>
                                                                         <td> 11190 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Regatta Luca 3 in 1 Jacket </a>
+                                                                            <a href="#"> Regatta Luca 3 in 1 Jacket </a>
                                                                         </td>
                                                                         <td> $25.50 </td>
                                                                         <td> 1245 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Motorola Droid 4 XT894 - 16GB - Black </a>
+                                                                            <a href="#"> Motorola Droid 4 XT894 - 16GB - Black </a>
                                                                         </td>
                                                                         <td> $878.50 </td>
                                                                         <td> 784 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Apple iPhone 4s - 16GB - Black </a>
+                                                                            <a href="#"> Apple iPhone 4s - 16GB - Black </a>
                                                                         </td>
                                                                         <td> $625.50 </td>
                                                                         <td> 809 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Samsung Galaxy S III SGH-I747 - 16GB </a>
+                                                                            <a href="#"> Samsung Galaxy S III SGH-I747 - 16GB </a>
                                                                         </td>
                                                                         <td> $915.50 </td>
                                                                         <td> 6709 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Motorola Droid 4 XT894 - 16GB - Black </a>
+                                                                            <a href="#"> Motorola Droid 4 XT894 - 16GB - Black </a>
                                                                         </td>
                                                                         <td> $878.50 </td>
                                                                         <td> 784 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
@@ -355,67 +353,67 @@
                                                                     <tbody>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> David Wilson </a>
+                                                                            <a href="#"> David Wilson </a>
                                                                         </td>
                                                                         <td> 3 </td>
                                                                         <td> $625.50 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Amanda Nilson </a>
+                                                                            <a href="#"> Amanda Nilson </a>
                                                                         </td>
                                                                         <td> 4 </td>
                                                                         <td> $12625.50 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Paul Strong </a>
+                                                                            <a href="#"> Paul Strong </a>
                                                                         </td>
                                                                         <td> 1 </td>
                                                                         <td> $890.85 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Jhon Doe </a>
+                                                                            <a href="#"> Jhon Doe </a>
                                                                         </td>
                                                                         <td> 2 </td>
                                                                         <td> $125.00 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Bill Chang </a>
+                                                                            <a href="#"> Bill Chang </a>
                                                                         </td>
                                                                         <td> 45 </td>
                                                                         <td> $12,125.70 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Paul Strong </a>
+                                                                            <a href="#"> Paul Strong </a>
                                                                         </td>
                                                                         <td> 1 </td>
                                                                         <td> $890.85 </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
@@ -438,7 +436,7 @@
                                                                     <tbody>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> David Wilson </a>
+                                                                            <a href="#"> David Wilson </a>
                                                                         </td>
                                                                         <td> 3 Jan, 2013 </td>
                                                                         <td> $625.50 </td>
@@ -446,13 +444,13 @@
                                                                             <span class="label label-sm label-warning"> Pending </span>
                                                                         </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Amanda Nilson </a>
+                                                                            <a href="#"> Amanda Nilson </a>
                                                                         </td>
                                                                         <td> 13 Feb, 2013 </td>
                                                                         <td> $12625.50 </td>
@@ -460,13 +458,13 @@
                                                                             <span class="label label-sm label-warning"> Pending </span>
                                                                         </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Paul Strong </a>
+                                                                            <a href="#"> Paul Strong </a>
                                                                         </td>
                                                                         <td> 1 Jun, 2013 </td>
                                                                         <td> $890.85 </td>
@@ -474,13 +472,13 @@
                                                                             <span class="label label-sm label-success"> Success </span>
                                                                         </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Jhon Doe </a>
+                                                                            <a href="#"> Jhon Doe </a>
                                                                         </td>
                                                                         <td> 20 Mar, 2013 </td>
                                                                         <td> $125.00 </td>
@@ -488,13 +486,13 @@
                                                                             <span class="label label-sm label-success"> Success </span>
                                                                         </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Bill Chang </a>
+                                                                            <a href="#"> Bill Chang </a>
                                                                         </td>
                                                                         <td> 29 May, 2013 </td>
                                                                         <td> $12,125.70 </td>
@@ -502,13 +500,13 @@
                                                                             <span class="label label-sm label-info"> In Process </span>
                                                                         </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <a href="javascript:;"> Paul Strong </a>
+                                                                            <a href="#"> Paul Strong </a>
                                                                         </td>
                                                                         <td> 1 Jun, 2013 </td>
                                                                         <td> $890.85 </td>
@@ -516,7 +514,7 @@
                                                                             <span class="label label-sm label-success"> Success </span>
                                                                         </td>
                                                                         <td>
-                                                                            <a href="javascript:;" class="btn btn-sm btn-default">
+                                                                            <a href="#" class="btn btn-sm btn-default">
                                                                                 <i class="fa fa-search"></i> Ver </a>
                                                                         </td>
                                                                     </tr>
@@ -529,8 +527,8 @@
                                             </div>
                                         </div>
                                         <!-- End: life time stats -->
-                                    </div>
-                                    <div class="col-md-6">
+                                    </div>#}
+                                    {#<div class="col-md-6">
                                         <!-- Begin: life time stats -->
                                         <!-- BEGIN PORTLET-->
                                         <div class="portlet light ">
@@ -580,10 +578,10 @@
                                             </div>
                                         </div>
                                         <!-- End: life time stats -->
-                                    </div>
+                                    </div>#}
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6 col-sm-6">
+                                    {#<div class="col-md-6 col-sm-6">
                                         <!-- BEGIN PORTLET-->
                                         <div class="portlet light ">
                                             <div class="portlet-title tabbable-line">
@@ -647,7 +645,7 @@
                                                         <div class="scroller" style="height: 290px;" data-always-visible="1" data-rail-visible1="1">
                                                             <ul class="feeds">
                                                                 <li>
-                                                                    <a href="javascript:;">
+                                                                    <a href="#">
                                                                         <div class="col1">
                                                                             <div class="cont">
                                                                                 <div class="cont-col1">
@@ -666,7 +664,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href="javascript:;">
+                                                                    <a href="#">
                                                                         <div class="col1">
                                                                             <div class="cont">
                                                                                 <div class="cont-col1">
@@ -685,7 +683,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href="javascript:;">
+                                                                    <a href="#">
                                                                         <div class="col1">
                                                                             <div class="cont">
                                                                                 <div class="cont-col1">
@@ -704,7 +702,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href="javascript:;">
+                                                                    <a href="#">
                                                                         <div class="col1">
                                                                             <div class="cont">
                                                                                 <div class="cont-col1">
@@ -723,7 +721,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href="javascript:;">
+                                                                    <a href="#">
                                                                         <div class="col1">
                                                                             <div class="cont">
                                                                                 <div class="cont-col1">
@@ -742,7 +740,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href="javascript:;">
+                                                                    <a href="#">
                                                                         <div class="col1">
                                                                             <div class="cont">
                                                                                 <div class="cont-col1">
@@ -768,101 +766,49 @@
                                             </div>
                                         </div>
                                         <!-- END PORTLET-->
-                                    </div>
+                                    </div>#}
                                     <div class="col-md-6 col-sm-6">
                                         <div class="portlet light ">
                                             <div class="portlet-title">
                                                 <div class="caption caption-md">
                                                     <i class="icon-bar-chart font-dark hide"></i>
                                                     <span class="caption-subject font-green-steel bold uppercase">Fornecedores</span>
-                                                    <span class="caption-helper">4 pendentes</span>
+                                                    <span class="caption-helper"> </span>
                                                 </div>
-                                                <div class="inputs">
+                                                {#<div class="inputs">
                                                     <div class="portlet-input input-inline input-small ">
                                                         <div class="input-icon right">
                                                             <i class="icon-magnifier"></i>
                                                             <input type="text" class="form-control form-control-solid input-circle" placeholder="buscar..."> </div>
                                                     </div>
-                                                </div>
+                                                </div>#}
                                             </div>
                                             <div class="portlet-body">
                                                 <div class="scroller" style="height: 338px;" data-always-visible="1" data-rail-visible1="0" data-handle-color="#D7DCE2">
                                                     <div class="general-item-list">
-                                                        <div class="item">
-                                                            <div class="item-head">
-                                                                <div class="item-details">
-                                                                    <a href="" class="item-name primary-link">Varejo Martins</a>
-                                                                    <span class="item-label">1 horas atrás</span>
+                                                        {% for supplier in suppliers %}
+                                                            <div class="item">
+                                                                <div class="item-head">
+                                                                    <div class="item-details">
+                                                                        <a href="#" class="item-name primary-link">
+                                                                            {{ supplier.name }}
+                                                                        </a>
+                                                                    </div>
                                                                 </div>
-                                                                <span class="item-status">
-                                                                            <span class="badge badge-empty badge-success"> </span> Concluído</span>
+                                                                {% for representative in supplier.representatives %}
+                                                                    <div class="item-body">
+                                                                        {{ representative.name }}<br>
+                                                                        {{ representative.email }}<br>
+                                                                        {{ representative.phone }}
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="item-body">
+                                                                        {{ supplier.email }}<br>
+                                                                        {{ supplier.phone }}
+                                                                    </div>
+                                                                {% endfor %}
                                                             </div>
-                                                            <div class="item-body">
-                                                                Marcelo Teixeira<br>
-                                                                marcelo@martins.com.br<br>
-                                                                (11) 5933-5317
-                                                            </div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="item-head">
-                                                                <div class="item-details">
-                                                                    <a href="" class="item-name primary-link">Varejo Martins</a>
-                                                                    <span class="item-label">3 horas atrás</span>
-                                                                </div>
-                                                                <span class="item-status">
-                                                                            <span class="badge badge-empty badge-warning"> </span> Pendente</span>
-                                                            </div>
-                                                            <div class="item-body">
-                                                                Marcelo Teixeira<br>
-                                                                marcelo@martins.com.br<br>
-                                                                (11) 5933-5317
-                                                            </div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="item-head">
-                                                                <div class="item-details">
-                                                                    <a href="" class="item-name primary-link">Varejo Martins</a>
-                                                                    <span class="item-label">3 horas atrás</span>
-                                                                </div>
-                                                                <span class="item-status">
-                                                                            <span class="badge badge-empty badge-warning"> </span> Pendente</span>
-                                                            </div>
-                                                            <div class="item-body">
-                                                                Marcelo Teixeira<br>
-                                                                marcelo@martins.com.br<br>
-                                                                (11) 5933-5317
-                                                            </div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="item-head">
-                                                                <div class="item-details">
-                                                                    <a href="" class="item-name primary-link">Varejo Martins</a>
-                                                                    <span class="item-label">3 horas atrás</span>
-                                                                </div>
-                                                                <span class="item-status">
-                                                                            <span class="badge badge-empty badge-warning"> </span> Pendente</span>
-                                                            </div>
-                                                            <div class="item-body">
-                                                                Marcelo Teixeira<br>
-                                                                marcelo@martins.com.br<br>
-                                                                (11) 5933-5317
-                                                            </div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <div class="item-head">
-                                                                <div class="item-details">
-                                                                    <a href="" class="item-name primary-link">Varejo Martins</a>
-                                                                    <span class="item-label">3 horas atrás</span>
-                                                                </div>
-                                                                <span class="item-status">
-                                                                            <span class="badge badge-empty badge-warning"> </span> Pendente</span>
-                                                            </div>
-                                                            <div class="item-body">
-                                                                Marcelo Teixeira<br>
-                                                                marcelo@martins.com.br<br>
-                                                                (11) 5933-5317
-                                                            </div>
-                                                        </div>
+                                                        {% endfor %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -880,42 +826,42 @@
         </div>
         <!-- END CONTENT -->
         <!-- BEGIN QUICK SIDEBAR -->
-        <a href="javascript:;" class="page-quick-sidebar-toggler">
+        <a href="#" class="page-quick-sidebar-toggler">
             <i class="icon-login"></i>
         </a>
         <div class="page-quick-sidebar-wrapper" data-close-on-body-click="false">
             <div class="page-quick-sidebar">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="javascript:;" data-target="#quick_sidebar_tab_1" data-toggle="tab"> Users
+                        <a href="#" data-target="#quick_sidebar_tab_1" data-toggle="tab"> Users
                             <span class="badge badge-danger">2</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:;" data-target="#quick_sidebar_tab_2" data-toggle="tab"> Alerts
+                        <a href="#" data-target="#quick_sidebar_tab_2" data-toggle="tab"> Alerts
                             <span class="badge badge-success">7</span>
                         </a>
                     </li>
                     <li class="dropdown">
-                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"> More
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> More
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu pull-right">
                             <li>
-                                <a href="javascript:;" data-target="#quick_sidebar_tab_3" data-toggle="tab">
+                                <a href="#" data-target="#quick_sidebar_tab_3" data-toggle="tab">
                                     <i class="icon-bell"></i> Alerts </a>
                             </li>
                             <li>
-                                <a href="javascript:;" data-target="#quick_sidebar_tab_3" data-toggle="tab">
+                                <a href="#" data-target="#quick_sidebar_tab_3" data-toggle="tab">
                                     <i class="icon-info"></i> Notifications </a>
                             </li>
                             <li>
-                                <a href="javascript:;" data-target="#quick_sidebar_tab_3" data-toggle="tab">
+                                <a href="#" data-target="#quick_sidebar_tab_3" data-toggle="tab">
                                     <i class="icon-speech"></i> Activities </a>
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="javascript:;" data-target="#quick_sidebar_tab_3" data-toggle="tab">
+                                <a href="#" data-target="#quick_sidebar_tab_3" data-toggle="tab">
                                     <i class="icon-settings"></i> Settings </a>
                             </li>
                         </ul>
@@ -1026,7 +972,7 @@
                         <div class="page-quick-sidebar-item">
                             <div class="page-quick-sidebar-chat-user">
                                 <div class="page-quick-sidebar-nav">
-                                    <a href="javascript:;" class="page-quick-sidebar-back-to-list">
+                                    <a href="#" class="page-quick-sidebar-back-to-list">
                                         <i class="icon-arrow-left"></i>Back</a>
                                 </div>
                                 <div class="page-quick-sidebar-chat-user-messages">
@@ -1034,7 +980,7 @@
                                         <img class="avatar" alt="" src="{{ asset('assets/layouts/layout/img/avatar3.jpg') }}" />
                                         <div class="message">
                                             <span class="arrow"></span>
-                                            <a href="javascript:;" class="name">Bob Nilson</a>
+                                            <a href="#" class="name">Bob Nilson</a>
                                             <span class="datetime">20:15</span>
                                             <span class="body"> When could you send me the report ? </span>
                                         </div>
@@ -1043,7 +989,7 @@
                                         <img class="avatar" alt="" src="{{ asset('assets/layouts/layout/img/avatar2.jpg') }}" />
                                         <div class="message">
                                             <span class="arrow"></span>
-                                            <a href="javascript:;" class="name">Ella Wong</a>
+                                            <a href="#" class="name">Ella Wong</a>
                                             <span class="datetime">20:15</span>
                                             <span class="body"> Its almost done. I will be sending it shortly </span>
                                         </div>
@@ -1052,7 +998,7 @@
                                         <img class="avatar" alt="" src="{{ asset('assets/layouts/layout/img/avatar3.jpg') }}" />
                                         <div class="message">
                                             <span class="arrow"></span>
-                                            <a href="javascript:;" class="name">Bob Nilson</a>
+                                            <a href="#" class="name">Bob Nilson</a>
                                             <span class="datetime">20:15</span>
                                             <span class="body"> Alright. Thanks! :) </span>
                                         </div>
@@ -1061,7 +1007,7 @@
                                         <img class="avatar" alt="" src="{{ asset('assets/layouts/layout/img/avatar2.jpg') }}" />
                                         <div class="message">
                                             <span class="arrow"></span>
-                                            <a href="javascript:;" class="name">Ella Wong</a>
+                                            <a href="#" class="name">Ella Wong</a>
                                             <span class="datetime">20:16</span>
                                             <span class="body"> You are most welcome. Sorry for the delay. </span>
                                         </div>
@@ -1070,7 +1016,7 @@
                                         <img class="avatar" alt="" src="{{ asset('assets/layouts/layout/img/avatar3.jpg') }}" />
                                         <div class="message">
                                             <span class="arrow"></span>
-                                            <a href="javascript:;" class="name">Bob Nilson</a>
+                                            <a href="#" class="name">Bob Nilson</a>
                                             <span class="datetime">20:17</span>
                                             <span class="body"> No probs. Just take your time :) </span>
                                         </div>
@@ -1079,7 +1025,7 @@
                                         <img class="avatar" alt="" src="{{ asset('assets/layouts/layout/img/avatar2.jpg') }}" />
                                         <div class="message">
                                             <span class="arrow"></span>
-                                            <a href="javascript:;" class="name">Ella Wong</a>
+                                            <a href="#" class="name">Ella Wong</a>
                                             <span class="datetime">20:40</span>
                                             <span class="body"> Alright. I just emailed it to you. </span>
                                         </div>
@@ -1088,7 +1034,7 @@
                                         <img class="avatar" alt="" src="{{ asset('assets/layouts/layout/img/avatar3.jpg') }}" />
                                         <div class="message">
                                             <span class="arrow"></span>
-                                            <a href="javascript:;" class="name">Bob Nilson</a>
+                                            <a href="#" class="name">Bob Nilson</a>
                                             <span class="datetime">20:17</span>
                                             <span class="body"> Great! Thanks. Will check it right away. </span>
                                         </div>
@@ -1097,7 +1043,7 @@
                                         <img class="avatar" alt="" src="{{ asset('assets/layouts/layout/img/avatar2.jpg') }}" />
                                         <div class="message">
                                             <span class="arrow"></span>
-                                            <a href="javascript:;" class="name">Ella Wong</a>
+                                            <a href="#" class="name">Ella Wong</a>
                                             <span class="datetime">20:40</span>
                                             <span class="body"> Please let me know if you have any comment. </span>
                                         </div>
@@ -1106,7 +1052,7 @@
                                         <img class="avatar" alt="" src="{{ asset('assets/layouts/layout/img/avatar3.jpg') }}" />
                                         <div class="message">
                                             <span class="arrow"></span>
-                                            <a href="javascript:;" class="name">Bob Nilson</a>
+                                            <a href="#" class="name">Bob Nilson</a>
                                             <span class="datetime">20:17</span>
                                             <span class="body"> Sure. I will check and buzz you if anything needs to be corrected. </span>
                                         </div>
@@ -1151,7 +1097,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">
+                                    <a href="#">
                                         <div class="col1">
                                             <div class="cont">
                                                 <div class="cont-col1">
@@ -1242,7 +1188,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">
+                                    <a href="#">
                                         <div class="col1">
                                             <div class="cont">
                                                 <div class="cont-col1">
@@ -1285,7 +1231,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">
+                                    <a href="#">
                                         <div class="col1">
                                             <div class="cont">
                                                 <div class="cont-col1">
@@ -1376,7 +1322,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">
+                                    <a href="#">
                                         <div class="col1">
                                             <div class="cont">
                                                 <div class="cont-col1">

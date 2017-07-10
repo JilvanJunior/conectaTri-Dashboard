@@ -5,96 +5,89 @@
 {% block menu_list %} active {% endblock %}
 
 {% block page %}
-<div class="page-wrapper-middle">
-    <!-- BEGIN CONTAINER -->
-    <div class="page-container">
-        <!-- BEGIN CONTENT -->
-        <div class="page-content-wrapper">
-            <!-- BEGIN CONTENT BODY -->
-            <!-- BEGIN PAGE HEAD-->
-            <div class="page-head">
-                <div class="container">
-                    <!-- BEGIN PAGE TITLE -->
-                    <div class="page-title">
-                        <h1>Listas
-                            <small>tabela de listas cadastradas</small>
-                        </h1>
+    <div class="page-wrapper-middle">
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <!-- BEGIN PAGE HEAD-->
+                <div class="page-head">
+                    <div class="container">
+                        <!-- BEGIN PAGE TITLE -->
+                        <div class="page-title">
+                            <h1>Listas
+                                <small>tabela de listas cadastradas</small>
+                            </h1>
+                        </div>
+                        <!-- END PAGE TITLE -->
                     </div>
-                    <!-- END PAGE TITLE -->
                 </div>
-            </div>
-            <!-- END PAGE HEAD-->
-            <!-- BEGIN PAGE CONTENT BODY -->
-            <div class="page-content">
-                <div class="container">
-                    <!-- BEGIN PAGE BREADCRUMBS -->
-                    <ul class="page-breadcrumb breadcrumb">
-                        <li>
-                            <a href="{{ path('dashboard') }}">Home</a>
-                            <i class="fa fa-circle"></i>
-                        </li>
-                        <li>
-                            <a href="#">Listas</a>
-                            <i class="fa fa-circle"></i>
-                        </li>
-                        <li>
-                            <span>Tabela</span>
-                        </li>
-                    </ul>
-                    <!-- END PAGE BREADCRUMBS -->
-                    <!-- BEGIN PAGE CONTENT INNER -->
-                    <div class="page-content-inner">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="note note-success">
-                                    <p> Tente redimensionar a janela do seu navegador para ver as tabelas no modo responsivo. </p>
-                                </div>
-                                <!-- BEGIN SAMPLE TABLE PORTLET-->
-                                <div class="portlet box green">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="fa fa-cogs"></i>Listas</div>
-                                        <div class="tools">
-                                            <a href="javascript:;" class="collapse"> </a>
-                                            <a href="#portlet-config" data-toggle="modal" class="config"> </a>
-                                            <a href="javascript:;" class="reload"> </a>
-                                            <a href="javascript:;" class="remove"> </a>
+                <!-- END PAGE HEAD-->
+                <!-- BEGIN PAGE CONTENT BODY -->
+                <div class="page-content">
+                    <div class="container">
+                        <!-- BEGIN PAGE BREADCRUMBS -->
+                        <ul class="page-breadcrumb breadcrumb">
+                            <li>
+                                <a href="{{ path('dashboard') }}">Home</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <a href="#">Listas</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span>Tabela</span>
+                            </li>
+                        </ul>
+                        <!-- END PAGE BREADCRUMBS -->
+                        <!-- BEGIN PAGE CONTENT INNER -->
+                        <div class="page-content-inner">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!-- BEGIN SAMPLE TABLE PORTLET-->
+                                    <div class="portlet box green">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-cogs"></i>Listas</div>
+                                        </div>
+                                        <div class="portlet-body flip-scroll">
+                                            <table class="table table-bordered table-striped table-condensed flip-content">
+                                                <thead class="flip-content">
+                                                <tr>
+                                                    <th width="20%"> Nome </th>
+                                                    <th> Descrição </th>
+                                                    <th> Tipo </th>
+                                                    <th> Ação </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for listing in listings %}
+                                                    <tr>
+                                                        <td>{{ listing.name }}</td>
+                                                        <td>{{ listing.description }}</td>
+                                                        <td>{{ types[listing.type] }}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                    <div class="portlet-body flip-scroll">
-                                        <table class="table table-bordered table-striped table-condensed flip-content">
-                                            <thead class="flip-content">
-                                            <tr>
-                                                <th width="20%"> Nome </th>
-                                                <th> Descrição </th>
-                                                <th> Departamento </th>
-                                                <th> Ação </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td> Lista 1 </td>
-                                                <td> Lorem ipsum dolor sit, amet</td>
-                                                <td> Alimentos Perecíveis </td>
-                                                <td> </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <!-- END SAMPLE TABLE PORTLET-->
                                 </div>
-                                <!-- END SAMPLE TABLE PORTLET-->
                             </div>
                         </div>
+                        <!-- END PAGE CONTENT INNER -->
                     </div>
-                    <!-- END PAGE CONTENT INNER -->
                 </div>
+                <!-- END PAGE CONTENT BODY -->
+                <!-- END CONTENT BODY -->
             </div>
-            <!-- END PAGE CONTENT BODY -->
-            <!-- END CONTENT BODY -->
+            <!-- END CONTENT -->
         </div>
-        <!-- END CONTENT -->
+        <!-- END CONTAINER -->
     </div>
-    <!-- END CONTAINER -->
-</div>
 
 {% endblock %}

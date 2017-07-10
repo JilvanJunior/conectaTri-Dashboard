@@ -60,7 +60,7 @@ class Supplier
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      * @Serializer\Exclude()
      */
     private $updatedAt;

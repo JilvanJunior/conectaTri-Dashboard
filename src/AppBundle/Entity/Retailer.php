@@ -57,6 +57,14 @@ class Retailer implements UserInterface, \Serializable
     private $listings;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="retailer")
+     * @Serializer\Exclude()
+     */
+    private $products;
+
+    /**
      * @var string
      *
      * @ORM\OneToMany(targetEntity="Quote", mappedBy="retailer")
@@ -184,13 +192,14 @@ class Retailer implements UserInterface, \Serializable
         $this->representatives = new ArrayCollection();
         $this->listings = new ArrayCollection();
         $this->quotes = new ArrayCollection();
+        $this->products = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
     }
 
     public function getRoles()
     {
-        return $this->roles;
+        return array($this->roles);
     }
 
     public function setRoles($roles)
@@ -634,6 +643,40 @@ class Retailer implements UserInterface, \Serializable
         return $this->listings;
     }
 
+    /**
+     * Add product
+     *
+     * @param Product $product
+     *
+     * @return Retailer
+     */
+    public function addProduct(Product $product)
+    {
+        $this->products[] = $product;
+
+        return $this;
+    }
+
+    /**
+     * Remove product
+     *
+     * @param Product $product
+     */
+    public function removeProduct(Product $product)
+    {
+        $this->products->removeElement($product);
+    }
+
+    /**
+     * Get products
+     *
+     * @return ArrayCollection
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+    
     /**
      * @return bool
      */
