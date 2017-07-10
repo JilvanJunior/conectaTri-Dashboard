@@ -1229,6 +1229,33 @@ class ApiController extends FOSRestController {
     }
 
     /**
+     * @Rest\Patch("/api/product/all")
+     */
+    public function searchAllProducts(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $search = json_decode($request->getContent());
+        $query = $d->getRepository("AppBundle:Product")->createQueryBuilder("p");
+        $results = $query->where("p.name like :product")
+            ->andWhere("p.deleted = FALSE")
+            ->setParameter("product", "%$search->query%")
+            ->distinct(true)
+            ->getQuery()->getResult();
+        return View::create($results, Response::HTTP_OK);
+    }
+
+    /**
      * @Rest\Patch("/api/listing")
      */
     public function searchListing(Request $request) {
