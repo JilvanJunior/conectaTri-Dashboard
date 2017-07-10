@@ -1221,6 +1221,8 @@ class ApiController extends FOSRestController {
         $search = json_decode($request->getContent());
         $query = $d->getRepository("AppBundle:Product")->createQueryBuilder("p");
         $results = $query->where("p.name like :product")
+            ->andWhere("p.retailer = :retailer")
+            ->andWhere("p.deleted = FALSE")
             ->setParameter("product", "%$search->query%")
             ->getQuery()->getResult();
         return View::create($results, Response::HTTP_OK);
@@ -1247,6 +1249,7 @@ class ApiController extends FOSRestController {
         $results = $d->getRepository("AppBundle:Listing")->createQueryBuilder("l")
             ->where("l.name like :listing")
             ->andWhere("l.retailer = :retailer")
+            ->andWhere("l.deleted = FALSE")
             ->setParameter("listing", "%$search->query%")
             ->setParameter("retailer", $dbToken->getRetailer())
             ->getQuery()->getResult();
