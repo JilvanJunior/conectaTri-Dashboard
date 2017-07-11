@@ -71,6 +71,25 @@ class ListsController extends Controller
     }
 
     /**
+     * @Route("/varejista/listas/deletar/{id}", name="deletar_lista")
+     * @param Request $request
+     * @param $id
+     * @return
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $listing = $em->getRepository('AppBundle:Listing')->findOneBy(['id' => $id]);
+        $listing->setUpdatedAt(new \DateTime());
+        $listing->setDeleted(true);
+
+        $em->flush();
+
+        return $this->redirectToRoute('listas');
+    }
+
+    /**
      * @Route("/varejista/lista/{id}/produtos", name="lista_produtos")
      * @param Request $request
      * @param $id

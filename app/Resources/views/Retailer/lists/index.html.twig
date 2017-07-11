@@ -93,6 +93,8 @@
                                                                 <i class="fa fa-edit"></i> Produtos </a>
                                                             <a href="{{ path('lista_produtos_quantidade', {'id': listing.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
                                                                 <i class="fa fa-edit"></i> Quantidade </a>
+                                                            <a href="{{ path('deletar_lista', {'id': listing.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
+                                                                <i class="fa fa-trash"></i> Deletar </a>
                                                         </td>
                                                     </tr>
                                                 {% endfor %}
