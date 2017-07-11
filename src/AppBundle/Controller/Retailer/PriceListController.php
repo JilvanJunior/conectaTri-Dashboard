@@ -11,7 +11,7 @@ class PriceListController extends Controller
     /**
      * @Route("/varejista/cotacoes", name="cotacoes")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
@@ -38,9 +38,9 @@ class PriceListController extends Controller
     }
 
     /**
-     * @Route("/varejista/cotacao/nova", name="nova_cotacao")
+     * @Route("/varejista/cotacao/remota/nova", name="nova_cotacao_remota")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addAction(Request $request)
     {
@@ -70,7 +70,7 @@ class PriceListController extends Controller
      * @Route("/varejista/cotacoes/{id}/editar", name="editar_cotacao")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editAction(Request $request, $id)
     {
@@ -78,7 +78,27 @@ class PriceListController extends Controller
 
         $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
 
-        // replace this example code with whatever you need
+        if($request->getMethod() == "POST"){
+
+            if($request->get('closed') == "on")
+                $quote->setClosed(true);
+            else
+                $quote->setClosed(false);
+
+            $quote->setName($request->get('name'));
+            $beginsAt = date_create_from_format('d/m/Y h:m:s', $request->get('begins-at'));
+            $quote->setBeginsAt($beginsAt);
+            $expiresAt = date_create_from_format('d/m/Y h:m:s', $request->get('expires-at'));
+            $quote->setExpiresAt($expiresAt);
+            $quote->setUpdatedAt(new \DateTime());
+
+            $em->persist($quote);
+
+            $em->flush();
+
+            return $this->redirectToRoute('cotacoes');
+        }
+
         return $this->render('Retailer/pricelist/edit.html.twig', [
             'quote' => $quote,
         ]);
@@ -88,7 +108,7 @@ class PriceListController extends Controller
      * @Route("/varejista/cotacoes/{id}/deletar", name="deletar_cotacao")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, $id)
     {
