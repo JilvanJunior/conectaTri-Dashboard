@@ -1,10 +1,10 @@
 {% extends 'Retailer/base.html.twig' %}
 
-{% block title %}Adicionar Produtos{% endblock %}
-{% block menu_products %} active {% endblock %}
+{% block title %}Cotação{% endblock %}
+{% block description %}{% endblock %}
+{% block menu_pricelist %} active {% endblock %}
 
 {% block page %}
-
     <div class="page-wrapper-row full-height">
         <div class="page-wrapper-middle">
             <!-- BEGIN CONTAINER -->
@@ -17,8 +17,8 @@
                         <div class="container">
                             <!-- BEGIN PAGE TITLE -->
                             <div class="page-title">
-                                <h1>Produtos
-                                    <small>adicionar produto</small>
+                                <h1>Cotação
+                                    <small>cotação</small>
                                 </h1>
                             </div>
                             <!-- END PAGE TITLE -->
@@ -35,11 +35,11 @@
                                     <i class="fa fa-circle"></i>
                                 </li>
                                 <li>
-                                    <a href="{{ path('produtos') }}">Produtos</a>
+                                    <a href="{{ path('cotacoes') }}">Cotações</a>
                                     <i class="fa fa-circle"></i>
                                 </li>
                                 <li>
-                                    <span>Produto</span>
+                                    <span>Cotação</span>
                                 </li>
                             </ul>
                             <!-- END PAGE BREADCRUMBS -->
@@ -53,52 +53,33 @@
                                                     <div class="portlet box green">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <i class="fa fa-gift"></i>Produto</div>
+                                                                <i class="fa fa-gift"></i>Cotação </div>
                                                         </div>
                                                         <div class="portlet-body form">
                                                             <!-- BEGIN FORM-->
-                                                            <form action="#" class="form-horizontal" method="POST">
+                                                            <form action="#" method="POST" class="form-horizontal">
                                                                 <div class="form-body">
                                                                     <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Nome do Produto</label>
+                                                                        <label class="col-md-3 control-label">Nome da Cotação</label>
                                                                         <div class="col-md-4">
-                                                                            <input type="text" name="name" class="form-control input-circle"
-                                                                                   placeholder="Nome do Produto" value="{% if product is defined %}{{ product.name }}{% endif %}">
+                                                                            <input type="text" name="name" class="form-control input-circle" placeholder="Nome da Cotação" value="{{ quote.name }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Marca do Produto</label>
+                                                                        <label class="col-md-3 control-label">Validade De</label>
                                                                         <div class="col-md-4">
-                                                                            <input type="text" name="brand" class="form-control input-circle"
-                                                                                   placeholder="Marca do Produto" value="{% if product is defined %}{{ product.brand }}{% endif %}">
+                                                                            <input type="text" name="begins-at" class="form-control input-circle" placeholder="Nome da Cotação" value="{{ quote.beginsAt|date('d/m/Y h:m:s') }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Tipo</label>
+                                                                        <label class="col-md-3 control-label">Validade Até</label>
                                                                         <div class="col-md-4">
-                                                                            <input type="text" name="type" class="form-control input-circle"
-                                                                                   placeholder="Tipo" value="{% if product is defined %}{{ product.type }}{% endif %}">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Peso / Quantidade</label>
-                                                                        <div class="col-md-4">
-                                                                            <input type="text" name="quantity" class="form-control input-circle"
-                                                                                   placeholder="Peso / Quantidade" value="{% if product is defined %}{{ product.quantity }}{% endif %}">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Unidade de Medida</label>
-                                                                        <div class="col-md-4">
-                                                                            <input type="text" name="unit" class="form-control input-circle"
-                                                                                   placeholder="Unidade de Medida" value="{% if product is defined %}{{ product.unit }}{% endif %}">
+                                                                            <input type="text" name="expires-at" class="form-control input-circle" placeholder="Nome da Cotação" value="{{ quote.expiresAt|date('d/m/Y h:m:s') }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group last">
-                                                                        <label class="col-md-3 control-label">Descrição Completa</label>
-                                                                        <div class="col-md-4">
-                                                                            <textarea name="full-description" class="form-control textarea-circle" cols="50" rows="10">{% if product is defined %}{{ product.fullDescription }}{% endif %}</textarea>
-                                                                        </div>
+                                                                        <label class="col-md-3 control-label">Cotação Finalizada</label>
+                                                                        <input type="checkbox" name="closed" {% if quote.closed %}checked{% endif %}>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-actions">

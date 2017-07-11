@@ -68,6 +68,7 @@
                                                     <th width="20%"> Nome </th>
                                                     <th> Descrição </th>
                                                     <th> Tipo </th>
+                                                    <th> Itens </th>
                                                     <th> Ação </th>
                                                 </tr>
                                                 </thead>
@@ -76,6 +77,7 @@
                                                     <th width="20%"> Nome </th>
                                                     <th> Descrição </th>
                                                     <th> Tipo </th>
+                                                    <th> Itens </th>
                                                     <th> Ação </th>
                                                 </tr>
                                                 </tfoot>
@@ -85,6 +87,7 @@
                                                         <td>{{ listing.name }}</td>
                                                         <td>{{ listing.description }}</td>
                                                         <td>{{ types[listing.type] }}</td>
+                                                        <td>{{ listing.listingProducts|length }}</td>
                                                         <td>
                                                             <a href="{{ path('lista_produtos', {'id': listing.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
                                                                 <i class="fa fa-edit"></i> Produtos </a>

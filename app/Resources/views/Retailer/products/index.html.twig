@@ -70,6 +70,7 @@
                                                     <th> Tipo </th>
                                                     <th> Fabricante </th>
                                                     <th> Quantidade / Unidade </th>
+                                                    <th> Ação </th>
                                                 </tr>
                                                 </thead>
                                                 <tfoot>
@@ -79,6 +80,7 @@
                                                     <th> Tipo </th>
                                                     <th> Fabricante </th>
                                                     <th> Quantidade / Unidade </th>
+                                                    <th> Ação </th>
                                                 </tr>
                                                 </tfoot>
                                                 <tbody>
@@ -89,6 +91,10 @@
                                                         <td> {{ product.type }} </td>
                                                         <td> {{ product.brand }} </td>
                                                         <td> {{ product.quantity }} {{ product.unit }} </td>
+                                                        <td>
+                                                            <a href="{{ path('editar_produto', {'id': product.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
+                                                                <i class="fa fa-edit"></i> Editar </a>
+                                                        </td>
                                                     </tr>
                                                 {% endfor %}
                                                 </tbody>

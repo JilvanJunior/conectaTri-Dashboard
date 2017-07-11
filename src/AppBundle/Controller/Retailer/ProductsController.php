@@ -25,7 +25,7 @@ class ProductsController extends Controller
     }
 
     /**
-     * @Route("/varejista/listas/novoproduto", name="novoproduto")
+     * @Route("/varejista/listas/produto/novo", name="novoproduto")
      * @param Request $request
      * @return
      */
@@ -53,6 +53,37 @@ class ProductsController extends Controller
         }
 
         return $this->render('Retailer/products/addProducts.html.twig', [
+        ]);
+    }
+
+    /**
+     * @Route("/varejista/listas/produto/editar/{id}", name="editar_produto")
+     * @param Request $request
+     * @return
+     */
+    public function editProductAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $product = $em->getRepository('AppBundle:Product')->findOneBy(['id' => $id]);
+
+        if($request->getMethod() == "POST"){
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+
+            $product->setEan('');
+            $product->setName($request->get('name'));
+            $product->setBrand($request->get('brand'));
+            $product->setQuantity($request->get('quantity'));
+            $product->setUnit($request->get('unit'));
+            $product->setType($request->get('type'));
+            $product->setFullDescription($request->get('full-description'));
+            $product->setRetailer($user);
+
+            $em->flush();
+        }
+
+        return $this->render('Retailer/products/addProducts.html.twig', [
+            'product' => $product,
         ]);
     }
 }
