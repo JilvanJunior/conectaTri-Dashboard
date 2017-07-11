@@ -93,7 +93,7 @@
                                                                 <td class="numeric"> {{ supplier.cnpj }} </td>
                                                                 <td class="numeric"> {{ representative.phone }} </td>
                                                                 <td>
-                                                                    <a href="#" class="btn btn-outline btn-circle btn-sm purple">
+                                                                    <a href="{{ path('editar_representante', {'id': representative.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
                                                                         <i class="fa fa-edit"></i> Editar </a>
                                                                 </td>
                                                             </tr>
@@ -104,10 +104,7 @@
                                                                 <td class="numeric">  </td>
                                                                 <td class="numeric"> {{ supplier.cnpj }} </td>
                                                                 <td class="numeric">  </td>
-                                                                <td>
-                                                                    <a href="#" class="btn btn-outline btn-circle btn-sm purple">
-                                                                        <i class="fa fa-edit"></i> Editar </a>
-                                                                </td>
+                                                                <td> </td>
                                                             </tr>
                                                         {% endfor %}
                                                     {% endfor %}

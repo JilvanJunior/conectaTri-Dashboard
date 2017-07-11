@@ -26,7 +26,7 @@ class SuppliersController extends Controller
     }
 
     /**
-     * @Route("/varejista/novo-fornecedor", name="novofornecedor")
+     * @Route("/varejista/fornecedor/novo", name="novofornecedor")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
@@ -58,7 +58,7 @@ class SuppliersController extends Controller
     }
 
     /**
-     * @Route("/varejista/novo-representante", name="novorepresentante")
+     * @Route("/varejista/representante/novo", name="novorepresentante")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -82,10 +82,49 @@ class SuppliersController extends Controller
             $em->persist($representative);
 
             $em->flush();
+
+            return $this->redirectToRoute('fornecedores');
         }
 
         return $this->render('Retailer/suppliers/addRepresentatives.html.twig', [
             'suppliers' => $suppliers,
+        ]);
+    }
+
+    /**
+     * @Route("/varejista/representante/{id}/editar", name="editar_representante")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editRepresentativeAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user]);
+        $representative = $em->getRepository('AppBundle:Representative')->find($id);
+
+        if($request->getMethod() == "POST"){
+
+            $supplier = $em->getRepository('AppBundle:Supplier')->findOneById($request->get('supplier'));
+
+            /** @var Representative $representative */
+            $representative->setName($request->get('name'));
+            $representative->setEmail($request->get('email'));
+            $representative->setPhone($request->get('phone'));
+            $representative->setSupplier($supplier);
+            $representative->setRetailer($user);
+            $representative->setUpdatedAt(new \DateTime());
+
+            $em->persist($representative);
+
+            $em->flush();
+
+            return $this->redirectToRoute('fornecedores');
+        }
+
+        return $this->render('Retailer/suppliers/addRepresentatives.html.twig', [
+            'suppliers' => $suppliers,
+            'representative' => $representative,
         ]);
     }
 }
