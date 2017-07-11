@@ -152,6 +152,7 @@
 
                 $('#sample_editable_1').on( 'click', 'tbody td.editable', function (e) {
                     editor.inline( this, {
+                        onBlur: 'submit',
                         submit: 'allIfChanged'
                     } );
                 } );
