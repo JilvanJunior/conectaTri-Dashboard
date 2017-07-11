@@ -13,7 +13,7 @@ class SuppliersController extends Controller
     /**
      * @Route("/varejista/fornecedores", name="fornecedores")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
@@ -28,7 +28,7 @@ class SuppliersController extends Controller
     /**
      * @Route("/varejista/novo-fornecedor", name="novofornecedor")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function addSupplierAction(Request $request)
     {
@@ -48,6 +48,8 @@ class SuppliersController extends Controller
             $em->persist($supplier);
 
             $em->flush();
+
+            return $this->redirectToRoute('novorepresentante');
         }
 
         return $this->render('Retailer/suppliers/addSuppliers.html.twig', [
@@ -58,7 +60,7 @@ class SuppliersController extends Controller
     /**
      * @Route("/varejista/novo-representante", name="novorepresentante")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addRepresentativeAction(Request $request)
     {
