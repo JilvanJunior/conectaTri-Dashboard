@@ -1123,7 +1123,7 @@ class ApiController extends FOSRestController {
         $msg->setTo([$dbRetailer->getEmail()]);
         $result = $mailer->send($msg);
         if ($result > 0) {
-            return View::create("Cadastro efetuado com sucesso. Foi enviado um link de ativação no e-mail cadastrado.", Response::HTTP_CREATED);
+            return View::create(new ApiError("Cadastro efetuado com sucesso. Foi enviado um link de ativação no e-mail cadastrado."), Response::HTTP_CREATED);
         }
         return View::create(new ApiError("Usuário cadastrado com sucesso, porém houve um problema ao tentar enviar o e-mail de verificação."), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
@@ -1193,12 +1193,12 @@ class ApiController extends FOSRestController {
             $result = $mailer->send($msg);
             if ($result > 0) {
                 $em->flush();
-                return View::create($dbRetailer, Response::HTTP_ACCEPTED);
+                return View::create(new ApiError("Alteração efetuada com sucesso. Será necessário reativar a conta a partir do link enviado ao e-mail cadastrado."), Response::HTTP_ACCEPTED);
             }
             return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de verificação, portanto os dados não foram alterados."), Response::HTTP_INTERNAL_SERVER_ERROR);
         } else {
             $em->flush();
-            return View::create($dbRetailer, Response::HTTP_ACCEPTED);
+            return View::create(new ApiError("Alteração efetuada com sucesso."), Response::HTTP_ACCEPTED);
         }
     }
 
