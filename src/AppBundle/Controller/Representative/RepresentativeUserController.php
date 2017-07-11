@@ -92,7 +92,10 @@ class RepresentativeUserController extends Controller
                     $quoteSupplier->setUpdatedAt(new \DateTime());
                 }
 
-                $quoteSupplier->setPrice($item['price']);
+                $price = str_replace(".","", $item['price']);
+                $price = str_replace(",",".", $price);
+
+                $quoteSupplier->setPrice($price);
                 $quoteSupplier->setQuantity($item['quantity']);
                 $quoteSupplier->setFilledIn(true);
 
@@ -114,7 +117,7 @@ class RepresentativeUserController extends Controller
             $tmp['quantity'] = '';
             foreach ($quoteSuppliers as $quoteSupplier) {
                 if (!$quoteSupplier->getDeleted() && $quoteSupplier->getRepresentative()->getId() == $representative[0]->getId()) {
-                    $tmp['price'] = $quoteSupplier->getPrice();
+                    $tmp['price'] = number_format($quoteSupplier->getPrice(), 2, ',', '.');
                     $tmp['quantity'] = $quoteSupplier->getQuantity();
                 }
             }
