@@ -23,4 +23,20 @@ class ListingProductRepository extends EntityRepository
             ->setParameters(array('listing' => $listingId, 'products' => $productsIds))
             ->getResult();
     }
+
+    public function findProductsByListings($listingIds)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT p
+                      FROM AppBundle:Product p
+                      WHERE p.deleted = 0 AND p.id IN (
+                        SELECT IDENTITY(lp.product)
+                        FROM AppBundle:ListingProduct lp
+                        WHERE lp.listing IN ( :listings )
+                      )'
+            )
+            ->setParameters(array('listings' => $listingIds))
+            ->getResult();
+    }
 }
