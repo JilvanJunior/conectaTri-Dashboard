@@ -39,7 +39,7 @@
                                     <i class="fa fa-circle"></i>
                                 </li>
                                 <li>
-                                    <span>Adicionar Produto</span>
+                                    <span>Produto</span>
                                 </li>
                             </ul>
                             <!-- END PAGE BREADCRUMBS -->
@@ -53,7 +53,7 @@
                                                     <div class="portlet box green">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <i class="fa fa-gift"></i>Adicionar Produto</div>
+                                                                <i class="fa fa-gift"></i>Produto</div>
                                                         </div>
                                                         <div class="portlet-body form">
                                                             <!-- BEGIN FORM-->
@@ -62,45 +62,49 @@
                                                                     <div class="form-group">
                                                                         <label class="col-md-3 control-label">Nome do Produto</label>
                                                                         <div class="col-md-4">
-                                                                            <input type="text" name="name" class="form-control input-circle" placeholder="Nome do Produto">
+                                                                            <input type="text" name="name" class="form-control input-circle"
+                                                                                   placeholder="Nome do Produto" value="{% if product is defined %}{{ product.name }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label class="col-md-3 control-label">Marca do Produto</label>
                                                                         <div class="col-md-4">
-                                                                            <input type="text" name="brand" class="form-control input-circle" placeholder="Marca do Produto">
+                                                                            <input type="text" name="brand" class="form-control input-circle"
+                                                                                   placeholder="Marca do Produto" value="{% if product is defined %}{{ product.brand }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label class="col-md-3 control-label">Tipo</label>
                                                                         <div class="col-md-4">
-                                                                            <input type="text" name="type" class="form-control input-circle" placeholder="Tipo">
+                                                                            <input type="text" name="type" class="form-control input-circle"
+                                                                                   placeholder="Tipo" value="{% if product is defined %}{{ product.type }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label class="col-md-3 control-label">Peso / Quantidade</label>
                                                                         <div class="col-md-4">
-                                                                            <input type="text" name="quantity" class="form-control input-circle" placeholder="Peso / Quantidade">
+                                                                            <input type="text" name="quantity" class="form-control input-circle"
+                                                                                   placeholder="Peso / Quantidade" value="{% if product is defined %}{{ product.quantity }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label class="col-md-3 control-label">Unidade de Medida</label>
                                                                         <div class="col-md-4">
-                                                                            <input type="text" name="unit" class="form-control input-circle" placeholder="Unidade de Medida">
+                                                                            <input type="text" name="unit" class="form-control input-circle"
+                                                                                   placeholder="Unidade de Medida" value="{% if product is defined %}{{ product.unit }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group last">
                                                                         <label class="col-md-3 control-label">Descrição Completa</label>
                                                                         <div class="col-md-4">
-                                                                            <textarea name="full-description" class="form-control textarea-circle" cols="50" rows="10"></textarea>
+                                                                            <textarea name="full-description" class="form-control textarea-circle" cols="50" rows="10">{% if product is defined %}{{ product.fullDescription }}{% endif %}</textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-actions">
                                                                     <div class="row">
                                                                         <div class="col-md-offset-3 col-md-9">
-                                                                            <button type="submit" class="btn btn-circle green">Adicionar</button>
-                                                                            {#<button type="button" class="btn btn-circle grey-salsa btn-outline">Cancelar</button>#}
+                                                                            <button type="submit" class="btn btn-circle green">Salvar</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
