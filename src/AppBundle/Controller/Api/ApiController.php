@@ -630,6 +630,7 @@ class ApiController extends FOSRestController {
         }
         $dbListing->setUpdatedAt(new \DateTime())
             ->setName($listing->name)
+            ->setType($listing->type)
             ->setDescription($listing->description)
             ->setDeleted(false);
         $em->flush();
@@ -1122,7 +1123,7 @@ class ApiController extends FOSRestController {
         $msg->setTo([$dbRetailer->getEmail()]);
         $result = $mailer->send($msg);
         if ($result > 0) {
-            return View::create($dbRetailer, Response::HTTP_CREATED);
+            return View::create("Cadastro efetuado com sucesso. Foi enviado um link de ativação no e-mail cadastrado.", Response::HTTP_CREATED);
         }
         return View::create(new ApiError("Usuário cadastrado com sucesso, porém houve um problema ao tentar enviar o e-mail de verificação."), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
