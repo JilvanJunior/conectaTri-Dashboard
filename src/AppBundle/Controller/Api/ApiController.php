@@ -1231,6 +1231,7 @@ class ApiController extends FOSRestController {
             ->andWhere("p.retailer = :retailer")
             ->andWhere("p.deleted = FALSE")
             ->setParameter("product", "%$search->query%")
+            ->setParameter("retailer", $dbToken->getRetailer())
             ->getQuery()->getResult();
         return View::create($results, Response::HTTP_OK);
     }
