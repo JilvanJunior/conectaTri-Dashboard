@@ -162,7 +162,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $products = $d->getRepository("AppBundle:Product")->findBy(["retailer" => $dbToken->getRetailer()]);
+        $products = $d->getRepository("AppBundle:Product")->findBy(["retailer" => $dbToken->getRetailer(), "deleted" => false]);
         return View::create($products, Response::HTTP_OK);
     }
 
@@ -685,6 +685,7 @@ class ApiController extends FOSRestController {
             ->where("q.deleted = FALSE")
             ->andWhere("q.retailer = :retailer")
             ->setParameter("retailer", $dbToken->getRetailer())
+            ->orderBy("q.createdAt", "DESC")
             ->getQuery()->getResult();
         $responseArray = [];
         foreach($quotes as $quote) {
@@ -733,6 +734,7 @@ class ApiController extends FOSRestController {
             ->andWhere("q.retailer = :retailer")
             ->setParameter("date", new \DateTime())
             ->setParameter("retailer", $dbToken->getRetailer())
+            ->orderBy("q.createdAt", "DESC")
             ->getQuery()->getResult();
         $responseArray = [];
         foreach($quotes as $quote) {
@@ -783,6 +785,7 @@ class ApiController extends FOSRestController {
             ->andWhere("q.deleted = FALSE")
             ->setParameter("date", new \DateTime())
             ->setParameter("retailer", $dbToken->getRetailer())
+            ->orderBy("q.createdAt", "DESC")
             ->getQuery()->getResult();
         $responseArray = [];
         foreach($quotes as $quote) {
