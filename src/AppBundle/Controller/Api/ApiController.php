@@ -685,7 +685,7 @@ class ApiController extends FOSRestController {
             ->where("q.deleted = FALSE")
             ->andWhere("q.retailer = :retailer")
             ->setParameter("retailer", $dbToken->getRetailer())
-            ->orderBy("q.createdAt DESC")
+            ->orderBy("q.createdAt", "DESC")
             ->getQuery()->getResult();
         $responseArray = [];
         foreach($quotes as $quote) {
