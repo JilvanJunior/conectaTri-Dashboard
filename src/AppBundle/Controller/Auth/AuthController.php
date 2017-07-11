@@ -13,7 +13,7 @@ class AuthController extends Controller
     /**
      * @Route("/", name="index")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function indexAction(Request $request)
     {
@@ -26,14 +26,18 @@ class AuthController extends Controller
         if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->redirectToRoute('admin_dashboard');
 
-        if($this->get('security.authorization_checker')->isGranted('ROLE_REPRESENTATIVE'))
+        if($this->get('security.authorization_checker')->isGranted('ROLE_REPRESENTATIVE')) {
+            if($request->get('id') == null)
+                return $this->redirectToRoute('access_denied');
+
             return $this->redirectToRoute('quote_representative', array('id' => $request->get('id')));
+        }
     }
 
     /**
      * @Route("/login", name="login")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function loginAction(Request $request)
     {
@@ -54,7 +58,7 @@ class AuthController extends Controller
     /**
      * @Route("/logout", name="logout")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function logoutAction(Request $request)
     {
@@ -87,7 +91,7 @@ class AuthController extends Controller
     /**
      * @Route("/acesso-negado", name="access_denied")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function accessDeniedAction(Request $request)
     {

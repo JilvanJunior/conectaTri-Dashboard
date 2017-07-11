@@ -85,29 +85,35 @@ class ResettingController extends Controller
      * @param Request $request
      * @param string  $token
      *
-     * @return RedirectResponse
+     * @return Response
      */
     public function resetAction(Request $request, $token)
     {
-
         $em = $this->getDoctrine()->getManager();
 
         $user = $em->getRepository('AppBundle:RepresentativeUser')->findOneBy(array('confirmationToken' => $token));
 
-
         if (null === $user) {
             throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
         }
-
 
         $form = $this->createForm(ResettingFormType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $url = $this->generateUrl('login');
             $response = new RedirectResponse($url);
+
+            // encode the password
+            $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+
+            // save the RepresentativeUser
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
 
             return $response;
         }

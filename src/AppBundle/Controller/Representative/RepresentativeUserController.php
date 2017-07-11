@@ -13,7 +13,7 @@ class RepresentativeUserController extends Controller
      * @Route("/representante/cotacao/{id}", name="quote_representative")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request, $id)
     {
@@ -21,8 +21,10 @@ class RepresentativeUserController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $quote = $em->getRepository('AppBundle:Quote')->getQuoteByRepresentative($user->getEmail(), $id);
+        if($quote == null)
+            return $this->redirectToRoute('access_denied');
         $now = new \DateTime();
-        if($quote == null || $now > $quote[0]->getExpiresAt() || $quote[0]->isClosed()) {
+        if($now > $quote[0]->getExpiresAt() || $quote[0]->isClosed()) {
             if ($now > $quote[0]->getExpiresAt() && !$quote[0]->isClosed()) {
                 $quote[0]->setClosed(true);
                 $em->flush();
