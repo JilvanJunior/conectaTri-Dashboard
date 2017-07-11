@@ -22,7 +22,7 @@
                         <!-- BEGIN PAGE TITLE -->
                         <div class="page-title">
                             <h1>Produtos
-                                <small>selecionar produtos para adicionar a lista</small>
+                                <small>selecionar produtos para adicionar a cotação</small>
                             </h1>
                         </div>
                         <!-- END PAGE TITLE -->
@@ -39,7 +39,11 @@
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
-                                <a href="{{ path('listas') }}">Listas</a>
+                                <a href="{{ path('cotacoes') }}">Cotações</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <a href="{{ path('cotacao_listas', {'id': quote.id}) }}">Listas</a>
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
@@ -56,7 +60,7 @@
                                         <div class="portlet-title">
                                             <div class="caption font-dark">
                                                 <i class="fa fa-group font-dark"></i>
-                                                <span class="caption-subject bold uppercase">Selecione os Produtos da Lista</span>
+                                                <span class="caption-subject bold uppercase">Selecione os Produtos da Cotação</span>
                                             </div>
                                             <div class="tools"> </div>
                                         </div>
@@ -139,7 +143,7 @@
 
                 $.ajax({
                     type: "POST",
-                    {#url: "{{ path('lista_produtos_save', {'id': listing.id}) }}",#}
+                    url: "{{ path('cotacao_produtos', {'id': quote.id}) }}",
                     data: JSON.stringify({products: data}),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",

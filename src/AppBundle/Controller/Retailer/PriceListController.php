@@ -5,9 +5,11 @@ namespace AppBundle\Controller\Retailer;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Quote;
 use AppBundle\Entity\QuoteProduct;
+use AppBundle\Entity\QuoteSupplier;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PriceListController extends Controller
 {
@@ -66,7 +68,7 @@ class PriceListController extends Controller
 
             $em->flush();
 
-            return $this->redirectToRoute('cotacao_remota_listas', ['id' => $quote->getId()]);
+            return $this->redirectToRoute('cotacao_listas', ['id' => $quote->getId()]);
         }
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', [
@@ -74,11 +76,45 @@ class PriceListController extends Controller
     }
 
     /**
-     * @Route("/varejista/cotacao/remota/{id}/listas", name="cotacao_remota_listas")
+     * @Route("/varejista/cotacao/presencial/nova", name="nova_cotacao_presencial")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addRemoteListAction(Request $request, $id)
+    public function addPresentialAction(Request $request)
+    {
+        if($request->getMethod() == "POST"){
+
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $em = $this->getDoctrine()->getManager();
+
+            $quote = new Quote();
+            $quote->setName($request->get('name'));
+            $quote->setClosed(false);
+            $quote->setType(2);
+            $quote->setRetailer($user);
+            $beginsAt = date_create_from_format('d/m/Y h:m:s', $request->get('begins-at'));
+            $quote->setBeginsAt($beginsAt);
+            $expiresAt = date_create_from_format('d/m/Y h:m:s', $request->get('expires-at'));
+            $quote->setExpiresAt($expiresAt);
+
+            $em->persist($quote);
+
+            $em->flush();
+
+            return $this->redirectToRoute('cotacao_listas', ['id' => $quote->getId()]);
+        }
+
+        return $this->render('Retailer/pricelist/addPriceList.html.twig', [
+        ]);
+    }
+
+    /**
+     * @Route("/varejista/cotacao/{id}/listas", name="cotacao_listas")
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function addListAction(Request $request, $id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -113,7 +149,7 @@ class PriceListController extends Controller
                 $em->flush();
             }
 
-            $data['url'] = $this->generateUrl('cotacao_remota_produtos', ['id' => $id]);
+            $data['url'] = $this->generateUrl('cotacao_produtos', ['id' => $id]);
             echo json_encode($data);
             exit();
         }
@@ -126,11 +162,12 @@ class PriceListController extends Controller
     }
 
     /**
-     * @Route("/varejista/cotacao/remota/{id}/produtos", name="cotacao_remota_produtos")
+     * @Route("/varejista/cotacao/{id}/produtos", name="cotacao_produtos")
      * @param Request $request
+     * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addRemoteProductsAction(Request $request, $id)
+    public function addProductsAction(Request $request, $id)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -167,7 +204,7 @@ class PriceListController extends Controller
 
             }
 
-            $data['url'] = $this->generateUrl('cotacoes');
+            $data['url'] = $this->generateUrl('cotacao_fornecedores', ['id' => $id]);
             echo json_encode($data);
             exit();
         }
@@ -176,6 +213,74 @@ class PriceListController extends Controller
             'quote' => $quote,
             'quoteProducts' => $quoteProducts,
             'products' => $products,
+        ]);
+    }
+
+    /**
+     * @Route("/varejista/cotacao/{id}/fornecedores", name="cotacao_fornecedores")
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function addSuppliersAction(Request $request, $id)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $quote = $em->getRepository('AppBundle:Quote')->find($id);
+
+        $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
+
+        if($request->getMethod() == "POST"){
+
+            $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $id, 'deleted' => false]);
+            $representativesIds = $request->get('suppliers');
+
+            //add new quoteSuppliers
+            foreach ($representativesIds as $representativesId) {
+
+                $representative = $em->getRepository('AppBundle:Representative')->find($representativesId);
+
+                foreach ($quoteProducts as $quoteProduct) {
+
+                    $quoteSupplier = new QuoteSupplier();
+                    $quoteSupplier->setQuoteProduct($quoteProduct);
+                    $quoteSupplier->setRepresentative($representative);
+                    $quoteSupplier->setPrice(0);
+                    $quoteSupplier->setQuantity(1);
+
+                    $em->persist($quoteSupplier);
+                    $em->flush();
+                }
+
+                if($quote->getType() == 1){
+                    //send mail to representative
+                    $link = $this->generateUrl('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
+                    $message = new \Swift_Message(
+                        'Cotação no ConectaTri',
+                        "<b>".$user->getFantasyName()."</b> lhe enviou um pedido de cotação no ConectaTri.
+                            <br><br>Para preencher esta cotação, clique <a href='$link'>aqui</a> ou acesse: $link
+                            <br><br>Caso este e-mail tenha sido enviado por acidente, pedimos que o desconsidere.
+                            <br><br>Obrigado",
+                        "text/html",
+                        "utf-8"
+                    );
+                    $message->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+                    $message->setTo([$representative->getEmail() => $representative->getName()]);
+
+                    $mailer = $this->get('swiftmailer.mailer.default');
+                    $mailer->send($message);
+                }
+            }
+
+            $data['url'] = $this->generateUrl('cotacoes');
+            echo json_encode($data);
+            exit();
+        }
+
+        return $this->render('Retailer/pricelist/addSuppliers.html.twig', [
+            'quote' => $quote,
+            'suppliers' => $suppliers,
         ]);
     }
 
