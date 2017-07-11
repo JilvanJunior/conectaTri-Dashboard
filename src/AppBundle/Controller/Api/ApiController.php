@@ -26,6 +26,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ApiController extends FOSRestController {
 
+    const emailRegex = '/(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)/';
+    const emailReplace = '$1***$2@$3$5***$4';
+
     /**
      * @Rest\Post("/api/login")
      */
@@ -79,7 +82,7 @@ class ApiController extends FOSRestController {
                 }
                 $result = $mailer->send($msg);
                 if ($result > 0) {
-                    return View::create(new ApiError("É necessário verificar seu endereço de email.\nE-mail de verificação reenviado para\n".preg_replace('(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)', '$1***$2@$3$5***$4', $dbUser->getEmail())), Response::HTTP_EXPECTATION_FAILED);
+                    return View::create(new ApiError("É necessário verificar seu endereço de email.\nE-mail de verificação reenviado para\n".preg_replace(self::emailRegex, self::emailReplace, $dbUser->getEmail())), Response::HTTP_EXPECTATION_FAILED);
                 }
                 return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de verificação"), Response::HTTP_INTERNAL_SERVER_ERROR);
             } else {
@@ -1228,6 +1231,7 @@ class ApiController extends FOSRestController {
             ->andWhere("p.retailer = :retailer")
             ->andWhere("p.deleted = FALSE")
             ->setParameter("product", "%$search->query%")
+            ->setParameter("retailer", $dbToken->getRetailer())
             ->getQuery()->getResult();
         return View::create($results, Response::HTTP_OK);
     }
@@ -1320,7 +1324,7 @@ class ApiController extends FOSRestController {
         }
         $result = $mailer->send($msg);
         if ($result > 0) {
-            return View::create(new ApiError("E-mail enviado para\n".preg_replace('/(\w{1,2}).*?(\w{1,2})@(?:(\w).+(\.\w+)|(\w).+)/', '$1***$2@$3$5***$4', $retailer->getEmail())), Response::HTTP_OK);
+            return View::create(new ApiError("E-mail enviado para\n".preg_replace(self::emailRegex, self::emailReplace, $retailer->getEmail())), Response::HTTP_OK);
         }
         return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de recuperação"), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
