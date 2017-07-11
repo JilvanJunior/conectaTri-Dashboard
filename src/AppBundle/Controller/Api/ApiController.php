@@ -162,7 +162,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $products = $d->getRepository("AppBundle:Product")->findBy(["retailer" => $dbToken->getRetailer()]);
+        $products = $d->getRepository("AppBundle:Product")->findBy(["retailer" => $dbToken->getRetailer(), "deleted" => false]);
         return View::create($products, Response::HTTP_OK);
     }
 
