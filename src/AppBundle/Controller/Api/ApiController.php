@@ -115,6 +115,38 @@ class ApiController extends FOSRestController {
     }
 
     /**
+     * @Rest\Get("/api/login")
+     */
+    public function refreshLoginAction(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+
+        // TODO: Cronjob instead of this
+        $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
+            ->where("s.lastUsed < :yesterday")
+            ->setParameter("yesterday", new \DateTime("yesterday"))
+            ->getQuery()->getResult();
+        foreach ($oldTokens as $oldToken) {
+            $em->remove($oldToken);
+        }
+        $em->flush();
+
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_BAD_REQUEST);
+        }
+
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+        
+        return View::create(new ApiError("Token de sessão válido"), Response::HTTP_OK);
+    }
+
+    /**
      * @Rest\Delete("/api/logout")
      */
     public function logoutAction(Request $request) {
