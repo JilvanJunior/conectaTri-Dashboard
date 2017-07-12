@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Router;
 
 class ApiController extends FOSRestController {
 
@@ -1282,6 +1283,7 @@ class ApiController extends FOSRestController {
      * @Rest\Post("/api/recovery/begin")
      */
     public function postBeginPasswordRecovery(Request $request) {
+        $r = $this->get('router');
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $cnpj = $request->get("cnpj");
@@ -1291,11 +1293,12 @@ class ApiController extends FOSRestController {
         }
         $data = [
             "i" => $retailer->getId(),
+            "u" => Utils::base64url_encode(hash_hmac("haval128,4", $retailer->getPassword(), $this->getParameter('internal_key'), true)),
             "j" => (new \DateTime())->getTimestamp()
         ];
-        $data['z'] = hash_hmac("sha512", json_encode($data), $this->getParameter('internal_key'));
+        $data['z'] = Utils::base64url_encode(hash_hmac("sha256", json_encode($data), $this->getParameter('internal_key'), true));
         $encoded = Utils::base64url_encode(json_encode($data));
-        $link = "https://rs.conectatri.com.br/" . $encoded;
+        $link = $r->generate("app_pass_recovery", ["token" => $encoded], Router::ABSOLUTE_URL);
         $mailer = $this->get('swiftmailer.mailer.default');
         $msg = new \Swift_Message(
             "Recuperação de Senha ConectaTri",
@@ -1311,7 +1314,9 @@ class ApiController extends FOSRestController {
         }
         $result = $mailer->send($msg);
         if ($result > 0) {
-            return View::create(new ApiError("E-mail enviado para\n".preg_replace(self::emailRegex, self::emailReplace, $retailer->getEmail())), Response::HTTP_OK);
+            return View::create(
+                new ApiError("E-mail enviado para\n".preg_replace(self::emailRegex, self::emailReplace, $retailer->getEmail())),
+                Response::HTTP_OK);
         }
         return View::create(new ApiError("Houve um problema ao tentar enviar o e-mail de recuperação"), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
@@ -1326,18 +1331,20 @@ class ApiController extends FOSRestController {
         $data = json_decode($request->getContent());
         $newData = [
             'i' => $data->i,
+            'u' => $data->u,
             'j' => $data->j
         ];
         $hash = $data->z;
         $pwd = $data->p;
-        $cmpHash = hash_hmac("sha512", json_encode($newData), $this->getParameter('internal_key'));
+        $cmpHash = Utils::base64url_encode(hash_hmac("sha256", json_encode($newData), $this->getParameter('internal_key'), true));
         $time = new \DateTime("yesterday");
         $dataTime = new \DateTime();
         $dataTime->setTimestamp($data->j);
-        if ($cmpHash != $hash || $dataTime < $time) {
+        $retailer = $d->getRepository("AppBundle:Retailer")->find($data->i);
+        $passHash = Utils::base64url_encode(hash_hmac("haval128,4", $retailer->getPassword(), $this->getParameter('internal_key'), true));
+        if ($cmpHash != $hash || $dataTime < $time || $passHash != $data->u) {
             return View::create(new ApiError("Dados inválidos para recuperação de senha"), Response::HTTP_BAD_REQUEST);
         }
-        $retailer = $d->getRepository("AppBundle:Retailer")->find($data->i);
         $retailer->setPassword($pe->encodePassword($retailer, $pwd));
         $em->flush();
         return View::create(new ApiError("Senha alterada com sucesso"), Response::HTTP_ACCEPTED);
