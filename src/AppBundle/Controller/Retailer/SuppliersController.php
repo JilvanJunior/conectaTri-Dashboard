@@ -49,6 +49,16 @@ class SuppliersController extends Controller
 
             $em->flush();
 
+            $this->addFlash(
+                'success',
+                'Fornecedor adicionado!'
+            );
+
+            $this->addFlash(
+                'info',
+                'Adicione um representante para o fornecedor.'
+            );
+
             return $this->redirectToRoute('novorepresentante');
         }
 
@@ -82,6 +92,11 @@ class SuppliersController extends Controller
             $em->persist($representative);
 
             $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Representante adicionado!'
+            );
 
             return $this->redirectToRoute('fornecedores');
         }
@@ -118,6 +133,11 @@ class SuppliersController extends Controller
             $em->persist($representative);
 
             $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Representante editado!'
+            );
 
             return $this->redirectToRoute('fornecedores');
         }

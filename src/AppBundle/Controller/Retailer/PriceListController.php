@@ -68,6 +68,11 @@ class PriceListController extends Controller
 
             $em->flush();
 
+            $this->addFlash(
+                'info',
+                'Selecione as listas de produtos para adicionar à cotação.'
+            );
+
             return $this->redirectToRoute('cotacao_listas', ['id' => $quote->getId()]);
         }
 
@@ -100,6 +105,11 @@ class PriceListController extends Controller
             $em->persist($quote);
 
             $em->flush();
+
+            $this->addFlash(
+                'info',
+                'Selecione as listas de produtos para adicionar à cotação.'
+            );
 
             return $this->redirectToRoute('cotacao_listas', ['id' => $quote->getId()]);
         }
@@ -148,6 +158,11 @@ class PriceListController extends Controller
 
                 $em->flush();
             }
+
+            $this->addFlash(
+                'info',
+                'Selecione os produtos para adicionar à cotação.'
+            );
 
             $data['url'] = $this->generateUrl('cotacao_produtos', ['id' => $id]);
             echo json_encode($data);
@@ -203,6 +218,11 @@ class PriceListController extends Controller
                 }
 
             }
+
+            $this->addFlash(
+                'info',
+                'Selecione os fornecedores da cotação.'
+            );
 
             $data['url'] = $this->generateUrl('cotacao_fornecedores', ['id' => $id]);
             echo json_encode($data);
@@ -273,6 +293,11 @@ class PriceListController extends Controller
                 }
             }
 
+            $this->addFlash(
+                'success',
+                'Cotação adicionada!'
+            );
+
             $data['url'] = $this->generateUrl('cotacoes');
             echo json_encode($data);
             exit();
@@ -313,6 +338,11 @@ class PriceListController extends Controller
             $em->persist($quote);
 
             $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Cotação editada!'
+            );
 
             return $this->redirectToRoute('cotacoes');
         }
@@ -376,6 +406,11 @@ class PriceListController extends Controller
 
         if($quote->getType() == 1)
             return $this->redirectToRoute('acompanhar_cotacao_produto', ['id' => $id]);
+
+        $this->addFlash(
+            'info',
+            'Edite os valores da cotação.'
+        );
 
         return $this->render('Retailer/pricelist/editQuoteProduct.html.twig', [
             'quoteProduct' => $quoteProduct,
@@ -443,6 +478,11 @@ class PriceListController extends Controller
         $quote->setDeleted(true);
 
         $em->flush();
+
+        $this->addFlash(
+            'success',
+            'Cotação deletada!'
+        );
 
         return $this->redirectToRoute('cotacoes');
     }

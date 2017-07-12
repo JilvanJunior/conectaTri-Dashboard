@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Retailer;
 
 use AppBundle\Entity\Listing;
 use AppBundle\Entity\ListingProduct;
+use AppBundle\Entity\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +14,7 @@ class ListsController extends Controller
     /**
      * @Route("/varejista/listas", name="listas")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
@@ -36,7 +37,7 @@ class ListsController extends Controller
     /**
      * @Route("/varejista/listas/novalista", name="novalista")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function addListAction(Request $request)
     {
@@ -62,6 +63,16 @@ class ListsController extends Controller
 
             $em->flush();
 
+            $this->addFlash(
+                'success',
+                'Lista adicionada!'
+            );
+
+            $this->addFlash(
+                'info',
+                'Selecione os produtos para adicionar à lista.'
+            );
+
             return $this->redirectToRoute('lista_produtos', ['id' => $listing->getId()]);
         }
 
@@ -74,7 +85,7 @@ class ListsController extends Controller
      * @Route("/varejista/listas/deletar/{id}", name="deletar_lista")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, $id)
     {
@@ -86,6 +97,11 @@ class ListsController extends Controller
 
         $em->flush();
 
+        $this->addFlash(
+            'success',
+            'Lista deletada!'
+        );
+
         return $this->redirectToRoute('listas');
     }
 
@@ -93,7 +109,7 @@ class ListsController extends Controller
      * @Route("/varejista/lista/{id}/produtos", name="lista_produtos")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addProductToListAction(Request $request, $id)
     {
@@ -136,13 +152,25 @@ class ListsController extends Controller
 
                     $listingProduct = new ListingProduct();
                     $listingProduct->setQuantity(1);
+                    /** @var Listing $listing */
                     $listingProduct->setListing($listing);
+                    /** @var Product $product */
                     $listingProduct->setProduct($product);
 
                     $em->persist($listingProduct);
                     $em->flush();
                 }
             }
+
+            $this->addFlash(
+                'success',
+                'Produtos adicionados à lista!'
+            );
+
+            $this->addFlash(
+                'info',
+                'Edite a quantidade de produtos da lista.'
+            );
 
         }
         $data['url'] = $this->generateUrl('lista_produtos_quantidade', ['id' => $id]);
@@ -154,7 +182,7 @@ class ListsController extends Controller
      * @Route("/varejista/lista/{id}/produtos/quantidade", name="lista_produtos_quantidade")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addListingProductAction(Request $request, $id)
     {

@@ -12,7 +12,7 @@ class ProductsController extends Controller
     /**
      * @Route("/varejista/produtos", name="produtos")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
@@ -27,7 +27,7 @@ class ProductsController extends Controller
     /**
      * @Route("/varejista/listas/produto/novo", name="novoproduto")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addProductAction(Request $request)
     {
@@ -50,6 +50,13 @@ class ProductsController extends Controller
             $em->persist($product);
 
             $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Produto adicionado!'
+            );
+
+            return $this->redirectToRoute('produtos');
         }
 
         return $this->render('Retailer/products/addProducts.html.twig', [
@@ -59,7 +66,8 @@ class ProductsController extends Controller
     /**
      * @Route("/varejista/listas/produto/editar/{id}", name="editar_produto")
      * @param Request $request
-     * @return
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editProductAction(Request $request, $id)
     {
@@ -80,6 +88,13 @@ class ProductsController extends Controller
             $product->setRetailer($user);
 
             $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Produto editado!'
+            );
+
+            return $this->redirectToRoute('produtos');
         }
 
         return $this->render('Retailer/products/addProducts.html.twig', [
