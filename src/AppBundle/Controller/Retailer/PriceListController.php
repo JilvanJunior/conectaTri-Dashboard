@@ -59,9 +59,9 @@ class PriceListController extends Controller
             $quote->setClosed(false);
             $quote->setType(1);
             $quote->setRetailer($user);
-            $beginsAt = date_create_from_format('d/m/Y h:m:s', $request->get('begins-at'));
+            $beginsAt = date_create_from_format('d/m/Y H:i', $request->get('begins-at'));
             $quote->setBeginsAt($beginsAt);
-            $expiresAt = date_create_from_format('d/m/Y h:m:s', $request->get('expires-at'));
+            $expiresAt = date_create_from_format('d/m/Y H:i', $request->get('expires-at'));
             $quote->setExpiresAt($expiresAt);
 
             $em->persist($quote);
@@ -97,9 +97,9 @@ class PriceListController extends Controller
             $quote->setClosed(false);
             $quote->setType(2);
             $quote->setRetailer($user);
-            $beginsAt = date_create_from_format('d/m/Y h:m:s', $request->get('begins-at'));
+            $beginsAt = date_create_from_format('d/m/Y H:i', $request->get('begins-at'));
             $quote->setBeginsAt($beginsAt);
-            $expiresAt = date_create_from_format('d/m/Y h:m:s', $request->get('expires-at'));
+            $expiresAt = date_create_from_format('d/m/Y H:i', $request->get('expires-at'));
             $quote->setExpiresAt($expiresAt);
 
             $em->persist($quote);
@@ -329,9 +329,9 @@ class PriceListController extends Controller
                 $quote->setClosed(false);
 
             $quote->setName($request->get('name'));
-            $beginsAt = date_create_from_format('d/m/Y h:m:s', $request->get('begins-at'));
+            $beginsAt = date_create_from_format('d/m/Y H:i', $request->get('begins-at'));
             $quote->setBeginsAt($beginsAt);
-            $expiresAt = date_create_from_format('d/m/Y h:m:s', $request->get('expires-at'));
+            $expiresAt = date_create_from_format('d/m/Y H:i', $request->get('expires-at'));
             $quote->setExpiresAt($expiresAt);
             $quote->setUpdatedAt(new \DateTime());
 
