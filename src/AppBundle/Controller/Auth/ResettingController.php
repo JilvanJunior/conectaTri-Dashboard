@@ -124,6 +124,16 @@ class ResettingController extends Controller
         ));
     }
 
+    /**
+     * @Route("/recovery/{token}", name="app_pass_recovery", schemes={"https"})
+     * @param string $token
+     *
+     * @return Response
+     */
+    public function appPasswordReset($token) {
+        return new Response();
+    }
+
     private function _generateToken()
     {
         return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
