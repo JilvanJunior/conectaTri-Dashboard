@@ -352,6 +352,9 @@ class PriceListController extends Controller
         $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
         $quote = $quoteProduct->getQuote();
 
+        if($quote->getType() == 2)
+            return $this->redirectToRoute('editar_cotacao_produto', ['id' => $id]);
+
         return $this->render('Retailer/pricelist/showQuoteProduct.html.twig', [
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
@@ -370,6 +373,9 @@ class PriceListController extends Controller
 
         $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
         $quote = $quoteProduct->getQuote();
+
+        if($quote->getType() == 1)
+            return $this->redirectToRoute('acompanhar_cotacao_produto', ['id' => $id]);
 
         return $this->render('Retailer/pricelist/editQuoteProduct.html.twig', [
             'quoteProduct' => $quoteProduct,
