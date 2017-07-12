@@ -285,7 +285,7 @@ class PriceListController extends Controller
     }
 
     /**
-     * @Route("/varejista/cotacoes/{id}/editar", name="editar_cotacao")
+     * @Route("/varejista/cotacao/{id}/editar", name="editar_cotacao")
      * @param Request $request
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
@@ -318,6 +318,42 @@ class PriceListController extends Controller
         }
 
         return $this->render('Retailer/pricelist/edit.html.twig', [
+            'quote' => $quote,
+        ]);
+    }
+
+    /**
+     * @Route("/varejista/cotacao/{id}/acompanhar", name="acompanhar_cotacao")
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
+
+        return $this->render('Retailer/pricelist/show.html.twig', [
+            'quote' => $quote,
+        ]);
+    }
+
+    /**
+     * @Route("/varejista/cotacao/acompanhar/produto/{id}", name="acompanhar_cotacao_produto")
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showQuoteProductAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
+        $quote = $quoteProduct->getQuote();
+
+        return $this->render('Retailer/pricelist/showQuoteProduct.html.twig', [
+            'quoteProduct' => $quoteProduct,
             'quote' => $quote,
         ]);
     }
