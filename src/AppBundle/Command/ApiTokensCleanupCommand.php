@@ -28,7 +28,7 @@ class ApiTokensCleanupCommand extends ContainerAwareCommand
         $em = $d->getManager();
         $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
             ->where("s.lastUsed < :past")
-            ->setParameter("past", new \DateTime("yesterday"))
+            ->setParameter("past", new \DateTime("-1 days"))
             ->getQuery()->getResult();
         foreach ($oldTokens as $oldToken) {
             $em->remove($oldToken);
