@@ -48,15 +48,6 @@ class ApiController extends FOSRestController {
             return View::create(new ApiError("Usuário ou senha inválidos"), Response::HTTP_BAD_REQUEST);
         }
 
-        // TODO: Cronjob instead of this
-        $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
-            ->where("s.lastUsed < :yesterday")
-            ->setParameter("yesterday", new \DateTime("yesterday"))
-            ->getQuery()->getResult();
-        foreach ($oldTokens as $oldToken) {
-            $em->remove($oldToken);
-        }
-
         if (!$dbUser->isVerified()) {
             if (\Swift_Validate::email($dbUser->getEmail())) {
                 $data = [
@@ -107,16 +98,6 @@ class ApiController extends FOSRestController {
         $d = $this->getDoctrine();
         $em = $d->getManager();
 
-        // TODO: Cronjob instead of this
-        $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
-            ->where("s.lastUsed < :past")
-            ->setParameter("past", new \DateTime("yesterday"))
-            ->getQuery()->getResult();
-        foreach ($oldTokens as $oldToken) {
-            $em->remove($oldToken);
-        }
-        $em->flush();
-
         $token = $request->headers->get("Api-Token");
         if (is_null($token)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
@@ -125,10 +106,8 @@ class ApiController extends FOSRestController {
         if (is_null($dbToken)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_BAD_REQUEST);
         }
-
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
-        
         return View::create(new ApiError("Token de sessão válido"), Response::HTTP_OK);
     }
 
@@ -144,16 +123,6 @@ class ApiController extends FOSRestController {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_BAD_REQUEST);
         }
         $em->remove($dbToken);
-
-        // TODO: Cronjob instead of this
-        $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
-            ->where("s.lastUsed < :past")
-            ->setParameter("past", new \DateTime("yesterday"))
-            ->getQuery()->getResult();
-        foreach ($oldTokens as $oldToken) {
-            $em->remove($oldToken);
-        }
-
         $em->flush();
         return View::create(null, Response::HTTP_NO_CONTENT);
     }
