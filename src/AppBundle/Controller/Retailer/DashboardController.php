@@ -16,12 +16,30 @@ class DashboardController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $quotes = $em->getRepository('AppBundle:Quote')->findBy(['retailer' => $user, 'deleted' => false]);
+        $quotes = $em->getRepository('AppBundle:Quote')->findBy(['retailer' => $user, 'deleted' => false], ['createdAt' => 'DESC']);
+        $listings = $em->getRepository('AppBundle:Listing')->findBy(['retailer' => $user, 'deleted' => false], ['createdAt' => 'DESC']);
+        $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user, 'deleted' => false], ['createdAt' => 'DESC']);
         $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
+        $average = $em->getRepository('AppBundle:QuoteSupplier')->getQuotesAverage($user->getId())[0];
+
+        //quote status
+        $status['0'] = "Em Andamento";
+        $status['1'] = "Encerrada";
+
+        //type of listings
+        $types['0'] = 'Não Informado';
+        $types['1'] = 'Comum';
+        $types['2'] = 'Sazonal';
+        $types['3'] = 'Semanal';
 
         return $this->render('Retailer/dashboard/index.html.twig', [
             'quotes' => $quotes,
+            'listings' => $listings,
+            'products' => $products,
             'suppliers' => $suppliers,
+            'average' => $average['average'],
+            'status' => $status,
+            'types' => $types,
         ]);
     }
 }
