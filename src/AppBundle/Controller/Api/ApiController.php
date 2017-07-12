@@ -1337,7 +1337,7 @@ class ApiController extends FOSRestController {
         $hash = $data->z;
         $pwd = $data->p;
         $cmpHash = Utils::base64url_encode(hash_hmac("sha256", json_encode($newData), $this->getParameter('internal_key'), true));
-        $time = new \DateTime("yesterday");
+        $time = new \DateTime("-1 days");
         $dataTime = new \DateTime();
         $dataTime->setTimestamp($data->j);
         $retailer = $d->getRepository("AppBundle:Retailer")->find($data->i);
