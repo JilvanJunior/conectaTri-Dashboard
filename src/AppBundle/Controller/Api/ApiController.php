@@ -89,28 +89,14 @@ class ApiController extends FOSRestController {
                 return View::create(new ApiError("O e-mail cadastrado parece ser inválido. Tente se recadastrar utilizando outro e-mail."), Response::HTTP_FAILED_DEPENDENCY);
             }
         }
-
-        $previousToken = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
-            ->where("s.lastUsed >= :time")
-            ->andWhere("s.retailer = :retailer")
-            ->setParameter("time", new \DateTime("15 minutes ago"))
-            ->setParameter("retailer", $dbUser)
-            ->orderBy("s.lastUsed", "DESC")
-            ->getQuery()->setMaxResults(1)->getOneOrNullResult();
-        if (is_null($previousToken)) {
-            $session = new ApiSession();
-            $uuid = Uuid::uuid4();
-            $session->setToken($uuid->toString());
-            $session->setRetailer($dbUser);
-            $em->persist($session);
-            $em->flush();
-            $previousToken = $session;
-        } else {
-            $previousToken->setLastUsed(new \DateTime());
-            $em->flush();
-        }
+        $session = new ApiSession();
+        $uuid = Uuid::uuid5(Uuid::uuid1(), $dbUser->getCnpj());
+        $session->setToken($uuid->toString());
+        $session->setRetailer($dbUser);
+        $em->persist($session);
+        $em->flush();
         return View::create([
-            "token" => $previousToken->getToken()
+            "token" => $session->getToken()
         ], Response::HTTP_OK);
     }
 
@@ -123,8 +109,8 @@ class ApiController extends FOSRestController {
 
         // TODO: Cronjob instead of this
         $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
-            ->where("s.lastUsed < :yesterday")
-            ->setParameter("yesterday", new \DateTime("yesterday"))
+            ->where("s.lastUsed < :past")
+            ->setParameter("past", new \DateTime("yesterday"))
             ->getQuery()->getResult();
         foreach ($oldTokens as $oldToken) {
             $em->remove($oldToken);
@@ -161,8 +147,8 @@ class ApiController extends FOSRestController {
 
         // TODO: Cronjob instead of this
         $oldTokens = $d->getRepository("AppBundle:ApiSession")->createQueryBuilder("s")
-            ->where("s.lastUsed < :yesterday")
-            ->setParameter("yesterday", new \DateTime("yesterday"))
+            ->where("s.lastUsed < :past")
+            ->setParameter("past", new \DateTime("yesterday"))
             ->getQuery()->getResult();
         foreach ($oldTokens as $oldToken) {
             $em->remove($oldToken);
