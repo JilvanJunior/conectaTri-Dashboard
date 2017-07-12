@@ -359,6 +359,70 @@ class PriceListController extends Controller
     }
 
     /**
+     * @Route("/varejista/cotacao/acompanhar/produto/{id}/editar", name="editar_cotacao_produto")
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editQuoteProductAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
+        $quote = $quoteProduct->getQuote();
+
+        return $this->render('Retailer/pricelist/editQuoteProduct.html.twig', [
+            'quoteProduct' => $quoteProduct,
+            'quote' => $quote,
+        ]);
+    }
+
+    /**
+     * @Route("/varejista/cotacao/acompanhar/produto/{id}/editar/data", name="editar_cotacao_produto_data")
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editQuoteProductDataAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $quoteSuppliers = $em->getRepository('AppBundle:QuoteSupplier')->findBy(['quoteProduct' => $id]);
+        $data = [];
+
+        if($request->getMethod() == "POST"){
+
+            $data = $request->get('data');
+            foreach ($data as $k => $item){
+                $quoteSupplier = $em->getRepository('AppBundle:QuoteSupplier')->findOneBy(['id' => $k]);
+
+                $price = str_replace(".","", $item['price']);
+                $price = str_replace(",",".", $price);
+
+                $quoteSupplier->setPrice($price);
+                $quoteSupplier->setQuantity($item['quantity']);
+                $quoteSupplier->setUpdatedAt(new \DateTime());
+
+                $em->persist($quoteSupplier);
+            }
+            $em->flush();
+        }
+
+        foreach ($quoteSuppliers as $quoteSupplier) {
+            /** @var QuoteSupplier $quoteSupplier */
+            $tmp['id'] = $quoteSupplier->getId();
+            $tmp['supplier'] = $quoteSupplier->getRepresentative()->getSupplier()->getName();
+            $tmp['representative'] = $quoteSupplier->getRepresentative()->getName();
+            $tmp['price'] = number_format($quoteSupplier->getPrice(), 2, ',', '.');
+            $tmp['quantity'] = $quoteSupplier->getQuantity();
+
+            $data['data'][] = $tmp;
+        }
+
+        echo json_encode($data);
+        exit();
+    }
+
+    /**
      * @Route("/varejista/cotacoes/{id}/deletar", name="deletar_cotacao")
      * @param Request $request
      * @param $id
