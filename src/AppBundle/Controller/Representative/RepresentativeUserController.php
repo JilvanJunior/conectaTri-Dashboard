@@ -119,7 +119,11 @@ class RepresentativeUserController extends Controller
             $tmp['quantity'] = '';
             foreach ($quoteSuppliers as $quoteSupplier) {
                 if (!$quoteSupplier->getDeleted() && $quoteSupplier->getRepresentative()->getId() == $representative[0]->getId()) {
-                    $tmp['price'] = number_format($quoteSupplier->getPrice(), 2, ',', '.');
+
+                    $price = $quoteSupplier->getPrice();
+
+                    if($price > 0)
+                        $tmp['price'] = number_format($price, 2, ',', '.');
                     $tmp['quantity'] = $quoteSupplier->getQuantity();
                 }
             }
