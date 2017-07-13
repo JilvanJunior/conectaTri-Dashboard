@@ -128,7 +128,7 @@ class ResettingController extends Controller
     }
 
     /**
-     * @Route("/recovery/{token}", name="app_pass_recovery", schemes={"http"})
+     * @Route("/recovery/{token}", name="app_pass_recovery")
      * @param Request $request
      * @param string $token
      * @return Response
