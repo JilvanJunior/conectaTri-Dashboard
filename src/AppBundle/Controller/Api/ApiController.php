@@ -119,6 +119,9 @@ class ApiController extends FOSRestController {
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_BAD_REQUEST);
