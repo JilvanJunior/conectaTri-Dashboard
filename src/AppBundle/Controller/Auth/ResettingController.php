@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller\Auth;
 
+use AppBundle\Form\AppResettingFormType;
 use AppBundle\Form\ResettingFormType;
+use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -120,18 +122,66 @@ class ResettingController extends Controller
 
         return $this->render('security/reset.html.twig', array(
             'token' => $token,
+            'action' => "recover_password_token",
             'form' => $form->createView(),
         ));
     }
 
     /**
-     * @Route("/recovery/{token}", name="app_pass_recovery", schemes={"https"})
+     * @Route("/recovery/{token}", name="app_pass_recovery", schemes={"http"})
+     * @param Request $request
      * @param string $token
-     *
      * @return Response
      */
-    public function appPasswordReset($token) {
-        return new Response();
+    public function appPasswordReset(Request $request, $token) {
+
+        $em = $this->getDoctrine()->getManager();
+        $pe = $this->get("security.password_encoder");
+
+        $data = json_decode(Utils::base64url_decode($token));
+        $newData = [
+            'i' => $data->i,
+            'u' => $data->u,
+            'j' => $data->j
+        ];
+        $user = $em->getRepository("AppBundle:Retailer")->find($data->i);
+        $passHash = Utils::base64url_encode(hash_hmac("haval128,4", $user->getPassword(), $this->getParameter('internal_key'), true));
+        $hash = $data->z;
+        $cmpHash = Utils::base64url_encode(hash_hmac("sha256", json_encode($newData), $this->getParameter('internal_key'), true));
+
+        $time = new \DateTime("-1 days");
+        $dataTime = new \DateTime();
+        $dataTime->setTimestamp($data->j);
+        if ($user == null || $cmpHash != $hash || $dataTime < $time || $passHash != $data->u) {
+            return $this->render('security/invalid_link.html.twig', array());
+        }
+
+        $form = $this->createForm(AppResettingFormType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $url = $this->generateUrl('login');
+            $response = new RedirectResponse($url);
+
+            // encode the password
+            $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+
+            // save the Retailer
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            return $response;
+        }
+
+        return $this->render('security/reset.html.twig', array(
+            'token' => $token,
+            'action' => "app_pass_recovery",
+            'form' => $form->createView(),
+        ));
     }
 
     private function _generateToken()

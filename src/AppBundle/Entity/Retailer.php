@@ -79,6 +79,8 @@ class Retailer implements UserInterface, \Serializable
      */
     private $email;
 
+    private $plainPassword;
+
     /**
      * @var string
      *
@@ -243,6 +245,16 @@ class Retailer implements UserInterface, \Serializable
     public function getUsername()
     {
         return $this->cnpj;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
     }
 
     /**

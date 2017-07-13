@@ -188,7 +188,7 @@
         </button>
         <div class="profile__form">
             <div class="profile__fields">
-                {{ form_start(form, {'action': path('recover_password_token', {'token': token})} ) }}
+                {{ form_start(form, {'action': path(action, {'token': token})} ) }}
                 {{ form_row(form.plainPassword.first, {'attr' : {'class' : 'input'}}) }}
                 {{ form_row(form.plainPassword.second, {'attr' : {'class' : 'input'}}) }}
                 <br>
