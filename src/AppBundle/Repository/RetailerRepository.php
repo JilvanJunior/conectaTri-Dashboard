@@ -24,6 +24,26 @@ class RetailerRepository extends EntityRepository
                   ORDER BY r.createdAt ASC'
             )
             ->getResult();
+    }
+
+    public function findWithOrders()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+            'SELECT r, (
+                    SELECT COUNT(qss)
+                    FROM AppBundle:QuoteSupplierStatus qss
+                    WHERE qss.quote IN (
+                      SELECT q
+                      FROM AppBundle:Quote q
+                      WHERE q.deleted = 0
+                      AND q.retailer = r
+                    )
+                  ) AS orders
+                  FROM AppBundle:Retailer r
+                  WHERE r.deleted = 0 AND r.verified = 1'
+            )
+            ->getResult();
 
     }
 }

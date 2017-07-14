@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\ActiveRetailer;
+use AppBundle\Entity\Retailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,11 +13,11 @@ class ClientsController extends Controller
     /**
      * @Route("/administrador/clientes", name="admin_clients")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
-        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false, 'verified' => true]);
+        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findWithOrders();
 
         return $this->render('Admin/clients/index.html.twig', ['clients' => $clients]);
     }
@@ -24,11 +25,11 @@ class ClientsController extends Controller
     /**
      * @Route("/administrador/clientes/clientesXregiao", name="admin_clients_pie_clientsXregion")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart1Action(Request $request)
     {
-        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false, 'verified' => true]);
+        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findWithOrders();
 
         return $this->render('Admin/clients/charts/chart_pie_clientXregion.html.twig', ['clients' => $clients]);
     }
@@ -51,11 +52,11 @@ class ClientsController extends Controller
     /**
      * @Route("/administrador/clientes/clientesXestado", name="admin_clients_pie_clientsXstate")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart2Action(Request $request)
     {
-        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false, 'verified' => true]);
+        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findWithOrders();
 
         return $this->render('Admin/clients/charts/chart_pie_clientXstate.html.twig', ['clients' => $clients]);
     }
@@ -79,11 +80,11 @@ class ClientsController extends Controller
     /**
      * @Route("/administrador/clientes/cadastrados", name="admin_clients_line_createdaccountsXtime")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart3Action(Request $request)
     {
-        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false, 'verified' => true]);
+        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findWithOrders();
 
         return $this->render('Admin/clients/charts/chart_line_createdaccountsXtime.html.twig', ['clients' => $clients]);
     }
@@ -105,11 +106,11 @@ class ClientsController extends Controller
     /**
      * @Route("/administrador/clientes/ativos", name="admin_clients_line_createdpricelistsXtime")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart4Action(Request $request)
     {
-        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findBy(['deleted' => false, 'verified' => true]);
+        $clients = $this->getDoctrine()->getRepository('AppBundle:Retailer')->findWithOrders();
 
         return $this->render('Admin/clients/charts/chart_line_createdpricelistsXtime.html.twig', ['clients' => $clients]);
     }

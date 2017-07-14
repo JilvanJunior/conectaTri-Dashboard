@@ -105,17 +105,14 @@
                                                     <tbody>
                                                     {% for client in clients %}
                                                         <tr>
-                                                            <td>{{ client.cnpj }}</td>
-                                                            <td>{{ client.companyName }}</td>
-                                                            <td>{{ client.listings|length }}</td>
-                                                            <td>{{ client.quotes|length }}</td>
-                                                            <td></td>
-                                                            <td>{{ client.createdAt|date('d/m/Y') }}</td>
+                                                            <td>{{ client.0.cnpj }}</td>
+                                                            <td>{{ client.0.companyName }}</td>
+                                                            <td>{{ client.0.listings|length }}</td>
+                                                            <td>{{ client.0.quotes|length }}</td>
+                                                            <td>{{ client.orders }}</td>
+                                                            <td>{{ client.0.createdAt|date('d/m/Y') }}</td>
                                                             <td>
-                                                                {#<a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                                    <i class="fa fa-eye"></i> Ver
-                                                                </a>#}
-                                                                <a href="{{ path('admin_pricelist_client', {'id': client.id}) }}" class="btn btn-outline btn-circle btn-sm grey-salsa">
+                                                                <a href="{{ path('admin_pricelist_client', {'id': client.0.id}) }}" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-line-chart"> Cotações</i>
                                                                 </a>
                                                             </td>
