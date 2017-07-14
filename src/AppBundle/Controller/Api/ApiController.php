@@ -936,8 +936,8 @@ class ApiController extends FOSRestController {
                     ->setQuoteProduct($quoteProduct);
                 $em->persist($quoteSupplier);
                 $quoteProduct->addQuoteSupplier($quoteSupplier);
-                $isFirst = false;
             }
+            $isFirst = false;
             $dbQuote->addQuoteProduct($quoteProduct);
         }
         $em->flush();
@@ -995,9 +995,10 @@ class ApiController extends FOSRestController {
                     } else {
                         $supplier->setQuantity($rcvSupplier->quantity)
                             ->setPrice(str_replace(",", ".", $rcvSupplier->price))
-                            ->setDeleted(true)
+                            ->setDeleted(false)
                             ->setUpdatedAt(new \DateTime());
                         if ($isFirst) {
+                            $supplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote, "representative" => $supplier->getRepresentative()]);
                             $supplierStatus = new QuoteSupplierStatus();
                             $supplierStatus->setQuote($dbQuote)->setRepresentative($supplier->getRepresentative());
                             $em->persist($supplierStatus);
@@ -1005,6 +1006,7 @@ class ApiController extends FOSRestController {
                         $tmp2[] = $supplier;
                     }
                 }
+                $isFirst = false;
                 $this->array_diff($rcvProduct->quote_suppliers, $tmp2);
                 /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
