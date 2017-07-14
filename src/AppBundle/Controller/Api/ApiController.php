@@ -936,8 +936,8 @@ class ApiController extends FOSRestController {
                     ->setQuoteProduct($quoteProduct);
                 $em->persist($quoteSupplier);
                 $quoteProduct->addQuoteSupplier($quoteSupplier);
-                $isFirst = false;
             }
+            $isFirst = false;
             $dbQuote->addQuoteProduct($quoteProduct);
         }
         $em->flush();
@@ -1005,6 +1005,7 @@ class ApiController extends FOSRestController {
                         $tmp2[] = $supplier;
                     }
                 }
+                $isFirst = false;
                 $this->array_diff($rcvProduct->quote_suppliers, $tmp2);
                 /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
