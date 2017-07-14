@@ -25,7 +25,7 @@ security:
         retailer_db_provider:
             entity:
                 class: AppBundle:Retailer
-                property: email
+                property: cnpj
 
 
     firewalls:

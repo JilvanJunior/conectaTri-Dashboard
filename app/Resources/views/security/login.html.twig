@@ -182,10 +182,42 @@
 
 <body>
 <div class="container">
-    <div class="profile">
-        <button class="profile__avatar" id="toggleProfile">
-            <img src="{{ asset('assets/layouts/layout3/img/avatar.png') }}" alt="Avatar" />
+    <div id="toggleBtn">
+        <button class="btn" id="toggleRetailer">
+            Sou Varejista
         </button>
+        <button class="btn" id="toggleRepresentative">
+            Sou Fornecedor
+        </button>
+    </div>
+    <div class="retailer">
+        {% if error %}
+            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+        <div class="profile__form">
+            <div class="profile__fields">
+                <form action="{{ path('login') }}" method="post">
+                    <div class="field">
+                        <input type="text" id="username" name="_username" class="input" required pattern=.*\S.* />
+                        <label for="username" class="label">CNPJ</label>
+                    </div>
+                    <div class="field">
+                        <input type="password" id="password" name="_password" class="input" required pattern=.*\S.* />
+                        <label for="password" class="label">Senha</label>
+                    </div>
+                    {#
+                        If you want to control the URL the user
+                        is redirected to on success (more details below)
+                        <input type="hidden" name="_target_path" value="/account" />
+                    #}
+                    <div class="profile__footer">
+                        <button class="btn" type="submit">Entrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="representative">
         {% if error %}
             <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
@@ -218,8 +250,18 @@
 
 <script>
     /* Simple VanillaJS to toggle class */
-    [].map.call(document.querySelectorAll('.profile'), function(el) {
-        el.classList.toggle('profile--open');
+    document.getElementById('toggleRetailer').addEventListener('click', function () {
+        [].map.call(document.querySelectorAll('.retailer'), function(el) {
+            el.classList.toggle('profile--open');
+        });
+        document.getElementById('toggleBtn').style.display = 'none';
+    });
+
+    document.getElementById('toggleRepresentative').addEventListener('click', function () {
+        [].map.call(document.querySelectorAll('.representative'), function(el) {
+            el.classList.toggle('profile--open');
+        });
+        document.getElementById('toggleBtn').style.display = 'none';
     });
 </script>
 </body>
