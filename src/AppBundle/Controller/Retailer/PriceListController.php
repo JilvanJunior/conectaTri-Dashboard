@@ -6,6 +6,8 @@ use AppBundle\Entity\Product;
 use AppBundle\Entity\Quote;
 use AppBundle\Entity\QuoteProduct;
 use AppBundle\Entity\QuoteSupplier;
+use AppBundle\Entity\QuoteSupplierStatus;
+use AppBundle\Entity\Representative;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -247,6 +249,7 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
+        /** @var Quote $quote */
         $quote = $em->getRepository('AppBundle:Quote')->find($id);
 
         $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
@@ -259,6 +262,7 @@ class PriceListController extends Controller
             //add new quoteSuppliers
             foreach ($representativesIds as $representativesId) {
 
+                /** @var Representative $representative */
                 $representative = $em->getRepository('AppBundle:Representative')->find($representativesId);
 
                 foreach ($quoteProducts as $quoteProduct) {
@@ -272,6 +276,13 @@ class PriceListController extends Controller
                     $em->persist($quoteSupplier);
                     $em->flush();
                 }
+
+                //create QuoteSupplierStatus
+                $quoteSupplierStatus = new QuoteSupplierStatus();
+                $quoteSupplierStatus->setQuote($quote);
+                $quoteSupplierStatus->setRepresentative($representative);
+                $em->persist($quoteSupplierStatus);
+                $em->flush();
 
                 if($quote->getType() == 1){
                     //send mail to representative

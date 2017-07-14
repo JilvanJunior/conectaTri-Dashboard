@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller\Representative;
 
+use AppBundle\Entity\Quote;
 use AppBundle\Entity\QuoteProduct;
 use AppBundle\Entity\QuoteSupplier;
+use AppBundle\Entity\QuoteSupplierStatus;
 use AppBundle\Entity\Representative;
 use AppBundle\Entity\RepresentativeUser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -110,8 +112,14 @@ class RepresentativeUserController extends Controller
                 $em->persist($quoteSupplier);
             }
 
-            $em->getRepository('AppBundle:QuoteSupplier')
-                ->updateStatusInProgress($quoteId, $representative->getId());
+            /** @var QuoteSupplierStatus $quoteSupplierStatus */
+            $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
+                ->findOneBy(['quote' => $quote, 'representative' => $representative]);
+
+            if($quoteSupplierStatus->getStatus() == 0) {
+                $quoteSupplierStatus->setStatus(1);
+                $em->persist($quoteSupplierStatus);
+            }
 
             $em->flush();
         }
@@ -158,13 +166,10 @@ class RepresentativeUserController extends Controller
         /** @var Quote $quote */
         $quote = $em->getRepository('AppBundle:Quote')->find($quoteId);
 
-        /** @var QuoteProduct $quoteProducts */
-        $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $quote]);
-
         /** @var Representative $representative */
         $representative = $em->getRepository('AppBundle:Representative')->find($representativeId);
 
-        if($quote == null || $quoteProducts == null || $representative == null){
+        if($quote == null || $representative == null){
             $data['url'] = $this->generateUrl('access_denied');
             echo json_encode($data);
             exit();
@@ -172,16 +177,12 @@ class RepresentativeUserController extends Controller
 
         if($request->getMethod() == "POST"){
 
-            $qsRepository = $em->getRepository('AppBundle:QuoteSupplier');
+            /** @var QuoteSupplierStatus $quoteSupplierStatus */
+            $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
+                ->findOneBy(['quote' => $quote, 'representative' => $representative]);
 
-            foreach ($quoteProducts as $quoteProduct) {
-                /** @var QuoteSupplier $quoteSupplier */
-                $quoteSupplier = $qsRepository->findOneBy(['quoteProduct' => $quoteProduct,
-                    'representative' => $representative, 'deleted' => false]);
-
-                $quoteSupplier->setStatus(2);
-                $em->persist($quoteSupplier);
-            }
+            $quoteSupplierStatus->setStatus(2);
+            $em->persist($quoteSupplierStatus);
 
             $em->flush();
 
