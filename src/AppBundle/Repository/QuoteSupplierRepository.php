@@ -40,4 +40,23 @@ class QuoteSupplierRepository extends EntityRepository
             ->getResult();
     }
 
+    public function updateStatusInProgress($quoteId, $representativeId)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'UPDATE AppBundle:QuoteSupplier qs
+                SET qs.status = 1
+                WHERE qs.deleted = 0 
+                AND qs.representative = :representative 
+                AND qs.quoteProduct IN (
+                  SELECT qp 
+                  FROM AppBundle:QuoteProduct qp
+                  WHERE qp.deleted = 0 
+                  AND qp.quote = :quote
+                )'
+            )
+            ->setParameters(array('quote' => $quoteId, 'representative' => $representativeId))
+            ->getResult();
+    }
+
 }

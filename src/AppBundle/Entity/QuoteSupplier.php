@@ -57,6 +57,20 @@ class QuoteSupplier
     private $quantity;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status = 0;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="filled_in", type="boolean")
+     */
+    private $filledIn = false;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -78,13 +92,6 @@ class QuoteSupplier
      * @ORM\Column(name="deleted", type="boolean")
      */
     private $deleted = false;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="filled_in", type="boolean")
-     */
-    private $filledIn = false;
 
 
     /**
@@ -174,6 +181,24 @@ class QuoteSupplier
     public function setQuantity($quantity)
     {
         $this->quantity = $quantity;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     * @return QuoteSupplier
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
         return $this;
     }
 

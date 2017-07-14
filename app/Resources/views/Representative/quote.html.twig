@@ -50,22 +50,6 @@
                                                         <div class="col-md-6">
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <div class="btn-group pull-right">
-                                                                <button class="btn green btn-outline dropdown-toggle" data-toggle="dropdown">Opções
-                                                                    <i class="fa fa-angle-down"></i>
-                                                                </button>
-                                                                <ul class="dropdown-menu pull-right">
-                                                                    <li>
-                                                                        <a href="#"> Imprimir </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="#"> Salvar como PDF </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="#"> Exportar para Excel </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -81,6 +65,9 @@
                                                     </tr>
                                                     </thead>
                                                 </table>
+                                                {% if not isCompleted %}
+                                                    <button id="button" class="btn btn-circle green">Encerrar Cotação</button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         <!-- END EXAMPLE TABLE PORTLET-->
@@ -110,8 +97,9 @@
 
             $(document).ready(function() {
 
+                {% if not isCompleted %}
                 var editor = new $.fn.dataTable.Editor( {
-                    ajax: '{{ path('quote_representative_data', {'id': quote.id, 'email': email}) }}',
+                    ajax: '{{ path('quote_representative_data', {'quoteId': quote.id, 'representativeId': representative.id}) }}',
                     table: '#sample_editable_1',
                     idSrc:  'id',
                     fields: [
@@ -156,10 +144,11 @@
                         submit: 'allIfChanged'
                     } );
                 } );
+                {% endif %}
 
                 var table = $('#sample_editable_1').DataTable( {
                     dom: 'Bfrtip',
-                    ajax: '{{ path('quote_representative_data', {'id': quote.id, 'email': email}) }}',
+                    ajax: '{{ path('quote_representative_data', {'quoteId': quote.id, 'representativeId': representative.id}) }}',
                     columns: [
                         {
                             "data": "name"
@@ -184,6 +173,22 @@
                     lengthChange: false,
                     buttons: [
                     ]
+                } );
+
+                $('#button').click( function () {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ path('end_quote_representative', {'quoteId': quote.id, 'representativeId': representative.id}) }}",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function(data) {
+                            window.location.href = data['url'];
+                        },
+                        error: function() {
+                            alert("Um problema ocorreu ao encerrar a cotação.");
+                        }
+                    });
                 } );
             } );
 

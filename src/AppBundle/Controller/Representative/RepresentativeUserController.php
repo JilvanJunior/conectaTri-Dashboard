@@ -2,7 +2,10 @@
 
 namespace AppBundle\Controller\Representative;
 
+use AppBundle\Entity\QuoteProduct;
 use AppBundle\Entity\QuoteSupplier;
+use AppBundle\Entity\Representative;
+use AppBundle\Entity\RepresentativeUser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,6 +20,7 @@ class RepresentativeUserController extends Controller
      */
     public function indexAction(Request $request, $id)
     {
+        /** @var RepresentativeUser $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
@@ -33,10 +37,14 @@ class RepresentativeUserController extends Controller
         }
 
         $isIncluded = false;
+        $isCompleted = false;
         foreach ($quote[0]->getQuoteProducts() as $quoteProduct) {
             foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                /** @var QuoteSupplier $quoteSupplier */
                 if ($quoteSupplier->getRepresentative()->getEmail() == $user->getEmail() && !$quoteSupplier->isDeleted()) {
                     $isIncluded = true;
+                    if($quoteSupplier->getStatus() == 2)
+                        $isCompleted = true;
                     break;
                 }
             }
@@ -49,47 +57,45 @@ class RepresentativeUserController extends Controller
         $representative = $em->getRepository('AppBundle:Representative')
             ->getRepresentativeByQuote($user->getEmail(), $id);
 
-        $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $quote]);
-
         return $this->render('Representative/quote.html.twig', array(
             'quote' => $quote[0],
-            'quoteProducts' => $quoteProducts,
             'representative' => $representative[0],
-            'email' => $user->getEmail(),
+            'isCompleted' => $isCompleted,
         ));
     }
 
     /**
-     * @Route("/representante/cotacao/{id}/{email}/data", name="quote_representative_data")
+     * @Route("/representante/cotacao/{quoteId}/{representativeId}/data", name="quote_representative_data")
      * @param Request $request
-     * @param $id
+     * @param $quoteId
+     * @param $representativeId
      */
-    public function quoteDataAction(Request $request, $id, $email)
+    public function quoteDataAction(Request $request, $quoteId, $representativeId)
     {
         $data = [];
 
         $em = $this->getDoctrine()->getManager();
 
-        $quote = $em->getRepository('AppBundle:Quote')->getQuoteByRepresentative($email, $id);
+        $quote = $em->getRepository('AppBundle:Quote')->find($quoteId);
         $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $quote]);
 
-        $representative = $em->getRepository('AppBundle:Representative')
-            ->getRepresentativeByQuote($email, $id);
+        $representative = $em->getRepository('AppBundle:Representative')->find($representativeId);
 
         if($request->getMethod() == "POST"){
 
             $data = $request->get('data');
             foreach ($data as $k => $item){
                 $quoteSupplier = $em->getRepository('AppBundle:QuoteSupplier')->findOneBy(
-                    ['quoteProduct' => $k, 'representative' => $representative[0], 'deleted' => false]);
+                    ['quoteProduct' => $k, 'representative' => $representative, 'deleted' => false]);
 
                 //check if exists
                 if($quoteSupplier == null){
                     $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($k);
 
                     $quoteSupplier = new QuoteSupplier();
+                    /** @var QuoteProduct $quoteProduct */
                     $quoteSupplier->setQuoteProduct($quoteProduct);
-                    $quoteSupplier->setRepresentative($representative[0]);
+                    $quoteSupplier->setRepresentative($representative);
                 } else{
                     $quoteSupplier->setUpdatedAt(new \DateTime());
                 }
@@ -103,6 +109,10 @@ class RepresentativeUserController extends Controller
 
                 $em->persist($quoteSupplier);
             }
+
+            $em->getRepository('AppBundle:QuoteSupplier')
+                ->updateStatusInProgress($quoteId, $representative->getId());
+
             $em->flush();
         }
 
@@ -118,7 +128,7 @@ class RepresentativeUserController extends Controller
             $tmp['price'] = '';
             $tmp['quantity'] = '';
             foreach ($quoteSuppliers as $quoteSupplier) {
-                if (!$quoteSupplier->getDeleted() && $quoteSupplier->getRepresentative()->getId() == $representative[0]->getId()) {
+                if (!$quoteSupplier->getDeleted() && $quoteSupplier->getRepresentative()->getId() == $representative->getId()) {
 
                     $price = $quoteSupplier->getPrice();
 
@@ -132,6 +142,55 @@ class RepresentativeUserController extends Controller
 
         echo json_encode($data);
         exit();
+    }
+
+    /**
+     * @Route("/representante/cotacao/{quoteId}/{representativeId}/encerrar", name="end_quote_representative")
+     * @param Request $request
+     * @param $quoteId
+     * @param $representativeId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function endQuoteAction(Request $request, $quoteId, $representativeId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var Quote $quote */
+        $quote = $em->getRepository('AppBundle:Quote')->find($quoteId);
+
+        /** @var QuoteProduct $quoteProducts */
+        $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $quote]);
+
+        /** @var Representative $representative */
+        $representative = $em->getRepository('AppBundle:Representative')->find($representativeId);
+
+        if($quote == null || $quoteProducts == null || $representative == null){
+            $data['url'] = $this->generateUrl('access_denied');
+            echo json_encode($data);
+            exit();
+        }
+
+        if($request->getMethod() == "POST"){
+
+            $qsRepository = $em->getRepository('AppBundle:QuoteSupplier');
+
+            foreach ($quoteProducts as $quoteProduct) {
+                /** @var QuoteSupplier $quoteSupplier */
+                $quoteSupplier = $qsRepository->findOneBy(['quoteProduct' => $quoteProduct,
+                    'representative' => $representative, 'deleted' => false]);
+
+                $quoteSupplier->setStatus(2);
+                $em->persist($quoteSupplier);
+            }
+
+            $em->flush();
+
+            $data['url'] = $this->generateUrl('quote_representative', ['id' => $quote->getId()]);
+            echo json_encode($data);
+            exit();
+        }
+
+        return $this->redirectToRoute('access_denied');
     }
 
 }
