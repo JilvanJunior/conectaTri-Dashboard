@@ -520,6 +520,19 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $dbListings = $d->getRepository("AppBundle:Listing")->findBy(["retailer" => $dbToken->getRetailer(), "deleted" => false]);
+        foreach ($dbListings as $listing) {
+            $em->detach($listing);
+            foreach ($listing->getListingProducts() as $product) {
+                if ($product->getProduct()->isDeleted() == true) {
+                    $listing->removeListingProduct($product);
+                }
+            }
+            foreach ($listing->getRepresentatives() as $representative) {
+                if ($representative->isDeleted()) {
+                    $listing->removeRepresentative($representative);
+                }
+            }
+        }
         return View::create($dbListings, Response::HTTP_OK);
     }
 
@@ -688,7 +701,7 @@ class ApiController extends FOSRestController {
             if (!$quote->isDeleted()) {
                 foreach ($quote->getQuoteProducts() as $product) {
                     $em->detach($product);
-                    if (!$product->isDeleted() && !$product->getProduct()->isDeleted()) {
+                    if (!$product->isDeleted()) {
                         foreach ($product->getQuoteSuppliers() as $supplier) {
                             $em->detach($supplier);
                             if ($supplier->isDeleted() || $supplier->getRepresentative()->isDeleted())
@@ -740,7 +753,7 @@ class ApiController extends FOSRestController {
             if (!$quote->isDeleted()) {
                 foreach ($quote->getQuoteProducts() as $product) {
                     $em->detach($product);
-                    if (!$product->isDeleted() && !$product->getProduct()->isDeleted()) {
+                    if (!$product->isDeleted()) {
                         foreach ($product->getQuoteSuppliers() as $supplier) {
                             $em->detach($supplier);
                             if ($supplier->isDeleted() || $supplier->getRepresentative()->isDeleted())
@@ -794,7 +807,7 @@ class ApiController extends FOSRestController {
             if (!$quote->isDeleted()) {
                 foreach ($quote->getQuoteProducts() as $product) {
                     $em->detach($product);
-                    if (!$product->isDeleted() && !$product->getProduct()->isDeleted()) {
+                    if (!$product->isDeleted()) {
                         foreach ($product->getQuoteSuppliers() as $supplier) {
                             $em->detach($supplier);
                             if ($supplier->isDeleted() || $supplier->getRepresentative()->isDeleted())
