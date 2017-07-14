@@ -47,7 +47,7 @@ class QuoteSupplierStatusFillupCommand extends ContainerAwareCommand
             $output->writeln("All QuoteSuppliers have a QuoteSupplierStatus, nothing to do.");
             return;
         }
-        $output->writeln(array_count_values($quoteSuppliers)." QuoteSuppliers don't have a QuoteSupplierStatus. Fixing this.");
+        $output->writeln(count($quoteSuppliers)." QuoteSuppliers don't have a QuoteSupplierStatus. Fixing this.");
         $qb = $d->getRepository("AppBundle:QuoteSupplier")->createQueryBuilder("s");
         $qb->select("IDENTITY(s.representative), IDENTITY(p.quote), SUM(s.price)")
             ->join("s.quoteProduct", "p")
