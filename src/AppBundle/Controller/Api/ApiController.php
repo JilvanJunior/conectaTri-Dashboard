@@ -995,7 +995,7 @@ class ApiController extends FOSRestController {
                     } else {
                         $supplier->setQuantity($rcvSupplier->quantity)
                             ->setPrice(str_replace(",", ".", $rcvSupplier->price))
-                            ->setDeleted(true)
+                            ->setDeleted(false)
                             ->setUpdatedAt(new \DateTime());
                         if ($isFirst) {
                             $supplierStatus = new QuoteSupplierStatus();
