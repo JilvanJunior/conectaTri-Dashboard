@@ -35,7 +35,10 @@
                             <!-- BEGIN PAGE CONTENT INNER -->
                             <div class="page-content-inner">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-xs-12">
+                                        <div class="m-heading-1 border-green m-bordered">
+                                            Clique nos campos de quantidade e preço para editá-los.
+                                        </div>
                                         <!-- BEGIN EXAMPLE TABLE PORTLET-->
                                         <div class="portlet light portlet-fit ">
                                             <div class="portlet-title">
@@ -50,6 +53,9 @@
                                                         <div class="col-md-6">
                                                         </div>
                                                         <div class="col-md-6">
+                                                            {% if not isCompleted %}
+                                                                <button id="button" class="btn btn-circle green pull-right">Encerrar Cotação</button>
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -65,9 +71,6 @@
                                                     </tr>
                                                     </thead>
                                                 </table>
-                                                {% if not isCompleted %}
-                                                    <button id="button" class="btn btn-circle green">Encerrar Cotação</button>
-                                                {% endif %}
                                             </div>
                                         </div>
                                         <!-- END EXAMPLE TABLE PORTLET-->
@@ -138,7 +141,6 @@
                     ]
                 } );
 
-
                 $('#sample_editable_1').on( 'click', 'tbody td.editable', function (e) {
                     editor.inline( this, {
                         onBlur: 'submit',
@@ -149,7 +151,13 @@
 
                 var table = $('#sample_editable_1').DataTable( {
                     language: {
-                        url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
+                        url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
+                        select: {
+                            rows: {
+                                _: "",
+                                1: ""
+                            }
+                        }
                     },
                     dom: 'Bfrtip',
                     ajax: '{{ path('quote_representative_data', {'quoteId': quote.id, 'representativeId': representative.id}) }}',

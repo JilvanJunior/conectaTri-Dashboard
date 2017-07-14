@@ -134,7 +134,14 @@
         $(function(){
             var table = $('#sample_1').DataTable({
                 language: {
-                    url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
+                    url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
+                    select: {
+                        rows: {
+                            _: "%d linha selecionadas",
+                            0: "Clique numa linha para selecionar",
+                            1: "1 linha selecionada"
+                        }
+                    }
                 }
             });
 

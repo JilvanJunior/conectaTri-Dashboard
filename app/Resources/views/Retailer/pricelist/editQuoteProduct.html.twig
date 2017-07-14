@@ -153,7 +153,13 @@
 
                 var table = $('#sample_editable_1').DataTable( {
                     language: {
-                        url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
+                        url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
+                        select: {
+                            rows: {
+                                _: "",
+                                1: ""
+                            }
+                        }
                     },
                     dom: 'Bfrtip',
                     ajax: '{{ path('editar_cotacao_produto_data', {'id': quoteProduct.id}) }}',
