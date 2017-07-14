@@ -125,7 +125,11 @@
     <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
     <script>
         $(function(){
-            var table = $('#sample_1').DataTable();
+            var table = $('#sample_1').DataTable({
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
+                }
+            });
 
             $('#sample_1 tbody').on( 'click', 'tr', function () {
                 if ( $(this).hasClass('selected') ) {

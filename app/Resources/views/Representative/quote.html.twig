@@ -60,8 +60,8 @@
                                                         <th> Marca </th>
                                                         <th> Descrição </th>
                                                         <th> Embalagem de Compra </th>
-                                                        <th> Preço </th>
                                                         <th> Quantidade </th>
+                                                        <th> Preço </th>
                                                     </tr>
                                                     </thead>
                                                 </table>
@@ -128,15 +128,16 @@
                             "type": "readonly"
                         },
                         {
-                            "label": "Preço",
-                            "name": "price"
-                        },
-                        {
                             "label": "Quantidade",
                             "name": "quantity"
+                        },
+                        {
+                            "label": "Preço",
+                            "name": "price"
                         }
                     ]
                 } );
+
 
                 $('#sample_editable_1').on( 'click', 'tbody td.editable', function (e) {
                     editor.inline( this, {
@@ -147,6 +148,9 @@
                 {% endif %}
 
                 var table = $('#sample_editable_1').DataTable( {
+                    language: {
+                        url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
+                    },
                     dom: 'Bfrtip',
                     ajax: '{{ path('quote_representative_data', {'quoteId': quote.id, 'representativeId': representative.id}) }}',
                     columns: [
@@ -163,10 +167,10 @@
                             "data": "quantity_unit"
                         },
                         {
-                            "data": "price", className: 'editable'
+                            "data": "quantity", className: 'editable'
                         },
                         {
-                            "data": "quantity", className: 'editable'
+                            "data": "price", className: 'editable'
                         }
                     ],
                     select: true,

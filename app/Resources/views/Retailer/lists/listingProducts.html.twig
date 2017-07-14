@@ -138,6 +138,9 @@
                 } );
 
                 var table = $('#sample_editable_1').DataTable( {
+                    language: {
+                        url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
+                    },
                     dom: 'Bfrtip',
                     ajax: '{{ path('lista_produtos_quantidade_data', {'id': listing.id}) }}',
                     columns: [
