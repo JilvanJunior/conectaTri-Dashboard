@@ -56,6 +56,13 @@ class Quote
     private $retailer;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuoteSupplierStatus", mappedBy="quote")
+     */
+    private $suppliersStatus;
+
+    /**
      * var \DateTime
      *
      * @ORM\Column(name="begins_at", type="datetime", nullable=true)
@@ -106,6 +113,7 @@ class Quote
     public function __construct()
     {
         $this->quoteProducts = new ArrayCollection();
+        $this->suppliersStatus = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->expiresAt = new \DateTime("2500-01-01");
         $this->beginsAt = new \DateTime();
@@ -191,7 +199,33 @@ class Quote
      * @return Quote
      */
     public function removeQuoteProduct($quoteProduct) {
-        if ($this->quoteProducts->contains($quoteProduct)) $this->quoteProducts->remove($quoteProduct);
+        if ($this->quoteProducts->contains($quoteProduct)) $this->quoteProducts->removeElement($quoteProduct);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSuppliersStatus()
+    {
+        return $this->suppliersStatus;
+    }
+
+    /**
+     * @param QuoteSupplierStatus $supplierStatus
+     * @return Quote
+     */
+    public function addSupplierStatus($supplierStatus) {
+        if (!$this->suppliersStatus->contains($supplierStatus)) $this->suppliersStatus->add($supplierStatus);
+        return $this;
+    }
+
+    /**
+     * @param QuoteSupplierStatus $supplierStatus
+     * @return Quote
+     */
+    public function removeSupplierStatus($supplierStatus) {
+        if ($this->suppliersStatus->contains($supplierStatus)) $this->suppliersStatus->removeElement($supplierStatus);
         return $this;
     }
 

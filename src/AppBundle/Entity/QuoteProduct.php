@@ -151,7 +151,7 @@ class QuoteProduct
      * @return $this
      */
     public function removeQuoteSupplier($quoteSupplier) {
-        if ($this->quoteSuppliers->contains($quoteSupplier)) $this->quoteSuppliers->remove($quoteSupplier);
+        if ($this->quoteSuppliers->contains($quoteSupplier)) $this->quoteSuppliers->removeElement($quoteSupplier);
         return $this;
     }
 

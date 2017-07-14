@@ -9,6 +9,7 @@ use AppBundle\Entity\Product;
 use AppBundle\Entity\Quote;
 use AppBundle\Entity\QuoteProduct;
 use AppBundle\Entity\QuoteSupplier;
+use AppBundle\Entity\QuoteSupplierStatus;
 use AppBundle\Entity\Representative;
 use AppBundle\Entity\Retailer;
 use AppBundle\Entity\Supplier;
@@ -683,11 +684,14 @@ class ApiController extends FOSRestController {
             ->getQuery()->getResult();
         $responseArray = [];
         foreach($quotes as $quote) {
-            if ($quote->isDeleted() == false) {
+            $em->detach($quote);
+            if (!$quote->isDeleted()) {
                 foreach ($quote->getQuoteProducts() as $product) {
-                    if ($product->isDeleted() == false) {
+                    $em->detach($product);
+                    if (!$product->isDeleted() && !$product->getProduct()->isDeleted()) {
                         foreach ($product->getQuoteSuppliers() as $supplier) {
-                            if ($supplier->isDeleted() == true)
+                            $em->detach($supplier);
+                            if ($supplier->isDeleted() || $supplier->getRepresentative()->isDeleted())
                                 $product->removeQuoteSupplier($supplier);
                             /* TODO: Add this
                             else
@@ -732,11 +736,14 @@ class ApiController extends FOSRestController {
             ->getQuery()->getResult();
         $responseArray = [];
         foreach($quotes as $quote) {
-            if ($quote->isDeleted() == false) {
+            $em->detach($quote);
+            if (!$quote->isDeleted()) {
                 foreach ($quote->getQuoteProducts() as $product) {
-                    if ($product->isDeleted() == false) {
+                    $em->detach($product);
+                    if (!$product->isDeleted() && !$product->getProduct()->isDeleted()) {
                         foreach ($product->getQuoteSuppliers() as $supplier) {
-                            if ($supplier->isDeleted() == true)
+                            $em->detach($supplier);
+                            if ($supplier->isDeleted() || $supplier->getRepresentative()->isDeleted())
                                 $product->removeQuoteSupplier($supplier);
                             /* TODO: Add this
                             else
@@ -783,11 +790,14 @@ class ApiController extends FOSRestController {
             ->getQuery()->getResult();
         $responseArray = [];
         foreach($quotes as $quote) {
-            if ($quote->isDeleted() == false) {
+            $em->detach($quote);
+            if (!$quote->isDeleted()) {
                 foreach ($quote->getQuoteProducts() as $product) {
-                    if ($product->isDeleted() == false) {
+                    $em->detach($product);
+                    if (!$product->isDeleted() && !$product->getProduct()->isDeleted()) {
                         foreach ($product->getQuoteSuppliers() as $supplier) {
-                            if ($supplier->isDeleted() == true)
+                            $em->detach($supplier);
+                            if ($supplier->isDeleted() || $supplier->getRepresentative()->isDeleted())
                                 $product->removeQuoteSupplier($supplier);
                             /* TODO: Add this
                             else
@@ -902,6 +912,7 @@ class ApiController extends FOSRestController {
             ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
             ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
         $em->persist($dbQuote);
+        $isFirst = true;
         foreach ($quote->quote_products as $product) {
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             $quoteProduct = new QuoteProduct();
@@ -910,6 +921,13 @@ class ApiController extends FOSRestController {
             $em->persist($quoteProduct);
             foreach ($product->quote_suppliers as $supplier) {
                 $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
+                if ($isFirst) {
+                    $supplierStatus = new QuoteSupplierStatus();
+                    $supplierStatus->setRepresentative($dbSupplier);
+                    $supplierStatus->setQuote($dbQuote);
+                    $em->persist($supplierStatus);
+                    $dbQuote->addSupplierStatus($supplierStatus);
+                }
                 $quoteSupplier = new QuoteSupplier();
                 $quoteSupplier->setRepresentative($dbSupplier)
                     ->setQuantity($supplier->quantity)
@@ -918,6 +936,7 @@ class ApiController extends FOSRestController {
                     ->setQuoteProduct($quoteProduct);
                 $em->persist($quoteSupplier);
                 $quoteProduct->addQuoteSupplier($quoteSupplier);
+                $isFirst = false;
             }
             $dbQuote->addQuoteProduct($quoteProduct);
         }
@@ -949,6 +968,8 @@ class ApiController extends FOSRestController {
         }
         $quote = json_decode($request->getContent());
         $tmp = [];
+        $isFirst = true;
+        /** @var QuoteProduct $product */
         foreach ($dbQuote->getQuoteProducts() as $product) {
             $rcvProduct = $this->arrayContains($quote->quote_products, $product);
             if ($rcvProduct == false) {
@@ -958,9 +979,17 @@ class ApiController extends FOSRestController {
                 $product->setDeleted(false)
                     ->setUpdatedAt(new \DateTime());
                 $tmp2 = [];
+                /** @var QuoteSupplier $supplier */
                 foreach ($product->getQuoteSuppliers() as $supplier) {
                     $rcvSupplier = $this->arrayContains($rcvProduct->quote_suppliers, $supplier);
                     if ($rcvSupplier == false) {
+                        if ($isFirst) {
+                            $supplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote, "representative" => $supplier->getRepresentative()]);
+                            if ($supplierStatus != null) {
+                                $dbQuote->removeSupplierStatus($supplierStatus);
+                                $em->remove($supplierStatus);
+                            }
+                        }
                         $supplier->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
                     } else {
@@ -968,12 +997,23 @@ class ApiController extends FOSRestController {
                             ->setPrice(str_replace(",", ".", $rcvSupplier->price))
                             ->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
+                        if ($isFirst) {
+                            $supplierStatus = new QuoteSupplierStatus();
+                            $supplierStatus->setQuote($dbQuote)->setRepresentative($supplier->getRepresentative());
+                            $em->persist($supplierStatus);
+                        }
                         $tmp2[] = $supplier;
                     }
                 }
                 $this->array_diff($rcvProduct->quote_suppliers, $tmp2);
+                /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
                     $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
+                    if ($isFirst) {
+                        $supplierStatus = new QuoteSupplierStatus();
+                        $supplierStatus->setQuote($dbQuote)->setRepresentative($dbSupplier);
+                        $em->persist($supplierStatus);
+                    }
                     $quoteSupplier = new QuoteSupplier();
                     $quoteSupplier->setRepresentative($dbSupplier)
                         ->setQuantity($supplier->quantity)
@@ -985,6 +1025,7 @@ class ApiController extends FOSRestController {
             }
         }
         $this->array_diff($quote->quote_products, $tmp);
+        /** @var \stdClass $product */
         foreach ($quote->quote_products as $product) {
             $newProduct = new QuoteProduct();
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);

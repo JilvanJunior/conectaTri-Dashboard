@@ -379,7 +379,7 @@ class Product
      *
      * @return bool
      */
-    public function getDeleted()
+    public function isDeleted()
     {
         return $this->deleted;
     }

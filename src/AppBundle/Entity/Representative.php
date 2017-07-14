@@ -203,7 +203,7 @@ class Representative
      *
      * @return boolean
      */
-    public function getDeleted()
+    public function isDeleted()
     {
         return $this->deleted;
     }

@@ -32,7 +32,7 @@ class ApiSession
     /**
      * @var string
      *
-     * @ORM\Column(name="token", type="string", length=36, unique=true)
+     * @ORM\Column(name="token", type="guid", unique=true)
      */
     private $token;
 
