@@ -39,14 +39,12 @@ class RepresentativeUserController extends Controller
         }
 
         $isIncluded = false;
-        $isCompleted = false;
+
         foreach ($quote[0]->getQuoteProducts() as $quoteProduct) {
             foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                 /** @var QuoteSupplier $quoteSupplier */
                 if ($quoteSupplier->getRepresentative()->getEmail() == $user->getEmail() && !$quoteSupplier->isDeleted()) {
                     $isIncluded = true;
-                    if($quoteSupplier->getStatus() == 2)
-                        $isCompleted = true;
                     break;
                 }
             }
@@ -58,6 +56,13 @@ class RepresentativeUserController extends Controller
 
         $representative = $em->getRepository('AppBundle:Representative')
             ->getRepresentativeByQuote($user->getEmail(), $id);
+
+        $isCompleted = false;
+        $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
+            ->findOneBy(['quote' => $quote, 'representative' => $representative]);
+
+        if($quoteSupplierStatus != null && $quoteSupplierStatus->getStatus() == 2)
+            $isCompleted = true;
 
         return $this->render('Representative/quote.html.twig', array(
             'quote' => $quote[0],
