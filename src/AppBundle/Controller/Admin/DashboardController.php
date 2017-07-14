@@ -10,6 +10,8 @@ class DashboardController extends Controller
 {
     /**
      * @Route("/administrador/", name="admin_dashboard")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
@@ -17,7 +19,10 @@ class DashboardController extends Controller
         $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
         $activeRetailers = $em->getRepository('AppBundle:ActiveRetailer')->findAll();
         $qtyRetailer = ($activeRetailers == null ? 0 : end($activeRetailers)->getQuantity());
-        $activeQuotes = $em->getRepository('AppBundle:Quote')->countActives();
+        $activeQuotes = count($em->getRepository('AppBundle:QuoteSupplierStatus')
+            ->findBy(['status' => 0]));
+        $activeQuotes += count($em->getRepository('AppBundle:QuoteSupplierStatus')
+            ->findBy(['status' => 1]));
 
         $topSuppliers = $em->getRepository('AppBundle:Supplier')->findTopSuppliers();
 
@@ -43,6 +48,7 @@ class DashboardController extends Controller
 
     /**
      * @Route("/administrador/cotacoes/presenciais/data", name="admin_dashboard_presential_quotes_data")
+     * @param Request $request
      */
     public function presentialQuotesDataAction(Request $request)
     {
@@ -55,6 +61,7 @@ class DashboardController extends Controller
 
     /**
      * @Route("/administrador/listas/data", name="admin_dashboard_lists_data")
+     * @param Request $request
      */
     public function listsDataAction(Request $request)
     {
@@ -79,6 +86,7 @@ class DashboardController extends Controller
 
     /**
      * @Route("/administrador/fornecedores/data", name="admin_dashboard_suppliers_data")
+     * @param Request $request
      */
     public function suppliersDataAction(Request $request)
     {
@@ -91,6 +99,7 @@ class DashboardController extends Controller
 
     /**
      * @Route("/administrador/representantes/data", name="admin_dashboard_representatives_data")
+     * @param Request $request
      */
     public function representativesDataAction(Request $request)
     {

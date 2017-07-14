@@ -11,7 +11,7 @@ class PriceListController extends Controller
     /**
      * @Route("/administrador/cotacoes/em-andamento", name="admin_pricelist_inprogress")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function inprogressAction(Request $request)
     {
@@ -26,7 +26,7 @@ class PriceListController extends Controller
     /**
      * @Route("/administrador/cotacoes/finalizadas", name="admin_pricelist_ended")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function endedPricelistAction(Request $request)
     {
@@ -42,12 +42,10 @@ class PriceListController extends Controller
     /**
      * @Route("/administrador/cotacoes/pedidos", name="admin_pricelist_sentorders")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function sentOrdersAction(Request $request)
     {
-        //TODO get orders
-
         // replace this example code with whatever you need
         return $this->render('Admin/pricelist/sentorders.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
@@ -58,7 +56,7 @@ class PriceListController extends Controller
      * @Route("/administrador/cotacoes/por-cliente/{id}", name="admin_pricelist_client")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function clientAction(Request $request, $id)
     {
@@ -74,7 +72,7 @@ class PriceListController extends Controller
      * @Route("/administrador/cotacoes/por-fornecedor/{id}", name="admin_pricelist_supplier")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function supplierAction(Request $request, $id)
     {
@@ -90,7 +88,7 @@ class PriceListController extends Controller
      * @Route("/administrador/cotacoes/por-produto/{id}", name="admin_pricelist_product")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function productAction(Request $request, $id)
     {
@@ -106,7 +104,7 @@ class PriceListController extends Controller
      * @Route("/administrador/cotacoes/por-data/{date}", name="admin_pricelist_date")
      * @param Request $request
      * @param $date
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function dateAction(Request $request, $date)
     {
@@ -121,11 +119,10 @@ class PriceListController extends Controller
     /**
      * @Route("/administrador/cotacoes/criadas", name="admin_pricelist_line_createdpricelistsXtime")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart1Action(Request $request)
     {
-        //TODO get orders
         $em = $this->getDoctrine()->getManager();
         $quotes = $em->getRepository('AppBundle:Quote')->countQuotesByDate();
 
@@ -140,7 +137,6 @@ class PriceListController extends Controller
      */
     public function chart1DataAction(Request $request)
     {
-        //TODO get orders
         $em = $this->getDoctrine()->getManager();
         $quotes = $em->getRepository('AppBundle:Quote')->countQuotesByDate();
 
