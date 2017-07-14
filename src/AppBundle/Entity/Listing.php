@@ -210,7 +210,7 @@ class Listing
      * @return $this
      */
     public function removeListingProduct($product) {
-        if ($this->listingProducts->contains($product)) $this->listingProducts->remove($product);
+        if ($this->listingProducts->contains($product)) $this->listingProducts->removeElement($product);
         return $this;
     }
 
@@ -236,7 +236,7 @@ class Listing
      * @return $this
      */
     public function removeRepresentative($representative) {
-        if ($this->representatives->contains($representative)) $this->representatives->remove($representative);
+        if ($this->representatives->contains($representative)) $this->representatives->removeElement($representative);
         return $this;
     }
 
