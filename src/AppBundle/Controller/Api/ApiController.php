@@ -1012,9 +1012,11 @@ class ApiController extends FOSRestController {
                             ->setUpdatedAt(new \DateTime());
                         if ($isFirst) {
                             $supplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote, "representative" => $supplier->getRepresentative()]);
-                            $supplierStatus = new QuoteSupplierStatus();
-                            $supplierStatus->setQuote($dbQuote)->setRepresentative($supplier->getRepresentative());
-                            $em->persist($supplierStatus);
+                            if ($supplierStatus == null) {
+                                $supplierStatus = new QuoteSupplierStatus();
+                                $supplierStatus->setQuote($dbQuote)->setRepresentative($supplier->getRepresentative());
+                                $em->persist($supplierStatus);
+                            }
                         }
                         $tmp2[] = $supplier;
                     }
