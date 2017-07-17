@@ -8,7 +8,13 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * QuoteSupplierStatus
  *
- * @ORM\Table(name="quote_supplier_status")
+ * @ORM\Table(name="quote_supplier_status",
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="status_unique", columns={
+ *             "quote_id", "representative_id"
+ *         })
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuoteSupplierStatusRepository")
  * @Serializer\ExclusionPolicy("none")
  */

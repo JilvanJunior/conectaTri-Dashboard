@@ -1021,7 +1021,6 @@ class ApiController extends FOSRestController {
                         $tmp2[] = $supplier;
                     }
                 }
-                $isFirst = false;
                 $this->array_diff($rcvProduct->quote_suppliers, $tmp2);
                 /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
@@ -1040,6 +1039,7 @@ class ApiController extends FOSRestController {
                 }
                 $tmp[] = $rcvProduct;
             }
+            $isFirst = false;
         }
         $this->array_diff($quote->quote_products, $tmp);
         /** @var \stdClass $product */
