@@ -62,8 +62,11 @@ class ApiController extends FOSRestController {
                 $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
                 $mailer = $this->get('swiftmailer.mailer.default');
                 $msg = new \Swift_Message(
-                    "Verificação de E-Mail ConectaTri",
-                    "Por favor, acesse o seguinte link para confirmar seu endereço de email: <br/><a href=\"$link\">$link</a>",
+                    "Verificação de E-Mail Conecta Tri",
+                    "Olá. <br><br>"
+                    ."Você está recebendo esse e-mail porque se cadastrou no App Conecta Tri.<br>"
+                    ."Clique no link para confirmar seu endereço de e-mail: <a href=\"$link\">$link</a>"
+                    ."<br><br>Obrigado.<br><br>Equipe Conecta Tri",
                     "text/html",
                     "utf-8"
                 );
@@ -1184,8 +1187,11 @@ class ApiController extends FOSRestController {
         $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
         $mailer = $this->get('swiftmailer.mailer.default');
         $msg = new \Swift_Message(
-            "Verificação de E-Mail ConectaTri",
-            "Por favor, acesse o seguinte link para confirmar seu endereço de email: <br/><a href=\"$link\">$link</a>",
+            "Verificação de E-Mail Conecta Tri",
+            "Olá. <br><br>"
+                    ."Você está recebendo esse e-mail porque se cadastrou no App Conecta Tri.<br>"
+                    ."Clique no link para confirmar seu endereço de e-mail: <a href=\"$link\">$link</a>"
+                    ."<br><br>Obrigado.<br><br>Equipe Conecta Tri",
             "text/html",
             "utf-8"
         );
@@ -1253,8 +1259,11 @@ class ApiController extends FOSRestController {
             $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
             $mailer = $this->get('swiftmailer.mailer.default');
             $msg = new \Swift_Message(
-                "Verificação de E-Mail ConectaTri",
-                "Por favor, acesse o seguinte link para confirmar seu endereço de email: <br/><a href=\"$link\">$link</a>",
+                "Verificação de E-Mail Conecta Tri",
+                "Olá. <br><br>"
+                ."Você está recebendo esse e-mail porque se cadastrou no App Conecta Tri.<br>"
+                ."Clique no link para confirmar seu endereço de e-mail: <a href=\"$link\">$link</a>"
+                ."<br><br>Obrigado.<br><br>Equipe Conecta Tri",
                 "text/html",
                 "utf-8"
             );

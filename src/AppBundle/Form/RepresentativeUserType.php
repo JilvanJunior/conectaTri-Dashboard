@@ -29,6 +29,7 @@ class RepresentativeUserType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => RepresentativeUser::class,
+            'invalid_message' => 'Este valor não é válido.',
         ));
     }
 }

@@ -41,6 +41,7 @@ class AppResettingFormType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => Retailer::class,
+            'invalid_message' => 'Este valor não é válido.',
         ));
     }
 

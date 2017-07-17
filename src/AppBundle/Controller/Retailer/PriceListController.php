@@ -289,10 +289,11 @@ class PriceListController extends Controller
                     $link = $this->generateUrl('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
                     $message = new \Swift_Message(
                         'Cotação no ConectaTri',
-                        "<b>".$user->getFantasyName()."</b> lhe enviou um pedido de cotação no ConectaTri.
-                            <br><br>Para preencher esta cotação, clique <a href='$link'>aqui</a> ou acesse: $link
-                            <br><br>Caso este e-mail tenha sido enviado por acidente, pedimos que o desconsidere.
-                            <br><br>Obrigado",
+                        "Olá.<br><br>"
+                            .$user->getFantasyName()." te cadastrou e te mandou uma cotação de compra no Conecta Tri, valida até "
+                            . $quote->getExpiresAt()->format('d/m/Y H:i') .
+                            "<br>Para preencher esta cotação, clique <a href='$link'>aqui</a> ou acesse o link: $link
+                            <br><br>Equipe Conecta Tri",
                         "text/html",
                         "utf-8"
                     );

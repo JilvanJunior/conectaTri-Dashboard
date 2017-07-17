@@ -25,22 +25,39 @@ class SupplierRepository extends EntityRepository
                       WHERE s2.cnpj = s.cnpj 
                     ) 
                   ) AS qtyRepresentatives,
-                  (SELECT COUNT(qp.id)
-                   FROM AppBundle:QuoteProduct qp
-                   WHERE qp.id IN (
-                    SELECT qs.id
-                    FROM AppBundle:QuoteSupplier qs
-                    WHERE qs.representative IN (
-                      SELECT r2.id
-                      FROM AppBundle:Representative r2
-                      WHERE r2.supplier IN (
-                        SELECT s3.id 
-                        FROM AppBundle:Supplier s3
-                        WHERE s3.cnpj = s.cnpj 
-                        ) 
+                  (SELECT COUNT(q.id)
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.id IN (
+                    SELECT IDENTITY(qp.quote)
+                    FROM AppBundle:QuoteProduct qp
+                    WHERE qp.id IN (
+                      SELECT qs.id
+                      FROM AppBundle:QuoteSupplier qs
+                      WHERE qs.representative IN (
+                        SELECT r2.id
+                        FROM AppBundle:Representative r2
+                        WHERE r2.supplier IN (
+                          SELECT s3.id 
+                          FROM AppBundle:Supplier s3
+                          WHERE s3.cnpj = s.cnpj 
+                          ) 
+                        )
+                      ) 
+                    )
+                  ) AS qtyQuotes,
+                  (SELECT COUNT(qss)
+                  FROM AppBundle:QuoteSupplierStatus qss
+                  WHERE qss.representative IN (
+                    SELECT r3.id
+                    FROM AppBundle:Representative r3
+                    WHERE r3.supplier IN (
+                      SELECT s4.id 
+                      FROM AppBundle:Supplier s4
+                      WHERE s4.cnpj = s.cnpj 
                       )
-                    ) 
-                  ) AS qtyQuotes
+                    )
+                  ) AS qtyOrders
                   FROM AppBundle:Supplier s
                   WHERE s.deleted = 0
                   GROUP BY s.cnpj
@@ -62,22 +79,39 @@ class SupplierRepository extends EntityRepository
                       WHERE s2.cnpj = s.cnpj 
                     ) 
                   ) AS qtyRepresentatives,
-                  (SELECT COUNT(qp.id)
-                   FROM AppBundle:QuoteProduct qp
-                   WHERE qp.id IN (
-                    SELECT qs.id
-                    FROM AppBundle:QuoteSupplier qs
-                    WHERE qs.representative IN (
-                      SELECT r2.id
-                      FROM AppBundle:Representative r2
-                      WHERE r2.supplier IN (
-                        SELECT s3.id 
-                        FROM AppBundle:Supplier s3
-                        WHERE s3.cnpj = s.cnpj 
-                        ) 
+                  (SELECT COUNT(q.id)
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.id IN (
+                    SELECT IDENTITY(qp.quote)
+                    FROM AppBundle:QuoteProduct qp
+                    WHERE qp.id IN (
+                      SELECT qs.id
+                      FROM AppBundle:QuoteSupplier qs
+                      WHERE qs.representative IN (
+                        SELECT r2.id
+                        FROM AppBundle:Representative r2
+                        WHERE r2.supplier IN (
+                          SELECT s3.id 
+                          FROM AppBundle:Supplier s3
+                          WHERE s3.cnpj = s.cnpj 
+                          ) 
+                        )
+                      ) 
+                    )
+                  ) AS qtyQuotes,
+                  (SELECT COUNT(qss)
+                  FROM AppBundle:QuoteSupplierStatus qss
+                  WHERE qss.representative IN (
+                    SELECT r3.id
+                    FROM AppBundle:Representative r3
+                    WHERE r3.supplier IN (
+                      SELECT s4.id 
+                      FROM AppBundle:Supplier s4
+                      WHERE s4.cnpj = s.cnpj 
                       )
-                    ) 
-                  ) AS qtyQuotes
+                    )
+                  ) AS qtyOrders
                   FROM AppBundle:Supplier s
                   WHERE s.deleted = 0 
                   AND s.cnpj = (
@@ -119,22 +153,39 @@ class SupplierRepository extends EntityRepository
                       WHERE s2.cnpj = s.cnpj 
                     ) 
                   ) AS qtyRepresentatives,
-                  (SELECT COUNT(qp.id)
-                   FROM AppBundle:QuoteProduct qp
-                   WHERE qp.id IN (
-                    SELECT qs.id
-                    FROM AppBundle:QuoteSupplier qs
-                    WHERE qs.representative IN (
-                      SELECT r2.id
-                      FROM AppBundle:Representative r2
-                      WHERE r2.supplier IN (
-                        SELECT s3.id 
-                        FROM AppBundle:Supplier s3
-                        WHERE s3.cnpj = s.cnpj 
-                        ) 
+                  (SELECT COUNT(q.id)
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.id IN (
+                    SELECT IDENTITY(qp.quote)
+                    FROM AppBundle:QuoteProduct qp
+                    WHERE qp.id IN (
+                      SELECT qs.id
+                      FROM AppBundle:QuoteSupplier qs
+                      WHERE qs.representative IN (
+                        SELECT r2.id
+                        FROM AppBundle:Representative r2
+                        WHERE r2.supplier IN (
+                          SELECT s3.id 
+                          FROM AppBundle:Supplier s3
+                          WHERE s3.cnpj = s.cnpj 
+                          ) 
+                        )
+                      ) 
+                    )
+                  ) AS qtyQuotes,
+                  (SELECT COUNT(qss)
+                  FROM AppBundle:QuoteSupplierStatus qss
+                  WHERE qss.representative IN (
+                    SELECT r3.id
+                    FROM AppBundle:Representative r3
+                    WHERE r3.supplier IN (
+                      SELECT s4.id 
+                      FROM AppBundle:Supplier s4
+                      WHERE s4.cnpj = s.cnpj 
                       )
-                    ) 
-                  ) AS qtyQuotes
+                    )
+                  ) AS qtyOrders
                   FROM AppBundle:Supplier s
                   WHERE s.deleted = 0
                   GROUP BY s.cnpj
@@ -149,22 +200,39 @@ class SupplierRepository extends EntityRepository
         return $this->getEntityManager()
             ->createQuery(
                 'SELECT s.name, s.cnpj, 
-                  (SELECT COUNT(qp.id)
-                   FROM AppBundle:QuoteProduct qp
-                   WHERE qp.id IN (
-                    SELECT qs.id
-                    FROM AppBundle:QuoteSupplier qs
-                    WHERE qs.representative IN (
-                      SELECT r2.id
-                      FROM AppBundle:Representative r2
-                      WHERE r2.supplier IN (
-                        SELECT s3.id 
-                        FROM AppBundle:Supplier s3
-                        WHERE s3.cnpj = s.cnpj 
-                        ) 
+                  (SELECT COUNT(q.id)
+                  FROM AppBundle:Quote q
+                  WHERE q.deleted = 0
+                  AND q.id IN (
+                    SELECT IDENTITY(qp.quote)
+                    FROM AppBundle:QuoteProduct qp
+                    WHERE qp.id IN (
+                      SELECT qs.id
+                      FROM AppBundle:QuoteSupplier qs
+                      WHERE qs.representative IN (
+                        SELECT r2.id
+                        FROM AppBundle:Representative r2
+                        WHERE r2.supplier IN (
+                          SELECT s3.id 
+                          FROM AppBundle:Supplier s3
+                          WHERE s3.cnpj = s.cnpj 
+                          ) 
+                        )
+                      ) 
+                    )
+                  ) AS qtyQuotes,
+                  (SELECT COUNT(qss)
+                  FROM AppBundle:QuoteSupplierStatus qss
+                  WHERE qss.representative IN (
+                    SELECT r3.id
+                    FROM AppBundle:Representative r3
+                    WHERE r3.supplier IN (
+                      SELECT s4.id 
+                      FROM AppBundle:Supplier s4
+                      WHERE s4.cnpj = s.cnpj 
                       )
-                    ) 
-                  ) AS qtyQuotes
+                    )
+                  ) AS qtyOrders
                   FROM AppBundle:Supplier s
                   WHERE s.deleted = 0
                   GROUP BY s.cnpj
