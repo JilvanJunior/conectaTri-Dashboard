@@ -37,21 +37,21 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="ean", type="string", length=255)
+     * @ORM\Column(name="ean", type="string", length=255, nullable=true)
      */
     private $ean;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="full_description", type="text")
+     * @ORM\Column(name="full_description", type="text", nullable=true)
      */
     private $fullDescription;
 
@@ -65,21 +65,21 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="brand", type="string", length=255)
+     * @ORM\Column(name="brand", type="string", length=255, nullable=true)
      */
     private $brand;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="quantity", type="integer")
+     * @ORM\Column(name="quantity", type="integer", nullable=true)
      */
     private $quantity;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="unit", type="string", length=255)
+     * @ORM\Column(name="unit", type="string", length=255, nullable=true)
      */
     private $unit;
 

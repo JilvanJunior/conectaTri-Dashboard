@@ -39,12 +39,12 @@ class ProductsController extends Controller
 
             $product = new Product();
             $product->setEan('');
-            $product->setName($request->get('name'));
-            $product->setBrand($request->get('brand'));
-            $product->setQuantity($request->get('quantity'));
-            $product->setUnit($request->get('unit'));
-            $product->setType($request->get('type'));
-            $product->setFullDescription($request->get('full-description'));
+            if($request->get('name') != "") $product->setName($request->get('name'));
+            if($request->get('brand') != "") $product->setBrand($request->get('brand'));
+            if($request->get('quantity') != "") $product->setQuantity($request->get('quantity'));
+            if($request->get('unit') != "") $product->setUnit($request->get('unit'));
+            if($request->get('type') != "") $product->setType($request->get('type'));
+            if($request->get('full-description') != "") $product->setFullDescription($request->get('full-description'));
             $product->setRetailer($user);
 
             $em->persist($product);
