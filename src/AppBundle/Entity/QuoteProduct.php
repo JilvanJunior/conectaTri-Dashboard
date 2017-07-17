@@ -50,6 +50,17 @@ class QuoteProduct
     private $quote;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\QuoteSupplier")
+     * @ORM\JoinTable(name="quote_product_winners",
+     *     joinColumns={@ORM\JoinColumn(name="quote_product_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="quote_supplier_id", referencedColumnName="id")}
+     *     )
+     */
+    private $winners;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -80,6 +91,7 @@ class QuoteProduct
     public function __construct()
     {
         $this->quoteSuppliers = new ArrayCollection();
+        $this->winners = new ArrayCollection();
         $this->createdAt = new DateTime();
     }
 
@@ -152,6 +164,32 @@ class QuoteProduct
      */
     public function removeQuoteSupplier($quoteSupplier) {
         if ($this->quoteSuppliers->contains($quoteSupplier)) $this->quoteSuppliers->removeElement($quoteSupplier);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getWinners()
+    {
+        return $this->winners;
+    }
+
+    /**
+     * @param QuoteSupplier $quoteSupplier
+     * @return $this
+     */
+    public function addWinner($quoteSupplier) {
+        if (!$this->winners->contains($quoteSupplier)) $this->winners->add($quoteSupplier);
+        return $this;
+    }
+
+    /**
+     * @param QuoteSupplier $quoteSupplier
+     * @return $this
+     */
+    public function removeWinner($quoteSupplier) {
+        if ($this->winners->contains($quoteSupplier)) $this->winners->removeElement($quoteSupplier);
         return $this;
     }
 

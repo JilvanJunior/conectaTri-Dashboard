@@ -603,7 +603,7 @@ class ApiController extends FOSRestController {
         $listing = json_decode($request->getContent());
         $tmp = [];
         foreach ($dbListing->getListingProducts() as $product) {
-            $rcvProduct = $this->arrayContains($listing->listing_products, $product);
+            $rcvProduct = self::arrayContains($listing->listing_products, $product);
             if ($rcvProduct == false) {
                 $dbListing->removeListingProduct($product);
                 $em->remove($product);
@@ -612,7 +612,7 @@ class ApiController extends FOSRestController {
                 $tmp[] = $rcvProduct;
             }
         }
-        $this->array_diff($listing->listing_products, $tmp);
+        self::array_diff($listing->listing_products, $tmp);
         foreach ($listing->listing_products as $product) {
             $newProduct = new ListingProduct();
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
@@ -624,14 +624,14 @@ class ApiController extends FOSRestController {
         }
         $tmp = [];
         foreach ($dbListing->getRepresentatives() as $representative) {
-            $rcvRepresentative = $this->arrayContains($listing->representatives, $representative);
+            $rcvRepresentative = self::arrayContains($listing->representatives, $representative);
             if ($rcvRepresentative == false) {
                 $dbListing->removeRepresentative($representative);
             } else {
                 $tmp[] = $rcvRepresentative;
             }
         }
-        $this->array_diff($listing->suppliers, $tmp);
+        self::array_diff($listing->suppliers, $tmp);
         foreach ($listing->suppliers as $representative) {
             $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($representative->id);
             $dbListing->addRepresentative($dbRepresentative);
@@ -984,17 +984,31 @@ class ApiController extends FOSRestController {
         $isFirst = true;
         /** @var QuoteProduct $product */
         foreach ($dbQuote->getQuoteProducts() as $product) {
-            $rcvProduct = $this->arrayContains($quote->quote_products, $product);
+            $rcvProduct = self::arrayContains($quote->quote_products, $product);
             if ($rcvProduct == false) {
                 $product->setDeleted(true)
                     ->setUpdatedAt(new \DateTime());
             } else {
                 $product->setDeleted(false)
                     ->setUpdatedAt(new \DateTime());
+                $tmp3 = [];
+                foreach ($product->getWinners() as $winner) {
+                    $rcvWinner = self::arrayContains($rcvProduct->winners, $winner);
+                    if ($rcvWinner == false) {
+                        $product->removeWinner($winner);
+                    } else {
+                        $tmp3[] = $winner;
+                    }
+                }
+                self::array_diff($rcvProduct->winners, $tmp3);
+                foreach ($rcvProduct->winners as $winner) {
+                    $dbWinner = self::array_item_by_id($product->getQuoteSuppliers(), $winner->id);
+                    $product->addWinner($dbWinner);
+                }
                 $tmp2 = [];
                 /** @var QuoteSupplier $supplier */
                 foreach ($product->getQuoteSuppliers() as $supplier) {
-                    $rcvSupplier = $this->arrayContains($rcvProduct->quote_suppliers, $supplier);
+                    $rcvSupplier = self::arrayContains($rcvProduct->quote_suppliers, $supplier);
                     if ($rcvSupplier == false) {
                         if ($isFirst) {
                             $supplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote, "representative" => $supplier->getRepresentative()]);
@@ -1003,6 +1017,7 @@ class ApiController extends FOSRestController {
                                 $em->remove($supplierStatus);
                             }
                         }
+                        if ($product->getWinner() == $supplier) $product->setWinner(null);
                         $supplier->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
                     } else {
@@ -1021,7 +1036,7 @@ class ApiController extends FOSRestController {
                         $tmp2[] = $supplier;
                     }
                 }
-                $this->array_diff($rcvProduct->quote_suppliers, $tmp2);
+                self::array_diff($rcvProduct->quote_suppliers, $tmp2);
                 /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
                     $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
@@ -1041,7 +1056,7 @@ class ApiController extends FOSRestController {
             }
             $isFirst = false;
         }
-        $this->array_diff($quote->quote_products, $tmp);
+        self::array_diff($quote->quote_products, $tmp);
         /** @var \stdClass $product */
         foreach ($quote->quote_products as $product) {
             $newProduct = new QuoteProduct();
@@ -1424,10 +1439,9 @@ class ApiController extends FOSRestController {
      * Finds one element in an array, searching by ID properties.
      * @param $array array Array in which to search for the element.
      * @param $element object Element whose ID to search for.
-     *
-     * @return boolean|object false if not found, the array's element otherwise.
+     * @return bool|object false if not found, the array's element otherwise.
      */
-    private function arrayContains($array, $element) {
+    private static function arrayContains($array, $element) {
         $arrayProp = false;
         try {
             $var = $array[0]->id;
@@ -1460,7 +1474,7 @@ class ApiController extends FOSRestController {
         return false;
     }
 
-    private function array_diff(&$array, $diff) {
+    private static function array_diff(&$array, $diff) {
         $arrayProp = false;
         try {
             $var = $array[0]->id;
@@ -1500,6 +1514,25 @@ class ApiController extends FOSRestController {
             if (!$contains) $ret[] = $aEle;
         }
         $array = $ret;
+    }
+
+    private static function array_item_by_id($array, $id) {
+        foreach ($array as $item) {
+            try {
+                if ($item->getId() == $id) return $item;
+            } catch (\Throwable $x) {
+                try {
+                    if ($item->id == $id) return $item;
+                } catch (\Throwable $xx) {
+                    try {
+                        if ($item['id'] == $id) return $item;
+                    } catch (\Throwable $xxx) {
+                        return null;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
 }
