@@ -77,8 +77,33 @@
                                                                     <div class="form-group">
                                                                         <label class="col-md-3 control-label">Tipo</label>
                                                                         <div class="col-md-4">
-                                                                            <input type="text" name="type" class="form-control input-circle"
-                                                                                   placeholder="Tipo" value="{% if product is defined %}{{ product.type }}{% endif %}">
+                                                                            <select name="type" class="form-control select-circle">
+                                                                                {% if product is defined %}
+                                                                                    <option value="{{ product.type }}" selected>{{ product.type }}</option>
+                                                                                {% else %}
+                                                                                    <option value="" disabled selected>Selecione um Tipo</option>
+                                                                                {% endif %}
+                                                                                {% for i in 0..24 %}
+                                                                                    <option value="Tipo {{ i }}">Tipo {{ i }}</option>
+                                                                                {% endfor %}
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="col-md-3 control-label">Unidade de Medida</label>
+                                                                        <div class="col-md-4">
+                                                                            <select name="unit" class="form-control select-circle">
+                                                                                {% if product is defined %}
+                                                                                    <option value="{{ product.unit }}" selected>{{ product.unit }}</option>
+                                                                                {% else %}
+                                                                                    <option value="" disabled selected>Selecione uma Unidade de Medida</option>
+                                                                                {% endif %}
+                                                                                <option value="CX">CX</option>
+                                                                                <option value="UN">UN</option>
+                                                                                <option value="g">g</option>
+                                                                                <option value="Kg">Kg</option>
+                                                                                <option value="Fardo">Fardo</option>
+                                                                            </select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
@@ -86,13 +111,6 @@
                                                                         <div class="col-md-4">
                                                                             <input type="number" name="quantity" class="form-control input-circle"
                                                                                    placeholder="Peso / Quantidade" value="{% if product is defined %}{{ product.quantity }}{% endif %}">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Unidade de Medida</label>
-                                                                        <div class="col-md-4">
-                                                                            <input type="text" name="unit" class="form-control input-circle"
-                                                                                   placeholder="Unidade de Medida" value="{% if product is defined %}{{ product.unit }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group last">
