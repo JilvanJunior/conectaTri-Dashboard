@@ -208,11 +208,11 @@
         <button class="btn" id="toggleRepresentative">
             Sou Fornecedor
         </button>
-    </div>
-    <div class="retailer">
         {% if error %}
             <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
+    </div>
+    <div class="retailer">
         <div class="profile__form">
             <div class="profile__logo">
                 <img src="{{ asset('assets/pages/img/logos/bg-conectatri-04.png') }}" alt="ConectaTri">
@@ -236,9 +236,6 @@
         </div>
     </div>
     <div class="representative">
-        {% if error %}
-            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
         <div class="profile__form">
             <div class="profile__logo">
                 <img src="{{ asset('assets/pages/img/logos/bg-conectatri-04.png') }}" alt="ConectaTri">

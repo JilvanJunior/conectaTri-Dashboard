@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Login ConectaTri</title>
+    <title>Recuperação de Senha - ConectaTri</title>
     <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,700' rel='stylesheet' type='text/css'>
     <style>
         /* Base styles */
@@ -18,8 +18,7 @@
             margin: 0;
             font-family: 'Work Sans', Arial, Helvetica, sans-serif;
             min-height: 100%;
-            background-image: url("{{ asset('assets/pages/img/background/loginbg.png') }}");
-            background-position: center;
+            background: #40AE40;
             color: #777;
         }
         img {
@@ -48,13 +47,21 @@
             position: relative;
         }
         .profile--open {
+            margin-top: 80px;
+        }
+        .profile--open .profile__logo {
+            text-align: center;
+        }
+        .profile--open .profile__logo img {
+            width: 220px;
+            margin-bottom: 30px;
         }
         .profile--open .profile__form {
             visibility: visible;
             height: auto;
             opacity: 1;
             transform: translateY(-6em);
-            padding-top: 12em;
+            padding-top: 5em;
         }
         .profile--open .profile__fields {
             opacity: 1;
@@ -151,7 +158,7 @@
             line-height: 2.5rem;
             padding: 0 1.5rem;
             color: white;
-            background: #8E49E8;
+            background: #88D000;
             text-transform: uppercase;
             border-radius: .25rem;
             letter-spacing: .2em;
@@ -162,7 +169,7 @@
         }
         .btn:hover,
         .btn:focus {
-            background: #A678E2;
+            background: #83BC3C;
         }
 
 
@@ -183,10 +190,10 @@
 <body>
 <div class="container">
     <div class="profile">
-        <button class="profile__avatar" id="toggleProfile">
-            <img src="{{ asset('assets/layouts/layout3/img/avatar.png') }}" alt="Avatar" />
-        </button>
         <div class="profile__form">
+            <div class="profile__logo">
+                <img src="{{ asset('assets/pages/img/logos/bg-conectatri-04.png') }}" alt="ConectaTri">
+            </div>
             <div class="profile__fields">
                 <form action="{{ path('recover_password_email') }}" method="POST">
                     <div class="field">
