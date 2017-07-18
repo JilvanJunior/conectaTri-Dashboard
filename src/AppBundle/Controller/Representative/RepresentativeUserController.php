@@ -107,10 +107,15 @@ class RepresentativeUserController extends Controller
                     $quoteSupplier->setUpdatedAt(new \DateTime());
                 }
 
-                $price = str_replace(".","", $item['price']);
-                $price = str_replace(",",".", $price);
+                if($item['price'] != "") {
+                    $price = str_replace(".","", $item['price']);
+                    $price = str_replace(",",".", $price);
 
-                $quoteSupplier->setPrice($price);
+                    $quoteSupplier->setPrice($price);
+                } else {
+                    $quoteSupplier->setPrice(0);
+                }
+
                 $quoteSupplier->setQuantity($item['quantity']);
                 $quoteSupplier->setFilledIn(true);
 
