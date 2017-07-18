@@ -14,12 +14,11 @@ class SuppliersController extends Controller
     /**
      * @Route("/administrador/fornecedores", name="admin_fornecedores")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $suppliers = $em->getRepository('AppBundle:Supplier')->groupByCnpj();
+        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->groupByCnpj();
 
         return $this->render('Admin/suppliers/index.html.twig', ['suppliers' => $suppliers]);
     }
@@ -28,12 +27,11 @@ class SuppliersController extends Controller
      * @Route("/administrador/fornecedor/{id}", name="admin_fornecedor")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function supplierAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $suppliers = $em->getRepository('AppBundle:Supplier')->groupByCnpjAndId($id);
+        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->groupByCnpjAndId($id);
 
         return $this->render('Admin/suppliers/index.html.twig', ['suppliers' => $suppliers]);
     }
@@ -41,12 +39,11 @@ class SuppliersController extends Controller
     /**
      * @Route("/administrador/fornecedores/cotacoesXpedidos", name="admin_suppliers_scatter_pricelistXorder")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart1Action(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $suppliers = $em->getRepository('AppBundle:Supplier')->groupByCnpj();
+        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->groupByCnpj();
 
         return $this->render('Admin/suppliers/charts/chart_scatter_pricelistXorder.html.twig', ['suppliers' => $suppliers]);
     }
@@ -57,8 +54,7 @@ class SuppliersController extends Controller
      */
     public function chart1DataAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $topSuppliers = $em->getRepository('AppBundle:Supplier')->findSuppliersQuotesAndOrders();
+        $topSuppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findSuppliersQuotesAndOrders();
 
         echo json_encode($topSuppliers);
         exit();
@@ -67,7 +63,7 @@ class SuppliersController extends Controller
     /**
      * @Route("/administrador/fornecedores/contascriadasXtempo", name="admin_suppliers_line_createdaccountsXtime")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart2Action(Request $request)
     {
@@ -97,7 +93,7 @@ class SuppliersController extends Controller
     /**
      * @Route("/administrador/fornecedores/fornecedoresXregiao", name="admin_suppliers_pie_suppliersXregion")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart3Action(Request $request)
     {
@@ -125,7 +121,7 @@ class SuppliersController extends Controller
     /**
      * @Route("/administrador/fornecedores/fornecedoresXestado", name="admin_suppliers_pie_suppliersXstate")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart4Action(Request $request)
     {

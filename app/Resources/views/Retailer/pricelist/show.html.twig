@@ -79,7 +79,7 @@
                                                 </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                {% for quoteProduct in quote.quoteProducts %}
+                                                {% for quoteProduct in quote.quoteProducts if quoteProduct.deleted == 0 %}
                                                     <tr>
                                                         <td> {{ quoteProduct.product.name }} </td>
                                                         <td> {{ quoteProduct.product.brand }} </td>
@@ -120,7 +120,7 @@
                                                 </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                    {% for quoteSupplier in quote.quoteProducts[0].quoteSuppliers %}
+                                                    {% for quoteSupplier in quote.quoteProducts[0].quoteSuppliers if quoteSupplier.deleted == 0 %}
                                                         <tr>
                                                             <td> {{ quoteSupplier.representative.supplier.name }} </td>
                                                             <td> {{ quoteSupplier.representative.name }} </td>

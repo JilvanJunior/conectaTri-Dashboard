@@ -86,7 +86,7 @@
                                                     </tfoot>
                                                     <tbody>
                                                     {% for supplier in suppliers %}
-                                                        {% for representative in supplier.representatives %}
+                                                        {% for representative in supplier.representatives if representative.deleted == 0 %}
                                                             <tr>
                                                                 <td> {{ supplier.name }} </td>
                                                                 <td> {{ representative.name }} </td>

@@ -85,7 +85,7 @@
                                                 </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                {% for quoteSupplier in quoteProduct.quoteSuppliers %}
+                                                {% for quoteSupplier in quoteProduct.quoteSuppliers if quoteSupplier.deleted == 0 %}
                                                     <tr>
                                                         <td> {{ quoteSupplier.representative.supplier.name }} </td>
                                                         <td> {{ quoteSupplier.representative.name }} </td>

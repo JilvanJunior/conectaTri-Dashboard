@@ -89,17 +89,11 @@
                                                             <td>{{ supplier.name }}</td>
                                                             <td>{{ supplier.qtyRepresentatives }}</td>
                                                             <td>{{ supplier.qtyQuotes }}</td>
-                                                            <td></td>
+                                                            <td>{{ supplier.qtyOrders }}</td>
                                                             <td>
-                                                                {#<a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                                    <i class="fa fa-eye"></i> Ver
-                                                                </a>#}
                                                                 <a href="{{ path('admin_pricelist_supplier', {'id': supplier.id}) }}" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-line-chart"> Cotações</i>
                                                                 </a>
-                                                                {#<a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
-                                                                    <i class="fa fa-shopping-cart"> Pedidos</i>
-                                                                </a>#}
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
