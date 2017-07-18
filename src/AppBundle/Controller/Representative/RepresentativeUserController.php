@@ -108,15 +108,16 @@ class RepresentativeUserController extends Controller
                 }
 
                 $price = $item['price'];
-                if($price != "" && is_int($price)) {
+                if($price != "") {
                     $price = str_replace(".","", $item['price']);
                     $price = str_replace(",",".", $price);
 
-                    $quoteSupplier->setPrice($price);
+                    if(is_numeric($price))
+                        $quoteSupplier->setPrice($price);
                 }
 
                 $quantity = $item['quantity'];
-                if(is_int($quantity)) {
+                if(is_numeric($quantity)) {
                     $quoteSupplier->setQuantity($quantity);
                 }
 
