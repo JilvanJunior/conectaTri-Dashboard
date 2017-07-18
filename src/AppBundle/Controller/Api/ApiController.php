@@ -707,7 +707,7 @@ class ApiController extends FOSRestController {
                     if (!$product->isDeleted()) {
                         foreach ($product->getQuoteSuppliers() as $supplier) {
                             $em->detach($supplier);
-                            if ($supplier->isDeleted() || $supplier->getRepresentative()->isDeleted())
+                            if ($supplier->getRepresentative()->isDeleted())
                                 $product->removeQuoteSupplier($supplier);
                             /* TODO: Add this
                             else
@@ -759,7 +759,7 @@ class ApiController extends FOSRestController {
                     if (!$product->isDeleted()) {
                         foreach ($product->getQuoteSuppliers() as $supplier) {
                             $em->detach($supplier);
-                            if ($supplier->isDeleted() || $supplier->getRepresentative()->isDeleted())
+                            if ($supplier->getRepresentative()->isDeleted())
                                 $product->removeQuoteSupplier($supplier);
                             /* TODO: Add this
                             else
@@ -813,7 +813,7 @@ class ApiController extends FOSRestController {
                     if (!$product->isDeleted()) {
                         foreach ($product->getQuoteSuppliers() as $supplier) {
                             $em->detach($supplier);
-                            if ($supplier->isDeleted() || $supplier->getRepresentative()->isDeleted())
+                            if ($supplier->getRepresentative()->isDeleted())
                                 $product->removeQuoteSupplier($supplier);
                             /* TODO: Add this
                             else
@@ -1012,7 +1012,7 @@ class ApiController extends FOSRestController {
                 /** @var QuoteSupplier $supplier */
                 foreach ($product->getQuoteSuppliers() as $supplier) {
                     $rcvSupplier = self::arrayContains($rcvProduct->quote_suppliers, $supplier);
-                    if ($rcvSupplier == false) {
+                    if ($rcvSupplier == false || (isset($rcvSupplier->deleted) && $rcvSupplier->deleted == true)) {
                         if ($isFirst) {
                             $supplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote, "representative" => $supplier->getRepresentative()]);
                             if ($supplierStatus != null) {
