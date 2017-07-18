@@ -63,8 +63,9 @@
                                                                     <div class="form-group">
                                                                         <label class="col-md-3 control-label">Nome do Produto*</label>
                                                                         <div class="col-md-4">
-                                                                            <input type="text" name="name" class="form-control input-circle" required
+                                                                            <input type="text" id="product" list="product-datalist" name="name" class="form-control input-circle" required
                                                                                    placeholder="Nome do Produto" value="{% if product is defined %}{{ product.name }}{% endif %}">
+                                                                            <datalist id="product-datalist"></datalist>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
@@ -148,4 +149,26 @@
             <!-- END CONTAINER -->
         </div>
     </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $(function(){
+            var dataList = document.getElementById('product-datalist');
+
+            $.ajax("{{ path('get_produtos') }}", {
+                success: function(data) {
+                    var jsonOptions = JSON.parse(data);
+
+                    jsonOptions.forEach(function(item) {
+                        var option = document.createElement('option');
+                        option.value = item.name;
+                        dataList.appendChild(option);
+                    });
+                },
+                error: function() {
+                    console.log("Um problema ocorreu ao listar os produtos");
+                }
+            });
+        });
+    </script>
 {% endblock %}

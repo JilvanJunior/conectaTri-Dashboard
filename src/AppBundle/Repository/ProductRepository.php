@@ -12,6 +12,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProductRepository extends EntityRepository
 {
+    public function findProductsName()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT DISTINCT(p.name) AS name
+                  FROM AppBundle:Product p 
+                  WHERE p.deleted = 0  
+                  ORDER BY p.name ASC'
+            )
+            ->getResult();
+
+    }
+
     public function countProductByDate()
     {
         return $this->getEntityManager()

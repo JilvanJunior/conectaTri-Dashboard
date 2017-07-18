@@ -32,10 +32,11 @@ class ProductsController extends Controller
     public function addProductAction(Request $request)
     {
 
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('AppBundle:Product')->findBy(['deleted' => false]);
+
         if($request->getMethod() == "POST"){
             $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            $em = $this->getDoctrine()->getManager();
 
             $product = new Product();
             $product->setEan('');
@@ -60,6 +61,7 @@ class ProductsController extends Controller
         }
 
         return $this->render('Retailer/products/addProducts.html.twig', [
+            'products' => $products,
         ]);
     }
 
@@ -100,5 +102,19 @@ class ProductsController extends Controller
         return $this->render('Retailer/products/addProducts.html.twig', [
             'product' => $product,
         ]);
+    }
+
+    /**
+     * @Route("/varejista/produtos/data", name="get_produtos")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getProductsAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('AppBundle:Product')->findProductsName();
+
+        echo json_encode($products);
+        exit();
     }
 }
