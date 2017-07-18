@@ -107,16 +107,19 @@ class RepresentativeUserController extends Controller
                     $quoteSupplier->setUpdatedAt(new \DateTime());
                 }
 
-                if($item['price'] != "") {
+                $price = $item['price'];
+                if($price != "" && is_int($price)) {
                     $price = str_replace(".","", $item['price']);
                     $price = str_replace(",",".", $price);
 
                     $quoteSupplier->setPrice($price);
-                } else {
-                    $quoteSupplier->setPrice(0);
                 }
 
-                $quoteSupplier->setQuantity($item['quantity']);
+                $quantity = $item['quantity'];
+                if(is_int($quantity)) {
+                    $quoteSupplier->setQuantity($quantity);
+                }
+
                 $quoteSupplier->setFilledIn(true);
 
                 $em->persist($quoteSupplier);
