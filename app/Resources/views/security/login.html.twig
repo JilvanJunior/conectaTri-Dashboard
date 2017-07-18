@@ -1,6 +1,10 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
     <title>Login ConectaTri</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
     <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,700' rel='stylesheet' type='text/css'>
     <style>
         /* Base styles */
@@ -38,7 +42,8 @@
         /* Container */
         .container {
             position: absolute;
-            width: 24em;
+            width: 90%;
+            max-width: 24em;
             left: 50%;
             top: 50%;
             transform: translate(-50%,-50%);
@@ -63,8 +68,8 @@
             display: block;
             height: auto;
             opacity: 1;
-            transform: translateY(-6em);
             padding-top: 5em;
+            margin: 0 auto;
         }
         .profile--open .profile__fields {
             opacity: 1;
@@ -174,6 +179,7 @@
             border-radius: .25rem;
             letter-spacing: .2em;
             transition: background .2s;
+            margin-bottom: 10px;
         }
         .btn:focus {
             outline: 0;
@@ -224,7 +230,7 @@
                         <label for="username" class="label">CNPJ</label>
                     </div>
                     <div class="field">
-                        <input type="password" id="password" name="_password" class="input" required pattern=.*\S.* />
+                        <input type="password" id="password-retailer" name="_password" class="input" required pattern=.*\S.* />
                         <label for="password" class="label">Senha</label>
                     </div>
                     <div class="profile__footer">
@@ -244,11 +250,11 @@
                 <form action="{{ path('login') }}" method="post">
 
                     <div class="field">
-                        <input type="text" id="username" name="_username" class="input" required pattern=.*\S.* />
+                        <input type="email" id="username-representative" name="_username" class="input" required pattern=.*\S.* />
                         <label for="username" class="label">E-mail</label>
                     </div>
                     <div class="field">
-                        <input type="password" id="password" name="_password" class="input" required pattern=.*\S.* />
+                        <input type="password" id="password-representative" name="_password" class="input" required pattern=.*\S.* />
                         <label for="password" class="label">Senha</label>
                     </div>
                     <div>Primeiro acesso? <a href="{{ path('representative_user_registration') }}">Clique aqui</a></div>
