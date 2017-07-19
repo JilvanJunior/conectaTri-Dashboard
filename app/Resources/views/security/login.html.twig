@@ -134,7 +134,7 @@
             margin-bottom: 2em;
         }
         .label {
-            position: absolute;
+            position: relative;
             height: 2rem;
             line-height: 2rem;
             bottom: 0;
@@ -226,12 +226,16 @@
             <div class="profile__fields">
                 <form id="retailer-form" action="{{ path('login') }}" method="post">
                     <div class="field">
-                        <input type="text" id="cnpj" name="_username" class="input" required pattern=.*\S.* />
                         <label for="username" class="label">CNPJ</label>
+                        <input type="text" id="cnpj" name="_username" class="input" required pattern=.*\S.* />
+
+
                     </div>
                     <div class="field">
-                        <input type="password" id="password-retailer" name="_password" class="input" required pattern=.*\S.* />
+
                         <label for="password" class="label">Senha</label>
+                        <input type="password" id="password-retailer" name="_password" class="input" required pattern=.*\S.* />
+
                     </div>
                     <div class="profile__footer">
                         <button class="btn" id="toggleBackRetailer" type="button">Voltar</button>
@@ -250,12 +254,14 @@
                 <form action="{{ path('login') }}" method="post">
 
                     <div class="field">
-                        <input type="text" id="username-representative" name="_username" class="input" required pattern=.*\S.* />
                         <label for="username" class="label">E-mail</label>
+                        <input type="text" id="username-representative" name="_username" class="input" required pattern=.*\S.* />
+
                     </div>
                     <div class="field">
-                        <input type="password" id="password-representative" name="_password" class="input" required pattern=.*\S.* />
                         <label for="password" class="label">Senha</label>
+                        <input type="password" id="password-representative" name="_password" class="input" required pattern=.*\S.* />
+
                     </div>
                     <div>Primeiro acesso? <a href="{{ path('representative_user_registration') }}">Clique aqui</a></div>
                     <div><a href="{{ path('recover_password') }}">Esqueci minha senha</a></div>
