@@ -461,7 +461,7 @@ body {
 }
 
 .form-group.form-md-line-input.has-success .form-control {
-    border-bottom: 1px solid #27a4b0
+    border-bottom: 1px solid #319431
 }
 
 .form-group.form-md-line-input.has-success .form-control.edited:not([readonly]) ~ label:after, .form-group.form-md-line-input.has-success .form-control.edited:not([readonly]) ~ .form-control-focus:after, .form-group.form-md-line-input.has-success .form-control.form-control-static ~ label:after, .form-group.form-md-line-input.has-success .form-control.form-control-static ~ .form-control-focus:after, .form-group.form-md-line-input.has-success .form-control:focus:not([readonly]) ~ label:after, .form-group.form-md-line-input.has-success .form-control:focus:not([readonly]) ~ .form-control-focus:after, .form-group.form-md-line-input.has-success .form-control.focus:not([readonly]) ~ label:after, .form-group.form-md-line-input.has-success .form-control.focus:not([readonly]) ~ .form-control-focus:after {
@@ -8933,11 +8933,11 @@ h1 .label, h2 .label, h3 .label, h4 .label, h5 .label, h6 .label {
 }
 
 .label-success {
-    background-color: #36c6d3
+    background-color: #319431
 }
 
 .label-success[href]:hover, .label-success[href]:focus {
-    background-color: #27a4b0
+    background-color: #319431
 }
 
 .label-info {
@@ -9014,12 +9014,12 @@ h1 .label, h2 .label, h3 .label, h4 .label, h5 .label, h6 .label {
 }
 
 .list-group .list-group-item-success {
-    color: #27a4b0;
-    background-color: #abe7ed
+    color: #ffffff;
+    background-color: #319431
 }
 
 .list-group a.list-group-item-success, .list-group button.list-group-item-success {
-    color: #27a4b0
+    color: #319431
 }
 
 .list-group a.list-group-item-success .list-group-item-heading, .list-group button.list-group-item-success .list-group-item-heading {
@@ -9027,14 +9027,14 @@ h1 .label, h2 .label, h3 .label, h4 .label, h5 .label, h6 .label {
 }
 
 .list-group a.list-group-item-success:hover, .list-group a.list-group-item-success:focus, .list-group button.list-group-item-success:hover, .list-group button.list-group-item-success:focus {
-    color: #27a4b0;
+    color: #319431;
     background-color: #96e1e8
 }
 
 .list-group a.list-group-item-success.active, .list-group a.list-group-item-success.active:hover, .list-group a.list-group-item-success.active:focus, .list-group button.list-group-item-success.active, .list-group button.list-group-item-success.active:hover, .list-group button.list-group-item-success.active:focus {
     color: #fff;
-    background-color: #27a4b0;
-    border-color: #27a4b0
+    background-color: #319431;
+    border-color: #319431
 }
 
 .list-group .list-group-item-info {
@@ -26054,7 +26054,7 @@ body.stop-scrolling {
 }
 
 .mt-element-ribbon .ribbon.ribbon-color-success:after {
-    border-color: #27a4b0
+    border-color: #319431
 }
 
 .mt-element-ribbon .ribbon.ribbon-color-success > .ribbon-sub {
