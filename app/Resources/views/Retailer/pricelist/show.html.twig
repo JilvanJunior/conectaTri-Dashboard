@@ -140,4 +140,14 @@
     <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
+    <script>
+        $(function(){
+           $('#sample_2').DataTable({
+               responsive: true,
+               language: {
+                   url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
+               }
+           });
+        });
+    </script>
 {% endblock %}

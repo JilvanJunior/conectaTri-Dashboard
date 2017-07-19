@@ -137,6 +137,10 @@
                 } );
 
                 $('#sample_editable_1').on( 'click', 'tbody td.editable', function (e) {
+                    if ( $(this).hasClass( 'control' ) || $(this).hasClass('select-checkbox') ) {
+                        return;
+                    }
+
                     editor.inline( this, {
                         onBlur: 'submit',
                         submit: 'allIfChanged'
@@ -153,7 +157,6 @@
                             }
                         }
                     },
-                    dom: 'Bfrtip',
                     ajax: '{{ path('editar_cotacao_produto_data', {'id': quoteProduct.id}) }}',
                     columns: [
                         {

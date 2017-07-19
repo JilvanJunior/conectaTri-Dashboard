@@ -390,14 +390,14 @@ Page Footer
             background: none !important; }
         .page-header .page-header-menu .hor-menu .navbar-nav > li:hover > a {
           background: none !important;
-          color: #ffffff !important; }
+          color: #333 !important; }
           .page-header .page-header-menu .hor-menu .navbar-nav > li:hover > a > i {
             color: #ffffff !important; }
         .page-header .page-header-menu .hor-menu .navbar-nav > li.open > a,
         .page-header .page-header-menu .hor-menu .navbar-nav > li.open > a:hover, .page-header .page-header-menu .hor-menu .navbar-nav > li.active > a,
         .page-header .page-header-menu .hor-menu .navbar-nav > li.active > a:hover, .page-header .page-header-menu .hor-menu .navbar-nav > li.current > a,
         .page-header .page-header-menu .hor-menu .navbar-nav > li.current > a:hover {
-          color: #fff !important;
+          color: #333 !important;
           background: #ffffff !important; }
           .page-header .page-header-menu .hor-menu .navbar-nav > li.open > a > i,
           .page-header .page-header-menu .hor-menu .navbar-nav > li.open > a:hover > i, .page-header .page-header-menu .hor-menu .navbar-nav > li.active > a > i,
