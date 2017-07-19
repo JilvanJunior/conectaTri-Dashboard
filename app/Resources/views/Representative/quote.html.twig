@@ -114,15 +114,8 @@
 
                 var table = $('#sample_editable_1').DataTable( {
                     language: {
-                        url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
-                        select: {
-                            rows: {
-                                _: "",
-                                1: ""
-                            }
-                        }
+                        url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
                     },
-                    dom: 'Bfrtip',
                     ajax: '{{ path('quote_representative_data', {'quoteId': quote.id, 'representativeId': representative.id}) }}',
                     columns: [
                         {
@@ -144,7 +137,6 @@
                             "data": "price", className: 'editable'
                         }
                     ],
-                    select: true,
                     lengthChange: false,
                     buttons: [
                     ]
