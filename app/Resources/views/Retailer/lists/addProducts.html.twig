@@ -72,15 +72,6 @@
                                                     <th> Embalagem de Compra </th>
                                                 </tr>
                                                 </thead>
-                                                <tfoot>
-                                                <tr>
-                                                    <th width="20%"> Código </th>
-                                                    <th> Nome do Produto </th>
-                                                    <th> Tipo </th>
-                                                    <th> Fabricante </th>
-                                                    <th> Embalagem de Compra </th>
-                                                </tr>
-                                                </tfoot>
                                                 <tbody>
                                                 {% for product in products %}
                                                     <tr class="{% for listingProduct in listingProducts %}{% if listingProduct.product.id == product.id %}selected{% endif %}{% endfor %}">

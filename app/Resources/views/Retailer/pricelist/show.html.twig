@@ -71,13 +71,6 @@
                                                     <th> Ação </th>
                                                 </tr>
                                                 </thead>
-                                                <tfoot>
-                                                <tr>
-                                                    <th> Nome do Produto </th>
-                                                    <th> Fabricante </th>
-                                                    <th> Ação </th>
-                                                </tr>
-                                                </tfoot>
                                                 <tbody>
                                                 {% for quoteProduct in quote.quoteProducts if quoteProduct.deleted == 0 %}
                                                     <tr>
@@ -112,13 +105,6 @@
                                                     <th>Status</th>
                                                 </tr>
                                                 </thead>
-                                                <tfoot>
-                                                <tr>
-                                                    <th>Nome do Fornecedor</th>
-                                                    <th>Nome do Representante</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                                </tfoot>
                                                 <tbody>
                                                     {% for quoteSupplier in quote.quoteProducts[0].quoteSuppliers if quoteSupplier.deleted == 0 %}
                                                         <tr>
