@@ -1,14 +1,15 @@
-
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
     <title>Acesso Não Permitido..</title>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:800' rel='stylesheet'
-          type='text/css'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:800' rel='stylesheet' type='text/css'>
 
     <style>
         body {
             margin: 0;
-            background: #fff;
             color: #1e1a1b;
             font-weight: 500;
             font-size: 1em;
@@ -31,20 +32,6 @@
 
         }
 
-        /*a:hover {
-          color: #f1f1f1;
-          text-shadow: 0 1px 0 rgba(255,255,255,1) , 0 2px 0 rgba(255,255,255,1) , 0 3px 0 rgba
-(255,255,255,1) , 0 4px 0 rgba(255,255,255,1) , 0 5px 0 rgba(255,255,255,1) , 0 6px 1px rgba
-(0,0,0,0.0980392) , 0 0 5px rgba(0,0,0,0.0980392) , 0 1px 3px rgba(0,0,0,0.298039) , 0 3px 5px rgba
-(0,0,0,0.2) , 0 -5px 10px rgba(0,0,0,0.247059) , 0 -7px 10px rgba(0,0,0,0.2) , 0 -15px 20px rgba
-(0,0,0,0.14902) ;
-          -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
-          -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
-          -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
-          transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
-
-        }
-        */
         a:focus {
             outline: none;
         }
@@ -56,15 +43,9 @@
             position: absolute;
         }
 
-
-
         /* Background colors */
 
-        .color-5 { margin-top: 30%;
-
-        }
-
-
+        .color-5 { margin-top: 30%; }
 
         .alinhamento{
             display: flex;
@@ -80,7 +61,6 @@
             outline: none;
             text-decoration: none;
             position: relative;
-            font-size: 15em;
             line-height: 1;
             color: #9e9ba4;
             display: inline-block;
@@ -94,11 +74,10 @@
             text-align: center;
             -o-text-overflow: clip;
             text-overflow: clip;
-            text-shadow: 0 1px 0 rgb(204,204,204) , 0 2px 0 rgb(201,201,201) , 0 3px 0 rgb
-            (187,187,187) , 0 4px 0 rgb(185,185,185) , 0 5px 0 rgb(170,170,170) , 0 6px 1px rgba
-        (0,0,0,0.0980392) , 0 0 5px rgba(0,0,0,0.0980392) , 0 1px 3px rgba(0,0,0,0.298039) , 0 3px 5px rgba
-        (0,0,0,0.2) , 0 5px 10px rgba(0,0,0,0.247059) , 0 10px 10px rgba(0,0,0,0.2) , 0 20px 20px rgba
-        (0,0,0,0.14902) ;
+            text-shadow: 0 1px 0 rgb(204,204,204) , 0 2px 0 rgb(201,201,201) , 0 3px 0 rgb(187,187,187),
+            0 4px 0 rgb(185,185,185) , 0 5px 0 rgb(170,170,170) , 0 6px 1px rgba(0,0,0,0.0980392),
+            0 0 5px rgba(0,0,0,0.0980392) , 0 1px 3px rgba(0,0,0,0.298039) , 0 3px 5px rgba(0,0,0,0.2),
+            0 5px 10px rgba(0,0,0,0.247059) , 0 10px 10px rgba(0,0,0,0.2) , 0 20px 20px rgba(0,0,0,0.14902) ;
             -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
             -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
             -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -151,37 +130,17 @@
             font-size: 0.9em;
         }
     </style>
-
-
 </head>
-
 <body>
-
-<!--
 <div class="container">
-    <p>Acesso não permitido... <br>Verifique a URL de acesso.</p>
-    <a href="{{ path('login') }}">Login</a>
-</div>
--->
-<div class="container">
-
-
-
-    <div  class="grid__item color-5">
-
+    <div class="grid__item color-5">
         <a  class="link link--urpi" href="#" data-letters="Erro 403">Erro 403</a><br>
-        <span class="alinhamento">
-					<p>Acesso não permitido, verifique a URL de acesso.</p>
-
-				</span>
+        <p class="alinhamento">Acesso não permitido, verifique a URL de acesso.</p>
 
         <div class="botaovoltar">
             <a class="btn" href="{{ path('login') }}">Voltar </a>
         </div>
     </div>
-
-
 </div>
 </body>
-
 </html>

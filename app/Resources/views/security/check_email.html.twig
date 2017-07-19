@@ -1,5 +1,146 @@
-<p>
-    Um email foi enviado. Ele contém um link que deve ser acessado para resetar sua senha.
-    <br>
-    Se você não receber sua senha, cheque sua pasta de spam ou tente novamente.
-</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Acesso Não Permitido..</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:800' rel='stylesheet' type='text/css'>
+
+    <style>
+        body {
+            margin: 0;
+            color: #1e1a1b;
+            font-weight: 500;
+            font-size: 1em;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            background: #40AE40;
+        }
+
+        a {
+            outline: none;
+            color: #dd3e62;
+            text-decoration: none;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+
+        }
+
+        a:focus {
+            outline: none;
+        }
+
+        .hidden {
+            height: 0;
+            width: 0;
+            overflow: hidden;
+            position: absolute;
+        }
+
+        /* Background colors */
+
+        .color-5 { margin-top: 30%; }
+
+        .alinhamento{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+        /*final demo style*/
+
+        /*linkstyle*/
+        /* General link styles */
+        .link {
+            outline: none;
+            text-decoration: none;
+            position: relative;
+            line-height: 1;
+            color: #9e9ba4;
+            display: inline-block;
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+            cursor: pointer;
+            border: none;
+            font: normal 8em/normal "Passero One", Helvetica, sans-serif;
+            color: rgba(255,255,255,1);
+            text-align: center;
+            -o-text-overflow: clip;
+            text-overflow: clip;
+            text-shadow: 0 1px 0 rgb(204,204,204) , 0 2px 0 rgb(201,201,201) , 0 3px 0 rgb(187,187,187),
+            0 4px 0 rgb(185,185,185) , 0 5px 0 rgb(170,170,170) , 0 6px 1px rgba(0,0,0,0.0980392),
+            0 0 5px rgba(0,0,0,0.0980392) , 0 1px 3px rgba(0,0,0,0.298039) , 0 3px 5px rgba(0,0,0,0.2),
+            0 5px 10px rgba(0,0,0,0.247059) , 0 10px 10px rgba(0,0,0,0.2) , 0 20px 20px rgba(0,0,0,0.14902) ;
+            -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+            -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+            -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+            transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        }
+        #link a:hover{
+            font-size: 10px;
+        }
+
+        @media screen and (max-width: 42em) {
+
+            .link--urpi { font-size: 5em; }
+
+        }
+        /*final link style*/
+
+        /* Button */
+        .btn {
+            width: 100px;
+            border: 0;
+            font-size: 0.75rem;
+            height: 2.5rem;
+            line-height: 2.5rem;
+            padding: 0 1.5rem;
+            color: white;
+            background: #88D000;
+            text-transform: uppercase;
+            border-radius: .25rem;
+            letter-spacing: .2em;
+            transition: background .2s;
+            margin-bottom: 10px;
+
+
+        }
+        .btn:focus {
+            outline: 0;
+        }
+        .btn:hover,
+        .btn:focus {
+            background: #83BC3C;
+        }
+        .botaovoltar{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+        p{
+            color: #fff;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="grid__item color-5">
+        <p class="alinhamento">Um email foi enviado. Ele contém um link que deve ser acessado para resetar sua senha.</p>
+        <p class="alinhamento">Se você não receber sua senha, cheque sua pasta de spam ou tente novamente.</p>
+
+        <div class="botaovoltar">
+            <a class="btn" href="{{ path('login') }}">Voltar </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
