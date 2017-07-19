@@ -191,33 +191,19 @@ class ResettingController extends Controller
 
     private function _sendResettingEmailMessage($user)
     {
-        $template = "email/password_resetting.email.twig";
 
         $url = $this->generateUrl('recover_password_token', array('token' => $user->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);
-        $rendered = $this->render($template, array(
-            'user' => $user,
-            'confirmationUrl' => $url,
-        ));
-        $this->_sendEmailMessage($rendered, "noreply@conectatri.com.br", (string) $user->getEmail());
-    }
 
-    /**
-     * @param string       $renderedTemplate
-     * @param array|string $fromEmail
-     * @param array|string $toEmail
-     */
-    private function _sendEmailMessage($renderedTemplate, $fromEmail, $toEmail)
-    {
-        // Render the email, use the first line as the subject, and the rest as the body
-        $renderedLines = explode("\n", trim($renderedTemplate));
-        $subject = "Recuperação de Senha";
-        $body = implode("\n", $renderedLines);
-
-        $message = (new \Swift_Message())
-            ->setSubject($subject)
-            ->setFrom($fromEmail)
-            ->setTo($toEmail)
-            ->setBody($body);
+        $message = (new \Swift_Message('Recuperação de senha'))
+            ->setFrom('noreply@conectatri.com.br')
+            ->setTo($user->getEmail())
+            ->setBody(
+                $this->renderView(
+                    'email/password_resetting.html.twig',
+                    array('user' => $user, 'confirmationUrl' => $url)
+                ),
+                'text/html'
+            );
 
         $this->get('mailer')->send($message);
     }

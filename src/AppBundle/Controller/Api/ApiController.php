@@ -61,22 +61,25 @@ class ApiController extends FOSRestController {
                 $encoded = Utils::base64url_encode(gzcompress(json_encode($data), 2));
                 $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
                 $mailer = $this->get('swiftmailer.mailer.default');
-                $msg = new \Swift_Message(
-                    "Verificação de E-Mail Conecta Tri",
-                    "Olá. <br><br>"
-                    ."Você está recebendo esse e-mail porque se cadastrou no App Conecta Tri.<br>"
-                    ."Clique no link para confirmar seu endereço de e-mail: <a href=\"$link\">$link</a>"
-                    ."<br><br>Obrigado.<br><br>Equipe Conecta Tri",
-                    "text/html",
-                    "utf-8"
-                );
-                $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+
                 if (\Swift_Validate::email($dbUser->getEmail())) {
-                    $msg->setTo([$dbUser->getEmail()]);
+                    //send e-mail from format
+                    $message = (new \Swift_Message('Verificação de E-mail - Conecta Tri'))
+                        ->setFrom('noreply@conectatri.com.br')
+                        ->setTo($user->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'email/confirm_email.html.twig',
+                                array('link' => $link)
+                            ),
+                            'text/html'
+                        );
+
+                    $result = $mailer->send($message);
                 } else {
                     return View::create(new ApiError("O e-mail cadastrado parece ser inválido. Tente se recadastrar utilizando outro e-mail."), Response::HTTP_FAILED_DEPENDENCY);
                 }
-                $result = $mailer->send($msg);
+
                 if ($result > 0) {
                     return View::create(new ApiError("É necessário verificar seu endereço de email.\nE-mail de verificação reenviado para\n".preg_replace(self::emailRegex, self::emailReplace, $dbUser->getEmail())), Response::HTTP_EXPECTATION_FAILED);
                 }
@@ -861,20 +864,24 @@ class ApiController extends FOSRestController {
         }
         $link = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
         $mailer = $this->get('swiftmailer.mailer.default');
-        $msg = new \Swift_Message(
-            'Cotação no ConectaTri',
-            "<b>".$dbToken->getRetailer()->getFantasyName()."</b> lhe enviou um pedido de cotação no ConectaTri.<br><br>Para preencher esta cotação, clique <a href='$link'>aqui</a> ou acesse: $link<br><br>Caso este e-mail tenha sido enviado por acidente, pedimos que o desconsidere.<br><br>Obrigado",
-            "text/html",
-            "utf-8"
-        );
-        $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
         $failed = "<ul>";
         $hasFailed = false;
         $total = 0;
         foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
             if (!$quoteSupplier->isDeleted() && \Swift_Validate::email($quoteSupplier->getRepresentative()->getEmail())) {
-                $msg->setTo([$quoteSupplier->getRepresentative()->getEmail() => $quoteSupplier->getRepresentative()->getName()]);
-                if (!$mailer->send($msg)) {
+                $message = (new \Swift_Message('Cotação - Conecta Tri'))
+                    ->setFrom('noreply@conectatri.com.br')
+                    ->setTo($quoteSupplier->getRepresentative()->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'email/quote_representative.html.twig',
+                            array('link' => $link,
+                                'fantasyName' => $dbToken->getRetailer()->getFantasyName(),
+                                'expiresAt' => $dbQuote->getExpiresAt())
+                        ),
+                        'text/html'
+                    );
+                if (!$mailer->send($message)) {
                     $hasFailed = true;
                     $failed .= "<li>".$quoteSupplier->getRepresentative()->getName()." &lt;".$quoteSupplier->getRepresentative()->getEmail()."&gt;</li>";
                 } else {
@@ -1186,18 +1193,19 @@ class ApiController extends FOSRestController {
         $encoded = Utils::base64url_encode(gzcompress(json_encode($data), 2));
         $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
         $mailer = $this->get('swiftmailer.mailer.default');
-        $msg = new \Swift_Message(
-            "Verificação de E-Mail Conecta Tri",
-            "Olá. <br><br>"
-                    ."Você está recebendo esse e-mail porque se cadastrou no App Conecta Tri.<br>"
-                    ."Clique no link para confirmar seu endereço de e-mail: <a href=\"$link\">$link</a>"
-                    ."<br><br>Obrigado.<br><br>Equipe Conecta Tri",
-            "text/html",
-            "utf-8"
-        );
-        $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
-        $msg->setTo([$dbRetailer->getEmail()]);
-        $result = $mailer->send($msg);
+        $message = (new \Swift_Message('Verificação de E-mail - Conecta Tri'))
+            ->setFrom('noreply@conectatri.com.br')
+            ->setTo($dbRetailer->getEmail())
+            ->setBody(
+                $this->renderView(
+                    'email/confirm_email.html.twig',
+                    array('link' => $link)
+                ),
+                'text/html'
+            );
+
+        $result = $mailer->send($message);
+
         if ($result > 0) {
             return View::create(new ApiError("Cadastro efetuado com sucesso. Foi enviado um link de ativação no e-mail cadastrado."), Response::HTTP_CREATED);
         }
@@ -1258,18 +1266,18 @@ class ApiController extends FOSRestController {
             $encoded = Utils::base64url_encode(gzcompress(json_encode($data), 2));
             $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
             $mailer = $this->get('swiftmailer.mailer.default');
-            $msg = new \Swift_Message(
-                "Verificação de E-Mail Conecta Tri",
-                "Olá. <br><br>"
-                ."Você está recebendo esse e-mail porque se cadastrou no App Conecta Tri.<br>"
-                ."Clique no link para confirmar seu endereço de e-mail: <a href=\"$link\">$link</a>"
-                ."<br><br>Obrigado.<br><br>Equipe Conecta Tri",
-                "text/html",
-                "utf-8"
-            );
-            $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
-            $msg->setTo([$dbRetailer->getEmail()]);
-            $result = $mailer->send($msg);
+            $message = (new \Swift_Message('Verificação de E-mail - Conecta Tri'))
+                ->setFrom('noreply@conectatri.com.br')
+                ->setTo($dbRetailer->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'email/confirm_email.html.twig',
+                        array('link' => $link)
+                    ),
+                    'text/html'
+                );
+
+            $result = $mailer->send($message);
             if ($result > 0) {
                 $em->flush();
                 return View::create(new ApiError("Alteração efetuada com sucesso. Será necessário reativar a conta a partir do link enviado ao e-mail cadastrado."), Response::HTTP_ACCEPTED);
@@ -1385,19 +1393,22 @@ class ApiController extends FOSRestController {
         $encoded = Utils::base64url_encode(json_encode($data));
         $link = $r->generate("app_pass_recovery", ["token" => $encoded], Router::ABSOLUTE_URL);
         $mailer = $this->get('swiftmailer.mailer.default');
-        $msg = new \Swift_Message(
-            "Recuperação de Senha ConectaTri",
-            "Por favor, utilize o app ConectaTri quando questionado para abrir o link abaixo:<br/><a href=\"$link\">$link</a>",
-            "text/html",
-            "utf-8"
-        );
-        $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
         if (\Swift_Validate::email($retailer->getEmail())) {
-            $msg->setTo([$retailer->getEmail()]);
+            $message = (new \Swift_Message('Recuperação de Senha - Conecta Tri'))
+                ->setFrom('noreply@conectatri.com.br')
+                ->setTo($retailer->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'email/password_resetting.html.twig',
+                        array('confirmationUrl' => $link)
+                    ),
+                    'text/html'
+                );
         } else {
             return View::create(new ApiError("O e-mail cadastrado parece ser inválido. Tente se recadastrar utilizando outro e-mail."), Response::HTTP_FAILED_DEPENDENCY);
         }
-        $result = $mailer->send($msg);
+        $result = $mailer->send($message);
+
         if ($result > 0) {
             return View::create(
                 new ApiError("E-mail enviado para\n".preg_replace(self::emailRegex, self::emailReplace, $retailer->getEmail())),

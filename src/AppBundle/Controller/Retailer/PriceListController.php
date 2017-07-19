@@ -8,6 +8,7 @@ use AppBundle\Entity\QuoteProduct;
 use AppBundle\Entity\QuoteSupplier;
 use AppBundle\Entity\QuoteSupplierStatus;
 use AppBundle\Entity\Representative;
+use AppBundle\Entity\Retailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -246,6 +247,7 @@ class PriceListController extends Controller
      */
     public function addSuppliersAction(Request $request, $id)
     {
+        /** @var Retailer $quote */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
@@ -287,18 +289,18 @@ class PriceListController extends Controller
                 if($quote->getType() == 1){
                     //send mail to representative
                     $link = $this->generateUrl('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
-                    $message = new \Swift_Message(
-                        'Cotação no ConectaTri',
-                        "Olá.<br><br>"
-                            .$user->getFantasyName()." te cadastrou e te mandou uma cotação de compra no Conecta Tri, valida até "
-                            . $quote->getExpiresAt()->format('d/m/Y H:i') .
-                            "<br>Para preencher esta cotação, clique <a href='$link'>aqui</a> ou acesse o link: $link
-                            <br><br>Equipe Conecta Tri",
-                        "text/html",
-                        "utf-8"
-                    );
-                    $message->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
-                    $message->setTo([$representative->getEmail() => $representative->getName()]);
+                    $message = (new \Swift_Message('Cotação - Conecta Tri'))
+                        ->setFrom('noreply@conectatri.com.br')
+                        ->setTo($representative->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'email/quote_representative.html.twig',
+                                array('link' => $link,
+                                    'fantasyName' => $user->getFantasyName(),
+                                    'expiresAt' => $quote->getExpiresAt())
+                            ),
+                            'text/html'
+                        );
 
                     $mailer = $this->get('swiftmailer.mailer.default');
                     $mailer->send($message);
