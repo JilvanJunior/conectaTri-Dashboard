@@ -1,10 +1,10 @@
 .btn.green-conecta:not(.btn-outline) {
     color: #FFFFFF;
-    background-color: #88D000;
-    border-color: #88D000; }
+    background-color: #40ae40;
+    border-color: #40ae40; }
 .btn.green-conecta:not(.btn-outline):focus, .btn.green-conecta:not(.btn-outline).focus {
     color: #FFFFFF;
-    background-color: #83BC3C;
+    background-color: #40ae40;
     border-color: #48d000; }
 .btn.green-conecta:not(.btn-outline):hover {
     color: #FFFFFF;
@@ -13,8 +13,8 @@
 .btn.green-conecta:not(.btn-outline):active, .btn.green-conecta:not(.btn-outline).active,
 .open > .btn.green-conecta:not(.btn-outline).dropdown-toggle {
     color: #FFFFFF;
-    background-color: #83BC3C;
-    border-color: #81BC3C; }
+    background-color: #40ae40;
+    border-color: #40ae40; }
 .btn.green-conecta:not(.btn-outline):active:hover, .btn.green-conecta:not(.btn-outline):active:focus, .btn.green-conecta:not(.btn-outline):active.focus, .btn.green-conecta:not(.btn-outline).active:hover, .btn.green-conecta:not(.btn-outline).active:focus, .btn.green-conecta:not(.btn-outline).active.focus,
 .open > .btn.green-conecta:not(.btn-outline).dropdown-toggle:hover,
 .open > .btn.green-conecta:not(.btn-outline).dropdown-toggle:focus,
