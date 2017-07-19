@@ -62,9 +62,9 @@
                                                             <form action="#" class="form-horizontal" method="POST">
                                                                 <div class="form-body">
                                                                     <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Fornecedor</label>
+                                                                        <label class="col-md-3 control-label">Fornecedor*</label>
                                                                         <div class="col-md-4">
-                                                                            <select name="supplier" class="form-control select-circle">
+                                                                            <select name="supplier" class="form-control select-circle" required>
                                                                                 {% if representative is defined %}
                                                                                     <option value="{{ representative.supplier.id }}" selected>
                                                                                         {{ representative.supplier.cnpj }} - {{ representative.supplier.name }}</option>
@@ -78,21 +78,21 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Nome do Representante</label>
+                                                                        <label class="col-md-3 control-label">Nome do Representante*</label>
                                                                         <div class="col-md-4">
                                                                             <input type="text" name="name" class="form-control input-circle" placeholder="Nome do Representante"
-                                                                                   value="{% if representative is defined %}{{ representative.name }}{% endif %}">
+                                                                                   required value="{% if representative is defined %}{{ representative.name }}{% endif %}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label class="col-md-3 control-label">E-mail</label>
+                                                                        <label class="col-md-3 control-label">E-mail*</label>
                                                                         <div class="col-md-4">
                                                                             <div class="input-group">
                                                                                 <span class="input-group-addon input-circle-left">
                                                                                     <i class="fa fa-envelope"></i>
                                                                                 </span>
                                                                                 <input type="email" name="email" class="form-control input-circle-right" placeholder="E-mail"
-                                                                                       value="{% if representative is defined %}{{ representative.email }}{% endif %}">
+                                                                                       required value="{% if representative is defined %}{{ representative.email }}{% endif %}">
                                                                             </div>
                                                                         </div>
                                                                     </div>
