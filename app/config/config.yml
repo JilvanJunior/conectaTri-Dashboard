@@ -104,6 +104,8 @@ fos_rest:
 # Temporary CircleRestClient
 circle_rest_client:
     curl:
-      defaults:
-        CURLOPT_HTTPHEADER:     [ 'Content-Type: application/x-www-form-urlencoded' ]
-        CURLOPT_FOLLOWLOCATION: true
+        defaults:
+            CURLOPT_HTTPHEADER:     [ 'Content-Type: application/x-www-form-urlencoded' ]
+            CURLOPT_FOLLOWLOCATION: true
+
+knp_snappy: ~
