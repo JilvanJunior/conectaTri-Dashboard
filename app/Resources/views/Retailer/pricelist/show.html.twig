@@ -77,7 +77,10 @@
                                                         <td> {{ quoteProduct.product.name }} </td>
                                                         <td> {{ quoteProduct.product.brand }} </td>
                                                         <td> <a href="{{ path('acompanhar_cotacao_produto', {'id': quoteProduct.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
-                                                                <i class="fa fa-eye"></i> Cotações </a> </td>
+                                                                <i class="fa fa-eye"></i> Cotações </a>
+                                                            <a href="{{ path('vencedor_cotacao_produto', {'id': quoteProduct.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
+                                                                <i class="fa fa-edit"></i> Editar Vencedores </a>
+                                                        </td>
                                                     </tr>
                                                 {% endfor %}
                                                 </tbody>

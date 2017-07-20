@@ -478,6 +478,60 @@ class PriceListController extends Controller
     }
 
     /**
+     * @Route("/varejista/cotacao/vencedor/produto/{id}", name="vencedor_cotacao_produto")
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editWinnerQuoteProductAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
+        $quote = $quoteProduct->getQuote();
+
+        if($request->getMethod() == "POST"){
+
+            $quoteSuppliers = $em->getRepository('AppBundle:QuoteSupplier')->findBy(['quoteProduct' => $quoteProduct, 'deleted' => false]);
+
+            foreach ($quoteSuppliers as $quoteSupplier) {
+                $quoteProduct->removeWinner($quoteSupplier);
+            }
+
+            $quoteSupplierIds = $request->get('quoteSuppliers');
+
+            //add new winnerQuoteProducts
+            foreach ($quoteSupplierIds as $quoteSupplierId) {
+
+                /** @var QuoteSupplier $product */
+                $quoteSupplier = $em->getRepository('AppBundle:QuoteSupplier')->findOneBy(['id' => $quoteSupplierId, 'deleted' => false]);
+
+                if($quoteSupplier != null) {
+                    $quoteProduct->addWinner($quoteSupplier);
+                }
+
+            }
+
+            $em->persist($quoteProduct);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Vencedores salvos!'
+            );
+
+            $data['url'] = $this->generateUrl('vencedor_cotacao_produto', ['id' => $id]);
+            echo json_encode($data);
+            exit();
+        }
+
+        return $this->render('Retailer/pricelist/editWinnerQuoteProduct.html.twig', [
+            'quoteProduct' => $quoteProduct,
+            'quote' => $quote,
+        ]);
+    }
+
+    /**
      * @Route("/varejista/cotacoes/{id}/deletar", name="deletar_cotacao")
      * @param Request $request
      * @param $id
