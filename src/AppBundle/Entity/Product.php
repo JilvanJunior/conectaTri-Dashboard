@@ -70,9 +70,9 @@ class Product
     private $brand;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="quantity", type="integer", nullable=true)
+     * @ORM\Column(name="quantity", type="float", nullable=true)
      */
     private $quantity;
 
@@ -267,7 +267,7 @@ class Product
     /**
      * Set quantity
      *
-     * @param integer $quantity
+     * @param float $quantity
      *
      * @return Product
      */
@@ -281,7 +281,7 @@ class Product
     /**
      * Get quantity
      *
-     * @return int
+     * @return float
      */
     public function getQuantity()
     {
