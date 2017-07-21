@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     <style>
         /* Base styles */
         *, *:after, *:before {
@@ -215,7 +216,7 @@
             Sou Fornecedor
         </button>
         {% if error %}
-            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            <div style="color: white !important;">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
     </div>
     <div class="retailer">

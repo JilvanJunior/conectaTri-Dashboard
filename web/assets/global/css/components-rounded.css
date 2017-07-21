@@ -1225,11 +1225,9 @@ a {
 a:hover {
   color: #3a3a3a
 }
-
 a:focus, a:hover, a:active {
   outline: 0
 }
-
 hr {
   margin: 20px 0;
   border: 0;

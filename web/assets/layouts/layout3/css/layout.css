@@ -397,7 +397,6 @@
 
 .page-header .page-header-top .top-menu .navbar-nav>li.dropdown-user .dropdown-toggle>.username {
   float: left;
-  font-size: 400;
   font-size: 14px;
   margin-top: 4px;
   margin-right: 2px
@@ -1159,7 +1158,7 @@ body,html {
 }
 
 .breadcrumb>.active {
-  color: #40ae40
+  color: #40ae40;
 }
 
 .page-content {
