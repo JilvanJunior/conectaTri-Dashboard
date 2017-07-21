@@ -572,7 +572,7 @@ class PriceListController extends Controller
         $quote = $em->getRepository('AppBundle:Quote')->find($idQuote);
         $representative = $em->getRepository('AppBundle:Representative')->find($idRepresentative);
         $supplier = $representative->getSupplier();
-        $quoteSuppliers = $em->getRepository('AppBundle:QuoteSupplier')->getQuoteSupplierByQuote($idQuote, $idRepresentative);
+        $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $idQuote, 'deleted' => false]);
 
 
         $html = $this->renderView('Retailer/pdf/quoteSupplier.html.twig', array(
@@ -580,7 +580,7 @@ class PriceListController extends Controller
             'retailer' => $user,
             'representative' => $representative,
             'supplier' => $supplier,
-            'quoteSuppliers' => $quoteSuppliers,
+            'quoteProducts' => $quoteProducts,
         ));
 
         $fileName = str_replace(" ", "_", $quote->getName())

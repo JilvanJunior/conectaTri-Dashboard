@@ -106,21 +106,25 @@
                                                     <th>Nome do Fornecedor</th>
                                                     <th>Nome do Representante</th>
                                                     <th>Status</th>
-                                                    <th>Ação</th>
+                                                    {% if quote.closed == 1 %}
+                                                        <th>Ação</th>
+                                                    {% endif %}
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {% for quoteSupplier in quote.quoteProducts[0].quoteSuppliers if quoteSupplier.deleted == 0 %}
-                                                        <tr>
-                                                            <td> {{ quoteSupplier.representative.supplier.name }} </td>
-                                                            <td> {{ quoteSupplier.representative.name }} </td>
-                                                            <td> {% if quoteSupplier.filledIn == 0 %} Pendente {% else %} Preencheu a Cotação {% endif %}</td>
+                                                {% for quoteSupplier in quote.quoteProducts[0].quoteSuppliers if quoteSupplier.deleted == 0 %}
+                                                    <tr>
+                                                        <td> {{ quoteSupplier.representative.supplier.name }} </td>
+                                                        <td> {{ quoteSupplier.representative.name }} </td>
+                                                        <td> {% if quoteSupplier.filledIn == 0 %} Pendente {% else %} Preencheu a Cotação {% endif %}</td>
+                                                        {% if quote.closed == 1 %}
                                                             <td> <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': quoteSupplier.representative.id}) }}"
                                                                     class="btn btn-outline btn-circle btn-sm purple">
-                                                                    <i class="fa fa-file"></i> Exportar em PDF </a>
+                                                                    <i class="fa fa-file"></i> Exportar Pedido </a>
                                                             </td>
-                                                        </tr>
-                                                    {% endfor %}
+                                                        {% endif %}
+                                                    </tr>
+                                                {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -150,12 +154,12 @@
     <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
     <script>
         $(function(){
-           $('#sample_2').DataTable({
-               responsive: true,
-               language: {
-                   url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
-               }
-           });
+            $('#sample_2').DataTable({
+                responsive: true,
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
+                }
+            });
         });
     </script>
 {% endblock %}
