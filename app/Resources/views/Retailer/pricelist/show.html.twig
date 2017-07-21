@@ -106,6 +106,7 @@
                                                     <th>Nome do Fornecedor</th>
                                                     <th>Nome do Representante</th>
                                                     <th>Status</th>
+                                                    <th>Ação</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -113,7 +114,11 @@
                                                         <tr>
                                                             <td> {{ quoteSupplier.representative.supplier.name }} </td>
                                                             <td> {{ quoteSupplier.representative.name }} </td>
-                                                            <td> {% if quoteSupplier.price == 0 %} Pendente {% else %} Preencheu a Cotação {% endif %}</td>
+                                                            <td> {% if quoteSupplier.filledIn == 0 %} Pendente {% else %} Preencheu a Cotação {% endif %}</td>
+                                                            <td> <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': quoteSupplier.representative.id}) }}"
+                                                                    class="btn btn-outline btn-circle btn-sm purple">
+                                                                    <i class="fa fa-file"></i> Exportar em PDF </a>
+                                                            </td>
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>

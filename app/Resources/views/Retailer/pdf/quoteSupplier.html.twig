@@ -1,0 +1,167 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin:0;
+            padding:0;
+        }
+        body {
+            background: #eff3f8;
+            font-size: 14px;
+            color: #555;
+            text-transform: uppercase;
+        }
+        .logo {
+            background: #40ae40;
+            text-align: center;
+            margin: 0 auto;
+            display: table;
+            padding: 10px;
+            border-radius: 0 0 20px 20px;
+        }
+        #tables {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        table {
+            clear: both;
+            max-width: none !important;
+            border: 1px solid #e7ecf1;
+            border-collapse: separate !important;
+            width: 100% !important;
+            margin: 0 !important;
+            background-color: #fff;
+            border-spacing: 0;
+            box-sizing: content-box;
+            border-radius: 5px;
+        }
+        table tr {
+            background-color: #fff;
+        }
+        table th {
+            text-align: left;
+            font-weight: normal;
+            font-size: 18px;
+        }
+        table td, table th {
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+            line-height: 1.42857;
+            vertical-align: top;
+            border: 1px solid #e7ecf1;
+            padding: 8px 10px;
+            border-left-width: 0;
+            border-bottom-width: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="logo">
+    <img alt="ConectaTri" src="http://conectatri.wemind.com.br/assets/pages/img/logos/bg-conectatri-03.png">
+</div>
+<br>
+<div id="tables">
+    <table>
+        <thead>
+        <tr>
+            <th colspan="2">DADOS DO FORNECEDOR</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>NOME</td>
+            <td>{{ representative.supplier.name }}</td>
+        </tr>
+        <tr>
+            <td>REPR.:</td>
+            <td>{{ representative.name }}</td>
+        </tr>
+        <tr>
+            <td>CNPJ</td>
+            <td>{{ representative.supplier.cnpj }}</td>
+        </tr>
+        <tr>
+            <td>EMAIL</td>
+            <td>{{ representative.email }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <table>
+        <thead>
+        <tr>
+            <th colspan="2">DADOS DO USUÁRIO</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>FANTASIA</td>
+            <td>{{ retailer.fantasyName }}</td>
+        </tr>
+        <tr>
+            <td>CNPJ</td>
+            <td>{{ retailer.cnpj }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <table>
+        <thead>
+        <tr>
+            <th colspan="2">DADOS DA COTAÇÃO</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>NOME</td>
+            <td>{{ quote.name }}</td>
+        </tr>
+        <tr>
+            <td>ID</td>
+            <td>{{ quote.id }}</td>
+        </tr>
+        <tr>
+            <td>INÍCIO</td>
+            <td>{{ quote.beginsAt|date('d/m/Y - H:i') }}</td>
+        </tr>
+        <tr>
+            <td>ENCERRA</td>
+            <td>{{ quote.expiresAt|date('d/m/Y - H:i') }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <table>
+        <thead>
+        <tr>
+            <th colspan="6">COTAÇÃO</th>
+        </tr>
+        <tr>
+            <td>PRODUTO</td>
+            <td>MARCA</td>
+            <td>EMBALAGEM</td>
+            <td>QTD.</td>
+            <td>PREÇO UN.</td>
+            <td>TOTAL</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for quoteSupplier in quoteSuppliers %}
+            <tr>
+                <td>{{ quoteSupplier.quoteProduct.product.name }}</td>
+                <td>{{ quoteSupplier.quoteProduct.product.brand }}</td>
+                <td>{{ quoteSupplier.quoteProduct.product.unit }} {{ quoteSupplier.quoteProduct.product.quantity }}</td>
+                <td>{{ quoteSupplier.quantity }}</td>
+                <td>R$ {{ quoteSupplier.price|number_format(2, ',', '.') }}</td>
+                <td>R$ {{ (quoteSupplier.quantity * quoteSupplier.price)|number_format(2, ',', '.') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

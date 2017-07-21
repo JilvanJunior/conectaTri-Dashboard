@@ -12,6 +12,7 @@ use AppBundle\Entity\Retailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PriceListController extends Controller
@@ -553,5 +554,45 @@ class PriceListController extends Controller
         );
 
         return $this->redirectToRoute('cotacoes');
+    }
+
+    /**
+     * @Route("/varejista/cotacao/fornecedor/{idQuote}/{idRepresentative}/pdf", name="cotacao_fornecedor_pdf")
+     * @param Request $request
+     * @param $idQuote
+     * @param $idRepresentative
+     * @return Response
+     * @internal param $id
+     */
+    public function quoteSupplierPdfAction(Request $request, $idQuote, $idRepresentative)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $quote = $em->getRepository('AppBundle:Quote')->find($idQuote);
+        $representative = $em->getRepository('AppBundle:Representative')->find($idRepresentative);
+        $supplier = $representative->getSupplier();
+        $quoteSuppliers = $em->getRepository('AppBundle:QuoteSupplier')->getQuoteSupplierByQuote($idQuote, $idRepresentative);
+
+
+        $html = $this->renderView('Retailer/pdf/quoteSupplier.html.twig', array(
+            'quote' => $quote,
+            'retailer' => $user,
+            'representative' => $representative,
+            'supplier' => $supplier,
+            'quoteSuppliers' => $quoteSuppliers,
+        ));
+
+        $fileName = str_replace(" ", "_", $quote->getName())
+            . "-" . str_replace(" ", "_", $supplier->getName());
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+            200,
+            array(
+                'Content-Type'          => 'application/pdf',
+                'Content-Disposition'   => 'attachment; filename="'.$fileName.'.pdf"'
+            )
+        );
     }
 }

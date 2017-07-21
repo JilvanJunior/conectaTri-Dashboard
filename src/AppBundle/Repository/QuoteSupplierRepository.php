@@ -59,4 +59,23 @@ class QuoteSupplierRepository extends EntityRepository
             ->getResult();
     }
 
+    public function getQuoteSupplierByQuote($quoteId, $representativeId)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT qs
+                FROM AppBundle:QuoteSupplier qs
+                WHERE qs.deleted = 0 
+                AND qs.representative = :representative 
+                AND qs.quoteProduct IN (
+                  SELECT qp 
+                  FROM AppBundle:QuoteProduct qp
+                  WHERE qp.deleted = 0 
+                  AND qp.quote = :quote
+                )'
+            )
+            ->setParameters(array('quote' => $quoteId, 'representative' => $representativeId))
+            ->getResult();
+    }
+
 }
