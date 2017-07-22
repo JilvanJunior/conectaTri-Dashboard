@@ -876,6 +876,7 @@ class ApiController extends FOSRestController {
                         $this->renderView(
                             'email/quote_representative.html.twig',
                             array('link' => $link,
+                                'supplier' => $representative->getSupplier()->getName(),
                                 'fantasyName' => $dbToken->getRetailer()->getFantasyName(),
                                 'expiresAt' => $dbQuote->getExpiresAt())
                         ),
