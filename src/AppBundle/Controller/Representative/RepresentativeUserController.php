@@ -33,6 +33,17 @@ class RepresentativeUserController extends Controller
         if($now > $quote[0]->getExpiresAt() || $quote[0]->isClosed()) {
             if ($now > $quote[0]->getExpiresAt() && !$quote[0]->isClosed()) {
                 $quote[0]->setClosed(true);
+                //TODO: send notification
+                $defaultUrl = 'https://kidsplace.firebaseio.com/';
+                $defaultToken = 'MqL0c8tKCtheLSYcygYNtGhU8Z2hULOFs9OKPdEp';
+                $defaultPath = '/firebase/example';
+                $data = array(
+                    "action" => "closed",
+                    "id" => $id
+                );
+                $firebase = new \Firebase\FirebaseLib($defaultUrl, $defaultToken);
+                $firebase->set($defaultPath . '/conectatri', $data);
+
                 $em->flush();
             }
             return $this->redirectToRoute('access_denied');
@@ -196,6 +207,16 @@ class RepresentativeUserController extends Controller
                 ->findOneBy(['quote' => $quote, 'representative' => $representative]);
 
             $quoteSupplierStatus->setStatus(2);
+            //TODO: send notification
+            $defaultUrl = 'https://kidsplace.firebaseio.com/';
+            $defaultToken = 'MqL0c8tKCtheLSYcygYNtGhU8Z2hULOFs9OKPdEp';
+            $defaultPath = '/firebase/example';
+            $data = array(
+                "action" => "closed",
+                "id" => $quoteId
+            );
+            $firebase = new \Firebase\FirebaseLib($defaultUrl, $defaultToken);
+            $firebase->set($defaultPath . '/conectatri', $data);
             $em->persist($quoteSupplierStatus);
 
             $em->flush();
