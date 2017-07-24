@@ -15,7 +15,7 @@ class RegistrationController extends Controller
     /**
      * @Route("/cadastro/representante", name="representative_user_registration")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function registerAction(Request $request)
     {
@@ -37,7 +37,8 @@ class RegistrationController extends Controller
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('login');
+            return $this->redirect($this->generateUrl('login') . "?fornecedor=1");
+
         }
 
         return $this->render(
