@@ -297,7 +297,7 @@ class PriceListController extends Controller
                             $this->renderView(
                                 'email/quote_representative.html.twig',
                                 array('link' => $link,
-                                    'supplier' => $representative->getSupplier()->getName(),
+                                    'companyName' => $user->getFantasyName()->getCompanyName(),
                                     'fantasyName' => $user->getFantasyName(),
                                     'expiresAt' => $quote->getExpiresAt())
                             ),
