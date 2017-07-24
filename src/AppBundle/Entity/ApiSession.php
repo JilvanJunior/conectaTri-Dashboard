@@ -51,6 +51,13 @@ class ApiSession
     private $lastUsed;
 
     /**
+     * @var FCMToken
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\FCMToken", mappedBy="apiSession", orphanRemoval=true)
+     */
+    private $fcmToken;
+
+    /**
      * ApiSession constructor.
      */
     public function __construct()
@@ -161,5 +168,23 @@ class ApiSession
     public function getLastUsed()
     {
         return $this->lastUsed;
+    }
+
+    /**
+     * @return FCMToken
+     */
+    public function getFcmToken()
+    {
+        return $this->fcmToken;
+    }
+
+    /**
+     * @param FCMToken $fcmToken
+     * @return ApiSession
+     */
+    public function setFcmToken($fcmToken)
+    {
+        $this->fcmToken = $fcmToken;
+        return $this;
     }
 }

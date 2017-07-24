@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\ApiSession;
+use AppBundle\Entity\FCMToken;
 use AppBundle\Entity\Listing;
 use AppBundle\Entity\ListingProduct;
 use AppBundle\Entity\Product;
@@ -136,6 +137,34 @@ class ApiController extends FOSRestController {
         $em->remove($dbToken);
         $em->flush();
         return View::create(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Rest\Post("/api/fcm")
+     */
+    public function postFCMAction(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();;
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $fcmToken = $request->get("token");
+        $dbFcmToken = new FCMToken();
+        $dbFcmToken->setRetailer($dbToken->getRetailer())
+            ->setApiSession($dbToken)
+            ->setToken($fcmToken);
+        $em->persist($dbFcmToken);
+        $em->flush();
+
+        return View::create(null, Response::HTTP_CREATED);
     }
 
     /**

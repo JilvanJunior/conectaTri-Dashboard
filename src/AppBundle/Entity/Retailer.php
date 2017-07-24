@@ -41,6 +41,22 @@ class Retailer implements UserInterface, \Serializable
     private $suppliers;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FCMToken", mappedBy="retailer", orphanRemoval=true)
+     * @Serializer\Exclude()
+     */
+    private $fcmTokens;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ApiSession", mappedBy="retailer", orphanRemoval=true)
+     * @Serializer\Exclude()
+     */
+    private $apiSessions;
+
+    /**
      * @var State
      *
      * @ORM\ManyToOne(targetEntity="State", inversedBy="retailers")
@@ -195,6 +211,7 @@ class Retailer implements UserInterface, \Serializable
         $this->listings = new ArrayCollection();
         $this->quotes = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->fcmTokens = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
     }
@@ -705,5 +722,21 @@ class Retailer implements UserInterface, \Serializable
     {
         $this->verified = $verified;
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getFcmTokens()
+    {
+        return $this->fcmTokens;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getApiSessions()
+    {
+        return $this->apiSessions;
     }
 }
