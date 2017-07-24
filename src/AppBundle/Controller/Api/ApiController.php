@@ -896,6 +896,7 @@ class ApiController extends FOSRestController {
         $failed = "<ul>";
         $hasFailed = false;
         $total = 0;
+        /** @var QuoteSupplier $quoteSupplier */
         foreach ($dbQuote->getQuoteProducts()[0]->getQuoteSuppliers() as $quoteSupplier) {
             if (!$quoteSupplier->isDeleted() && \Swift_Validate::email($quoteSupplier->getRepresentative()->getEmail())) {
                 $message = (new \Swift_Message('Cotação - Conecta Tri'))
@@ -905,7 +906,7 @@ class ApiController extends FOSRestController {
                         $this->renderView(
                             'email/quote_representative.html.twig',
                             array('link' => $link,
-                                'supplier' => $representative->getSupplier()->getName(),
+                                'supplier' => $quoteSupplier->getRepresentative()->getSupplier()->getName(),
                                 'fantasyName' => $dbToken->getRetailer()->getFantasyName(),
                                 'expiresAt' => $dbQuote->getExpiresAt())
                         ),
