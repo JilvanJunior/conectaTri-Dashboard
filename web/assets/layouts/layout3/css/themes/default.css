@@ -172,7 +172,7 @@ body.page-md {
 }
 
 .page-header .page-header-top .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu > li.external > a:hover {
-  color: #5496cf
+  color: #FFF;
 }
 
 .page-header .page-header-top .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu.dropdown-menu-default > li a, .page-header .page-header-top .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu .dropdown-menu-list > li a {
@@ -181,7 +181,7 @@ body.page-md {
 }
 
 .page-header .page-header-top .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu.dropdown-menu-default > li a > i, .page-header .page-header-top .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu .dropdown-menu-list > li a > i {
-  color: #6fa7d7
+  color: #FFF;
 }
 
 .page-header .page-header-top .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu.dropdown-menu-default > li a:hover, .page-header .page-header-top .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu .dropdown-menu-list > li a:hover {
@@ -256,7 +256,7 @@ body.page-md {
 }
 
 .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li > a > i {
-  color: #6fa7d7
+  color: #FFF;
 }
 
 .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li:hover > a {
@@ -265,7 +265,7 @@ body.page-md {
 }
 
 .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li:hover > a > i {
-  color: #6fa7d7
+  color: #FFF;
 }
 
 .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li.active > a, .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li.active > a:hover, .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li.current > a, .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li.current > a:hover {
@@ -274,7 +274,7 @@ body.page-md {
 }
 
 .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li.active > a > i, .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li.active > a:hover > i, .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li.current > a > i, .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li.current > a:hover > i {
-  color: #6fa7d7
+  color: #FFF;
 }
 
 .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li.divider {
@@ -282,7 +282,7 @@ body.page-md {
 }
 
 .page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-submenu > a:after {
-  color: #6fa7d7
+  color: #FFF;
 }
 
 .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li.mega-menu-dropdown > .dropdown-menu {
@@ -338,7 +338,7 @@ body.page-md {
 }
 
 .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li > a > i {
-  color: #6fa7d7
+  color: #FFF;
 }
 
 .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li:hover > a {
@@ -347,7 +347,7 @@ body.page-md {
 }
 
 .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li:hover > a > i {
-  color: #6fa7d7
+  color: #FFF;
 }
 
 .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li.active > a, .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li.active > a:hover, .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li.current > a, .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li.current > a:hover {
@@ -356,7 +356,7 @@ body.page-md {
 }
 
 .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li.active > a > i, .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li.active > a:hover > i, .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li.current > a > i, .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li.current > a:hover > i {
-  color: #6fa7d7
+  color: #FFF;
 }
 
 .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li .dropdown-menu li.divider {
@@ -365,20 +365,20 @@ body.page-md {
 
 .page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav > li > .dropdown-menu {
   border: 1px solid #eaeaf2;
-  border-top: 0
+  border-top: 0;
 }
 
 .page-header .page-header-menu .search-form {
-  background: #40AE40
+  background: #FFF;
 }
 
 .page-header .page-header-menu .search-form .input-group {
-  background: #40AE40
+  background: #FFF;
 }
 
 .page-header .page-header-menu .search-form .input-group .form-control {
   color: #616d7d;
-  background: #40AE40
+  background: #FFF;
 }
 
 .page-header .page-header-menu .search-form .input-group .form-control::-moz-placeholder {

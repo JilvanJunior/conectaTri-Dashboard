@@ -4106,8 +4106,8 @@ tbody.collapse.in {
   .pagination > .active > span:focus {
     z-index: 3;
     color: #fff;
-    background-color: #337ab7;
-    border-color: #337ab7;
+    background-color: #40ae40;
+    border-color: #319431;
     cursor: default; }
   .pagination > .disabled > span,
   .pagination > .disabled > span:hover,
