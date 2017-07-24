@@ -108,4 +108,7 @@ circle_rest_client:
             CURLOPT_HTTPHEADER:     [ 'Content-Type: application/x-www-form-urlencoded' ]
             CURLOPT_FOLLOWLOCATION: true
 
-knp_snappy: ~
+knp_snappy:
+    pdf:
+        enabled: true
+        binary: /usr/bin/wkhtmltopdf
