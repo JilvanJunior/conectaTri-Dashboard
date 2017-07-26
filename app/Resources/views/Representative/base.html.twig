@@ -24,6 +24,7 @@
     <!-- END PAGE LEVEL PLUGINS -->
     <!-- BEGIN THEME GLOBAL STYLES -->
     <link href="{{ asset('assets/global/css/components-rounded.min.css') }}" rel="stylesheet" id="style_components" type="text/css" />
+    <link href="{{ asset('assets/global/css/styles.css') }}" rel="stylesheet" id="style_components" type="text/css" />
     <link href="{{ asset('assets/global/css/plugins.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- END THEME GLOBAL STYLES -->
     <!-- BEGIN THEME LAYOUT STYLES -->
@@ -44,8 +45,8 @@
                     <div class="container">
                         <!-- BEGIN LOGO -->
                         <div class="page-logo">
-                            <a href="{{ path('admin_dashboard') }}">
-                                <img src="{{ asset('assets/layouts/layout3/img/logo-default.jpg') }}" alt="logo" class="logo-default">
+                            <a href="#">
+                                <img src="{{ asset('assets/pages/img/logos/bg-conectatri-04.png') }}" alt="logo" class="logo-default" width="170px">
                             </a>
                         </div>
                         <!-- END LOGO -->
@@ -60,16 +61,11 @@
                                 </li>
                                 <!-- BEGIN USER LOGIN DROPDOWN -->
                                 <li class="dropdown dropdown-user dropdown-dark">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                        <img alt="" class="img-circle" src="{{ asset('assets/layouts/layout3/img/avatar.png') }}">
-                                        <span class="username username-hide-mobile">Opções</span>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-default">
-                                        <li>
-                                            <a href="{{ path('logout') }}">
-                                                <i class="icon-key"></i> Logout </a>
-                                        </li>
-                                    </ul>
+                                <li>
+                                    <a href="{{ path('logout') }}">
+                                        <i class="icon-key"></i> Logout </a>
+                                </li>
+
                                 </li>
                                 <!-- END USER LOGIN DROPDOWN -->
                             </ul>
