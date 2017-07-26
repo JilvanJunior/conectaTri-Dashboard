@@ -25,7 +25,7 @@ class ProductsController extends Controller
     }
 
     /**
-     * @Route("/varejista/listas/produto/novo", name="novoproduto")
+     * @Route("/varejista/produtos/novo", name="novoproduto")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -66,7 +66,7 @@ class ProductsController extends Controller
     }
 
     /**
-     * @Route("/varejista/listas/produto/editar/{id}", name="editar_produto")
+     * @Route("/varejista/produto/editar/{id}", name="editar_produto")
      * @param Request $request
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
