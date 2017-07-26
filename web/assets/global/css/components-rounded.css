@@ -4,9 +4,8 @@ body {
   padding: 0 !important;
   margin: 0 !important;
   direction: "ltr";
-  font-size: 14px
+  font-size: 14px;
 }
-
 @-webkit-viewport {
   width: device-width
 }
@@ -15468,11 +15467,11 @@ body[ng-controller] .modal {
 }
 
 .dashboard-stat.green-conecta {
-  background-color: #8cb369
+  background-color: #40ae40;
 }
 
 .dashboard-stat.green-conecta.dashboard-stat-light:hover {
-  background-color: #67884d
+  background-color: #319431;
 }
 
 .dashboard-stat.green-conecta .visual > i {
