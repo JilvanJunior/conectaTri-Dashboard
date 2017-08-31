@@ -964,7 +964,8 @@ class ApiController extends FOSRestController {
             ->setRetailer($dbToken->getRetailer())
             ->setClosed(false)
             ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
-            ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
+            ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at))
+            ->setPaymentDate(\DateTime::createFromFormat(\DateTime::ATOM, $quote->payment_date));
         $em->persist($dbQuote);
         $isFirst = true;
         foreach ($quote->quote_products as $product) {

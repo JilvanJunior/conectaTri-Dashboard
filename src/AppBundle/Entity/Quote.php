@@ -77,6 +77,13 @@ class Quote
     private $expiresAt;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="payment_date", type="datetime", nullable=true)
+     */
+    private $paymentDate;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="closed", type="boolean")
@@ -280,6 +287,24 @@ class Quote
     public function setExpiresAt($expiresAt)
     {
         $this->expiresAt = $expiresAt;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getPaymentDate()
+    {
+        return $this->paymentDate;
+    }
+
+    /**
+     * @param \DateTime $paymentDate
+     * @return Quote
+     */
+    public function setPaymentDate($paymentDate)
+    {
+        $this->paymentDate = $paymentDate;
         return $this;
     }
 
