@@ -963,10 +963,10 @@ class ApiController extends FOSRestController {
             ->setType($quote->type)
             ->setRetailer($dbToken->getRetailer())
             ->setClosed(false)
-            ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
-            ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
-        if(!is_null($quote->payment_date))
-            $dbQuote->setPaymentDate(\DateTime::createFromFormat(\DateTime::ATOM, $quote->payment_date));
+            ->setExpiresAt($this->createATOMDateTime($quote->expires_at))
+            ->setBeginsAt($this->createATOMDateTime($quote->begins_at));
+        if(property_exists($quote, 'payment_date'))
+            $dbQuote->setPaymentDate($this->createATOMDateTime($quote->payment_date));
 
         $em->persist($dbQuote);
         $isFirst = true;
@@ -1118,9 +1118,9 @@ class ApiController extends FOSRestController {
         }
         $dbQuote->setDeleted(false)
             ->setName($quote->name)
-            ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
+            ->setExpiresAt($this->createATOMDateTime($quote->expires_at))
             ->setClosed(isset($quote->closed) ? $quote->closed : false)
-            ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
+            ->setBeginsAt($this->createATOMDateTime($quote->begins_at));
         $em->flush();
         return View::create($dbQuote, Response::HTTP_ACCEPTED);
     }
@@ -1589,4 +1589,13 @@ class ApiController extends FOSRestController {
         return null;
     }
 
+    private function createATOMDateTime($dateString)
+    {
+        $timeZone = new \DateTimeZone(date_default_timezone_get());
+
+        $date = \DateTime::createFromFormat(\DateTime::ATOM, $dateString);
+        $date->setTimezone($timeZone);
+
+        return $date;
+    }
 }
