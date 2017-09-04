@@ -27,10 +27,7 @@ class AuthController extends Controller
             return $this->redirectToRoute('admin_dashboard');
 
         if($this->get('security.authorization_checker')->isGranted('ROLE_REPRESENTATIVE')) {
-            if($request->get('id') == null)
-                return $this->redirectToRoute('access_denied');
-
-            return $this->redirectToRoute('quote_representative', array('id' => $request->get('id')));
+            return $this->redirectToRoute('representative_dashboard');
         }
     }
 
