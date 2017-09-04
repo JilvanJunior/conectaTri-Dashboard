@@ -239,6 +239,7 @@
 
                     </div>
                     <div class="profile__footer">
+                        <div>Primeiro acesso? <a href="{{ path('retailer_user_registration') }}">Clique aqui</a></div>
                         <button class="btn" id="toggleBackRetailer" type="button">Voltar</button>
                         <button class="btn" type="submit">Entrar</button>
                     </div>
@@ -338,10 +339,13 @@
             }
         };
 
-        var supplier = getUrlParameter('fornecedor');
-        console.log(supplier);
-        if(supplier) {
+        var representative = getUrlParameter('fornecedor');
+        var retailer = getUrlParameter('varejista');
+        if(representative) {
             toggleRepresentative();
+            document.getElementById('toggleBtn').style.display = 'none';
+        } else if(retailer) {
+            toggleRetailer();
             document.getElementById('toggleBtn').style.display = 'none';
         }
 
