@@ -2,6 +2,7 @@
 
 {% block title %}Cotação{% endblock %}
 {% block description %}{% endblock %}
+{% block menu_quote %} active {% endblock %}
 
 {% block page_plugins %}
     {#<link href="{{ asset('assets/global/plugins/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />#}
@@ -45,6 +46,15 @@
                     <!-- BEGIN PAGE CONTENT BODY -->
                     <div class="page-content">
                         <div class="container">
+                            <!-- BEGIN PAGE BREADCRUMBS -->
+                            <ul class="page-breadcrumb breadcrumb">
+                                <li>
+                                    <a href="{{ path('representative_dashboard') }}">Home</a>
+                                    <i class="fa fa-circle"></i>
+                                    <a href="#">Cotação</a>
+                                </li>
+                            </ul>
+                            <!-- END PAGE BREADCRUMBS -->
                             <!-- BEGIN PAGE CONTENT INNER -->
                             <div class="page-content-inner">
                                 <div class="row">
