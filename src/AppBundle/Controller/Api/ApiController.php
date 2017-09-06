@@ -246,6 +246,7 @@ class ApiController extends FOSRestController {
             ->setFullDescription($product->full_description)
             ->setQuantity($product->quantity)
             ->setUnit($product->unit)
+            ->setBarCode($product->bar_code)
             ->setCreatedAt(new \DateTime())
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false)
