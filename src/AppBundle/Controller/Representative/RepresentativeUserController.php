@@ -78,6 +78,7 @@ class RepresentativeUserController extends Controller
         return $this->render('Representative/quote.html.twig', array(
             'quote' => $quote[0],
             'representative' => $representative[0],
+            'observation' => $quoteSupplierStatus->getObservation(),
             'isCompleted' => $isCompleted,
         ));
     }
@@ -157,6 +158,7 @@ class RepresentativeUserController extends Controller
             $tmp['brand'] = $product->getBrand();
             $tmp['description'] = $product->getFullDescription();
             $tmp['quantity_unit'] = $product->getUnit()  . ' ' . $product->getQuantity();
+            $tmp['bar_code'] = $product->getBarCode();
             $quoteSuppliers = $quoteProduct->getQuoteSuppliers();
             $tmp['price'] = '';
             $tmp['quantity'] = '';

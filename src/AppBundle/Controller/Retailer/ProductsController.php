@@ -41,6 +41,7 @@ class ProductsController extends Controller
             $product = new Product();
             $product->setEan('');
             if($request->get('name') != "") $product->setName($request->get('name'));
+            if($request->get('ean') != "") $product->setEan($request->get('ean'));
             if($request->get('brand') != "") $product->setBrand($request->get('brand'));
             if($request->get('quantity') != "") $product->setQuantity($request->get('quantity'));
             if($request->get('unit') != "") $product->setUnit($request->get('unit'));
@@ -82,6 +83,7 @@ class ProductsController extends Controller
 
             $product->setEan('');
             $product->setName($request->get('name'));
+            $product->setBarCode($request->get('ean'));
             $product->setBrand($request->get('brand'));
             $product->setQuantity($request->get('quantity'));
             $product->setUnit($request->get('unit'));

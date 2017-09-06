@@ -46,6 +46,13 @@ class QuoteSupplierStatus
     private $representative;
 
     /**
+     * @var observation
+     *
+     * @ORM\Column(name="observation", type="text")
+     */
+    private $observation;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="status", type="smallint")
@@ -109,6 +116,30 @@ class QuoteSupplierStatus
     public function getRepresentative()
     {
         return $this->representative;
+    }
+
+    /**
+     * Set observation
+     *
+     * @param string $observation
+     *
+     * @return QuoteSupplierStatus
+     */
+    public function setObservation($observation)
+    {
+        $this->observation = $observation;
+
+        return $this;
+    }
+
+    /**
+     * Get observation
+     *
+     * @return string
+     */
+    public function getObservation()
+    {
+        return $this->observation;
     }
 
     /**
