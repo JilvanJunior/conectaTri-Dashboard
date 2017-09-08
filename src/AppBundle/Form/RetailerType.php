@@ -18,25 +18,26 @@ class RetailerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('cnpj', TextType::class, array('label' => 'CNPJ'))
-            ->add('companyName', TextType::class, array('label' => 'Razão Social'))
-            ->add('fantasyName', TextType::class, array('label' => 'Nome de Usuário'))
+            ->add('cnpj', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'CNPJ')))
+            ->add('companyName', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Razão Social')))
+            ->add('fantasyName', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Nome de Usuário')))
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Senha'),
-                'second_options' => array('label' => 'Confirme a Senha'),
+                'first_options'  => array('label' => false, 'attr' => array('placeholder' => 'Senha')),
+                'second_options' => array('label' => false, 'attr' => array('placeholder' => 'Confirme a Senha')),
             ))
-            ->add('email', EmailType::class, array('label' => 'E-mail'))
-            ->add('cep', TextType::class, array('label' => 'CEP'))
-            ->add('address', TextType::class, array('label' => 'Endereço'))
-            ->add('city', TextType::class, array('label' => 'Cidade'))
+            ->add('email', EmailType::class, array('label' => false, 'attr' => array('placeholder' => 'E-mail')))
+            ->add('cep', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'CEP')))
+            ->add('address', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Endereço')))
+            ->add('city', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Cidade')))
             ->add('state', EntityType::class, array(
                 'class' => 'AppBundle:State',
                 'choice_label' => 'name',
-                'label' => 'Estado'
+                'label' => false,
+                'placeholder' => 'Estado'
             ))
-            ->add('phone', TextType::class, array('label' => 'Telefone'))
-            ->add('cellphone', TextType::class, array('label' => 'Telefone Celular'))
+            ->add('phone', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Telefone')))
+            ->add('cellphone', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Telefone Celular')))
         ;
 
         $builder->get('cnpj')
