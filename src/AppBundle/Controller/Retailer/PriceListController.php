@@ -395,6 +395,8 @@ class PriceListController extends Controller
                 continue;
 
             $representative = $quoteSupplier->getRepresentative();
+            $supplier = $representative->getSupplier();
+            $sum = $em->getRepository('AppBundle:QuoteSupplier')->getQuoteSupplierSum($quote, $supplier);
             $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
                 ->findOneBy(['quote' => $quote, 'representative' => $representative]);
             if(is_null($quoteSupplierStatus))
@@ -402,11 +404,20 @@ class PriceListController extends Controller
             else
                 $observation = $quoteSupplierStatus->getObservation();
 
+            if($quoteSupplier->isFilledIn()) {
+                $moreThanMinimun = ($supplier->getMinimunValue() <= $sum)?'Sim':'Não';
+                $filledIn = 'Preencheu a Cotação';
+            } else {
+                $moreThanMinimun = '-';
+                $filledIn = 'Pendente';
+            }
+
             $status = array(
                 'representativeId' => $representative->getId(),
                 'representativeName' => $representative->getName(),
-                'supplierName' => $representative->getSupplier()->getName(),
-                'filledIn' => $quoteSupplier->isFilledIn()?'Preencheu a Cotação':'Pendente',
+                'supplierName' => $supplier->getName(),
+                'moreThanMinimun' => $moreThanMinimun,
+                'filledIn' => $filledIn,
                 'observation' => $observation
             );
 

@@ -24,7 +24,7 @@ class ApiSession
     /**
      * @var Retailer
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Retailer", inversedBy="apiSessions")
      * @ORM\JoinColumn(name="retailer_id", referencedColumnName="id")
      */
     private $retailer;
