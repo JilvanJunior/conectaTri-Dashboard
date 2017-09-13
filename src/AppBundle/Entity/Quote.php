@@ -84,9 +84,9 @@ class Quote
     private $expiresAt;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="payment_date", type="datetime", nullable=true)
+     * @ORM\Column(name="payment_date", type="string", length=255, nullable=true)
      */
     private $paymentDate;
 
@@ -316,7 +316,7 @@ class Quote
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
     public function getPaymentDate()
     {
@@ -324,7 +324,7 @@ class Quote
     }
 
     /**
-     * @param \DateTime $paymentDate
+     * @param string $paymentDate
      * @return Quote
      */
     public function setPaymentDate($paymentDate)

@@ -966,7 +966,8 @@ class ApiController extends FOSRestController {
             ->setExpiresAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->expires_at))
             ->setBeginsAt(\DateTime::createFromFormat(\DateTime::ATOM, $quote->begins_at));
         if(!is_null($quote->payment_date))
-            $dbQuote->setPaymentDate(\DateTime::createFromFormat(\DateTime::ATOM, $quote->payment_date));
+            $dbQuote->setPaymentDate($quote->payment_date);
+//            $dbQuote->setPaymentDate(\DateTime::createFromFormat(\DateTime::ATOM, $quote->payment_date));
 
         $em->persist($dbQuote);
         $isFirst = true;
