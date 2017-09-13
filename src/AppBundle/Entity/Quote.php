@@ -63,6 +63,13 @@ class Quote
     private $suppliersStatus;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="send_to_supplier", type="boolean")
+     */
+    private $sendToSupplier = false;
+
+    /**
      * var \DateTime
      *
      * @ORM\Column(name="begins_at", type="datetime", nullable=true)
@@ -251,6 +258,24 @@ class Quote
     public function setRetailer($retailer)
     {
         $this->retailer = $retailer;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendToSupplier()
+    {
+        return $this->sendToSupplier;
+    }
+
+    /**
+     * @param bool $sendToSupplier
+     * @return Quote
+     */
+    public function setSendToSupplier($sendToSupplier)
+    {
+        $this->sendToSupplier = $sendToSupplier;
         return $this;
     }
 
