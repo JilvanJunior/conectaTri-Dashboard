@@ -5,16 +5,11 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
+//TODO add constraint representative and quote
 /**
  * QuoteSupplierStatus
  *
- * @ORM\Table(name="quote_supplier_status",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="status_unique", columns={
- *             "quote_id", "representative_id"
- *         })
- *     }
- * )
+ * @ORM\Table(name="quote_supplier_status")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuoteSupplierStatusRepository")
  * @Serializer\ExclusionPolicy("none")
  */
