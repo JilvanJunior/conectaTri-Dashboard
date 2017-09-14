@@ -70,6 +70,13 @@ class Quote
     private $sendToSupplier = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="code_martins", type="string", length=255, nullable=true)
+     */
+    private $codeMartins;
+
+    /**
      * var \DateTime
      *
      * @ORM\Column(name="begins_at", type="datetime", nullable=true)
@@ -258,6 +265,24 @@ class Quote
     public function setRetailer($retailer)
     {
         $this->retailer = $retailer;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodeMartins()
+    {
+        return $this->codeMartins;
+    }
+
+    /**
+     * @param string $codeMartins
+     * @return Quote
+     */
+    public function setCodeMartins($codeMartins)
+    {
+        $this->codeMartins = $codeMartins;
         return $this;
     }
 

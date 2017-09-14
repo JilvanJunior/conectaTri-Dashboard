@@ -968,6 +968,8 @@ class ApiController extends FOSRestController {
             ->setSendToSupplier($quote->send_to_supplier);
         if(!is_null($quote->payment_date))
             $dbQuote->setPaymentDate($quote->payment_date);
+        if(!is_null($quote->codigo_martins))
+            $dbQuote->setCodeMartins($quote->codigo_martins);
 
         $em->persist($dbQuote);
         $isFirst = true;
@@ -1128,6 +1130,8 @@ class ApiController extends FOSRestController {
             ->setSendToSupplier($quote->send_to_supplier);
         if(!is_null($quote->payment_date))
             $dbQuote->setPaymentDate($quote->payment_date);
+        if(!is_null($quote->codigo_martins))
+            $dbQuote->setCodeMartins($quote->codigo_martins);
         $em->flush();
         return View::create($dbQuote, Response::HTTP_ACCEPTED);
     }
