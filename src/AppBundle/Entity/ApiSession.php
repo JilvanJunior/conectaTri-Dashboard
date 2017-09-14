@@ -39,7 +39,7 @@ class ApiSession
     /**
      * @var string
      *
-     * @ORM\Column(name="key", type="string", , length=255, nullable=true)
+     * @ORM\Column(name="key", type="string", length=255, nullable=true)
      */
     private $key;
 
@@ -146,7 +146,7 @@ class ApiSession
 
     /**
      * @param string $key
-     * @return Quote
+     * @return ApiSession
      */
     public function setKey($key)
     {
