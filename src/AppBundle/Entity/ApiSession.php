@@ -37,6 +37,20 @@ class ApiSession
     private $token;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="key", type="string", , length=255, nullable=true)
+     */
+    private $key;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="rca_virtual", type="boolean")
+     */
+    private $rcaVirtual = false;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -122,6 +136,42 @@ class ApiSession
         return $this->token;
     }
 
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     * @return Quote
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+        return $this;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function isRcaVirtual()
+    {
+        return $this->rcaVirtual;
+    }
+
+    /**
+     * @param bool $rcaVirtual
+     * @return ApiSession
+     */
+    public function setRcaVirtual($rcaVirtual)
+    {
+        $this->rcaVirtual = $rcaVirtual;
+        return $this;
+    }
+    
     /**
      * Set createdAt
      *
