@@ -39,9 +39,9 @@ class ApiSession
     /**
      * @var string
      *
-     * @ORM\Column(name="key", type="string", length=255, nullable=true)
+     * @ORM\Column(name="client_key", type="string", length=255, nullable=true)
      */
-    private $key;
+    private $clientKey;
 
     /**
      * @var bool
@@ -139,18 +139,18 @@ class ApiSession
     /**
      * @return string
      */
-    public function getKey()
+    public function getClientKey()
     {
-        return $this->key;
+        return $this->clientKey;
     }
 
     /**
-     * @param string $key
+     * @param string $clientKey
      * @return ApiSession
      */
-    public function setKey($key)
+    public function setClientKey($clientKey)
     {
-        $this->key = $key;
+        $this->clientKey = $clientKey;
         return $this;
     }
     
