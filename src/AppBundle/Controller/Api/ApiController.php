@@ -1105,6 +1105,7 @@ class ApiController extends FOSRestController {
         /** @var \stdClass $product */
         foreach ($quote->quote_products as $product) {
             $newProduct = new QuoteProduct();
+            /** @var Product $dbProduct */
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             foreach ($product->quote_suppliers as $supplier) {
                 $newSupplier = new QuoteSupplier();
@@ -1112,9 +1113,11 @@ class ApiController extends FOSRestController {
                 $newSupplier->setRepresentative($dbSupplier)
                     ->setQuantity($supplier->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price));
+                $em->persist($newSupplier);
                 $newProduct->addQuoteSupplier($newSupplier);
             }
             $newProduct->setProduct($dbProduct);
+            $em->persist($newProduct);
             $dbQuote->addQuoteProduct($newProduct);
         }
         $dbQuote->setDeleted(false)
