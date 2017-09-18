@@ -40,6 +40,14 @@ class Supplier
     private $state;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="min_value", type="decimal", precision=10, scale=2, nullable=true)
+     * @Serializer\Type("string")
+     */
+    private $minimunValue;
+
+    /**
      * @ORM\Column(type="string", length=50)
      */
     private $cnpj;
@@ -113,6 +121,28 @@ class Supplier
     public function getCnpj()
     {
         return $this->cnpj;
+    }
+
+    /**
+     * Set cnpj
+     *
+     * @param string $minimunValue
+     * @return Supplier
+     */
+    public function setMinimunValue($minimunValue)
+    {
+        $this->minimunValue = $minimunValue;
+        return $this;
+    }
+
+    /**
+     * Get minimunValue
+     *
+     * @return string
+     */
+    public function getMinimunValue()
+    {
+        return $this->minimunValue;
     }
 
     /**

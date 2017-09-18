@@ -158,7 +158,7 @@ class RepresentativeUserController extends Controller
             $tmp['brand'] = $product->getBrand();
             $tmp['description'] = $product->getFullDescription();
             $tmp['quantity_unit'] = $product->getUnit()  . ' ' . $product->getQuantity();
-            $tmp['bar_code'] = $product->getBarCode();
+            $tmp['ean'] = $product->getEan();
             $quoteSuppliers = $quoteProduct->getQuoteSuppliers();
             $tmp['price'] = '';
             $tmp['quantity'] = '';

@@ -16,11 +16,11 @@ class RepresentativeUserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', EmailType::class, array('label' => 'E-mail'))
+            ->add('email', EmailType::class, array('label' => false, 'attr' => array('placeholder' => 'E-mail')))
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Senha'),
-                'second_options' => array('label' => 'Confirme a Senha'),
+                'first_options'  => array('label' => false, 'attr' => array('placeholder' => 'Senha')),
+                'second_options' => array('label' => false, 'attr' => array('placeholder' => 'Confirme a Senha')),
             ))
         ;
     }

@@ -78,4 +78,16 @@ class QuoteSupplierRepository extends EntityRepository
             ->getResult();
     }
 
+    public function getQuoteSupplierSum($quote, $supplier)
+    {
+        $qb = $this->createQueryBuilder('qs');
+        return (float) $qb
+            ->select('SUM(qs.price * qs.quantity) total')
+            ->innerJoin('AppBundle:QuoteProduct', 'qp', 'WITH', 'qp = qs.quoteProduct')
+            ->innerJoin('AppBundle:Representative', 'r', 'WITH', 'r = qs.representative')
+            ->andWhere('qp.quote = :quote')
+            ->andWhere('r.supplier = :supplier')
+            ->setParameters(array('quote' => $quote, 'supplier' => $supplier))
+            ->getQuery()->getSingleScalarResult();
+    }
 }
