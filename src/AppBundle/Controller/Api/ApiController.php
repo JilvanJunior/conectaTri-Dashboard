@@ -924,6 +924,12 @@ class ApiController extends FOSRestController {
             }
         }
         $failed .= "</ul>";
+
+        /** @var Quote $dbQuote */
+        $dbQuote->setUpdatedAt(new \DateTime());
+        $dbQuote->setSendToSupplier(true);
+        $em->flush();
+
         if ($hasFailed && \Swift_Validate::email($dbToken->getRetailer()->getEmail())) {
             $msg = new \Swift_Message(
                 'Envio de Cotação no ConectaTri',
