@@ -202,6 +202,14 @@ class Retailer implements UserInterface, \Serializable
     private $deleted = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     * @Serializer\Exclude()
+     */
+    private $rcaVirtual = false;
+
+    /**
      * Retailer constructor.
      */
     public function __construct()
@@ -533,6 +541,24 @@ class Retailer implements UserInterface, \Serializable
     public function setDeleted($deleted)
     {
         $this->deleted = $deleted;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRCAVirtual()
+    {
+        return $this->rcaVirtual;
+    }
+
+    /**
+     * @param bool $rcaVirtual
+     * @return Retailer
+     */
+    public function setRCAVirtual($rcaVirtual)
+    {
+        $this->rcaVirtual = $rcaVirtual;
         return $this;
     }
 
