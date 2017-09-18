@@ -63,6 +63,20 @@ class Quote
     private $suppliersStatus;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="send_to_supplier", type="boolean")
+     */
+    private $sendToSupplier = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code_martins", type="string", length=255, nullable=true)
+     */
+    private $codeMartins;
+
+    /**
      * var \DateTime
      *
      * @ORM\Column(name="begins_at", type="datetime", nullable=true)
@@ -77,9 +91,9 @@ class Quote
     private $expiresAt;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="payment_date", type="datetime", nullable=true)
+     * @ORM\Column(name="payment_date", type="string", length=255, nullable=true)
      */
     private $paymentDate;
 
@@ -255,6 +269,42 @@ class Quote
     }
 
     /**
+     * @return string
+     */
+    public function getCodeMartins()
+    {
+        return $this->codeMartins;
+    }
+
+    /**
+     * @param string $codeMartins
+     * @return Quote
+     */
+    public function setCodeMartins($codeMartins)
+    {
+        $this->codeMartins = $codeMartins;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendToSupplier()
+    {
+        return $this->sendToSupplier;
+    }
+
+    /**
+     * @param bool $sendToSupplier
+     * @return Quote
+     */
+    public function setSendToSupplier($sendToSupplier)
+    {
+        $this->sendToSupplier = $sendToSupplier;
+        return $this;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getBeginsAt()
@@ -291,7 +341,7 @@ class Quote
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
     public function getPaymentDate()
     {
@@ -299,7 +349,7 @@ class Quote
     }
 
     /**
-     * @param \DateTime $paymentDate
+     * @param string $paymentDate
      * @return Quote
      */
     public function setPaymentDate($paymentDate)

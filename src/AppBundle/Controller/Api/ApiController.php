@@ -964,10 +964,11 @@ class ApiController extends FOSRestController {
             ->setType($quote->type)
             ->setRetailer($dbToken->getRetailer())
             ->setClosed(false)
-            ->setExpiresAt($this->createATOMDateTime($quote->expires_at))
-            ->setBeginsAt($this->createATOMDateTime($quote->begins_at));
-        if(property_exists($quote, 'payment_date'))
-            $dbQuote->setPaymentDate($this->createATOMDateTime($quote->payment_date));
+            ->setSendToSupplier($quote->send_to_supplier);
+        if(!is_null($quote->payment_date))
+            $dbQuote->setPaymentDate($quote->payment_date);
+        if(!is_null($quote->codigo_martins))
+            $dbQuote->setCodeMartins($quote->codigo_martins);
 
         $em->persist($dbQuote);
         $isFirst = true;
@@ -1105,6 +1106,7 @@ class ApiController extends FOSRestController {
         /** @var \stdClass $product */
         foreach ($quote->quote_products as $product) {
             $newProduct = new QuoteProduct();
+            /** @var Product $dbProduct */
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             foreach ($product->quote_suppliers as $supplier) {
                 $newSupplier = new QuoteSupplier();
@@ -1112,9 +1114,11 @@ class ApiController extends FOSRestController {
                 $newSupplier->setRepresentative($dbSupplier)
                     ->setQuantity($supplier->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price));
+                $em->persist($newSupplier);
                 $newProduct->addQuoteSupplier($newSupplier);
             }
             $newProduct->setProduct($dbProduct);
+            $em->persist($newProduct);
             $dbQuote->addQuoteProduct($newProduct);
         }
         $dbQuote->setDeleted(false)
@@ -1122,6 +1126,12 @@ class ApiController extends FOSRestController {
             ->setExpiresAt($this->createATOMDateTime($quote->expires_at))
             ->setClosed(isset($quote->closed) ? $quote->closed : false)
             ->setBeginsAt($this->createATOMDateTime($quote->begins_at));
+            ->setSendToSupplier($quote->send_to_supplier);
+        if(!is_null($quote->payment_date))
+            $dbQuote->setPaymentDate($quote->payment_date);
+        if(!is_null($quote->codigo_martins))
+            $dbQuote->setCodeMartins($quote->codigo_martins);
+
         $em->flush();
         return View::create($dbQuote, Response::HTTP_ACCEPTED);
     }
@@ -1159,6 +1169,84 @@ class ApiController extends FOSRestController {
             ->setUpdatedAt(new \DateTime());
         $em->flush();
         return View::create($dbQuote, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Patch("/api/quote/{id}/suppliers")
+     */
+    public function sendQuoteLinkToSuppliers(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        /** @var Quote $dbQuote */
+        $dbQuote = $d->getRepository("AppBundle:Quote")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
+        if (is_null($dbQuote)) {
+            return View::create(new ApiError("Cotação não encontrada"), Response::HTTP_NOT_FOUND);
+        }
+        $link = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
+        $mailer = $this->get('swiftmailer.mailer.default');
+        $failed = "<ul>";
+        $hasFailed = false;
+        $total = 0;
+
+        $suppliers = json_decode($request->getContent());
+        /** @var \stdClass $supplier */
+        foreach ($suppliers as $supplier) {
+
+            $representatives = $d->getRepository("AppBundle:Representative")->findBy(["supplier" => $supplier->id]);
+
+            /** @var Representative $representative */
+            foreach($representatives as $representative){
+
+                if (\Swift_Validate::email($representative->getEmail())) {
+                    $message = (new \Swift_Message('Cotação - Conecta Tri'))
+                        ->setFrom('noreply@conectatri.com.br')
+                        ->setTo($representative->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'email/quote_representative.html.twig',
+                                array('link' => $link,
+                                    'companyName' => $dbToken->getRetailer()->getCompanyName(),
+                                    'fantasyName' => $dbToken->getRetailer()->getFantasyName(),
+                                    'expiresAt' => $dbQuote->getExpiresAt())
+                            ),
+                            'text/html'
+                        );
+                    if (!$mailer->send($message)) {
+                        $hasFailed = true;
+                        $failed .= "<li>".$representative->getName()." &lt;".$representative->getEmail()."&gt;</li>";
+                    } else {
+                        $total++;
+                    }
+                }
+            }
+
+        }
+        $failed .= "</ul>";
+        if ($hasFailed && \Swift_Validate::email($dbToken->getRetailer()->getEmail())) {
+            $msg = new \Swift_Message(
+                'Envio de Cotação no ConectaTri',
+                "Os e-mails contendo o endereço de acesso à cotação foram enviados a alguns dos destinatários. Porém, não foi possível enviar aos seguintes: <br>$failed<br><br>Caso este e-mail tenha sido enviado por acidente, pedimos que o desconsidere.<br><br>Obrigado",
+                "text/html",
+                "utf-8"
+            );
+            $msg->setFrom(["noreply@conectatri.com.br" => "ConectaTri"]);
+            $msg->setTo([$dbToken->getRetailer()->getEmail() => $dbToken->getRetailer()->getFantasyName()]);
+        }
+        if ($total > 0) {
+            return View::create(new ApiError("E-mails enviados com sucesso"), Response::HTTP_OK);
+        }
+        return View::create(new ApiError("Houve um problema ao enviar os e-mails."), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
