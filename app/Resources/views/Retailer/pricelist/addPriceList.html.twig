@@ -82,6 +82,12 @@
                                                                             <input type="text" id="datetimepicker2" name="expires-at" class="form-control input-circle" placeholder="Validade Até" required>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="form-group last">
+                                                                        <label class="col-md-3 control-label">Prazo de pagamento</label>
+                                                                        <div class="col-md-4">
+                                                                            <input type="text" id="datetimepicker3" name="payment-date" class="form-control input-circle" placeholder="Prazo de Pagamento">
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="form-actions">
                                                                     <div class="row">
@@ -123,6 +129,10 @@
                 language: 'pt-BR'
             });
             $('#datetimepicker2').datetimepicker({
+                format: 'dd/mm/yyyy hh:ii',
+                language: 'pt-BR'
+            });
+            $('#datetimepicker3').datetimepicker({
                 format: 'dd/mm/yyyy hh:ii',
                 language: 'pt-BR'
             });

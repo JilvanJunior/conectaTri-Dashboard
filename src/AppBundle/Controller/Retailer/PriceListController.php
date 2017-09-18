@@ -67,6 +67,10 @@ class PriceListController extends Controller
             $quote->setBeginsAt($beginsAt);
             $expiresAt = date_create_from_format('d/m/Y H:i', $request->get('expires-at'));
             $quote->setExpiresAt($expiresAt);
+            if($request->get('payment-date')) {
+                $paymentDate = date_create_from_format('d/m/Y H:i', $request->get('payment-date'));
+                $quote->setExpiresAt($paymentDate);
+            }
 
             $em->persist($quote);
 
@@ -105,6 +109,10 @@ class PriceListController extends Controller
             $quote->setBeginsAt($beginsAt);
             $expiresAt = date_create_from_format('d/m/Y H:i', $request->get('expires-at'));
             $quote->setExpiresAt($expiresAt);
+            if($request->get('payment-date')) {
+                $paymentDate = date_create_from_format('d/m/Y H:i', $request->get('payment-date'));
+                $quote->setExpiresAt($paymentDate);
+            }
 
             $em->persist($quote);
 
@@ -379,9 +387,35 @@ class PriceListController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
+        $data = array();
+
+        $products = $quote->getQuoteProducts();
+        foreach($products[0]->getQuoteSuppliers() as $quoteSupplier) {
+            if($quoteSupplier->isDeleted())
+                continue;
+
+            $representative = $quoteSupplier->getRepresentative();
+            $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
+                ->findOneBy(['quote' => $quote, 'representative' => $representative]);
+            if(is_null($quoteSupplierStatus))
+                $observation = '';
+            else
+                $observation = $quoteSupplierStatus->getObservation();
+
+            $status = array(
+                'representativeId' => $representative->getId(),
+                'representativeName' => $representative->getName(),
+                'supplierName' => $representative->getSupplier()->getName(),
+                'filledIn' => $quoteSupplier->isFilledIn()?'Preencheu a Cotação':'Pendente',
+                'observation' => $observation
+            );
+
+            $data[] = $status;
+        }
 
         return $this->render('Retailer/pricelist/show.html.twig', [
             'quote' => $quote,
+            'supplierStatuses' => $data
         ]);
     }
 

@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use AppBundle\Entity\Retailer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -37,6 +38,32 @@ class RetailerType extends AbstractType
             ->add('phone', TextType::class, array('label' => 'Telefone'))
             ->add('cellphone', TextType::class, array('label' => 'Telefone Celular'))
         ;
+
+        $builder->get('cnpj')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($cleanCNPJ) {
+                    $mask = '##.###.###/####-##';
+                    $maskared = '';
+                    $k = 0;
+                    for($i = 0; $i <= strlen($mask) - 1; $i++)
+                    {
+                        if($mask[$i] == '#')
+                        {
+                            if(isset($cleanCNPJ[$k]))
+                                $maskared .= $cleanCNPJ[$k++];
+                        }
+                        else
+                        {
+                            if(isset($mask[$i]))
+                                $maskared .= $mask[$i];
+                        }
+                    }
+                    return $maskared;
+                },
+                function ($maskedCNPJ) {
+                    return str_replace(array('.','/','-'), '', $maskedCNPJ);
+                }
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

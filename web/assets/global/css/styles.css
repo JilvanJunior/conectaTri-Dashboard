@@ -120,7 +120,8 @@ fieldset[disabled] .btn.green-conecta:not(.btn-outline).focus {
 
 
 .dashboard-stat.green-conecta {
-    background-color: #319431; }
+    background-color: white;
+}
 .dashboard-stat.green-conecta.dashboard-stat-light:hover {
     background-color: #40ae40; }
 .dashboard-stat.green-conecta .visual > i {
@@ -128,14 +129,17 @@ fieldset[disabled] .btn.green-conecta:not(.btn-outline).focus {
     opacity: 0.1;
     filter: alpha(opacity=10); }
 .dashboard-stat.green-conecta .details .number {
-    color: #FFFFFF; }
+    color: #6f7d90;
+}
 .dashboard-stat.green-conecta .details .desc {
-    color: #FFFFFF;
+    color: #6f7d90;
     opacity: 1;
-    filter: alpha(opacity=100); }
+    filter: alpha(opacity=100);
+}
 .dashboard-stat.green-conecta .more {
     color: #FFFFFF;
-    background-color: #40ae40; }
+    background-color: #2ecc71;
+}
 
 
 

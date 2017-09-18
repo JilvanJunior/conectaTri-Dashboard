@@ -2,6 +2,7 @@
 
 {% block title %}Cotação{% endblock %}
 {% block description %}{% endblock %}
+{% block menu_quote %} active {% endblock %}
 
 {% block page_plugins %}
     {#<link href="{{ asset('assets/global/plugins/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />#}
@@ -9,6 +10,11 @@
 {% endblock %}
 
 {% block page %}
+    <style>
+        td.editable {
+            font-weight: bold;
+        }
+    </style>
     <div class="page-wrapper-row full-height">
         <div class="page-wrapper-middle">
             <!-- BEGIN CONTAINER -->
@@ -36,6 +42,10 @@
                                 <h4 style="display: inline">
                                     <small>validade</small>
                                     {{ quote.expiresAt|date("d/m/Y H:i") }}
+                                </h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <h4 style="display: inline">
+                                    <small>prazo de pagamento</small>
+                                    {{ quote.paymentDate|date("d/m/Y H:i") }}
                                 </h4>
                             </div>
                             <!-- END PAGE TITLE -->
@@ -45,6 +55,15 @@
                     <!-- BEGIN PAGE CONTENT BODY -->
                     <div class="page-content">
                         <div class="container">
+                            <!-- BEGIN PAGE BREADCRUMBS -->
+                            <ul class="page-breadcrumb breadcrumb">
+                                <li>
+                                    <a href="{{ path('representative_dashboard') }}">Home</a>
+                                    <i class="fa fa-circle"></i>
+                                    <a href="#">Cotação</a>
+                                </li>
+                            </ul>
+                            <!-- END PAGE BREADCRUMBS -->
                             <!-- BEGIN PAGE CONTENT INNER -->
                             <div class="page-content-inner">
                                 <div class="row">
@@ -69,20 +88,18 @@
                                                 <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
                                                     <thead>
                                                     <tr>
-                                                        <th> Produto </th>
-                                                        <th> Marca </th>
-                                                        <th> Descrição </th>
-                                                        <th> Embalagem de Compra </th>
-                                                        <th> Quantidade </th>
-                                                        <th> Preço </th>
+                                                        <th> <strong>Produto</strong> </th>
+                                                        <th> <strong>Embalagem de Compra</strong> </th>
+                                                        <th> <strong>Código de Barras</strong> </th>
+                                                        <th> <strong>Quantidade</strong> </th>
+                                                        <th> <strong>Preço</strong> </th>
                                                     </tr>
                                                     </thead>
                                                     <tfoot>
                                                     <tr>
                                                         <th> Produto </th>
-                                                        <th> Marca </th>
-                                                        <th> Descrição </th>
                                                         <th> Embalagem de Compra </th>
+                                                        <th> Código de Barras </th>
                                                         <th> Quantidade </th>
                                                         <th> Preço </th>
                                                     </tr>
@@ -90,6 +107,18 @@
                                                     <tbody>
                                                     </tbody>
                                                 </table>
+                                            </div>
+                                            <div class='row'>
+                                                <div class='col-xs-12'>
+                                                    <div style='padding: 10px 20px;'>
+                                                        Observações:
+                                                        <textarea id='observation' class='form-control' style='resize: vertical;'>{{ observation }}</textarea>
+                                                        <span id='save-message'><small>
+                                                            <span class='type'></span>
+                                                            <span class='message'></span>
+                                                        </small></span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <!-- END EXAMPLE TABLE PORTLET-->
@@ -129,20 +158,19 @@
                             "data": "name"
                         },
                         {
-                            "data": "brand"
-                        },
-                        {
-                            "data": "description"
-                        },
-                        {
                             "data": "quantity_unit"
                         },
                         {
-                            "data": "quantity", className: 'editable'
+                            "data": "ean"
                         },
                         {
-                            "data": "price", className: 'editable'
-                        }
+                            "data": "quantity",
+                            className: 'editable'
+                        },
+                        {
+                            "data": "price",
+                            className: 'editable'
+                        },
                     ],
                     lengthChange: false,
                     buttons: [
@@ -165,18 +193,13 @@
                             "type": "readonly"
                         },
                         {
-                            "label": "Marca",
-                            "name": "brand",
-                            "type": "readonly"
-                        },
-                        {
-                            "label": "Descrição",
-                            "name": "description",
-                            "type": "readonly"
-                        },
-                        {
                             "label": "Embalagem de Compra",
                             "name": "quantity_unit",
+                            "type": "readonly"
+                        },
+                        {
+                            "label": "Código de Barras",
+                            "name": "ean",
                             "type": "readonly"
                         },
                         {
@@ -186,7 +209,7 @@
                         {
                             "label": "Preço",
                             "name": "price"
-                        }
+                        },
                     ]
                 } );
 
@@ -213,6 +236,33 @@
                         }
                     });
                 } );
+
+                $('#observation').blur(function() {
+                    let text = $(this).val();
+
+                    $.ajax({
+                        url: "{{ path('quote_representative_observation', {'id': quote.id}) }}",
+                        type: 'PATCH',
+                        data: {
+                            observation: text
+                        },
+                        success: function(response) {
+                            let type = '';
+
+                            if(response.status == 'error') {
+                                type = 'Erro:';
+                            }
+
+                            $('#save-message .type').val(type);
+                            $('#save-message .message').text(response.message);
+                            $('#save-message').show();
+
+                            setTimeout(function() {
+                                $('#save-message').fadeOut();
+                            }, 1000);
+                        }
+                    });
+                });
             } );
 
         }(jQuery));

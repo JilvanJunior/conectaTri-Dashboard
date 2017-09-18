@@ -42,9 +42,7 @@
             width: 90%;
             max-width: 24em;
             left: 50%;
-            top: 50%;
-            transform: translate(-50%,-50%);
-            animation: intro .7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transform: translate(-50%);
         }
 
         /* Profile Card */
@@ -52,7 +50,7 @@
             position: relative;
         }
         .profile--open {
-            margin-top: 80px;
+            margin-top: 50px;
         }
         .profile--open .profile__logo {
             text-align: center;
@@ -201,6 +199,7 @@
                 <img src="{{ asset('assets/pages/img/logos/bg-conectatri-04.png') }}" alt="ConectaTri">
             </div>
             <div class="profile__fields">
+                {{ form_errors(form) }}
                 {{ form_start(form) }}
                 {{ form_row(form.cnpj, {'attr' : {'class' : 'input'}}) }}
                 {{ form_row(form.companyName, {'attr' : {'class' : 'input'}}) }}
@@ -218,17 +217,70 @@
                 <button type="button" class="btn" onclick="window.location.replace('{{ path('login') }}')">Voltar</button>
                 <button id='teste' type="submit" class="btn">Cadastrar-se!</button>
                 {{ form_end(form) }}
-                {{ form_errors(form) }}
             </div>
         </div>
     </div>
 </div>
 
+<script src="{{ asset('assets/global/plugins/jquery.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/pages/scripts/jquery.mask.min.js') }}" type="text/javascript"></script>
 <script>
-    /* Simple VanillaJS to toggle class */
-    [].map.call(document.querySelectorAll('.profile'), function(el) {
-        el.classList.toggle('profile--open');
+$(document).ready(function() {
+    var SPMaskBehavior = function (val) {
+        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    };
+
+    var spOptions = {
+        onKeyPress: function(val, e, field, options) {
+            field.mask(SPMaskBehavior.apply({}, arguments), options);
+        }
+    };
+
+    $('#retailer_phone').mask(SPMaskBehavior, spOptions);
+    $('#retailer_cellphone').mask(SPMaskBehavior, spOptions);
+    $('#retailer_cnpj').mask('00.000.000/0000-00');
+    $('#retailer_cep').mask('00000-000');
+});
+
+function ufToStateId(uf) {
+    let ufs = ['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO'];
+
+    return ufs.indexOf(uf.toUpperCase()) + 1;
+}
+
+$('#retailer_cep').blur(function() {
+    let cep = $(this).val().replace(/\D/g, '');
+
+    if(cep == '')
+        return;
+
+    let validacep = /^[0-9]{8}$/;
+    if(!validacep.test(cep)) {
+        alert('CEP inválido!');
+        return;
+    }
+
+    $("#retailer_address").val("...");
+    $("#retailer_city").val("...");
+
+    //Consulta o webservice viacep.com.br/
+    $.getJSON("//viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+        if("erro" in dados) {
+            alert("CEP não encontrado.");
+            return;
+        }
+
+        //Atualiza os campos com os valores da consulta.
+        $("#retailer_address").val(dados.logradouro);
+        $("#retailer_city").val(dados.localidade);
+        $("#retailer_state").val(ufToStateId(dados.uf));
     });
+});
+
+/* Simple VanillaJS to toggle class */
+[].map.call(document.querySelectorAll('.profile'), function(el) {
+    el.classList.toggle('profile--open');
+});
 </script>
 </body>
 
