@@ -1125,7 +1125,7 @@ class ApiController extends FOSRestController {
             ->setName($quote->name)
             ->setExpiresAt($this->createATOMDateTime($quote->expires_at))
             ->setClosed(isset($quote->closed) ? $quote->closed : false)
-            ->setBeginsAt($this->createATOMDateTime($quote->begins_at));
+            ->setBeginsAt($this->createATOMDateTime($quote->begins_at))
             ->setSendToSupplier($quote->send_to_supplier);
         if(!is_null($quote->payment_date))
             $dbQuote->setPaymentDate($quote->payment_date);
