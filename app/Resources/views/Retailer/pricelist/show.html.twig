@@ -106,6 +106,7 @@
                                                     <th>Nome do Fornecedor</th>
                                                     <th>Nome do Representante</th>
                                                     <th>Status</th>
+                                                    <th>Atende ao mínimo</th>
                                                     <th>Observação</th>
                                                     {% if quote.closed == 1 %}
                                                         <th>Ação</th>
@@ -118,6 +119,7 @@
                                                         <td> {{ supplierStatus.supplierName }} </td>
                                                         <td> {{ supplierStatus.representativeName }} </td>
                                                         <td> {{ supplierStatus.filledIn }} </td>
+                                                        <td> {{ supplierStatus.moreThanMinimun }} </td>
                                                         <td> {{ supplierStatus.observation }} </td>
                                                         {% if quote.closed == 1 %}
                                                             <td> <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': supplierStatus.representativeId}) }}"

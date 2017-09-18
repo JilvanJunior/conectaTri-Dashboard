@@ -143,20 +143,18 @@
             transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .input {
-            width: 100%;
-            font-size: 100%;
-            border: 0;
-            padding: 0;
             background-color: transparent;
-            height: 2rem;
-            line-height: 2rem;
-            border-bottom: 1px solid #eee;
+            border: solid 1px green;
+            border-radius: 5px;
             color: #777;
-            transition: all .2s ease-in;
+            height: 3rem;
+            line-height: 2rem;
+            padding: 5px;
+            width: 100%;
         }
-        .input:focus {
-            outline: 0;
-            border-color: #ccc;
+        ::-webkit-input-placeholder, ::-moz-placeholder, ::placeholder {
+            color: green;
+            opacity: 1;
         }
 
         /* Using required and a faux pattern to see if input has text from http://stackoverflow.com/questions/16952526/detect-if-an-input-has-text-in-it-using-css */
@@ -227,16 +225,10 @@
             <div class="profile__fields">
                 <form id="retailer-form" action="{{ path('login') }}" method="post">
                     <div class="field">
-                        <label for="username" class="label">CNPJ</label>
-                        <input type="text" id="cnpj" name="_username" class="input" required pattern=.*\S.* />
-
-
+                        <input type="text" id="cnpj" name="_username" class="input" placeholder="CNPJ" required pattern=.*\S.* />
                     </div>
                     <div class="field">
-
-                        <label for="password" class="label">Senha</label>
-                        <input type="password" id="password-retailer" name="_password" class="input" required pattern=.*\S.* />
-
+                        <input type="password" id="password-retailer" name="_password" class="input" placeholder="Senha" required pattern=.*\S.* />
                     </div>
                     <div class="profile__footer">
                         <div>Primeiro acesso? <a href="{{ path('retailer_user_registration') }}">Clique aqui</a></div>
@@ -256,14 +248,10 @@
                 <form action="{{ path('login') }}" method="post">
 
                     <div class="field">
-                        <label for="username" class="label">E-mail</label>
-                        <input type="text" id="username-representative" name="_username" class="input" required pattern=.*\S.* />
-
+                        <input type="text" id="username-representative" name="_username" class="input" placeholder="E-mail" required pattern=.*\S.* />
                     </div>
                     <div class="field">
-                        <label for="password" class="label">Senha</label>
-                        <input type="password" id="password-representative" name="_password" class="input" required pattern=.*\S.* />
-
+                        <input type="password" id="password-representative" name="_password" class="input" placeholder="Senha" required pattern=.*\S.* />
                     </div>
                     <div>Primeiro acesso? <a href="{{ path('representative_user_registration') }}">Clique aqui</a></div>
                     <div><a href="{{ path('recover_password') }}">Esqueci minha senha</a></div>
