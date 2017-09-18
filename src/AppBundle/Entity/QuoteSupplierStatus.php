@@ -43,7 +43,7 @@ class QuoteSupplierStatus
     /**
      * @var observation
      *
-     * @ORM\Column(name="observation", type="text")
+     * @ORM\Column(name="observation", type="text", nullable=true)
      */
     private $observation;
 
