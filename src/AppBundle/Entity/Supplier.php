@@ -58,6 +58,13 @@ class Supplier
     private $name;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="rca", type="boolean")
+     */
+    private $rca = false;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -167,6 +174,24 @@ class Supplier
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRca()
+    {
+        return $this->rca;
+    }
+
+    /**
+     * @param bool $rca
+     * @return Supplier
+     */
+    public function setRca($rca)
+    {
+        $this->rca = $rca;
+        return $this;
     }
 
     /**
