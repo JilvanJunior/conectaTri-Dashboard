@@ -865,8 +865,8 @@ class ApiController extends FOSRestController {
     }
 
     /**
-    * @Rest\Get("/api/quote/{id}/link")
-    */
+     * @Rest\Get("/api/quote/{id}/link")
+     */
     public function getQuoteLink(Request $request, $id) {
         $url = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
         return View::create($url, Response::HTTP_OK);
@@ -1206,35 +1206,29 @@ class ApiController extends FOSRestController {
         $hasFailed = false;
         $total = 0;
 
-        $suppliers = json_decode($request->getContent());
-        /** @var \stdClass $supplier */
-        foreach ($suppliers as $supplier) {
+        $representatives = json_decode($request->getContent());
+        /** @var \stdClass $representative */
+        foreach ($representatives as $representative) {
 
-            $representatives = $d->getRepository("AppBundle:Representative")->findBy(["supplier" => $supplier->id]);
-
-            /** @var Representative $representative */
-            foreach($representatives as $representative){
-
-                if (\Swift_Validate::email($representative->getEmail())) {
-                    $message = (new \Swift_Message('Cotação - Conecta Tri'))
-                        ->setFrom('noreply@conectatri.com.br')
-                        ->setTo($representative->getEmail())
-                        ->setBody(
-                            $this->renderView(
-                                'email/quote_representative.html.twig',
-                                array('link' => $link,
-                                    'companyName' => $dbToken->getRetailer()->getCompanyName(),
-                                    'fantasyName' => $dbToken->getRetailer()->getFantasyName(),
-                                    'expiresAt' => $dbQuote->getExpiresAt())
-                            ),
-                            'text/html'
-                        );
-                    if (!$mailer->send($message)) {
-                        $hasFailed = true;
-                        $failed .= "<li>".$representative->getName()." &lt;".$representative->getEmail()."&gt;</li>";
-                    } else {
-                        $total++;
-                    }
+            if (\Swift_Validate::email($representative->contactEmail)) {
+                $message = (new \Swift_Message('Cotação - Conecta Tri'))
+                    ->setFrom('noreply@conectatri.com.br')
+                    ->setTo($representative->contactEmail)
+                    ->setBody(
+                        $this->renderView(
+                            'email/quote_representative.html.twig',
+                            array('link' => $link,
+                                'companyName' => $dbToken->getRetailer()->getCompanyName(),
+                                'fantasyName' => $dbToken->getRetailer()->getFantasyName(),
+                                'expiresAt' => $dbQuote->getExpiresAt())
+                        ),
+                        'text/html'
+                    );
+                if (!$mailer->send($message)) {
+                    $hasFailed = true;
+                    $failed .= "<li>".$representative->contactName." &lt;".$representative->contactEmail."&gt;</li>";
+                } else {
+                    $total++;
                 }
             }
 
