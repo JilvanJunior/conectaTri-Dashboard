@@ -1210,10 +1210,12 @@ class ApiController extends FOSRestController {
         /** @var \stdClass $representative */
         foreach ($representatives as $representative) {
 
-            if (\Swift_Validate::email($representative->contactEmail)) {
+            $dbRepresentative = $d->getRepository('AppBundle:Representative')->findOneBy(['id' => $representative->id]);
+
+            if (\Swift_Validate::email($dbRepresentative->getEmail())) {
                 $message = (new \Swift_Message('Cotação - Conecta Tri'))
                     ->setFrom('noreply@conectatri.com.br')
-                    ->setTo($representative->contactEmail)
+                    ->setTo($dbRepresentative->getEmail())
                     ->setBody(
                         $this->renderView(
                             'email/quote_representative.html.twig',
@@ -1226,7 +1228,7 @@ class ApiController extends FOSRestController {
                     );
                 if (!$mailer->send($message)) {
                     $hasFailed = true;
-                    $failed .= "<li>".$representative->contactName." &lt;".$representative->contactEmail."&gt;</li>";
+                    $failed .= "<li>".$dbRepresentative->getName()." &lt;".$dbRepresentative->getEmail()."&gt;</li>";
                 } else {
                     $total++;
                 }
