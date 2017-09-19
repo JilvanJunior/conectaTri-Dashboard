@@ -46,6 +46,7 @@
                             <!-- BEGIN PAGE CONTENT INNER -->
                             <div class="page-content-inner">
                                 <div class="row">
+
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                         <div class="dashboard-stat green-conecta">
                                             <div class="details">
@@ -60,7 +61,23 @@
                                             </a>
                                         </div>
                                     </div>
+
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="dashboard-stat green-conecta">
+                                            <div class="details">
+                                                <div class="number"> {{ quotes|length }} </div>
+                                                <div class="desc"> Cotações </div>
+                                            </div>
+                                            <div class="visual">
+                                                <img src='{{ asset('assets/pages/img/cart.png') }}'/>
+                                            </div>
+                                            <a class="more" href="{{ path('cotacoes') }}"> Ver Mais
+                                                <i class="fa fa-chevron-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" >
                                         <div class="dashboard-stat green-conecta">
                                             <div class="details">
                                                 <div class="number"> R$ {{ average|number_format(2, ',', '.') }} </div>
