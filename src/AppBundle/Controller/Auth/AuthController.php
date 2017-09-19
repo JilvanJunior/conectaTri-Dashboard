@@ -26,9 +26,8 @@ class AuthController extends Controller
         if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->redirectToRoute('admin_dashboard');
 
-        if($this->get('security.authorization_checker')->isGranted('ROLE_REPRESENTATIVE')) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_REPRESENTATIVE'))
             return $this->redirectToRoute('representative_dashboard');
-        }
     }
 
     /**
@@ -38,6 +37,15 @@ class AuthController extends Controller
      */
     public function loginAction(Request $request)
     {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER'))
+            return $this->redirectToRoute('dashboard', array('id' => $request->get('id')));
+
+        if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
+            return $this->redirectToRoute('admin_dashboard');
+
+        if($this->get('security.authorization_checker')->isGranted('ROLE_REPRESENTATIVE'))
+            return $this->redirectToRoute('representative_dashboard');
+
         $authenticationUtils = $this->get('security.authentication_utils');
 
         // get the login error if there is one

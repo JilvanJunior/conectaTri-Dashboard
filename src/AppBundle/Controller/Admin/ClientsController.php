@@ -180,4 +180,25 @@ class ClientsController extends Controller
         exit();
     }
 
+    /**
+     * @Route("/administrador/clientes/rcavirtual", name="admin_change_rca")
+     * @param Request $request
+     */
+    public function changeClientRCA(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = json_decode($request->getContent());
+
+        $client = $em->getRepository('AppBundle:Retailer')->find($data->clientId);
+        $client->setRCAVirtual($data->state);
+
+        try {
+            $em->flush();
+            echo(json_encode(['newState' => $data->state]));
+        } catch(\Exception $e) {
+            echo(json_encode(['newState' => !$data->state]));
+        }
+        exit();
+    }
+
 }
