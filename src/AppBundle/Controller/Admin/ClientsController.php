@@ -7,6 +7,7 @@ use AppBundle\Entity\Retailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Process\Process;
 
 class ClientsController extends Controller
 {
@@ -198,7 +199,12 @@ class ClientsController extends Controller
         } catch(\Exception $e) {
             echo(json_encode(['newState' => !$data->state]));
         }
+
+        if($client->isRCAVirtual() && !$client->isRegisteredOnMartins()) {
+            $rootDir = $this->get('kernel')->getRootDir().'/..';
+            shell_exec("php $rootDir/bin/console conectatri:retailers:export {$data->clientId} > /dev/null 2>/dev/null");
+        }
+
         exit();
     }
-
 }

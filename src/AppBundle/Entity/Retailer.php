@@ -210,6 +210,14 @@ class Retailer implements UserInterface, \Serializable
     private $rcaVirtual = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     * @Serializer\Exclude()
+     */
+    private $registeredOnMartins = false;
+
+    /**
      * Retailer constructor.
      */
     public function __construct()
@@ -559,6 +567,24 @@ class Retailer implements UserInterface, \Serializable
     public function setRCAVirtual($rcaVirtual)
     {
         $this->rcaVirtual = $rcaVirtual;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRegisteredOnMartins()
+    {
+        return $this->registeredOnMartins;
+    }
+
+    /**
+     * @param bool $registeredOnMartins
+     * @return Retailer
+     */
+    public function setRegisteredOnMartins($registeredOnMartins)
+    {
+        $this->registeredOnMartins = $registeredOnMartins;
         return $this;
     }
 
