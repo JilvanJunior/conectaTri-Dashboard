@@ -195,16 +195,27 @@ class ClientsController extends Controller
 
         try {
             $em->flush();
-            echo(json_encode(['newState' => $data->state]));
+            $newState = $data->state;
         } catch(\Exception $e) {
-            echo(json_encode(['newState' => !$data->state]));
+            $newState = !$data->state;
         }
 
         if($client->isRCAVirtual() && !$client->isRegisteredOnMartins()) {
             $rootDir = $this->get('kernel')->getRootDir().'/..';
-            shell_exec("php $rootDir/bin/console conectatri:retailers:export {$data->clientId} > /dev/null 2>/dev/null");
+            $env = $this->get('kernel')->getEnvironment();
+            $command = "php $rootDir/bin/console conectatri:retailers:export {$data->clientId} --env=$env > /dev/null 2>&1 &";
+
+            $dispatcher = $this->get('event_dispatcher');
+            $dispatcher->addListener('kernel.terminate', function() use($command) { //Binda esta função ao evento terminate, que ocorre depois de enviar a respota
+                $process = new Process($command);
+                $process->run();
+                //exec($command);
+            });
         }
 
-        exit();
+        $response = $this->json(['newState' => $newState]);
+        $response->headers->set('Connection', 'close'); //Em teoria força a conexão a fechar assim que a resposta é enviada
+
+        return $response;
     }
 }

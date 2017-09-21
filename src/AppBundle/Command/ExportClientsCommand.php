@@ -34,6 +34,7 @@ class ExportClientsCommand extends ContainerAwareCommand
         $output->writeln('Exportando '.$retailer->getCompanyName());
         $logger->info('Exportando '.$retailer->getCompanyName());
 
+        sleep(20);return; // PARA TESTE
         if(!$retailer->isRCAVirtual()) {
             $output->writeln('Este Retailer não está marcado como RCA Virtual!');
             $logger->info('Este Retailer não está marcado como RCA Virtual!');
