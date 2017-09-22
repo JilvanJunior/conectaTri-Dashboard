@@ -447,6 +447,8 @@ class ApiController extends FOSRestController {
                 ->setCreatedAt(new \DateTime())
                 ->setUpdatedAt(new \DateTime())
                 ->setDeleted(false);
+            if(!is_null($representative->minimun_value))
+                $supplier->setMinimunValue($representative->minimun_value);
             $em->persist($supplier);
         }
         $dbRepresentative = new Representative();
@@ -497,6 +499,9 @@ class ApiController extends FOSRestController {
             ->setCnpj($representative->cnpj)
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false);
+        if(!is_null($representative->minimun_value))
+            $dbRepresentative->getSupplier()->setMinimunValue($representative->minimun_value);
+
         $dbRepresentative->setName($representative->contact_name)
             ->setPhone($representative->contact_phone)
             ->setCellphone($representative->contact_cellphone)
