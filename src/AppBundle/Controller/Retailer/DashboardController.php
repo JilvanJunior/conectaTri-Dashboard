@@ -40,6 +40,7 @@ class DashboardController extends Controller
             'average' => $average['average'],
             'status' => $status,
             'types' => $types,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 }

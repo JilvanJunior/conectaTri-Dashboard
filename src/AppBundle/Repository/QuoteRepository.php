@@ -57,6 +57,20 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    public function getMartinsQuotes($retailer)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                   FROM AppBundle:Quote q
+                   WHERE q.codeMartins IS NOT NULL
+                   AND q.retailer = :retailer
+                '
+            )
+            ->setParameters(['retailer' => $retailer])
+            ->getResult();
+    }
+
     public function getQuoteByRepresentative($email, $id)
     {
         return $this->getEntityManager()
