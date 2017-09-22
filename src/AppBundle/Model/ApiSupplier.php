@@ -52,6 +52,11 @@ class ApiSupplier
     private $contactEmail;
 
     /**
+     * $var int
+     */
+    private $minimumValue;
+
+    /**
      * ApiSupplier constructor.
      */
     public function __construct(Representative $representative)
@@ -63,6 +68,7 @@ class ApiSupplier
         $this->contactEmail = $representative->getEmail();
         $this->name = $representative->getSupplier()->getName();
         $this->cnpj = $representative->getSupplier()->getCnpj();
+        $this->minimumValue = $representative->getSupplier()->getMinimumValue();
     }
 
     /**
@@ -206,6 +212,24 @@ class ApiSupplier
     public function setContactEmail($contactEmail)
     {
         $this->contactEmail = $contactEmail;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMinimumValue()
+    {
+        return $this->minimumValue;
+    }
+
+    /**
+     * @param int $minimumValue
+     * @return ApiSupplier
+     */
+    public function setMinimumValue($minimumValue)
+    {
+        $this->minimumValue = $minimumValue;
         return $this;
     }
 }
