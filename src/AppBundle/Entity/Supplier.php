@@ -23,6 +23,7 @@ class Supplier
 
     /**
      * @ORM\OneToMany(targetEntity="Representative", mappedBy="supplier")
+     * @Serializer\Exclude()
      */
     private $representatives;
 

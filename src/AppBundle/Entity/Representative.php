@@ -23,7 +23,6 @@ class Representative
     /**
      * @ORM\ManyToOne(targetEntity="Supplier", inversedBy="representatives")
      * @ORM\JoinColumn(name="supplier_id", referencedColumnName="id")
-     * @Serializer\Exclude()
      */
     private $supplier;
 

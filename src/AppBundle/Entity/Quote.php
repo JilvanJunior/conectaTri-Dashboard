@@ -289,7 +289,7 @@ class Quote
     /**
      * @return bool
      */
-    public function isSendToSupplier()
+    public function mustSendToSupplier()
     {
         return $this->sendToSupplier;
     }
