@@ -23,6 +23,7 @@ class Supplier
 
     /**
      * @ORM\OneToMany(targetEntity="Representative", mappedBy="supplier")
+     * @Serializer\Exclude()
      */
     private $representatives;
 
@@ -45,7 +46,7 @@ class Supplier
      * @ORM\Column(name="min_value", type="decimal", precision=10, scale=2, nullable=true)
      * @Serializer\Type("string")
      */
-    private $minimunValue;
+    private $minimumValue;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -133,23 +134,23 @@ class Supplier
     /**
      * Set cnpj
      *
-     * @param string $minimunValue
+     * @param string $minimumValue
      * @return Supplier
      */
-    public function setMinimunValue($minimunValue)
+    public function setMinimumValue($minimumValue)
     {
-        $this->minimunValue = $minimunValue;
+        $this->minimumValue = $minimumValue;
         return $this;
     }
 
     /**
-     * Get minimunValue
+     * Get minimumValue
      *
      * @return string
      */
-    public function getMinimunValue()
+    public function getMinimumValue()
     {
-        return $this->minimunValue;
+        return $this->minimumValue;
     }
 
     /**

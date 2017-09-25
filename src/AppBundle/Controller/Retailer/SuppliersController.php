@@ -43,13 +43,13 @@ class SuppliersController extends Controller
             $supplier = new Supplier();
             $supplier->setName($request->get('name'));
             $supplier->setCnpj($request->get('cnpj'));
-            $value = $request->get('minimunValue');
+            $value = $request->get('minimumValue');
             if(!empty($value)) {
                 $value = str_replace(".","", $value);
                 $value = str_replace(",",".", $value);
 
                 if(is_numeric($value))
-                    $supplier->setMinimunValue($value);
+                    $supplier->setMinimumValue($value);
             }
             $supplier->setState($state);
             $supplier->setRetailer($user);

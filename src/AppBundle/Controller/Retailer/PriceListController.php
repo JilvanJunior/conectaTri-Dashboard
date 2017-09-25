@@ -414,10 +414,10 @@ class PriceListController extends Controller
                 $observation = $quoteSupplierStatus->getObservation();
 
             if($quoteSupplier->isFilledIn()) {
-                $moreThanMinimun = ($supplier->getMinimunValue() <= $sum)?'Sim':'Não';
+                $moreThanMinimum = ($supplier->getMinimumValue() <= $sum)?'Sim':'Não';
                 $filledIn = 'Preencheu a Cotação';
             } else {
-                $moreThanMinimun = '-';
+                $moreThanMinimum = '-';
                 $filledIn = 'Pendente';
             }
 
@@ -425,7 +425,7 @@ class PriceListController extends Controller
                 'representativeId' => $representative->getId(),
                 'representativeName' => $representative->getName(),
                 'supplierName' => $supplier->getName(),
-                'moreThanMinimun' => $moreThanMinimun,
+                'moreThanMinimum' => $moreThanMinimum,
                 'filledIn' => $filledIn,
                 'observation' => $observation
             );

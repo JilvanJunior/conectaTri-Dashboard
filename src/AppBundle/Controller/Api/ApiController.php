@@ -247,7 +247,6 @@ class ApiController extends FOSRestController {
             ->setFullDescription($product->full_description)
             ->setQuantity($product->quantity)
             ->setUnit($product->unit)
-            ->setBarCode($product->bar_code)
             ->setCreatedAt(new \DateTime())
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false)
@@ -448,6 +447,8 @@ class ApiController extends FOSRestController {
                 ->setCreatedAt(new \DateTime())
                 ->setUpdatedAt(new \DateTime())
                 ->setDeleted(false);
+            if(!is_null($representative->minimum_value))
+                $supplier->setMinimumValue($representative->minimum_value);
             $em->persist($supplier);
         }
         $dbRepresentative = new Representative();
@@ -498,6 +499,9 @@ class ApiController extends FOSRestController {
             ->setCnpj($representative->cnpj)
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false);
+        if(!is_null($representative->minimum_value))
+            $dbRepresentative->getSupplier()->setMinimumValue($representative->minimum_value);
+
         $dbRepresentative->setName($representative->contact_name)
             ->setPhone($representative->contact_phone)
             ->setCellphone($representative->contact_cellphone)
@@ -893,6 +897,17 @@ class ApiController extends FOSRestController {
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Cotação não encontrada"), Response::HTTP_NOT_FOUND);
         }
+
+        $details = json_decode($request->getContent());
+        if(is_null($details)) {
+            $force = false;
+        } else {
+            $force = $details->force;
+        }
+        if(!$force && !$dbQuote->mustSendToSupplier()) {
+            return View::create(new ApiError("Quotação marcada para não enviar."), Response::HTTP_OK);
+        }
+
         $link = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
         $mailer = $this->get('swiftmailer.mailer.default');
         $failed = "<ul>";
@@ -1200,6 +1215,17 @@ class ApiController extends FOSRestController {
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Cotação não encontrada"), Response::HTTP_NOT_FOUND);
         }
+
+        $details = json_decode($request->getContent());
+        if(is_null($details)) {
+            $force = false;
+        } else {
+            $force = $details->force;
+        }
+        if(!$force && !$dbQuote->mustSendToSupplier()) {
+            return View::create(new ApiError("Quotação marcada para não enviar."), Response::HTTP_OK);
+        }
+
         $link = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
         $mailer = $this->get('swiftmailer.mailer.default');
         $failed = "<ul>";
@@ -1235,7 +1261,11 @@ class ApiController extends FOSRestController {
             }
 
         }
+        $dbQuote->setUpdatedAt(new \DateTime());
+        $dbQuote->setSendToSupplier(true);
+        $em->flush();
         $failed .= "</ul>";
+
         if ($hasFailed && \Swift_Validate::email($dbToken->getRetailer()->getEmail())) {
             $msg = new \Swift_Message(
                 'Envio de Cotação no ConectaTri',
