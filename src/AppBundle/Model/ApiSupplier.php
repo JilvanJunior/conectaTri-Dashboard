@@ -75,7 +75,7 @@ class ApiSupplier
         $this->name = $representative->getSupplier()->getName();
         $this->cnpj = $representative->getSupplier()->getCnpj();
         $this->minimumValue = $representative->getSupplier()->getMinimumValue();
-        $this->rca = $representative->getSupplier()->getIsRca();
+        $this->rca = $representative->getSupplier()->isRca();
     }
 
     /**
