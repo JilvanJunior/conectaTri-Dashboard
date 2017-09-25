@@ -717,17 +717,16 @@
                         break;
                     case 3 :
                         $("#wizardStepLabel").text("Selecionar Produtos");
-                        setItensSuplliers("product-datatable","quote_itens");
-                        setItensSuplliers("representative-datatable","quote_suppliers");
+                        break;
+                    case 4 :
+                        $("#wizardStepLabel").text("Confirmação dos Dados");
                         setDateTime("datetimepicker1","quote_start","date");
                         setDateTime("datetimepicker1","quote_start_time","time");
                         setDateTime("datetimepicker2","quote_end","date");
                         setDateTime("datetimepicker2","quote_end_time","time");
                         setDateTime("datetimepicker3","quote_due_date","date");
-
-                        break;
-                    case 4 :
-                        $("#wizardStepLabel").text("Confirmação dos Dados");
+                        setItensSuplliers("product-datatable","quote_itens");
+                        setItensSuplliers("representative-datatable","quote_suppliers");
                         break;
                     default:
 
