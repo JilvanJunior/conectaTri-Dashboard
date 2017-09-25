@@ -57,11 +57,17 @@ class ApiSupplier
     private $minimumValue;
 
     /**
+     * $var bool
+     */
+    private $rca;
+
+    /**
      * ApiSupplier constructor.
      */
     public function __construct(Representative $representative)
     {
         $this->id = $representative->getId();
+        $this->supplierId = $representative->getSupplier()->getId();
         $this->contactName = $representative->getName();
         $this->contactPhone = $representative->getPhone();
         $this->contactCellphone = $representative->getCellphone();
@@ -69,6 +75,7 @@ class ApiSupplier
         $this->name = $representative->getSupplier()->getName();
         $this->cnpj = $representative->getSupplier()->getCnpj();
         $this->minimumValue = $representative->getSupplier()->getMinimumValue();
+        $this->rca = $representative->getSupplier()->isRca();
     }
 
     /**
@@ -230,6 +237,24 @@ class ApiSupplier
     public function setMinimumValue($minimumValue)
     {
         $this->minimumValue = $minimumValue;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRca()
+    {
+        return $this->rca;
+    }
+
+    /**
+     * @param bool $rca
+     * @return ApiSupplier
+     */
+    public function setRca($rca)
+    {
+        $this->rca = $rca;
         return $this;
     }
 }
