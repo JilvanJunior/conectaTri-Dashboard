@@ -265,7 +265,7 @@
                                                     <div class="portlet box green-conecta" style="border-left-width: 0px;border-bottom-width: 0px;border-right-width: 0px;">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <i class="fa fa-gift"></i>Cotação
+                                                                <i class="fa fa-gift"></i><span id="wizardStepLabel">Dados da Cotação<span>
                                                             </div>
                                                         </div>
 
@@ -403,64 +403,6 @@
 
                                                                 <div class="tab-pane " id="tab2">
                                                                     <div class="wizard-container">
-                                                                    <table class="table table-striped table-bordered table-hover" id="listing-datatable">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th width="20%"> Nome </th>
-                                                                            <th> Descrição </th>
-                                                                            <th> Tipo </th>
-                                                                            <th> Itens </th>
-                                                                            <th></th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-
-                                                                        {% if listing is defined %}
-                                                                            {% for listing in listings %}
-                                                                                <tr>
-                                                                                    <input type="hidden" value="{{ listing.id }}">
-                                                                                    <td>{{ listing.name }}</td>
-                                                                                    <td>{{ listing.description }}</td>
-                                                                                    <td>{{ types[listing.type] }}</td>
-                                                                                    <td>{{ listing.listingProducts|length }}</td>
-                                                                                </tr>
-                                                                            {% endfor %}
-                                                                        {% endif %}
-                                                                        </tbody>
-                                                                    </table>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="tab-pane" id="tab3">
-                                                                    <div class="wizard-container">
-                                                                    <table class="table table-striped table-bordered table-hover" id="product-datatable">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th width="20%"> Código </th>
-                                                                            <th> Nome do Produto </th>
-                                                                            <th> Tipo </th>
-                                                                            <th> Fabricante </th>
-                                                                            <th> Embalagem de Compra </th>
-                                                                            <th></th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        {% if product is defined %}
-                                                                        {% for product in products %}
-                                                                            <tr class="{% for quoteProduct in quoteProducts %}{% if quoteProduct.product.id == product.id %}selected{% endif %}{% endfor %}">
-                                                                                <td> {{ product.id }} </td>
-                                                                                <td> {{ product.name }} </td>
-                                                                                <td> {{ product.type }} </td>
-                                                                                <td> {{ product.brand }} </td>
-                                                                                <td> {{ product.unit }} {{ product.quantity }} </td>
-                                                                            </tr>
-                                                                        {% endfor %}
-                                                                        {% endif %}
-                                                                        </tbody>
-                                                                    </table>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="tab-pane" id="tab4">
-                                                                    <div class="wizard-container">
                                                                         <table class="table table-striped table-bordered table-hover" id="representative-datatable">
                                                                             <thead>
                                                                             <tr>
@@ -474,21 +416,81 @@
                                                                             </thead>
                                                                             <tbody>
                                                                             {% if supplier is defined %}
-                                                                            {% for supplier in suppliers %}
-                                                                                {% for representative in supplier.representatives if representative.deleted == 0 %}
+                                                                                {% for supplier in suppliers %}
+                                                                                    {% for representative in supplier.representatives if representative.deleted == 0 %}
+                                                                                        <tr>
+                                                                                            <td> {{ supplier.name }} </td>
+                                                                                            <td> {{ representative.name }} </td>
+                                                                                            <td class="numeric"> {{ representative.email }} </td>
+                                                                                            <td class="numeric"> {{ supplier.cnpj }} </td>
+                                                                                            <td class="numeric"> {{ representative.phone }} </td>
+                                                                                            <td>
+                                                                                                <a href="{{ path('editar_representante', {'id': representative.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
+                                                                                                    <i class="fa fa-edit"></i> Editar </a>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    {% endfor %}
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="tab-pane" id="tab3">
+                                                                    <div class="wizard-container">
+                                                                        <table class="table table-striped table-bordered table-hover" id="listing-datatable">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th width="20%"> Nome </th>
+                                                                                <th> Descrição </th>
+                                                                                <th> Tipo </th>
+                                                                                <th> Itens </th>
+                                                                                <th></th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+
+                                                                            {% if listing is defined %}
+                                                                                {% for listing in listings %}
                                                                                     <tr>
-                                                                                        <td> {{ supplier.name }} </td>
-                                                                                        <td> {{ representative.name }} </td>
-                                                                                        <td class="numeric"> {{ representative.email }} </td>
-                                                                                        <td class="numeric"> {{ supplier.cnpj }} </td>
-                                                                                        <td class="numeric"> {{ representative.phone }} </td>
-                                                                                        <td>
-                                                                                            <a href="{{ path('editar_representante', {'id': representative.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
-                                                                                                <i class="fa fa-edit"></i> Editar </a>
-                                                                                        </td>
+                                                                                        <input type="hidden" value="{{ listing.id }}">
+                                                                                        <td>{{ listing.name }}</td>
+                                                                                        <td>{{ listing.description }}</td>
+                                                                                        <td>{{ types[listing.type] }}</td>
+                                                                                        <td>{{ listing.listingProducts|length }}</td>
                                                                                     </tr>
                                                                                 {% endfor %}
-                                                                            {% endfor %}
+                                                                            {% endif %}
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="tab-pane" id="tab4">
+                                                                    <div class="wizard-container">
+                                                                        <table class="table table-striped table-bordered table-hover" id="product-datatable">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th width="20%"> Código </th>
+                                                                                <th> Nome do Produto </th>
+                                                                                <th> Tipo </th>
+                                                                                <th> Fabricante </th>
+                                                                                <th> Embalagem de Compra </th>
+                                                                                <th></th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            {% if product is defined %}
+                                                                                {% for product in products %}
+                                                                                    <tr class="{% for quoteProduct in quoteProducts %}{% if quoteProduct.product.id == product.id %}selected{% endif %}{% endfor %}">
+                                                                                        <td> {{ product.id }} </td>
+                                                                                        <td> {{ product.name }} </td>
+                                                                                        <td> {{ product.type }} </td>
+                                                                                        <td> {{ product.brand }} </td>
+                                                                                        <td> {{ product.unit }} {{ product.quantity }} </td>
+                                                                                    </tr>
+                                                                                {% endfor %}
                                                                             {% endif %}
                                                                             </tbody>
                                                                         </table>
@@ -701,58 +703,49 @@
         $(document).ready(function() {
             $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
                 var currentStep = navigation.find('li');
-                currentStep.removeClass("active")
+                currentStep.removeClass("active");
+
+                switch(index) {
+                    case 0 :
+                        $("#wizardStepLabel").text("Dados da Cotação");
+                        break;
+                    case 1 :
+                        $("#wizardStepLabel").text("Selecionar Fornecedor");
+                        break;
+                    case 2 :
+                        $("#wizardStepLabel").text("Selecionar Lista");
+                        break;
+                    case 3 :
+                        $("#wizardStepLabel").text("Selecionar Produtos");
+                        setItensSuplliers("product-datatable","quote_itens");
+                        setItensSuplliers("representative-datatable","quote_suppliers");
+                        setDateTime("datetimepicker1","quote_start","date");
+                        setDateTime("datetimepicker1","quote_start_time","time");
+                        setDateTime("datetimepicker2","quote_end","date");
+                        setDateTime("datetimepicker2","quote_end_time","time");
+                        setDateTime("datetimepicker3","quote_due_date","date");
+
+                        break;
+                    case 4 :
+                        $("#wizardStepLabel").text("Confirmação dos Dados");
+                        break;
+                    default:
+
+                    //console.log("birl")
+                }
+
+
 
             }});
         });
 
         $("#advance").on("click", function() {
             var $bar = $(".ProgressBar");
-
-            var tabId =  $bar.children(".is-current").find("a").attr("href")
-
-
-
-            switch(tabId) {
-                case "#tab1" :
-                    //console.log("birl_1")
-                    //$("form").submit()
-                    break;
-                case "#tab2" :
-                    //console.log("birl_2")
-                    break;
-                case "#tab3" :
-                    //console.log("birl_3")
-                    break;
-                case "#tab4" :""
-                    setItensSuplliers("product-datatable","quote_itens");
-                    setItensSuplliers("representative-datatable","quote_suppliers");
-                    setDateTime("datetimepicker1","quote_start","date");
-                    setDateTime("datetimepicker1","quote_start_time","time");
-                    setDateTime("datetimepicker2","quote_end","date");
-                    setDateTime("datetimepicker2","quote_end_time","time");
-                    setDateTime("datetimepicker3","quote_due_date","date");
-
-                    break;
-                case "#tab5" :
-                   // console.log("birl_5")
-                    break;
-                default:
-                    //console.log("birl")
-            }
-
             if ($bar.children(".is-current").length > 0) {
                 $bar.children(".is-current").removeClass("is-current").addClass("is-complete").next().addClass("is-current");
             } else {
                 $bar.children().first().addClass("is-current");
             }
-
-
-
-
-
-
-
         });
 
         $("#previous").on("click", function() {
