@@ -211,6 +211,14 @@
             transform: rotate(45deg);
         }
 
+        .error {
+            border: 1px solid red !important;
+        }
+
+        .valid {
+            border: 1px solid deepskyblue !important;
+        }
+
     </style>
 
     <div class="page-wrapper-row full-height">
@@ -265,7 +273,7 @@
                                                     <div class="portlet box green-conecta" style="border-left-width: 0px;border-bottom-width: 0px;border-right-width: 0px;">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <i class="fa fa-gift"></i>Cotação
+                                                                <i class="fa fa-gift"></i><span id="wizardStepLabel">Dados da Cotação</span>
                                                             </div>
                                                         </div>
 
@@ -274,7 +282,7 @@
                                                         <!-- BEGIN WIZARD-->
 
                                                         <div id="rootwizard">
-                                                            <div class="navbar" style="border-top-width: 0px">
+                                                            <div class="navbar" style="border-top-width: 0px;border-left-width: 0px;border-right-width: 0px;">
                                                                 <div class="navbar-inner portlet-title">
                                                                     <div class="container">
                                                                         <ul class="ProgressBar">
@@ -403,64 +411,6 @@
 
                                                                 <div class="tab-pane " id="tab2">
                                                                     <div class="wizard-container">
-                                                                    <table class="table table-striped table-bordered table-hover" id="listing-datatable">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th width="20%"> Nome </th>
-                                                                            <th> Descrição </th>
-                                                                            <th> Tipo </th>
-                                                                            <th> Itens </th>
-                                                                            <th></th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-
-                                                                        {% if listing is defined %}
-                                                                            {% for listing in listings %}
-                                                                                <tr>
-                                                                                    <input type="hidden" value="{{ listing.id }}">
-                                                                                    <td>{{ listing.name }}</td>
-                                                                                    <td>{{ listing.description }}</td>
-                                                                                    <td>{{ types[listing.type] }}</td>
-                                                                                    <td>{{ listing.listingProducts|length }}</td>
-                                                                                </tr>
-                                                                            {% endfor %}
-                                                                        {% endif %}
-                                                                        </tbody>
-                                                                    </table>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="tab-pane" id="tab3">
-                                                                    <div class="wizard-container">
-                                                                    <table class="table table-striped table-bordered table-hover" id="product-datatable">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th width="20%"> Código </th>
-                                                                            <th> Nome do Produto </th>
-                                                                            <th> Tipo </th>
-                                                                            <th> Fabricante </th>
-                                                                            <th> Embalagem de Compra </th>
-                                                                            <th></th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        {% if product is defined %}
-                                                                        {% for product in products %}
-                                                                            <tr class="{% for quoteProduct in quoteProducts %}{% if quoteProduct.product.id == product.id %}selected{% endif %}{% endfor %}">
-                                                                                <td> {{ product.id }} </td>
-                                                                                <td> {{ product.name }} </td>
-                                                                                <td> {{ product.type }} </td>
-                                                                                <td> {{ product.brand }} </td>
-                                                                                <td> {{ product.unit }} {{ product.quantity }} </td>
-                                                                            </tr>
-                                                                        {% endfor %}
-                                                                        {% endif %}
-                                                                        </tbody>
-                                                                    </table>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="tab-pane" id="tab4">
-                                                                    <div class="wizard-container">
                                                                         <table class="table table-striped table-bordered table-hover" id="representative-datatable">
                                                                             <thead>
                                                                             <tr>
@@ -474,21 +424,81 @@
                                                                             </thead>
                                                                             <tbody>
                                                                             {% if supplier is defined %}
-                                                                            {% for supplier in suppliers %}
-                                                                                {% for representative in supplier.representatives if representative.deleted == 0 %}
+                                                                                {% for supplier in suppliers %}
+                                                                                    {% for representative in supplier.representatives if representative.deleted == 0 %}
+                                                                                        <tr>
+                                                                                            <td> {{ supplier.name }} </td>
+                                                                                            <td> {{ representative.name }} </td>
+                                                                                            <td class="numeric"> {{ representative.email }} </td>
+                                                                                            <td class="numeric"> {{ supplier.cnpj }} </td>
+                                                                                            <td class="numeric"> {{ representative.phone }} </td>
+                                                                                            <td>
+                                                                                                <a href="{{ path('editar_representante', {'id': representative.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
+                                                                                                    <i class="fa fa-edit"></i> Editar </a>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    {% endfor %}
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="tab-pane" id="tab3">
+                                                                    <div class="wizard-container">
+                                                                        <table class="table table-striped table-bordered table-hover" id="listing-datatable">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th width="20%"> Nome </th>
+                                                                                <th> Descrição </th>
+                                                                                <th> Tipo </th>
+                                                                                <th> Itens </th>
+                                                                                <th></th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+
+                                                                            {% if listing is defined %}
+                                                                                {% for listing in listings %}
                                                                                     <tr>
-                                                                                        <td> {{ supplier.name }} </td>
-                                                                                        <td> {{ representative.name }} </td>
-                                                                                        <td class="numeric"> {{ representative.email }} </td>
-                                                                                        <td class="numeric"> {{ supplier.cnpj }} </td>
-                                                                                        <td class="numeric"> {{ representative.phone }} </td>
-                                                                                        <td>
-                                                                                            <a href="{{ path('editar_representante', {'id': representative.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
-                                                                                                <i class="fa fa-edit"></i> Editar </a>
-                                                                                        </td>
+                                                                                        <input type="hidden" value="{{ listing.id }}">
+                                                                                        <td>{{ listing.name }}</td>
+                                                                                        <td>{{ listing.description }}</td>
+                                                                                        <td>{{ types[listing.type] }}</td>
+                                                                                        <td>{{ listing.listingProducts|length }}</td>
                                                                                     </tr>
                                                                                 {% endfor %}
-                                                                            {% endfor %}
+                                                                            {% endif %}
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="tab-pane" id="tab4">
+                                                                    <div class="wizard-container">
+                                                                        <table class="table table-striped table-bordered table-hover" id="product-datatable">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th width="20%"> Código </th>
+                                                                                <th> Nome do Produto </th>
+                                                                                <th> Tipo </th>
+                                                                                <th> Fabricante </th>
+                                                                                <th> Embalagem de Compra </th>
+                                                                                <th></th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            {% if product is defined %}
+                                                                                {% for product in products %}
+                                                                                    <tr class="{% for quoteProduct in quoteProducts %}{% if quoteProduct.product.id == product.id %}selected{% endif %}{% endfor %}">
+                                                                                        <td> {{ product.id }} </td>
+                                                                                        <td> {{ product.name }} </td>
+                                                                                        <td> {{ product.type }} </td>
+                                                                                        <td> {{ product.brand }} </td>
+                                                                                        <td> {{ product.unit }} {{ product.quantity }} </td>
+                                                                                    </tr>
+                                                                                {% endfor %}
                                                                             {% endif %}
                                                                             </tbody>
                                                                         </table>
@@ -590,7 +600,8 @@
                                                                     <li class="previous first" style="display:none;"><a href="#">Início</a></li>
                                                                     <li class="previous"   id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
                                                                     <li class="next last" style="display:none;"><a href="#">Último</a></li>
-                                                                    <li class="next" id="advance"><a class="btn btn-circle green-conecta pull-right" href="#" style="margin-right: 5px;margin-bottom: 5px;">Próximo</a></li>
+
+                                                                    <li class="next" id="advance"><a class="btn btn-circle green-conecta pull-right disabled" href="#" style="margin-right: 5px;margin-bottom: 5px;">Próximo</a></li>
 
                                                                 </ul>
                                                             </div>
@@ -646,6 +657,8 @@
     <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/jquery-validation/js/localization/messages_pt_BR.min.js') }}" type="text/javascript"></script>
 
 
     <script>
@@ -696,56 +709,21 @@
             $("#" + elementId ).text(formatted)
         }
 
-        //BEGIN WIZARD METHODS
-
-        $(document).ready(function() {
-            $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
-                var currentStep = navigation.find('li');
-                currentStep.removeClass("active")
-
-            }});
-        });
-
-        $("#advance").on("click", function() {
-            var $bar = $(".ProgressBar");
-
-            var tabId =  $bar.children(".is-current").find("a").attr("href")
-
-
-
-            switch(tabId) {
-                case "#tab1" :
-                    //console.log("birl_1")
-                    //$("form").submit()
-                    break;
-                case "#tab2" :
-                    //console.log("birl_2")
-                    break;
-                case "#tab3" :
-                    //console.log("birl_3")
-                    break;
-                case "#tab4" :""
-                    setItensSuplliers("product-datatable","quote_itens");
-                    setItensSuplliers("representative-datatable","quote_suppliers");
-                    setDateTime("datetimepicker1","quote_start","date");
-                    setDateTime("datetimepicker1","quote_start_time","time");
-                    setDateTime("datetimepicker2","quote_end","date");
-                    setDateTime("datetimepicker2","quote_end_time","time");
-                    setDateTime("datetimepicker3","quote_due_date","date");
-
-                    break;
-                case "#tab5" :
-                   // console.log("birl_5")
-                    break;
-                default:
-                    //console.log("birl")
-            }
-
+        function stepFoward($bar){
             if ($bar.children(".is-current").length > 0) {
                 $bar.children(".is-current").removeClass("is-current").addClass("is-complete").next().addClass("is-current");
             } else {
                 $bar.children().first().addClass("is-current");
             }
+        }
+
+
+
+
+        //$("#advance").addClass("disabled")
+
+
+        $(document).ready(function() {
 
 
 
@@ -753,6 +731,128 @@
 
 
 
+
+            //BEGIN WIZARD METHODS
+            $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
+                var currentStep = navigation.find('li');
+                currentStep.removeClass("active");
+
+
+                switch(index) {
+                    case 0 :
+
+                        $("#wizardStepLabel").text("Dados da Cotação");
+                        $("#advance a").addClass('disabled');
+
+                        //BEGIN FORM VALIDATION
+
+
+                        var cotacaoForm = $( "#cotacao_form" );
+
+                        cotacaoForm.validate({
+                            errorPlacement: function(){
+                                return false;
+                            }
+                        });
+
+
+                        cotacaoForm.mouseout(function() {
+
+                            var validationState = $('#cotacao_form').valid();
+
+                            if(validationState){
+                                $("#advance").find("a").removeClass('disabled');
+
+
+                            }
+
+                        });
+
+                        //END FORM VALIDATION
+
+                        break;
+
+                    case 1 :
+
+                        $("#wizardStepLabel").text("Selecionar Fornecedor");
+                        $("#advance a").addClass('disabled');
+
+                        var representativeTable = $('#representative-datatable');
+
+                        representativeTable.mouseout(function() {
+
+                            if( representativeTable.find('tr').find("input").is(":checked") ){
+
+                                $("#advance").find("a").removeClass('disabled');
+
+                            }
+
+                        });
+
+                        break;
+                    case 2 :
+
+                        $("#wizardStepLabel").text("Selecionar Lista");
+                        $("#advance a").addClass('disabled');
+
+                        var listingTable = $('#listing-datatable');
+
+                        listingTable.mouseout(function() {
+
+                            if( listingTable.find('tr').find("input").is(":checked") ){
+
+                                $("#advance").find("a").removeClass('disabled');
+
+                            }
+
+                        });
+
+                        break;
+                    case 3 :
+                        $("#wizardStepLabel").text("Selecionar Produtos");
+                        $("#advance a").addClass('disabled');
+
+                        var productTable = $('#product-datatable');
+
+                        productTable.mouseout(function() {
+
+                            if( productTable.find('tr').find("input").is(":checked") ){
+
+                                $("#advance").find("a").removeClass('disabled');
+
+                            }
+
+                        });
+
+                        break;
+                    case 4 :
+                        $("#wizardStepLabel").text("Confirmação dos Dados");
+                        $("#advance").hide()
+                        setDateTime("datetimepicker1","quote_start","date");
+                        setDateTime("datetimepicker1","quote_start_time","time");
+                        setDateTime("datetimepicker2","quote_end","date");
+                        setDateTime("datetimepicker2","quote_end_time","time");
+                        setDateTime("datetimepicker3","quote_due_date","date");
+                        setItensSuplliers("product-datatable","quote_itens");
+                        setItensSuplliers("representative-datatable","quote_suppliers");
+                        break;
+                    default:
+
+                    //console.log("birl")
+                }
+
+
+
+            }});
+        });
+
+
+
+        $("#advance").on("click", function() {
+
+            var $bar = $(".ProgressBar");
+
+                stepFoward($bar);
         });
 
         $("#previous").on("click", function() {
@@ -765,16 +865,6 @@
         });
 
         //END WIZARD METHODS
-
-
-        //BEGIN FLOAT LABEL METHODS
-
-        $('#cotacao').keyup(function(){
-            $('.cotacao.text').addClass('typing');
-            if( $(this).val().length == 0 ) {
-                $('.cotacao.text').removeClass('typing');
-            }
-        });
 
         $('#datetimepicker1').change(function(){
             $('.datetimepicker1.text').addClass('typing');
@@ -796,16 +886,20 @@
             }
         });
 
+
+        //BEGIN FLOAT LABEL METHODS
+        $('#cotacao').keyup(function(){
+            $('.cotacao.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.cotacao.text').removeClass('typing');
+            }
+        });
         //END FLOAT LABEL METHODS
 
         //token
-        var token = 'a51a169d-2e9b-57eb-aeb6-b2db2870bc58'
+        var token = 'a51a169d-2e9b-57eb-aeb6-b2db2870bc58';
 
         // BEGIN LISTING TABLE
-
-
-
-
         $('#listing-datatable').dataTable( {
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
@@ -848,10 +942,6 @@
         // END LISTING TABLE
 
         // BEGIN PRODUCTS TABLE
-
-
-
-
         $('#product-datatable').dataTable( {
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
@@ -890,12 +980,7 @@
         } );
         // END PRODUCTS TABLE
 
-
         // BEGIN REPRESENTATIVE TABLE
-
-
-
-
         $('#representative-datatable').dataTable( {
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
@@ -933,8 +1018,6 @@
             ]
         } );
         // END REPRESENTATIVE TABLE
-
-
 
     </script>
 

@@ -22,6 +22,7 @@ class SuppliersController extends Controller
 
         return $this->render('Retailer/suppliers/index.html.twig', [
             'suppliers' => $suppliers,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -32,11 +33,11 @@ class SuppliersController extends Controller
      */
     public function addSupplierAction(Request $request)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         $states = $em->getRepository('AppBundle:State')->findAll();
 
         if($request->getMethod() == "POST"){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
             $state = $em->getRepository('AppBundle:State')->findOneById($request->get('state'));
 
             $supplier = new Supplier();
@@ -72,6 +73,7 @@ class SuppliersController extends Controller
 
         return $this->render('Retailer/suppliers/addSuppliers.html.twig', [
             'states' => $states,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -111,6 +113,7 @@ class SuppliersController extends Controller
 
         return $this->render('Retailer/suppliers/addRepresentatives.html.twig', [
             'suppliers' => $suppliers,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -153,6 +156,7 @@ class SuppliersController extends Controller
         return $this->render('Retailer/suppliers/addRepresentatives.html.twig', [
             'suppliers' => $suppliers,
             'representative' => $representative,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 }

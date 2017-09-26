@@ -46,14 +46,30 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
                 'SELECT q
                   FROM AppBundle:Quote q
                   WHERE q.deleted = 0
-                  AND q.retailer IN (
-                    SELECT IDENTITY(r.retailer)
-                    FROM AppBundle:Representative r
+                  AND q.id IN (
+                    SELECT IDENTITY(qss.quote)
+                    FROM AppBundle:QuoteSupplierStatus qss
+                    INNER JOIN AppBundle:representative r
+                     WITH qss.representative = r
                     WHERE r.email = :email
                     AND r.deleted = 0
                   )'
             )
             ->setParameters(array('email' => $email))
+            ->getResult();
+    }
+
+    public function getMartinsQuotes($retailer)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q
+                   FROM AppBundle:Quote q
+                   WHERE q.codeMartins IS NOT NULL
+                   AND q.retailer = :retailer
+                '
+            )
+            ->setParameters(['retailer' => $retailer])
             ->getResult();
     }
 

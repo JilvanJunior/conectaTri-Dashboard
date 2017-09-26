@@ -130,6 +130,21 @@
                                         </li>
                                     </ul>
                                 </li>
+                                {% if userIsRCA %}
+                                <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown {% block menu_martins %}{% endblock %}">
+                                    <a href="#"> Martins
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="dropdown-menu pull-left">
+                                        <li aria-haspopup="true">
+                                            <a href="{{ path('boletos_martins') }}" class="nav-link"> Meus Boletos Martins</a>
+                                        </li>
+                                        <li aria-haspopup="true">
+                                            <a href="{{ path('pedidos_martins') }}" class="nav-link"> Meus Pedidos Martins</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                {% endif %}
                                 <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown {% block menu_suppliers %}{% endblock %}">
                                     <a href="#"> Fornecedores
                                         <span class="arrow"></span>

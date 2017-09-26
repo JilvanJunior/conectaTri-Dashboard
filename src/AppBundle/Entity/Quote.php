@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use AppBundle\Service\MartinsConnector;
 
 /**
  * Quote
@@ -438,5 +439,56 @@ class Quote
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * Verify if quote is made by a RCA flagged Retailer
+     * and generate the RCA quote if needed
+     */
+    public function checkForRCAQuote($chave)
+    {
+        if(!$this->retailer->isRCAVirtual())
+            return;
+
+        foreach($this->suppliersStatus as $suppliersStatus) {
+            $representative = $suppliersStatus->getRepresentative();
+            $supplier = $representative->getSupplier();
+
+            if($supplier->isRca())
+                $this->makeRCAQuote($chave, $supplier);
+        }
+    }
+
+    private function makeRCAQuote($chave, $supplier)
+    {
+        $products = [];
+        $quantitiesByProduct = [];
+
+        foreach($this->quoteProducts as $quoteProduct) {
+            $product = $quoteProduct->getProduct();
+            
+            $products[] = $product;
+            $quantitiesByProduct[$product->getId()] = [
+                'idMartins' => 0,
+                'quantity' => $quoteProduct->getQuantity()
+            ];
+        }
+
+        $mc = new MartinsConnector($chave, $this->retailer);
+
+        $codes = $mc->getMartinsCodeByEan($products);
+        foreach($codes as $key => $code) {
+            $quantitiesByProduct[$key]['idMartins'] = $code;
+        }
+
+        $infos = $mc->getMartinsInfos($codes);
+        foreach($this->quoteProducts as $quoteProduct) {
+            $product = $quoteProduct->getProduct();
+            $quoteSuppliers = $quoteProduct->getQuoteSuppliers();
+            foreach($quoteSuppliers as $quoteSupplier) {
+                if($supplier->getId() == $quoteSupplier->getSupplier()->getId())
+                    $quoteSupplier->setPrice($infos[$product->getId()]->PrecoDeCaixa);
+            }
+        }
     }
 }

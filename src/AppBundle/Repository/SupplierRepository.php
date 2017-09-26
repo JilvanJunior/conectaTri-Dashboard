@@ -188,7 +188,7 @@ class SupplierRepository extends EntityRepository
                   ) AS qtyOrders
                   FROM AppBundle:Supplier s
                   WHERE s.deleted = 0
-                  GROUP BY s.cnpj
+                  GROUP BY s.id
                   ORDER BY qtyQuotes DESC'
             )
             ->setMaxResults(10)
