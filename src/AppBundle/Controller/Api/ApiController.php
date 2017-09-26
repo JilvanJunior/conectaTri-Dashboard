@@ -17,6 +17,7 @@ use AppBundle\Entity\Supplier;
 use AppBundle\Model\ApiError;
 use AppBundle\Model\ApiSupplier;
 use AppBundle\Utils\Utils;
+use AppBundle\Service\MartinsConnector;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Ramsey\Uuid\Uuid;
@@ -1617,6 +1618,40 @@ class ApiController extends FOSRestController {
         $d = $this->getDoctrine();
         $states = $d->getRepository("AppBundle:State")->findAll();
         return View::create($states, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/api/boleto")
+     */
+    public function getBoletos(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $user = $dbToken->getRetailer();
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $acesso = $mc->login();
+
+        $boletos = $mc->getMartinsBoletos();
+        $saidaBoletos = [];
+        foreach($boletos as $boleto) {
+            $saida = [];
+            foreach(get_object_vars($boleto) as $varName => $var)
+                $saida[$varName] = $var;
+
+            $saidaBoletos[] = $saida;
+        }
+
+        return View::create($saidaBoletos, Response::HTTP_OK);
     }
 
     /**
