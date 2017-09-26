@@ -142,6 +142,20 @@ class Retailer implements UserInterface, \Serializable
     private $address;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $number;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $district;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="string", length=255)
@@ -423,6 +437,42 @@ class Retailer implements UserInterface, \Serializable
     public function setAddress($address)
     {
         $this->address = $address;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param int $number
+     * @return Retailer
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDistrict()
+    {
+        return $this->district;
+    }
+
+    /**
+     * @param string $district
+     * @return Retailer
+     */
+    public function setDistricit($district)
+    {
+        $this->district = $district;
         return $this;
     }
 
