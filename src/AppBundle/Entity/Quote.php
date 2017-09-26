@@ -477,20 +477,26 @@ class Quote
         $mc = new MartinsConnector($chave, $this->retailer);
 
         $codes = $mc->getMartinsCodeByEan($products);
+        if(empty($codes))
+            return;
+
         foreach($codes as $key => $code) {
             $quantitiesByProduct[$key]['idMartins'] = $code;
         }
 
-        $infos = $mc->getMartinsInfos($codes);
+        $infos = $mc->getMartinsInfos($quantitiesByProduct);
         foreach($this->quoteProducts as $quoteProduct) {
             $product = $quoteProduct->getProduct();
             $quoteSuppliers = $quoteProduct->getQuoteSuppliers();
             foreach($quoteSuppliers as $quoteSupplier) {
-                if($supplier->getId() != $quoteSupplier->getSupplier()->getId())
+                if($supplier->getId() != $quoteSupplier->getRepresentative()->getSupplier()->getId())
                     continue;
 
                 $preco = (double) $infos[$product->getId()]->PrecoDeCaixa;
-                $precoUnitario = $preco/$product->getQuantity();
+                if($product->getQuantity() > 0)
+                    $precoUnitario = $preco/$product->getQuantity();
+                else
+                    $precoUnitario = 0;
                 $quoteSupplier->setPrice($precoUnitario);
             }
         }

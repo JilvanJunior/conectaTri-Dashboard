@@ -57,9 +57,11 @@ class MartinsConnector
             ];
         }
 
-        $params['produtos'] = $products;
+        $params['produtos'] = array_values($products);
 
         $infos = $this->soap->consultarPreco($params)->consultarPrecoResult->Mercadorias->Mercadoria;
+        if(!is_array($infos))
+            $infos = [$infos];
         $infosById = [];
         foreach($infos as $info) {
             $infosById[$idsByMartins[$info->CodigoMercadoria]] = $info;
@@ -74,15 +76,19 @@ class MartinsConnector
 
         $idsByEan = [];
         foreach($products as $product) {
-            $idsByEan[$product->getEan()] = $product->getId();
+            $ean = $product->getEan();
+            if(!empty($ean))
+                $idsByEan[$ean] = $product->getId();
         }
+        if(empty($idsByEan))
+            return [];
 
         $params['Mercadorias'] = array_keys($idsByEan);
 
         $result = $this->soap->consultarInfoMercadoriasPorEAN($params)->consultarInfoMercadoriasPorEANResult->MercadoriasInformacoes;
 
         $codes = [];
-        foreach($result->MercadoriaInformacoes as $info) {
+        foreach($result as $info) {
             $ean = $info->CODIGO_EAN;
             $idMartins = $info->CODIGO;
             $codes[$idsByEan[$ean]] = $idMartins;
@@ -120,6 +126,9 @@ class MartinsConnector
 
     private function getExtraParams()
     {
+        if(is_null($this->acesso))
+            $this->login();
+
         $login = $this->acesso->Login;
         $condicoes = $login->CondicoesPagamento->CondPgto;
         if(is_array($condicoes))
