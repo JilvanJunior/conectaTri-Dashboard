@@ -21,6 +21,7 @@ class ProductsController extends Controller
 
         return $this->render('Retailer/products/index.html.twig', [
             'products' => $products,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -31,13 +32,11 @@ class ProductsController extends Controller
      */
     public function addProductAction(Request $request)
     {
-
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('AppBundle:Product')->findBy(['deleted' => false]);
 
         if($request->getMethod() == "POST"){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
             $product = new Product();
             $product->setEan('');
             if($request->get('name') != "") $product->setName($request->get('name'));
@@ -63,6 +62,7 @@ class ProductsController extends Controller
 
         return $this->render('Retailer/products/addProducts.html.twig', [
             'products' => $products,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -74,13 +74,12 @@ class ProductsController extends Controller
      */
     public function editProductAction(Request $request, $id)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
         $product = $em->getRepository('AppBundle:Product')->findOneBy(['id' => $id]);
 
         if($request->getMethod() == "POST"){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
             $product->setEan('');
             $product->setName($request->get('name'));
             $product->setBarCode($request->get('ean'));
@@ -103,6 +102,7 @@ class ProductsController extends Controller
 
         return $this->render('Retailer/products/addProducts.html.twig', [
             'product' => $product,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 

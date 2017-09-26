@@ -31,6 +31,7 @@ class ListsController extends Controller
         return $this->render('Retailer/lists/index.html.twig', [
             'listings' => $listings,
             'types' => $types,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -41,6 +42,7 @@ class ListsController extends Controller
      */
     public function addListAction(Request $request)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         //type of listings
         $types = [];
         $types['0'] = 'Não Informado';
@@ -51,7 +53,6 @@ class ListsController extends Controller
 
         if($request->getMethod() == "POST"){
             $em = $this->getDoctrine()->getManager();
-            $user = $this->get('security.token_storage')->getToken()->getUser();
 
             $listing = new Listing();
             $listing->setName($request->get('name'));
@@ -78,6 +79,7 @@ class ListsController extends Controller
 
         return $this->render('Retailer/lists/addList.html.twig', [
             'types' => $types,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -123,6 +125,7 @@ class ListsController extends Controller
             'listing' => $listing,
             'listingProducts' => $listingProducts,
             'products' => $products,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -191,6 +194,7 @@ class ListsController extends Controller
 
         return $this->render('Retailer/lists/listingProducts.html.twig', [
             'listing' => $listing,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 

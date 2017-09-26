@@ -43,6 +43,7 @@ class PriceListController extends Controller
             'quotes' => $quotes,
             'types' => $types,
             'status' => $status,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -53,9 +54,9 @@ class PriceListController extends Controller
      */
     public function addRemoteAction(Request $request)
     {
-        if($request->getMethod() == "POST"){
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-            $user = $this->get('security.token_storage')->getToken()->getUser();
+        if($request->getMethod() == "POST"){
             $em = $this->getDoctrine()->getManager();
 
             $quote = new Quote();
@@ -85,6 +86,7 @@ class PriceListController extends Controller
         }
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', [
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -95,9 +97,9 @@ class PriceListController extends Controller
      */
     public function addPresentialAction(Request $request)
     {
-        if($request->getMethod() == "POST"){
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
-            $user = $this->get('security.token_storage')->getToken()->getUser();
+        if($request->getMethod() == "POST"){
             $em = $this->getDoctrine()->getManager();
 
             $quote = new Quote();
@@ -127,6 +129,7 @@ class PriceListController extends Controller
         }
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', [
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -185,6 +188,7 @@ class PriceListController extends Controller
             'quote' => $quote,
             'listings' => $listings,
             'types' => $types,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -245,6 +249,7 @@ class PriceListController extends Controller
             'quote' => $quote,
             'quoteProducts' => $quoteProducts,
             'products' => $products,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -330,6 +335,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/addSuppliers.html.twig', [
             'quote' => $quote,
             'suppliers' => $suppliers,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -341,6 +347,7 @@ class PriceListController extends Controller
      */
     public function editAction(Request $request, $id)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
         $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
@@ -373,6 +380,7 @@ class PriceListController extends Controller
 
         return $this->render('Retailer/pricelist/edit.html.twig', [
             'quote' => $quote,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -384,6 +392,7 @@ class PriceListController extends Controller
      */
     public function showAction(Request $request, $id)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
         $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
@@ -426,7 +435,8 @@ class PriceListController extends Controller
 
         return $this->render('Retailer/pricelist/show.html.twig', [
             'quote' => $quote,
-            'supplierStatuses' => $data
+            'supplierStatuses' => $data,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -449,6 +459,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/showQuoteProduct.html.twig', [
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -476,6 +487,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/editQuoteProduct.html.twig', [
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -575,6 +587,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/editWinnerQuoteProduct.html.twig', [
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
