@@ -988,9 +988,9 @@ class ApiController extends FOSRestController {
             ->setRetailer($dbToken->getRetailer())
             ->setClosed(false)
             ->setSendToSupplier($quote->send_to_supplier);
-        if(!is_null($quote->payment_date))
+        if(property_exists($quote, 'payment_date'))
             $dbQuote->setPaymentDate($quote->payment_date);
-        if(!is_null($quote->codigo_martins))
+        if(property_exists($quote, 'codigo_martins'))
             $dbQuote->setCodeMartins($quote->codigo_martins);
 
         $em->persist($dbQuote);
@@ -1023,7 +1023,7 @@ class ApiController extends FOSRestController {
             $isFirst = false;
             $dbQuote->addQuoteProduct($quoteProduct);
         }
-        $dbQuote->checkForRCAQuote();
+        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'));
         $em->flush();
 
         return View::create($dbQuote, Response::HTTP_CREATED);
@@ -1157,7 +1157,7 @@ class ApiController extends FOSRestController {
             $dbQuote->setPaymentDate($quote->payment_date);
         if(!is_null($quote->codigo_martins))
             $dbQuote->setCodeMartins($quote->codigo_martins);
-        $dbQuote->checkForRCAQuote();
+        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'));
 
         $em->flush();
         return View::create($dbQuote, Response::HTTP_ACCEPTED);

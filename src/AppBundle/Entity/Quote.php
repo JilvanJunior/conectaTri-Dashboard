@@ -486,8 +486,12 @@ class Quote
             $product = $quoteProduct->getProduct();
             $quoteSuppliers = $quoteProduct->getQuoteSuppliers();
             foreach($quoteSuppliers as $quoteSupplier) {
-                if($supplier->getId() == $quoteSupplier->getSupplier()->getId())
-                    $quoteSupplier->setPrice($infos[$product->getId()]->PrecoDeCaixa);
+                if($supplier->getId() != $quoteSupplier->getSupplier()->getId())
+                    continue;
+
+                $preco = (double) $infos[$product->getId()]->PrecoDeCaixa;
+                $precoUnitario = $preco/$product->getQuantity();
+                $quoteSupplier->setPrice($precoUnitario);
             }
         }
     }
