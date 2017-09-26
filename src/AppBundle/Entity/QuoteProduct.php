@@ -50,6 +50,13 @@ class QuoteProduct
     private $quote;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="quantity", type="integer")
+     */
+    private $quantity;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\QuoteSupplier")
@@ -129,6 +136,24 @@ class QuoteProduct
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * @param int $quantity
+     * @return QuoteProduct
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
     }
 
     /**

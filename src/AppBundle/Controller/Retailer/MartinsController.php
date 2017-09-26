@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Retailer;
 
 use AppBundle\Entity\Product;
+use AppBundle\Service\MartinsConnector;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,32 +21,10 @@ class MartinsController extends Controller
         if(!$user->isRCAVirtual())
             return $this->redirectToRoute('dashboard');
 
-        $soap = new \SoapClient('http://service.martins.com.br/b2bservice.asmx?WSDL');
-        $chave = $this->getParameter('chave_martins');
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $acesso = $mc->login();
 
-        $params = [
-            'chpac' => $chave,
-            'cnpj' => '11822193000182',//$user->getCnpj(),
-            'email' => 'aline@martins.com.br',//$user->getEmail(),
-            'token' => ''
-        ];
-        $acesso = $soap->logarUsuario($params)->logarUsuarioResult;
-
-        unset($params['email']);
-        $params['Mercadorias'] = [
-            900107, 900693, 100490, 2308594, 108063, 107173
-        ];
-        $mercadorias = $soap->consultarInfoMercadoriasPorCodigo($params)->consultarInfoMercadoriasPorCodigoResult;
-        var_dump($mercadorias->MercadoriasInformacoes);exit();
-
-        $boletos = $soap->consultaBoletosPendente($params)->consultaBoletosPendenteResult->boletosPendentes;
-        if(property_exists($boletos, 'titulosBoleto')) {
-            if(is_array($boletos->titulosBoleto))
-                $boletos = $boletos->titulosBoleto;
-            else
-                $boletos = [$boletos->titulosBoleto];
-        } else
-            $boletos = [];
+        $boletos = $mc->getMartinsBoletos();
 
         return $this->render('Retailer/martins/boletos.html.twig', [
             'boletos' => $boletos,

@@ -1008,6 +1008,7 @@ class ApiController extends FOSRestController {
                     $supplierStatus->setQuote($dbQuote);
                     $em->persist($supplierStatus);
                     $dbQuote->addSupplierStatus($supplierStatus);
+                    $quoteProduct->setQuantity($supplier->quantity);
                 }
                 $quoteSupplier = new QuoteSupplier();
                 $quoteSupplier->setRepresentative($dbSupplier)
@@ -1021,6 +1022,7 @@ class ApiController extends FOSRestController {
             $isFirst = false;
             $dbQuote->addQuoteProduct($quoteProduct);
         }
+        $dbQuote->checkForRCAQuote();
         $em->flush();
 
         return View::create($dbQuote, Response::HTTP_CREATED);
@@ -1089,6 +1091,7 @@ class ApiController extends FOSRestController {
                         $supplier->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
                     } else {
+                        $product->setQuantity($rcvSupplier->quantity);
                         $supplier->setQuantity($rcvSupplier->quantity)
                             ->setPrice(str_replace(",", ".", $rcvSupplier->price))
                             ->setDeleted(false)
@@ -1153,6 +1156,7 @@ class ApiController extends FOSRestController {
             $dbQuote->setPaymentDate($quote->payment_date);
         if(!is_null($quote->codigo_martins))
             $dbQuote->setCodeMartins($quote->codigo_martins);
+        $dbQuote->checkForRCAQuote();
 
         $em->flush();
         return View::create($dbQuote, Response::HTTP_ACCEPTED);
