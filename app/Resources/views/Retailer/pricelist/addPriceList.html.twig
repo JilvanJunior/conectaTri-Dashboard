@@ -433,11 +433,12 @@
                                                                                 <th>E-mail</th>
                                                                                 <th>CNPJ</th>
                                                                                 <th>Telefone</th>
-                                                                                <th>Ação</th>
+                                                                                <th></th>
+
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                            {% if supplier is defined %}
+
                                                                                 {% for supplier in suppliers %}
                                                                                     {% for representative in supplier.representatives if representative.deleted == 0 %}
                                                                                         <tr>
@@ -447,13 +448,13 @@
                                                                                             <td class="numeric"> {{ supplier.cnpj }} </td>
                                                                                             <td class="numeric"> {{ representative.phone }} </td>
                                                                                             <td>
-                                                                                                <a href="{{ path('editar_representante', {'id': representative.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
-                                                                                                    <i class="fa fa-edit"></i> Editar </a>
+                                                                                                <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ supplier.id }}" name="test" /> <span></span>
                                                                                             </td>
+
                                                                                         </tr>
                                                                                     {% endfor %}
                                                                                 {% endfor %}
-                                                                            {% endif %}
+
                                                                             </tbody>
                                                                         </table>
 
@@ -474,17 +475,20 @@
                                                                             </thead>
                                                                             <tbody>
 
-                                                                            {% if listing is defined %}
+
                                                                                 {% for listing in listings %}
                                                                                     <tr>
                                                                                         <input type="hidden" value="{{ listing.id }}">
-                                                                                        <td>{{ listing.name }}</td>
-                                                                                        <td>{{ listing.description }}</td>
+                                                                                        <td width="20%">{{ listing.name }}</td>
+                                                                                        <td >{{ listing.description }}</td>
                                                                                         <td>{{ types[listing.type] }}</td>
                                                                                         <td>{{ listing.listingProducts|length }}</td>
+                                                                                        <td>
+                                                                                            <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ listing.id }}" name="test" /> <span></span>
+                                                                                        </td>
                                                                                     </tr>
                                                                                 {% endfor %}
-                                                                            {% endif %}
+
                                                                             </tbody>
                                                                         </table>
 
@@ -501,21 +505,23 @@
                                                                                 <th> Tipo </th>
                                                                                 <th> Fabricante </th>
                                                                                 <th> Embalagem de Compra </th>
-                                                                                <th></th>
+                                                                                <th> </th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                            {% if product is defined %}
-                                                                                {% for product in products %}
-                                                                                    <tr class="{% for quoteProduct in quoteProducts %}{% if quoteProduct.product.id == product.id %}selected{% endif %}{% endfor %}">
-                                                                                        <td> {{ product.id }} </td>
-                                                                                        <td> {{ product.name }} </td>
-                                                                                        <td> {{ product.type }} </td>
-                                                                                        <td> {{ product.brand }} </td>
-                                                                                        <td> {{ product.unit }} {{ product.quantity }} </td>
-                                                                                    </tr>
-                                                                                {% endfor %}
-                                                                            {% endif %}
+                                                                            {% for product in products %}
+                                                                                <tr>
+                                                                                    <td> {{ product.id }} </td>
+                                                                                    <td> {{ product.name }} </td>
+                                                                                    <td> {{ product.type }} </td>
+                                                                                    <td> {{ product.brand }} </td>
+                                                                                    <td> {{ product.unit }} {{ product.quantity }} </td>
+                                                                                    <td>
+                                                                                        <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ product.id }}" name="test" /> <span></span>
+                                                                                    </td>
+
+                                                                                </tr>
+                                                                            {% endfor %}
                                                                             </tbody>
                                                                         </table>
                                                                     </div>
@@ -659,7 +665,9 @@
         <symbol id="checkmark-bold" viewBox="0 0 24 24">
             <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
         </symbol>
+
     </svg>
+
 
 {% endblock %}
 
@@ -919,89 +927,7 @@
         });
         //END FLOAT LABEL METHODS
 
-        //token
-        var token = 'a51a169d-2e9b-57eb-aeb6-b2db2870bc58';
 
-        // BEGIN LISTING TABLE
-        $('#listing-datatable').dataTable( {
-            language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
-                select: {
-                    rows: {
-                        _: "%d linha selecionadas",
-                        0: "Clique numa linha para selecionar",
-                        1: "1 linha selecionada"
-                    }
-                }
-            },
-            ajax: {
-                url: "http://localhost/api/listing",
-                type: 'GET',
-                dataSrc: "",
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader('Api-Token', token);
-                }
-            },
-            columns: [
-            { "data": "name" },
-            { "data": "description" },
-            { "data": "type" },
-            { "data": "listing_products",
-                "render": function ( data, type, row ) {
-                    return data.length;
-                },
-            },
-            { "data": "id",
-                    "orderable": false ,
-                    "className": "dt-center",
-                    "render": function ( data, type, row ) {
-                        return '' +
-                            '<label class="mt-checkbox mt-checkbox-outline">  <input type="checkbox" value="'+data+'" name="test" /> <span></span>';
-                    },
-                }
-
-        ]
-        } );
-        // END LISTING TABLE
-
-        // BEGIN PRODUCTS TABLE
-        $('#product-datatable').dataTable( {
-            language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
-                select: {
-                    rows: {
-                        _: "%d linha selecionadas",
-                        0: "Clique numa linha para selecionar",
-                        1: "1 linha selecionada"
-                    }
-                }
-            },
-            ajax: {
-                url: "http://localhost/api/product",
-                type: 'GET',
-                dataSrc: "",
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader('Api-Token', token);
-                }
-            },
-            columns: [
-                { "data": "id" },
-                { "data": "name" },
-                { "data": "type" },
-                { "data": "brand"},
-                { "data": "unit"},
-                { "data": "id",
-                    "orderable": false ,
-                    "className": "dt-center",
-                    "render": function ( data, type, row ) {
-                        return '' +
-                            '<label class="mt-checkbox mt-checkbox-outline">  <input type="checkbox" value="'+data+'" name="test" /> <span></span>';
-                    },
-                }
-
-            ]
-        } );
-        // END PRODUCTS TABLE
 
         // BEGIN REPRESENTATIVE TABLE
         $('#representative-datatable').dataTable( {
@@ -1014,33 +940,41 @@
                         1: "1 linha selecionada"
                     }
                 }
-            },
-            ajax: {
-                url: "http://localhost/api/representative",
-                type: 'GET',
-                dataSrc: "",
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader('Api-Token', token);
-                }
-            },
-            columns: [
-                { "data": "name" },
-                { "data": "contact_name" },
-                { "data": "contact_email" },
-                { "data": "cnpj"},
-                { "data": "contact_email"},
-                { "data": "id",
-                    "orderable": false ,
-                    "className": "dt-center",
-                    "render": function ( data, type, row ) {
-                        return '' +
-                            '<label class="mt-checkbox mt-checkbox-outline">  <input type="checkbox" value="'+data+'" name="test" /> <span></span>';
-                    },
-                }
-
-            ]
+            }
         } );
         // END REPRESENTATIVE TABLE
+
+
+        // BEGIN LISTING TABLE
+        $('#listing-datatable').dataTable( {
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
+                select: {
+                    rows: {
+                        _: "%d linha selecionadas",
+                        0: "Clique numa linha para selecionar",
+                        1: "1 linha selecionada"
+                    }
+                }
+            }
+        } );
+        // END LISTING TABLE
+
+
+        // BEGIN PRODUCTS TABLE
+        $('#product-datatable').dataTable( {
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
+                select: {
+                    rows: {
+                        _: "%d linha selecionadas",
+                        0: "Clique numa linha para selecionar",
+                        1: "1 linha selecionada"
+                    }
+                }
+            }
+        } );
+        // END PRODUCTS TABLE
 
     </script>
 
