@@ -82,7 +82,7 @@ class ProductsController extends Controller
         if($request->getMethod() == "POST"){
             $product->setEan('');
             $product->setName($request->get('name'));
-            $product->setBarCode($request->get('ean'));
+            $product->setEan($request->get('ean'));
             $product->setBrand($request->get('brand'));
             $product->setQuantity($request->get('quantity'));
             $product->setUnit($request->get('unit'));
