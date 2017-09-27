@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * MartinsOrder
@@ -44,6 +46,37 @@ class MartinsOrder
      */
     private $linkToBill;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     * @Serializer\Exclude()
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     * @Serializer\Exclude()
+     */
+    private $updatedAt;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     * @Serializer\Exclude()
+     */
+    private $deleted = false;
+
+    /**
+     * MartinsOrder constructor.
+     */
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
     /**
      * Get id
@@ -119,6 +152,60 @@ class MartinsOrder
     public function getLinkToBill()
     {
         return $this->linkToBill;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param DateTime $createdAt
+     * @return Retailer
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param DateTime $updatedAt
+     * @return Retailer
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param bool $deleted
+     * @return Retailer
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+        return $this;
     }
 }
 
