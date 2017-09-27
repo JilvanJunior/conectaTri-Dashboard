@@ -91,6 +91,14 @@ class Retailer implements UserInterface, \Serializable
     /**
      * @var string
      *
+     * @ORM\OneToMany(targetEntity="MartinsOrder", mappedBy="retailer")
+     * @Serializer\Exclude()
+     */
+    private $martinsOrders;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=100)
      */
     private $email;
@@ -242,6 +250,7 @@ class Retailer implements UserInterface, \Serializable
         $this->quotes = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->fcmTokens = new ArrayCollection();
+        $this->martinsOrders = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
     }
@@ -740,6 +749,40 @@ class Retailer implements UserInterface, \Serializable
         return $this->quotes;
     }
 
+    /**
+     * Add martinsOrder
+     *
+     * @param MartinsOrder $martinsOrder
+     *
+     * @return Retailer
+     */
+    public function addMartinsOrder(MartinsOrder $martinsOrder)
+    {
+        $this->martinsOrders[] = $martinsOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove martinsOrder
+     *
+     * @param MartinsOrder $martinsOrder
+     */
+    public function removeMartinsOrder(MartinsOrder $martinsOrder)
+    {
+        $this->martinsOrders->removeElement($martinsOrder);
+    }
+
+    /**
+     * Get martinsOrders
+     *
+     * @return ArrayCollection
+     */
+    public function getMartinsOrders()
+    {
+        return $this->martinsOrders;
+    }
+    
     /**
      * Add listing
      *
