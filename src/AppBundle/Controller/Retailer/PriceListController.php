@@ -17,6 +17,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PriceListController extends Controller
 {
+
+
+
+
     /**
      * @Route("/varejista/cotacoes", name="cotacoes")
      * @param Request $request
@@ -86,9 +90,37 @@ class PriceListController extends Controller
         }
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', [
-            'userIsRCA' => $user->isRCAVirtual(),
+            //'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
+
+    /**
+     * @Route("/varejista/cotacao/remota/nova", name="nova_cotacao_remota")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getTables(Request $request)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
+        $products = $user->getProducts();
+        $listings = $this->getDoctrine()->getRepository('AppBundle:Listing')->findBy(['retailer' => $user, 'deleted' => false]);
+
+        //type of listings
+        $types = [];
+        $types['0'] = 'Não Informado';
+        $types['1'] = 'Comum';
+        $types['2'] = 'Sazonal';
+        $types['3'] = 'Semanal';
+
+        return $this->render('Retailer/pricelist/addPriceList.html.twig', [
+            'products' => $products,
+            'suppliers' => $suppliers,
+            'listings' => $listings,
+            'types' => $types
+        ]);
+    }
+
 
     /**
      * @Route("/varejista/cotacao/presencial/nova", name="nova_cotacao_presencial")
