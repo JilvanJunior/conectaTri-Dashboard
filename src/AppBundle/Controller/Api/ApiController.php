@@ -1339,7 +1339,6 @@ class ApiController extends FOSRestController {
             ->setCity($retailer->city)
             ->setState($dbState)
             ->setCep($retailer->cep)
-            ->setAddress($retailer->address)
             ->setPhone($retailer->phone)
             ->setCellphone($retailer->cellphone);
         $sec = $this->get('security.password_encoder');
@@ -1411,7 +1410,6 @@ class ApiController extends FOSRestController {
             ->setDistricit($retailer->district)
             ->setCity($retailer->city)
             ->setState($dbState)
-            ->setAddress($retailer->address)
             ->setCep($retailer->cep)
             ->setPhone($retailer->phone)
             ->setCellphone($retailer->cellphone)
@@ -1652,6 +1650,62 @@ class ApiController extends FOSRestController {
         }
 
         return View::create($saidaBoletos, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\POST("/api/martinsQuote")
+     */
+    public function getMartinsQuote(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $user = $dbToken->getRetailer();
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $acesso = $mc->login();
+
+        $productsData = json_decode($request->getContent());
+
+        $productsIds = [];
+        $quantitiesByProduct = [];
+        foreach($productsData as $productData) {
+            $productsIds[] = $productData->id;
+
+            $quantitiesByProduct[$productData->id] = [
+                'idMartins' => 0,
+                'quantity' => $productData->quantity
+            ];
+        }
+
+        $products = $em->getRepository('AppBundle:Product')->findById($productsIds);
+        $codes = $mc->getMartinsCodeByEan($products);
+        if(empty($codes))
+            return View::create([], Response::HTTP_OK);
+
+        foreach($codes as $key => $code) {
+            $quantitiesByProduct[$key]['idMartins'] = $code;
+        }
+
+        $infos = $mc->getMartinsInfos($quantitiesByProduct);
+        $saidaInfos = [];
+        foreach($infos as $id => $info) {
+            $saida = [];
+            foreach(get_object_vars($info) as $varName => $var)
+                $saida[$varName] = $var;
+
+            $saidaInfos[$id] = $saida;
+        }
+
+        return View::create($saidaInfos, Response::HTTP_OK);
     }
 
     /**

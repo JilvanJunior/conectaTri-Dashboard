@@ -59,6 +59,13 @@ class MartinsConnector
         return $acesso;
     }
 
+    public function getProductInfoByMartinsCode($code) {
+        $params = $this->getDefaultParams();
+        $params["Mercadorias"] = [$code];
+
+        return $this->soap->consultarInfoMercadoriasPorCodigo($params)->consultarInfoMercadoriasPorCodigoResult->MercadoriasInformacoes;
+    }
+
     /**
      * @param array $quantitiesByProduct
      * @return array
@@ -173,15 +180,14 @@ class MartinsConnector
 
         $params['Mercadorias'] = array_keys($idsByEan);
 
-        print_r($this->soap->consultarInfoMercadoriasPorEAN($params)->consultarInfoMercadoriasPorEANResult);
-        exit();
-
-        $result = $this->soap->consultarInfoMercadoriasPorEAN($params)->consultarInfoMercadoriasPorEANResult->MercadoriasInformacoes;
+        $results = $this->soap->consultarInfoMercadoriasPorEAN($params)->consultarInfoMercadoriasPorEANResult->MercadoriasInformacoes->MercadoriaInformacoes;
+        if(!is_array($results))
+            $results = [$results];
 
         $codes = [];
-        foreach($result as $info) {
-            $ean = $info->CODIGO_EAN;
-            $idMartins = $info->CODIGO;
+        foreach($results as $result) {
+            $ean = $result->CODIGO_EAN;
+            $idMartins = $result->CODIGO;
             $codes[$idsByEan[$ean]] = $idMartins;
         }
 
