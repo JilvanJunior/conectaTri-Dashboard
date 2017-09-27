@@ -487,18 +487,32 @@ class Quote
         $infos = $mc->getMartinsInfos($quantitiesByProduct);
         foreach($this->quoteProducts as $quoteProduct) {
             $product = $quoteProduct->getProduct();
+            if(!key_exists($product->getId(), $infos))
+                continue;
+
             $quoteSuppliers = $quoteProduct->getQuoteSuppliers();
             foreach($quoteSuppliers as $quoteSupplier) {
                 if($supplier->getId() != $quoteSupplier->getRepresentative()->getSupplier()->getId())
                     continue;
 
                 $preco = (double) $infos[$product->getId()]->PrecoDeCaixa;
-                if($product->getQuantity() > 0)
-                    $precoUnitario = $preco/$product->getQuantity();
+                if($quoteProduct->getQuantity() > 0)
+                    $precoUnitario = $preco/$quoteProduct->getQuantity();
                 else
                     $precoUnitario = 0;
                 $quoteSupplier->setPrice($precoUnitario);
+                $quoteSupplier->setFilledIn(true);
+
+                break;
             }
+        }
+
+        foreach($this->getSuppliersStatus() as $supplierStatus) {
+            if($supplier->getId() != $supplierStatus->getRepresentative()->getSupplier()->getId())
+                continue;
+
+            $supplierStatus->setStatus(1);
+            break;
         }
     }
 }
