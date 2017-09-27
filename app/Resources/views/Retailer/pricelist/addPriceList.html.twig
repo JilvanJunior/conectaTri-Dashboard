@@ -219,6 +219,20 @@
             border: 1px solid deepskyblue !important;
         }
 
+        .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+            color: transparent;
+            background-color: transparent;
+        }
+
+        .nav>li>a:hover, .nav>li>a:focus {
+            text-decoration: none;
+            background-color: transparent;
+        }
+        .disabled-click {
+            pointer-events: none;
+            cursor: default;
+        }
+
     </style>
 
     <div class="page-wrapper-row full-height">
@@ -287,31 +301,31 @@
                                                                     <div class="container">
                                                                         <ul class="ProgressBar">
                                                                             <li class="ProgressBar-step is-current">
-                                                                                <a href="#tab1" data-toggle="tab">
+                                                                                <a href="#tab1" class="disabled-click" data-toggle="tab">
                                                                                     <svg class="ProgressBar-icon"><use xlink:href="#checkmark-bold"/></svg>
                                                                                     <span class="ProgressBar-stepLabel"><!--1--></span>
                                                                                 </a>
                                                                             </li>
-                                                                            <li class="ProgressBar-step">
-                                                                                <a href="#tab2" data-toggle="tab">
+                                                                            <li class="ProgressBar-step" disabled="">
+                                                                                <a href="#tab2" class="disabled-click" data-toggle="tab">
                                                                                     <svg class="ProgressBar-icon"><use xlink:href="#checkmark-bold"/></svg>
                                                                                     <span class="ProgressBar-stepLabel"><!--2--></span>
                                                                                 </a>
                                                                             </li>
                                                                             <li class="ProgressBar-step">
-                                                                                <a href="#tab3" data-toggle="tab">
+                                                                                <a href="#tab3" class="disabled-click" data-toggle="tab">
                                                                                     <svg class="ProgressBar-icon"><use xlink:href="#checkmark-bold"/></svg>
                                                                                     <span class="ProgressBar-stepLabel"><!--3--></span>
                                                                                 </a>
                                                                             </li>
                                                                             <li class="ProgressBar-step">
-                                                                                <a href="#tab4" data-toggle="tab">
+                                                                                <a href="#tab4" class="disabled-click" class="disabled-click" data-toggle="tab">
                                                                                     <svg class="ProgressBar-icon"><use xlink:href="#checkmark-bold"/></svg>
                                                                                     <span class="ProgressBar-stepLabel"><!--4--></span>
                                                                                 </a>
                                                                             </li>
                                                                             <li class="ProgressBar-step">
-                                                                                <a href="#tab5" data-toggle="tab">
+                                                                                <a href="#tab5" class="disabled-click" data-toggle="tab">
                                                                                     <svg class="ProgressBar-icon"><use xlink:href="#checkmark-bold"/></svg>
                                                                                     <span class="ProgressBar-stepLabel"><!--5--></span>
                                                                                 </a>
@@ -445,6 +459,7 @@
 
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="tab-pane" id="tab3">
                                                                     <div class="wizard-container">
                                                                         <table class="table table-striped table-bordered table-hover" id="listing-datatable">
@@ -475,6 +490,7 @@
 
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="tab-pane" id="tab4">
                                                                     <div class="wizard-container">
                                                                         <table class="table table-striped table-bordered table-hover" id="product-datatable">
@@ -504,6 +520,7 @@
                                                                         </table>
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="tab-pane" id="tab5">
                                                                     <div class="wizard-container">
                                                                         <div class="row">
@@ -764,6 +781,8 @@
                                 $("#advance").find("a").removeClass('disabled');
 
 
+
+
                             }
 
                         });
@@ -785,6 +804,8 @@
 
                                 $("#advance").find("a").removeClass('disabled');
 
+
+
                             }
 
                         });
@@ -803,6 +824,7 @@
 
                                 $("#advance").find("a").removeClass('disabled');
 
+
                             }
 
                         });
@@ -819,6 +841,7 @@
                             if( productTable.find('tr').find("input").is(":checked") ){
 
                                 $("#advance").find("a").removeClass('disabled');
+
 
                             }
 
