@@ -6,6 +6,7 @@ use AppBundle\Entity\ApiSession;
 use AppBundle\Entity\FCMToken;
 use AppBundle\Entity\Listing;
 use AppBundle\Entity\ListingProduct;
+use AppBundle\Entity\MartinsOrder;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Quote;
 use AppBundle\Entity\QuoteProduct;
@@ -1752,6 +1753,43 @@ class ApiController extends FOSRestController {
         }
 
         return View::create($saidaInfos, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Post("/api/martins/pedidos")
+     */
+    public function getMartinsOrders(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $user = $dbToken->getRetailer();
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $acesso = $mc->login();
+
+        $martinsOrders = $d->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user]);
+
+        $orders = array();
+
+        /** @var MartinsOrder $martinsOrder */
+        foreach ($martinsOrders as $k => $martinsOrder){
+            $order = $mc->trackMartinsPedido($martinsOrder->getCode());
+            $orders[$k]['order_code'] = $martinsOrder->getCode();
+            $orders[$k]['order_date'] = $order->trackingData->trackingData->DataVenda;
+            $orders[$k]['order_value'] = $martinsOrder->getTotal();
+            $orders[$k]['order_status'] = $order->PedidoStatus;
+        }
+
+        return View::create($orders, Response::HTTP_OK);
     }
 
     /**

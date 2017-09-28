@@ -109,6 +109,7 @@ class MartinsConnector
     {
         $params = $this->getDefaultParams();
         $params += $this->getExtraParams();
+        $params += $this->getFilialParams();
 
         $products = [];
         $idsByMartins = [];
@@ -175,7 +176,6 @@ class MartinsConnector
         $infos = $this->soap->trankingPedido($params)->trankingPedidoResult->trackingData;
 
         return $infos;
-        return $infosById;
     }
 
     /**
@@ -278,6 +278,20 @@ class MartinsConnector
             'CondicaoPagamento' => $condicao,
             'FilialExpedicao' => $login->FilialExpedicao,
             'FilialFaturamento' => $login->FilialFaturamento
+        ];
+
+        return $params;
+    }
+
+    private function getFilialParams(){
+        if(is_null($this->acesso))
+            $this->login();
+
+        $login = $this->acesso->Login;
+
+        $params = [
+            'FilialDeExpedicao' => $login->FilialExpedicao,
+            'FilialDeFaturamento' => $login->FilialFaturamento
         ];
 
         return $params;
