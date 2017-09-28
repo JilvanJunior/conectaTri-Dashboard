@@ -1756,7 +1756,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Post("/api/martins/pedidos")
+     * @Rest\Get("/api/martins/pedidos")
      */
     public function getMartinsOrders(Request $request) {
         $d = $this->getDoctrine();
