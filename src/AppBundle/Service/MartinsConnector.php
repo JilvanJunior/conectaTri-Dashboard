@@ -18,7 +18,9 @@ class MartinsConnector
      */
     public function __construct($chave = null, $user = null)
     {
-        $this->soap = new \SoapClient('http://service.martins.com.br/b2bservice.asmx?WSDL');
+        //TODO change to production
+        $this->soap = new \SoapClient('http://servicemarketup.martins.com.br/b2bservice.asmx?WSDL');
+//        $this->soap = new \SoapClient('http://service.martins.com.br/b2bservice.asmx?WSDL');
         $this->chave = $chave;
         $this->user = $user;
     }
@@ -157,6 +159,20 @@ class MartinsConnector
         $infos = $this->soap->cadastrarPedido($params)->cadastrarPedidoResult;
         if(!is_array($infos))
             $infos = [$infos];
+
+        return $infos;
+    }
+
+    /**
+     * @param int $orderId
+     * @return stdClass
+     */
+    public function trackMartinsPedido(int $orderId)
+    {
+        $params = $this->getDefaultParams();
+        $params['pedido'] = $orderId;
+
+        $infos = $this->soap->trankingPedido($params)->trankingPedidoResult->trackingData;
 
         return $infos;
     }
