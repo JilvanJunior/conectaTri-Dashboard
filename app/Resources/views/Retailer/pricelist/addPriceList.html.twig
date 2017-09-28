@@ -265,6 +265,12 @@
 
         }
 
+        .text-area{
+            width: 284px;
+            border: 1px solid #40AE40
+
+        }
+
 
 
     </style>
@@ -438,9 +444,10 @@
 
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
-                                                                                            <div class="form-group datetimepicker3 text ">
-                                                                                                <label for="datetimepicker3">Prazo de pagamento</label>
-                                                                                                <input class="form-control " type="text" id="datetimepicker3" name="payment-date" required />
+                                                                                            <div class="form-group prazo text ">
+                                                                                                <label for="prazo">Prazo de pagamento</label>
+                                                                                                <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date"  >
+                                                                                                </textarea>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -945,18 +952,41 @@
             }
         });
 
+        $('#datetimepicker1').datetimepicker(
+            'setDate', (new Date()),
+            {format: 'dd/mm/yyyy hh:ii'}
+        );
+        $('.datetimepicker1.text').addClass('typing');
+
+
+
         $('#datetimepicker2').change(function(){
             $('.datetimepicker2.text').addClass('typing');
             if( $(this).val().length == 0 ) {
                 $('.datetimepicker2.text').removeClass('typing');
             }
         });
-        $('#datetimepicker3').change(function(){
-            $('.datetimepicker3.text').addClass('typing');
-            if( $(this).val().length == 0 ) {
-                $('.datetimepicker3.text').removeClass('typing');
-            }
-        });
+
+
+
+
+        //cotacao field default value
+
+        var d = new Date();
+
+        var month = d.getMonth()+1;
+        var day = d.getDate();
+        var hours = d.getHours()
+        var minutes = d.getMinutes()
+
+        var output = "Cotação " + ((''+day).length<2 ? '0' : '') + day + '/' +
+            ((''+month).length<2 ? '0' : '') + month + ", " +
+            hours + ":" + minutes;
+
+        $("#cotacao").val(output);
+        $('.cotacao.text').addClass('typing');
+
+
 
 
         //BEGIN FLOAT LABEL METHODS
@@ -964,6 +994,13 @@
             $('.cotacao.text').addClass('typing');
             if( $(this).val().length == 0 ) {
                 $('.cotacao.text').removeClass('typing');
+            }
+        });
+
+        $('#prazo').keyup(function(){
+            $('.prazo.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.prazo.text').removeClass('typing');
             }
         });
         //END FLOAT LABEL METHODS
