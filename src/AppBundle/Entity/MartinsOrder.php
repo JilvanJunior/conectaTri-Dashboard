@@ -42,6 +42,13 @@ class MartinsOrder
     /**
      * @var string
      *
+     * @ORM\Column(name="total", type="float")
+     */
+    private $total;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="link_to_bill", type="string", length=255, nullable=true)
      */
     private $linkToBill;
@@ -130,6 +137,30 @@ class MartinsOrder
         return $this->code;
     }
 
+    /**
+     * Set total
+     *
+     * @param float $total
+     *
+     * @return Product
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+    
     /**
      * Set linkToBill
      *

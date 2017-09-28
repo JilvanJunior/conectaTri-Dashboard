@@ -18,7 +18,9 @@ class MartinsConnector
      */
     public function __construct($chave = null, $user = null)
     {
+        //TODO change to production
         $this->soap = new \SoapClient('http://servicemarketup.martins.com.br/b2bservice.asmx?WSDL');
+//        $this->soap = new \SoapClient('http://service.martins.com.br/b2bservice.asmx?WSDL');
         $this->chave = $chave;
         $this->user = $user;
     }
@@ -158,6 +160,21 @@ class MartinsConnector
             $infosById[$idsByMartins[$info->CodigoMercadoria]] = $info;
         }
 
+        return $infos;
+    }
+
+    /**
+     * @param int $orderId
+     * @return stdClass
+     */
+    public function trackMartinsPedido(int $orderId)
+    {
+        $params = $this->getDefaultParams();
+        $params['pedido'] = $orderId;
+
+        $infos = $this->soap->trankingPedido($params)->trankingPedidoResult->trackingData;
+
+        return $infos;
         return $infosById;
     }
 
@@ -234,7 +251,8 @@ class MartinsConnector
         //TODO change cnpj
         $params = [
             'chpac' => $this->chave,
-            'cnpj' => '11822193000182',//$this->user->getCnpj(),
+            'cnpj' => '11822193000182',
+            //$this->user->getCnpj(),
             'token' => ''
         ];
 
