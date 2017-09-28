@@ -348,4 +348,16 @@ class Supplier
     {
         return $this->state;
     }
+
+    public static function newMartinsSupplier()
+    {
+        $martinsSupplier = (new Supplier())
+            ->setName('Martins')
+            ->setCnpj('')
+            ->setCreatedAt(new \DateTime())
+            ->setDeleted(false)
+            ->setRca(true);
+
+        return $martinsSupplier;
+    }
 }

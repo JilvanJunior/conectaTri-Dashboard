@@ -105,39 +105,6 @@ class MartinsConnector
      * @param array $quantitiesByProduct
      * @return array
      */
-    public function getMartinsEstoque(array $quantitiesByProduct)
-    {
-        $params = $this->getDefaultParams();
-        $params += $this->getExtraParams();
-
-        $products = [];
-        $idsByMartins = [];
-        foreach($quantitiesByProduct as $id => $quantityProduct) {
-            $idMartins = $quantityProduct['idMartins'];
-            $idsByMartins[$idMartins] = $id;
-            $products[$id] = [
-                'CodigoMercadoria' => $idMartins,
-                'Quantidade' => $quantityProduct['quantity']
-            ];
-        }
-
-        $params['produtos'] = array_values($products);
-
-        $infos = $this->soap->consultarEstoque($params)->consultarEstoqueResult->Estoque->Estoque;
-        if(!is_array($infos))
-            $infos = [$infos];
-        $infosById = [];
-        foreach($infos as $info) {
-            $infosById[$idsByMartins[$info->CodigoMercadoria]] = $info;
-        }
-
-        return $infosById;
-    }
-
-    /**
-     * @param array $quantitiesByProduct
-     * @return array
-     */
     public function saveMartinsPedido(array $quantitiesByProduct)
     {
         $params = $this->getDefaultParams();
@@ -164,6 +131,39 @@ class MartinsConnector
     }
 
     /**
+     * @param array $quantitiesByProduct
+     * @return array
+     */
+    public function getMartinsEstoque(array $quantitiesByProduct)
+    {
+        $params = $this->getDefaultParams();
+        $params += $this->getExtraParams();
+
+        $products = [];
+        $idsByMartins = [];
+        foreach($quantitiesByProduct as $id => $quantityProduct) {
+            $idMartins = $quantityProduct['idMartins'];
+            $idsByMartins[$idMartins] = $id;
+            $products[$id] = [
+                'CodigoMercadoria' => $idMartins,
+                'Quantidade' => $quantityProduct['quantity']
+            ];
+        }
+
+        $params['produtos'] = array_values($products);
+
+        $infos = $this->soap->consultarEstoque($params)->consultarEstoqueResult->Estoque->Estoque;
+        if(!is_array($infos))
+            $infos = [$infos];
+        $infosById = [];
+        foreach($infos as $info) {
+            $infosById[$idsByMartins[$info->CodigoMercadoria]] = $info;
+        }
+
+        return $infos;
+    }
+
+    /**
      * @param int $orderId
      * @return stdClass
      */
@@ -175,13 +175,14 @@ class MartinsConnector
         $infos = $this->soap->trankingPedido($params)->trankingPedidoResult->trackingData;
 
         return $infos;
+        return $infosById;
     }
 
     /**
      * @param array $products
      * @return array
      */
-    public function getMartinsCodeByEan(array $products)
+    public function getProductInfoByEan(array $products)
     {
         $params = $this->getDefaultParams();
 
@@ -200,11 +201,27 @@ class MartinsConnector
         if(!is_array($results))
             $results = [$results];
 
-        $codes = [];
+        $infos = [];
         foreach($results as $result) {
             $ean = $result->CODIGO_EAN;
+            $infos[$idsByEan[$ean]] = $result;
+        }
+
+        return $infos;
+    }
+
+    /**
+     * @param array $products
+     * @return array
+     */
+    public function getMartinsCodeByEan(array $products)
+    {
+        $results = $this->getProductInfoByEan($products);
+
+        $codes = [];
+        foreach($results as $id => $result) {
             $idMartins = $result->CODIGO;
-            $codes[$idsByEan[$ean]] = $idMartins;
+            $codes[$id] = $idMartins;
         }
 
         return $codes;

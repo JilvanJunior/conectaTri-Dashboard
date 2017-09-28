@@ -208,6 +208,9 @@
                 {{ form_row(form.email, {'attr' : {'class' : 'input'}}) }}
                 {{ form_row(form.cep, {'attr' : {'class' : 'input'}}) }}
                 {{ form_row(form.address, {'attr' : {'class' : 'input'}}) }}
+                {{ form_row(form.number, {'attr' : {'class' : 'input'}}) }}
+                {{ form_row(form.complement, {'attr' : {'class' : 'input'}}) }}
+                {{ form_row(form.district, {'attr' : {'class' : 'input'}}) }}
                 {{ form_row(form.city, {'attr' : {'class' : 'input'}}) }}
                 {{ form_row(form.state, {'attr' : {'class' : 'input'}}) }}
                 {{ form_row(form.phone, {'attr' : {'class' : 'input'}}) }}
@@ -260,6 +263,7 @@ $('#retailer_cep').blur(function() {
     }
 
     $("#retailer_address").val("...");
+    $("#retailer_district").val("...");
     $("#retailer_city").val("...");
 
     //Consulta o webservice viacep.com.br/
@@ -271,6 +275,7 @@ $('#retailer_cep').blur(function() {
 
         //Atualiza os campos com os valores da consulta.
         $("#retailer_address").val(dados.logradouro);
+        $("#retailer_district").val(dados.bairro);
         $("#retailer_city").val(dados.localidade);
         $("#retailer_state").val(ufToStateId(dados.uf));
     });
