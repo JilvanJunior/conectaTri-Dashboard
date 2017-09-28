@@ -22,6 +22,7 @@ class SuppliersController extends Controller
 
         return $this->render('Retailer/suppliers/index.html.twig', [
             'suppliers' => $suppliers,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -73,6 +74,7 @@ class SuppliersController extends Controller
 
         return $this->render('Retailer/suppliers/addSuppliers.html.twig', [
             'states' => $states,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -113,6 +115,7 @@ class SuppliersController extends Controller
 
         return $this->render('Retailer/suppliers/addRepresentatives.html.twig', [
             'suppliers' => $suppliers,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -156,6 +159,7 @@ class SuppliersController extends Controller
         return $this->render('Retailer/suppliers/addRepresentatives.html.twig', [
             'suppliers' => $suppliers,
             'representative' => $representative,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
