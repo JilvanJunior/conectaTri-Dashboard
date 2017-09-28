@@ -343,6 +343,17 @@
                                                                 </div>
                                                             </div>
 
+
+                                                            <ul class="pager wizard">
+
+                                                                <li class="previous first" style="display:none;"><a href="#">Início</a></li>
+                                                                <li class="previous"   id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
+                                                                <li class="next last" style="display:none;"><a href="#">Último</a></li>
+
+                                                                <li class="next" id="advance"><a class="btn btn-circle green-conecta pull-right disabled" href="#" style="margin-right: 5px;margin-bottom: 5px;">Próximo</a></li>
+
+                                                            </ul>
+
                                                             <div class="tab-content">
 
                                                                 <!-- BEGIN COTACAO STEP-->
@@ -478,7 +489,7 @@
                                                                                 <th> Descrição </th>
                                                                                 <th> Tipo </th>
                                                                                 <th> Itens </th>
-                                                                                <th class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllListing" type="checkbox" name="test" /> <span></span></th>
+                                                                                <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllListing" type="checkbox" name="test" /> <span></span></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -516,7 +527,7 @@
                                                                                 <th> Tipo </th>
                                                                                 <th> Fabricante </th>
                                                                                 <th> Embalagem de Compra </th>
-                                                                                <th><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAll" type="checkbox"  name="selectAllProducts" /> <span></span></th>
+                                                                                <th><label class="mt-checkbox mt-checkbox-outline"/>  <input  type="checkbox"  name="selectAllProducts" /> <span></span></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -629,15 +640,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <ul class="pager wizard">
 
-                                                                    <li class="previous first" style="display:none;"><a href="#">Início</a></li>
-                                                                    <li class="previous"   id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
-                                                                    <li class="next last" style="display:none;"><a href="#">Último</a></li>
-
-                                                                    <li class="next" id="advance"><a class="btn btn-circle green-conecta pull-right disabled" href="#" style="margin-right: 5px;margin-bottom: 5px;">Próximo</a></li>
-
-                                                                </ul>
                                                             </div>
                                                         </div>
 
@@ -961,12 +964,6 @@
         selectAll("selectAllReprensentative","chkRepresentative");
 
 
-
-
-
-
-
-
         // END REPRESENTATIVE TABLE
 
 
@@ -980,10 +977,10 @@
                         0: "Clique numa linha para selecionar",
                         1: "1 linha selecionada"
                     }
-                },"columnDefs": [
-                    { "orderable": false, "targets": 4 }
-                ]
-            }
+                }
+            },"columnDefs": [
+                { "orderable": false, "targets": 4 }
+            ]
         } );
 
         //select all function
