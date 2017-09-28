@@ -77,7 +77,7 @@ class MartinsConnector
         return $infosById;
     }
 
-    public function getMartinsCodeByEan(array $products)
+    public function getProductInfoByEan(array $products)
     {
         $params = $this->getDefaultParams();
 
@@ -96,11 +96,23 @@ class MartinsConnector
         if(!is_array($results))
             $results = [$results];
 
-        $codes = [];
+        $infos = [];
         foreach($results as $result) {
             $ean = $result->CODIGO_EAN;
+            $infos[$idsByEan[$ean]] = $result;
+        }
+
+        return $infos;
+    }
+
+    public function getMartinsCodeByEan(array $products)
+    {
+        $results = $this->getProductInfoByEan($products);
+
+        $codes = [];
+        foreach($results as $id => $result) {
             $idMartins = $result->CODIGO;
-            $codes[$idsByEan[$ean]] = $idMartins;
+            $codes[$id] = $idMartins;
         }
 
         return $codes;
@@ -126,7 +138,7 @@ class MartinsConnector
     {
         $params = [
             'chpac' => $this->chave,
-            'cnpj' => '11822193000182',//$user->getCnpj(),
+            'cnpj' => '11822193000182',//$this->user->getCnpj(),
             'token' => ''
         ];
 

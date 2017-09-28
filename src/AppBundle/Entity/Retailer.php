@@ -151,6 +151,13 @@ class Retailer implements UserInterface, \Serializable
     /**
      * @var string
      *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $complement;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $district;
@@ -461,6 +468,24 @@ class Retailer implements UserInterface, \Serializable
     /**
      * @return string
      */
+    public function getComplement()
+    {
+        return $this->complement;
+    }
+
+    /**
+     * @param string $complement
+     * @return Retailer
+     */
+    public function setComplement($complement)
+    {
+        $this->complement = $complement;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getDistrict()
     {
         return $this->district;
@@ -614,9 +639,15 @@ class Retailer implements UserInterface, \Serializable
      * @param bool $rcaVirtual
      * @return Retailer
      */
-    public function setRCAVirtual($rcaVirtual)
+    public function setRCAVirtual($rcaVirtual, $martinsSupplier, $em)
     {
         $this->rcaVirtual = $rcaVirtual;
+        if($this->rcaVirtual) {
+            $this->addMartinsRepresentative($martinsSupplier, $em);
+        } else {
+            $this->removeMartinsRepresentative();
+        }
+
         return $this;
     }
 
@@ -840,5 +871,44 @@ class Retailer implements UserInterface, \Serializable
     public function getApiSessions()
     {
         return $this->apiSessions;
+    }
+
+    private function addMartinsRepresentative($martinsSupplier, $em)
+    {
+        $hasMartinsRepresentative = false;
+        foreach($this->getRepresentatives() as $representative) {
+            $supplier = $representative->getSupplier();
+            if(!$supplier->isRca())
+                continue;
+
+            $representative->setDeleted(false);
+            $hasMartinsRepresentative = true;
+        }
+
+        if($hasMartinsRepresentative)
+            return;
+
+        $representative = (new Representative())
+            ->setRetailer($this)
+            ->setSupplier($martinsSupplier)
+            ->setName('Martins')
+            ->setEmail('automatico@martins.com.br')
+            ->setPhone('')
+            ->setCreatedAt(new \DateTime())
+            ->setDeleted(false);
+        $em->persist($representative);
+        
+        $this->addRepresentative($representative);
+    }
+
+    private function removeMartinsRepresentative()
+    {
+        foreach($this->getRepresentatives() as $representative) {
+            $supplier = $representative->getSupplier();
+            if(!$supplier->isRca())
+                continue;
+
+            $representative->setDeleted(true);
+        }
     }
 }
