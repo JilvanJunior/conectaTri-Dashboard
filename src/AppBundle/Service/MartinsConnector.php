@@ -18,7 +18,7 @@ class MartinsConnector
      */
     public function __construct($chave = null, $user = null)
     {
-        $this->soap = new \SoapClient('http://service.martins.com.br/b2bservice.asmx?WSDL');
+        $this->soap = new \SoapClient('http://servicemarketup.martins.com.br/b2bservice.asmx?WSDL');
         $this->chave = $chave;
         $this->user = $user;
     }

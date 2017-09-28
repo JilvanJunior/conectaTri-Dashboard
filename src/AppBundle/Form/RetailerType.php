@@ -29,6 +29,9 @@ class RetailerType extends AbstractType
             ->add('email', EmailType::class, array('label' => false, 'attr' => array('placeholder' => 'E-mail')))
             ->add('cep', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'CEP')))
             ->add('address', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Endereço')))
+            ->add('number', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Número')))
+            ->add('complement', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Complemento')))
+            ->add('district', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Bairro')))
             ->add('city', TextType::class, array('label' => false, 'attr' => array('placeholder' => 'Cidade')))
             ->add('state', EntityType::class, array(
                 'class' => 'AppBundle:State',
