@@ -11,6 +11,11 @@ class MartinsConnector
     private $user;
     private $acesso = null;
 
+    /**
+     * MartinsConnector constructor.
+     * @param string $chave
+     * @param Retailer $user
+     */
     public function __construct($chave = null, $user = null)
     {
         $this->soap = new \SoapClient('http://service.martins.com.br/b2bservice.asmx?WSDL');
@@ -18,22 +23,35 @@ class MartinsConnector
         $this->user = $user;
     }
 
+    /**
+     * @param string $chave
+     * @return $this
+     */
     public function setChave(string $chave)
     {
         $this->chave = $chave;
         return $this;
     }
 
+    /**
+     * @param Retailer $user
+     * @return $this
+     */
     public function setUser(Retailer $user)
     {
         $this->user = $user;
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function login()
     {
+        //TODO change $params['email']
         $params = $this->getDefaultParams();
-        $params['email'] = 'aline@martins.com.br';//$this->user->getEmail();
+        $params['email'] = 'aline@martins.com.br';
+        //$params['email'] = $this->user->getEmail();
 
         $acesso = $this->soap->logarUsuario($params)->logarUsuarioResult;
         $this->acesso = $acesso;
@@ -48,6 +66,10 @@ class MartinsConnector
         return $this->soap->consultarInfoMercadoriasPorCodigo($params)->consultarInfoMercadoriasPorCodigoResult->MercadoriasInformacoes;
     }
 
+    /**
+     * @param array $quantitiesByProduct
+     * @return array
+     */
     public function getMartinsInfos(array $quantitiesByProduct)
     {
         $params = $this->getDefaultParams();
@@ -77,6 +99,72 @@ class MartinsConnector
         return $infosById;
     }
 
+    /**
+     * @param array $quantitiesByProduct
+     * @return array
+     */
+    public function saveMartinsPedido(array $quantitiesByProduct)
+    {
+        $params = $this->getDefaultParams();
+        $params += $this->getExtraParams();
+
+        $products = [];
+        $idsByMartins = [];
+        foreach($quantitiesByProduct as $id => $quantityProduct) {
+            $idMartins = $quantityProduct['idMartins'];
+            $idsByMartins[$idMartins] = $id;
+            $products[$id] = [
+                'CodigoMercadoria' => $idMartins,
+                'Quantidade' => $quantityProduct['quantity']
+            ];
+        }
+
+        $params['produtos'] = $products;
+
+        $infos = $this->soap->cadastrarPedido($params)->cadastrarPedidoResult;
+        if(!is_array($infos))
+            $infos = [$infos];
+
+        return $infos;
+    }
+
+    /**
+     * @param array $quantitiesByProduct
+     * @return array
+     */
+    public function getMartinsEstoque(array $quantitiesByProduct)
+    {
+        $params = $this->getDefaultParams();
+        $params += $this->getExtraParams();
+
+        $products = [];
+        $idsByMartins = [];
+        foreach($quantitiesByProduct as $id => $quantityProduct) {
+            $idMartins = $quantityProduct['idMartins'];
+            $idsByMartins[$idMartins] = $id;
+            $products[$id] = [
+                'CodigoMercadoria' => $idMartins,
+                'Quantidade' => $quantityProduct['quantity']
+            ];
+        }
+
+        $params['produtos'] = array_values($products);
+
+        $infos = $this->soap->consultarEstoque($params)->consultarEstoqueResult->Estoque->Estoque;
+        if(!is_array($infos))
+            $infos = [$infos];
+        $infosById = [];
+        foreach($infos as $info) {
+            $infosById[$idsByMartins[$info->CodigoMercadoria]] = $info;
+        }
+
+        return $infosById;
+    }
+
+    /**
+     * @param array $products
+     * @return array
+     */
     public function getProductInfoByEan(array $products)
     {
         $params = $this->getDefaultParams();
@@ -105,6 +193,10 @@ class MartinsConnector
         return $infos;
     }
 
+    /**
+     * @param array $products
+     * @return array
+     */
     public function getMartinsCodeByEan(array $products)
     {
         $results = $this->getProductInfoByEan($products);
@@ -118,6 +210,9 @@ class MartinsConnector
         return $codes;
     }
 
+    /**
+     * @return array
+     */
     public function getMartinsBoletos()
     {
         $params = $this->getDefaultParams();
@@ -136,6 +231,7 @@ class MartinsConnector
 
     private function getDefaultParams()
     {
+        //TODO change cnpj
         $params = [
             'chpac' => $this->chave,
             'cnpj' => '11822193000182',//$this->user->getCnpj(),
@@ -145,6 +241,9 @@ class MartinsConnector
         return $params;
     }
 
+    /**
+     * @return array
+     */
     private function getExtraParams()
     {
         if(is_null($this->acesso))

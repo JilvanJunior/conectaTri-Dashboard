@@ -6,8 +6,8 @@
 
 {% block page_plugins %}
     <link href="{{ asset('assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/global/plugins/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+
 {% endblock %}
 
 {% block page %}
@@ -232,6 +232,47 @@
             pointer-events: none;
             cursor: default;
         }
+        td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        th {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .dataTables_filter{
+
+            padding-right: 40px;
+
+        }
+        .datatable-plus-button{
+
+            padding-top: 5px;
+            top: 14px;
+            padding-bottom: 5px;
+            padding-right: 9px;
+            background: #40AE40;
+
+
+
+        }
+        .datatable-plus-button::before {
+
+            font-family: fontAwesome;
+            content: "\f067\00a0";
+            color: white;
+            background-color: transparent;
+
+        }
+
+        .text-area{
+            width: 284px;
+            border: 1px solid #40AE40;
+            padding-top: 14px;
+
+        }
+
+
 
     </style>
 
@@ -335,6 +376,17 @@
                                                                 </div>
                                                             </div>
 
+
+                                                            <ul class="pager wizard">
+
+                                                                <li class="previous first" style="display:none;"><a href="#">Início</a></li>
+                                                                <li class="previous"   id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
+                                                                <li class="next last" style="display:none;"><a href="#">Último</a></li>
+
+                                                                <li class="next" id="advance"><a class="btn btn-circle green-conecta pull-right disabled" href="#" style="margin-right: 5px;margin-bottom: 5px;">Próximo</a></li>
+
+                                                            </ul>
+
                                                             <div class="tab-content">
 
                                                                 <!-- BEGIN COTACAO STEP-->
@@ -393,9 +445,10 @@
 
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
-                                                                                            <div class="form-group datetimepicker3 text ">
-                                                                                                <label for="datetimepicker3">Prazo de pagamento</label>
-                                                                                                <input class="form-control " type="text" id="datetimepicker3" name="payment-date" required />
+                                                                                            <div class="form-group prazo text ">
+                                                                                                <label for="prazo">Prazo de pagamento</label>
+                                                                                                <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date"  >
+                                                                                                </textarea>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -433,7 +486,7 @@
                                                                                 <th>E-mail</th>
                                                                                 <th>CNPJ</th>
                                                                                 <th>Telefone</th>
-                                                                                <th></th>
+                                                                                <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllReprensentative" type="checkbox"   /> <span></span></th>
 
                                                                             </tr>
                                                                             </thead>
@@ -448,7 +501,7 @@
                                                                                             <td class="numeric"> {{ supplier.cnpj }} </td>
                                                                                             <td class="numeric"> {{ representative.phone }} </td>
                                                                                             <td>
-                                                                                                <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ supplier.id }}" name="test" /> <span></span>
+                                                                                                <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkRepresentative" value="{{ supplier.id }}"  /> <span></span>
                                                                                             </td>
 
                                                                                         </tr>
@@ -470,7 +523,7 @@
                                                                                 <th> Descrição </th>
                                                                                 <th> Tipo </th>
                                                                                 <th> Itens </th>
-                                                                                <th></th>
+                                                                                <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllListing" type="checkbox" name="test" /> <span></span></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -484,7 +537,7 @@
                                                                                         <td>{{ types[listing.type] }}</td>
                                                                                         <td>{{ listing.listingProducts|length }}</td>
                                                                                         <td>
-                                                                                            <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ listing.id }}" name="test" /> <span></span>
+                                                                                            <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ listing.id }}" name="chkListing" /> <span></span>
                                                                                         </td>
                                                                                     </tr>
                                                                                 {% endfor %}
@@ -494,6 +547,9 @@
 
                                                                     </div>
                                                                 </div>
+
+
+
 
                                                                 <div class="tab-pane" id="tab4">
                                                                     <div class="wizard-container">
@@ -505,7 +561,7 @@
                                                                                 <th> Tipo </th>
                                                                                 <th> Fabricante </th>
                                                                                 <th> Embalagem de Compra </th>
-                                                                                <th> </th>
+                                                                                <th><label class="mt-checkbox mt-checkbox-outline"/>  <input  type="checkbox"  name="selectAllProducts" /> <span></span></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -517,7 +573,7 @@
                                                                                     <td> {{ product.brand }} </td>
                                                                                     <td> {{ product.unit }} {{ product.quantity }} </td>
                                                                                     <td>
-                                                                                        <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ product.id }}" name="test" /> <span></span>
+                                                                                        <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ product.id }}" name="chkProducts" /> <span></span>
                                                                                     </td>
 
                                                                                 </tr>
@@ -618,15 +674,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <ul class="pager wizard">
 
-                                                                    <li class="previous first" style="display:none;"><a href="#">Início</a></li>
-                                                                    <li class="previous"   id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
-                                                                    <li class="next last" style="display:none;"><a href="#">Último</a></li>
-
-                                                                    <li class="next" id="advance"><a class="btn btn-circle green-conecta pull-right disabled" href="#" style="margin-right: 5px;margin-bottom: 5px;">Próximo</a></li>
-
-                                                                </ul>
                                                             </div>
                                                         </div>
 
@@ -680,8 +728,6 @@
     <script src="{{ asset('assets/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/localization/messages_pt_BR.min.js') }}" type="text/javascript"></script>
 
@@ -742,6 +788,14 @@
             }
         }
 
+        function selectAll(topCheck,checks){
+            $("[name='" + topCheck + "']").click(function() {
+                var checkBoxes = $("[name='" + checks + "']");
+                checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+            })
+        }
+
+
 
 
 
@@ -749,14 +803,6 @@
 
 
         $(document).ready(function() {
-
-
-
-
-
-
-
-
             //BEGIN WIZARD METHODS
             $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
                 var currentStep = navigation.find('li');
@@ -875,6 +921,9 @@
 
 
             }});
+
+
+
         });
 
 
@@ -904,18 +953,41 @@
             }
         });
 
+        $('#datetimepicker1').datetimepicker(
+            'setDate', (new Date()),
+            {format: 'dd/mm/yyyy hh:ii'}
+        );
+        $('.datetimepicker1.text').addClass('typing');
+
+
+
         $('#datetimepicker2').change(function(){
             $('.datetimepicker2.text').addClass('typing');
             if( $(this).val().length == 0 ) {
                 $('.datetimepicker2.text').removeClass('typing');
             }
         });
-        $('#datetimepicker3').change(function(){
-            $('.datetimepicker3.text').addClass('typing');
-            if( $(this).val().length == 0 ) {
-                $('.datetimepicker3.text').removeClass('typing');
-            }
-        });
+
+
+
+
+        //cotacao field default value
+
+        var d = new Date();
+
+        var month = d.getMonth()+1;
+        var day = d.getDate();
+        var hours = d.getHours()
+        var minutes = d.getMinutes()
+
+        var output = "Cotação " + ((''+day).length<2 ? '0' : '') + day + '/' +
+            ((''+month).length<2 ? '0' : '') + month + ", " +
+            hours + ":" + minutes;
+
+        $("#cotacao").val(output);
+        $('.cotacao.text').addClass('typing');
+
+
 
 
         //BEGIN FLOAT LABEL METHODS
@@ -923,6 +995,13 @@
             $('.cotacao.text').addClass('typing');
             if( $(this).val().length == 0 ) {
                 $('.cotacao.text').removeClass('typing');
+            }
+        });
+
+        $('#prazo').keyup(function(){
+            $('.prazo.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.prazo.text').removeClass('typing');
             }
         });
         //END FLOAT LABEL METHODS
@@ -940,8 +1019,35 @@
                         1: "1 linha selecionada"
                     }
                 }
-            }
+            },
+            dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
+            buttons: [
+                {
+                    text: '',
+                    className: 'datatable-plus-button '
+                    // action: function ( e, dt, node, config ) {
+                     //   console.log(dt);
+                    //}
+                }
+            ],
+            "columnDefs": [
+                { "orderable": false, "targets": 5 }
+            ]
+
         } );
+
+        /*
+
+         padding-top: 5px;
+         top: 14px;
+         padding-bottom: 5px;
+
+         */
+
+        //select all function
+        selectAll("selectAllReprensentative","chkRepresentative");
+
+
         // END REPRESENTATIVE TABLE
 
 
@@ -956,8 +1062,25 @@
                         1: "1 linha selecionada"
                     }
                 }
-            }
+            },
+            dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
+            buttons: [
+                {
+                    text: '',
+                    className: 'datatable-plus-button '
+                    // action: function ( e, dt, node, config ) {
+                    //   console.log(dt);
+                    //}
+                }
+            ],
+            "columnDefs": [
+                { "orderable": false, "targets": 4 }
+            ]
         } );
+
+        //select all function
+        selectAll("selectAllListing","chkListing");
+
         // END LISTING TABLE
 
 
@@ -972,9 +1095,29 @@
                         1: "1 linha selecionada"
                     }
                 }
-            }
+            },
+            dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
+            buttons: [
+                {
+                    text: '',
+                    className: 'datatable-plus-button '
+                    // action: function ( e, dt, node, config ) {
+                    //   console.log(dt);
+                    //}
+                }
+            ],
+            "columnDefs": [
+                { "orderable": false, "targets": 5 }
+            ]
         } );
+
+        //select all function
+        selectAll("selectAllProducts","chkProducts");
+
         // END PRODUCTS TABLE
+
+
+
 
     </script>
 
