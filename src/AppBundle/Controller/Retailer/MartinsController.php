@@ -28,6 +28,7 @@ class MartinsController extends Controller
 
         return $this->render('Retailer/martins/boletos.html.twig', [
             'boletos' => $boletos,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -54,6 +55,7 @@ class MartinsController extends Controller
         return $this->render('Retailer/martins/pedidos.html.twig', [
             'pedidos' => $pedidos,
             'types' => $types,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }

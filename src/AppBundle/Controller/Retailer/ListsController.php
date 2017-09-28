@@ -31,6 +31,8 @@ class ListsController extends Controller
         return $this->render('Retailer/lists/index.html.twig', [
             'listings' => $listings,
             'types' => $types,
+            'username' => $user->getFantasyName(),
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -79,6 +81,8 @@ class ListsController extends Controller
 
         return $this->render('Retailer/lists/addList.html.twig', [
             'types' => $types,
+            'username' => $user->getFantasyName(),
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -125,6 +129,7 @@ class ListsController extends Controller
             'listing' => $listing,
             'listingProducts' => $listingProducts,
             'products' => $products,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -194,6 +199,7 @@ class ListsController extends Controller
 
         return $this->render('Retailer/lists/listingProducts.html.twig', [
             'listing' => $listing,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }

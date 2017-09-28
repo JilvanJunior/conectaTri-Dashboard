@@ -21,6 +21,7 @@ class ProductsController extends Controller
 
         return $this->render('Retailer/products/index.html.twig', [
             'products' => $products,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -62,6 +63,7 @@ class ProductsController extends Controller
 
         return $this->render('Retailer/products/addProducts.html.twig', [
             'products' => $products,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -102,6 +104,7 @@ class ProductsController extends Controller
 
         return $this->render('Retailer/products/addProducts.html.twig', [
             'product' => $product,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
