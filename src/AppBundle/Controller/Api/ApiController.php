@@ -1013,7 +1013,7 @@ class ApiController extends FOSRestController {
     /**
      * @Rest\Get("/api/quote/{id}/updated")
      */
-    public function getQuoteLink(Request $request, $id) {
+    public function updateQuote(Request $request, $id) {
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $token = $request->headers->get("Api-Token");
