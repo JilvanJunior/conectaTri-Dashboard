@@ -121,7 +121,7 @@ class ApiController extends FOSRestController {
                         $saida[$var_name] = $var;
                     $saidaAcesso[] = $saida;
                 }
-                
+
                 $retorno['condicoesMartins'] = $saidaAcesso;
             }
         }
@@ -2054,7 +2054,7 @@ class ApiController extends FOSRestController {
             $em->persist($martinsOrder);
             $em->flush();
         } else {
-            return View::create(new ApiError("Pedido não cadastrado!"), Response::HTTP_BAD_REQUEST);
+            return View::create(new ApiError($order->Mensagem), Response::HTTP_BAD_REQUEST);
         }
 
         $output = [];

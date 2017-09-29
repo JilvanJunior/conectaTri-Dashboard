@@ -125,15 +125,13 @@ class MartinsConnector
         $params['produtos'] = $products;
 
         $infos = $this->soap->cadastrarPedido($params)->cadastrarPedidoResult;
-        if(!is_array($infos))
-            $infos = [$infos];
 
         return $infos;
     }
 
     /**
      * @param array $quantitiesByProduct
-     * @return array
+     * @return \stdClass
      */
     public function getMartinsEstoque(array $quantitiesByProduct)
     {
