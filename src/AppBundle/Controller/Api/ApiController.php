@@ -98,8 +98,10 @@ class ApiController extends FOSRestController {
         $em->persist($session);
         $em->flush();
         return View::create([
-            "token" => $session->getToken(),
-            "isRCAVirtual" => $dbUser->isRCAVirtual()
+            'token' => $session->getToken(),
+            'isRCAVirtual' => $dbUser->isRCAVirtual(),
+            'chpac' => $this->getParameter('chave_martins'),
+            'email' => $user->getEmail()
         ], Response::HTTP_OK);
     }
 
