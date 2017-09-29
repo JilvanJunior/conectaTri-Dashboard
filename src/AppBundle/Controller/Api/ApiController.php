@@ -873,6 +873,134 @@ class ApiController extends FOSRestController {
     }
 
     /**
+     * @Rest\Get("/api/quote/current/product/{id}")
+     */
+    public function getCurrentQuotesByProduct(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $quoteProducts = $d->getRepository('AppBundle:QuoteProduct')->findBy(['product' => $id]);
+
+        $quotesIds = array();
+
+        /** @var QuoteProduct $quoteProduct */
+        foreach ($quoteProducts as $quoteProduct) {
+            $quotesIds[] = $quoteProduct->getQuote()->getId();
+        }
+
+        $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
+            ->where("q.expiresAt > :date")
+            ->andWhere("q.deleted = FALSE")
+            ->andWhere("q.closed = FALSE")
+            ->andWhere("q.retailer = :retailer")
+            ->andWhere("q.id IN (:quotes)")
+            ->setParameter("date", new \DateTime())
+            ->setParameter("retailer", $dbToken->getRetailer())
+            ->setParameter("quotes", $quotesIds)
+            ->orderBy("q.createdAt", "DESC")
+            ->getQuery()->getResult();
+        $responseArray = [];
+        foreach($quotes as $quote) {
+            $em->detach($quote);
+            if (!$quote->isDeleted()) {
+                foreach ($quote->getQuoteProducts() as $product) {
+                    $em->detach($product);
+                    if (!$product->isDeleted()) {
+                        foreach ($product->getQuoteSuppliers() as $supplier) {
+                            $em->detach($supplier);
+                            if ($supplier->getRepresentative()->isDeleted())
+                                $product->removeQuoteSupplier($supplier);
+                            /* TODO: Add this
+                            else
+                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
+                            */
+                        }
+                    } else {
+                        $quote->removeQuoteProduct($product);
+                    }
+                }
+                $responseArray[] = $quote;
+            }
+        }
+        return View::create($responseArray, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/api/quote/closed/product/{id}")
+     */
+    public function getClosedQuotesByProduct(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $quoteProducts = $d->getRepository('AppBundle:QuoteProduct')->findBy(['product' => $id]);
+
+        $quotesIds = array();
+
+        /** @var QuoteProduct $quoteProduct */
+        foreach ($quoteProducts as $quoteProduct) {
+            $quotesIds[] = $quoteProduct->getQuote()->getId();
+        }
+
+        $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
+            ->where("q.expiresAt < :date")
+            ->andWhere("q.deleted = FALSE")
+            ->andWhere("q.retailer = :retailer")
+            ->orWhere("q.closed = TRUE")
+            ->andWhere("q.retailer = :retailer")
+            ->andWhere("q.deleted = FALSE")
+            ->andWhere("q.id IN (:quotes)")
+            ->setParameter("date", new \DateTime())
+            ->setParameter("retailer", $dbToken->getRetailer())
+            ->setParameter("quotes", $quotesIds)
+            ->orderBy("q.createdAt", "DESC")
+            ->getQuery()->getResult();
+        $responseArray = [];
+        foreach($quotes as $quote) {
+            $em->detach($quote);
+            if (!$quote->isDeleted()) {
+                foreach ($quote->getQuoteProducts() as $product) {
+                    $em->detach($product);
+                    if (!$product->isDeleted()) {
+                        foreach ($product->getQuoteSuppliers() as $supplier) {
+                            $em->detach($supplier);
+                            if ($supplier->getRepresentative()->isDeleted())
+                                $product->removeQuoteSupplier($supplier);
+                            /* TODO: Add this
+                            else
+                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
+                            */
+                        }
+                    } else {
+                        $quote->removeQuoteProduct($product);
+                    }
+                }
+                $responseArray[] = $quote;
+            }
+        }
+        return View::create($responseArray, Response::HTTP_OK);
+    }
+
+    /**
      * @Rest\Get("/api/quote/{id}/link")
      */
     public function getQuoteLink(Request $request, $id) {
