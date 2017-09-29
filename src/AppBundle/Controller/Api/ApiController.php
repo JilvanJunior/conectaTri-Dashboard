@@ -1946,18 +1946,74 @@ class ApiController extends FOSRestController {
         $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
         $acesso = $mc->login();
 
-        $products = json_decode($request->getContent());
+        $productsData = json_decode($request->getContent());
 
-        //verifica se tem estoque e preco igual
+        $productsIds = [];
+        $quantitiesByProduct = [];
+        $quantitiesAndPrices = [];
+        foreach($productsData as $productData) {
+            $productsIds[] = $productData->id;
+
+            $quantitiesByProduct[$productData->id] = [
+                'idMartins' => 0,
+                'quantity' => $productData->quantity,
+            ];
+            $quantitiesAndPrices[$productData->id] = [
+                'quantity' => $productData->quantity,
+                'price' => $productData->price
+            ];
+        }
+
+        $products = $d->getRepository('AppBundle:Product')->findById($productsIds);
+
+        $codes = $mc->getMartinsCodeByEan($products);
+        if(empty($codes))
+            return View::create(new ApiError("Nenhum produto encontrado"), Response::HTTP_BAD_REQUEST);
+
+        foreach($codes as $key => $code) {
+            $quantitiesByProduct[$key]['idMartins'] = $code;
+        }
+
+        //check if product has stock and price not changed
+        $hasStock = true;
+        $priceChange = false;
+        $productsChange = array();
+        $mercadorias = $mc->getMartinsInfos($quantitiesByProduct);
+        foreach($mercadorias as $key => $mercadoria) {
+            if($quantitiesAndPrices[$key]['price'] != $mercadoria->PrecoNormal){
+                $priceChange = true;
+                $productsChange[$key] =  $mercadoria->CodigoMercadoria;
+            }
+            if(!$mercadoria->Estoque){
+                $hasStock = false;
+                $productsChange[$key] =  $mercadoria->CodigoMercadoria;
+            }
+        }
+        if($priceChange)
+            return View::create(new ApiError("Alguns produtos tiveram alteração no preço: "
+                . implode(", ", $productsChange)), Response::HTTP_BAD_REQUEST);
+        if(!$hasStock)
+            return View::create(new ApiError("Alguns produtos não tem estoque: "
+                . implode(", ", $productsChange)), Response::HTTP_BAD_REQUEST);
 
         //faz pedido na martins
+        $order = $mc->saveMartinsPedido($quantitiesByProduct);
+        if($order->Status == 0 || $order->Status == 2){
+            $martinsOrder = new MartinsOrder();
+            $martinsOrder->setCode($order->Pedido->Codigo);
+            $martinsOrder->setLinkToBill($order->LinkBoleto);
+            $martinsOrder->setRetailer($user);
+            $em->persist($martinsOrder);
+            $em->flush();
+        } else {
+            return View::create(new ApiError("Pedido não cadastrado!"), Response::HTTP_BAD_REQUEST);
+        }
 
-        //salva informacoes do pedido
+        $output = [];
+        foreach(get_object_vars($order) as $varName => $var)
+            $output[$varName] = $var;
 
-        //retorna pedido salvo
-
-
-        return View::create(array(), Response::HTTP_OK);
+        return View::create($output, Response::HTTP_OK);
     }
 
     /**
