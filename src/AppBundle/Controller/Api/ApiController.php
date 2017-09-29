@@ -97,12 +97,36 @@ class ApiController extends FOSRestController {
         $session->setRetailer($dbUser);
         $em->persist($session);
         $em->flush();
-        return View::create([
+
+        $retorno = [
             'token' => $session->getToken(),
             'isRCAVirtual' => $dbUser->isRCAVirtual(),
             'chpac' => $this->getParameter('chave_martins'),
             'email' => $dbUser->getEmail()
-        ], Response::HTTP_OK);
+        ];
+
+        if($dbUser->isRCAVirtual()) {
+            $mc = new MartinsConnector($this->getParameter('chave_martins'), $dbUser);
+            $acesso = $mc->login();
+
+            if(property_exists($acesso, 'Login')) {
+                $saidaAcesso = [];
+                $condicoes = $acesso->Login->CondicoesPagamento->CondPgto;
+                if(!is_array($condicoes))
+                    $condicoes = [$condicoes];
+
+                foreach($condicoes as $condicao) {
+                    $saida = [];
+                    foreach (get_object_vars($condicao) as $var_name => $var)
+                        $saida[$var_name] = $var;
+                    $saidaAcesso[] = $saida;
+                }
+                
+                $retorno['condicoesMartins'] = $saidaAcesso;
+            }
+        }
+
+        return View::create($retorno, Response::HTTP_OK);
     }
 
     /**
@@ -1008,6 +1032,30 @@ class ApiController extends FOSRestController {
     public function getQuoteLink(Request $request, $id) {
         $url = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
         return View::create($url, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/api/quote/{id}/updated")
+     */
+    public function updateQuote(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $dbQuote = $d->getRepository("AppBundle:Quote")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
+        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'));
+        $em->flush();
+
+        return View::create($dbQuote, Response::HTTP_OK);
     }
 
     /**

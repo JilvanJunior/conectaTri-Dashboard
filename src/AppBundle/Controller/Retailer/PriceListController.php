@@ -109,7 +109,8 @@ class PriceListController extends Controller
         $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', [
-
+            'username' => $user->getFantasyName(),
+            'userIsRCA' => $user->isRCAVirtual(),
             'token' => $token->getToken()
         ]);
     }
