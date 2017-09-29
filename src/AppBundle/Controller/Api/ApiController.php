@@ -97,12 +97,36 @@ class ApiController extends FOSRestController {
         $session->setRetailer($dbUser);
         $em->persist($session);
         $em->flush();
-        return View::create([
+
+        $retorno = [
             'token' => $session->getToken(),
             'isRCAVirtual' => $dbUser->isRCAVirtual(),
             'chpac' => $this->getParameter('chave_martins'),
             'email' => $dbUser->getEmail()
-        ], Response::HTTP_OK);
+        ];
+
+        if($dbUser->isRCAVirtual()) {
+            $mc = new MartinsConnector($this->getParameter('chave_martins'), $dbUser);
+            $acesso = $mc->login();
+
+            if(property_exists($acesso, 'Login')) {
+                $saidaAcesso = [];
+                $condicoes = $acesso->Login->CondicoesPagamento->CondPgto;
+                if(!is_array($condicoes))
+                    $condicoes = [$condicoes];
+
+                foreach($condicoes as $condicao) {
+                    $saida = [];
+                    foreach (get_object_vars($condicao) as $var_name => $var)
+                        $saida[$var_name] = $var;
+                    $saidaAcesso[] = $saida;
+                }
+                
+                $retorno['condicoesMartins'] = $saidaAcesso;
+            }
+        }
+
+        return View::create($retorno, Response::HTTP_OK);
     }
 
     /**
