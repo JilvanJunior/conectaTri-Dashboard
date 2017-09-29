@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Retailer;
 
+use AppBundle\Entity\ApiSession;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Quote;
 use AppBundle\Entity\QuoteProduct;
@@ -99,25 +100,15 @@ class PriceListController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getTables(Request $request)
+    public function getRestApiToken(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
-        $products = $user->getProducts();
-        $listings = $this->getDoctrine()->getRepository('AppBundle:Listing')->findBy(['retailer' => $user, 'deleted' => false]);
-
-        //type of listings
-        $types = [];
-        $types['0'] = 'Não Informado';
-        $types['1'] = 'Comum';
-        $types['2'] = 'Sazonal';
-        $types['3'] = 'Semanal';
+        $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', [
-            'products' => $products,
-            'suppliers' => $suppliers,
-            'listings' => $listings,
-            'types' => $types
+
+            'token' => $token->getToken()
         ]);
     }
 
