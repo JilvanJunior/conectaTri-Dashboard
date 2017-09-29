@@ -18,10 +18,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PriceListController extends Controller
 {
-
-
-
-
     /**
      * @Route("/varejista/cotacoes", name="cotacoes")
      * @param Request $request
@@ -48,50 +44,6 @@ class PriceListController extends Controller
             'quotes' => $quotes,
             'types' => $types,
             'status' => $status,
-            'username' => $user->getFantasyName(),
-            'userIsRCA' => $user->isRCAVirtual(),
-        ]);
-    }
-
-    /**
-     * @Route("/varejista/cotacao/remota/nova", name="nova_cotacao_remota")
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function addRemoteAction(Request $request)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        if($request->getMethod() == "POST"){
-            $em = $this->getDoctrine()->getManager();
-
-            $quote = new Quote();
-            $quote->setName($request->get('name'));
-            $quote->setClosed(false);
-            $quote->setType(1);
-            $quote->setRetailer($user);
-            $beginsAt = date_create_from_format('d/m/Y H:i', $request->get('begins-at'));
-            $quote->setBeginsAt($beginsAt);
-            $expiresAt = date_create_from_format('d/m/Y H:i', $request->get('expires-at'));
-            $quote->setExpiresAt($expiresAt);
-            if($request->get('payment-date')) {
-                $paymentDate = date_create_from_format('d/m/Y H:i', $request->get('payment-date'));
-                $quote->setExpiresAt($paymentDate);
-            }
-
-            $em->persist($quote);
-
-            $em->flush();
-
-            $this->addFlash(
-                'info',
-                'Selecione as listas de produtos para adicionar à cotação.'
-            );
-
-            return $this->redirectToRoute('cotacao_listas', ['id' => $quote->getId()]);
-        }
-
-        return $this->render('Retailer/pricelist/addPriceList.html.twig', [
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);

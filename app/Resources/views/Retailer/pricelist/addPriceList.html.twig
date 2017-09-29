@@ -317,9 +317,6 @@
                             <!-- END PAGE BREADCRUMBS -->
                             <!-- BEGIN PAGE CONTENT INNER -->
                             <div class="page-content-inner">
-
-
-
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="tabbable-line boxless tabbable-reversed">
@@ -331,11 +328,7 @@
                                                                 <i class="fa fa-gift"></i><span id="wizardStepLabel">Dados da Cotação</span>
                                                             </div>
                                                         </div>
-
-
-
                                                         <!-- BEGIN WIZARD-->
-
                                                         <div id="rootwizard">
                                                             <div class="navbar" style="border-top-width: 0px;border-left-width: 0px;border-right-width: 0px;">
                                                                 <div class="navbar-inner portlet-title">
@@ -376,21 +369,15 @@
                                                                 </div>
                                                             </div>
 
-
                                                             <ul class="pager wizard">
-
                                                                 <li class="previous first" style="display:none;"><a href="#">Início</a></li>
                                                                 <li class="previous"   id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
                                                                 <li class="next last" style="display:none;"><a href="#">Último</a></li>
-
                                                                 <li class="next" id="advance"><a class="btn btn-circle green-conecta pull-right disabled" href="#" style="margin-right: 5px;margin-bottom: 5px;">Próximo</a></li>
-
                                                             </ul>
 
                                                             <div class="tab-content">
-
                                                                 <!-- BEGIN COTACAO STEP-->
-
                                                                 <div class="tab-pane" id="tab1">
 
                                                                     <div class="portlet-body form">
@@ -425,11 +412,9 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-
                                                                                 </div>
 
                                                                                 <div class="row ">
-
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
                                                                                             <div class="form-group datetimepicker2 text ">
@@ -438,35 +423,20 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-
                                                                                 </div>
 
                                                                                 <div class="row ">
-
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
                                                                                             <div class="form-group prazo text ">
                                                                                                 <label for="prazo">Prazo de pagamento</label>
-                                                                                                <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date"  >
+                                                                                                <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date">
                                                                                                 </textarea>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-
-                                                                                </div>
-
-
-                                                                            </div>
-                                                                            <!--
-                                                                            <div class="form-actions">
-                                                                                <div class="row">
-                                                                                    <div class="col-md-offset-3 col-md-9">
-                                                                                        <button type="submit" class="btn btn-circle green-conecta">Salvar</button>
-                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                            -->
-
 
                                                                         </form>
                                                                         <!-- END FORM-->
@@ -671,27 +641,13 @@
                                                                                 </br>
                                                                                 <button  class="btn col-md-6 green-conecta">Enviar Para Fornecedor</button>
 
-
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
-
                                                             </div>
                                                         </div>
-
-
-
-
                                                         <!-- END WIZARD-->
-
-
-
-
-
-
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -716,21 +672,10 @@
         <symbol id="checkmark-bold" viewBox="0 0 24 24">
             <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
         </symbol>
-
-        <span>
-            {{ token }}
-        </span>
-
-
     </svg>
-
-
 {% endblock %}
 
-
-
 {% block script %}
-
     <script src="{{ asset('assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.pt-BR.js') }}" type="text/javascript" charset="UTF-8"></script>
     <script src="{{ asset('assets/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js') }}" type="text/javascript"></script>
@@ -738,7 +683,6 @@
     <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/localization/messages_pt_BR.min.js') }}" type="text/javascript"></script>
-
 
     <script>
         var token = "{{ token }}";
@@ -757,38 +701,31 @@
             });
         });
 
-        function setItensSuplliers(id,elementId){
-
-            var count = 0 ;
+        function setItensSuplliers(id,elementId) {
+            var count = 0;
 
             $.each($("#" + id + " tr").find("input"), function( index, value ) {
                 if ( $(this)["0"].checked ){
                     count = count + 1
                 };
             });
-            console.log(elementId + " " + count)
-            $("#" + elementId ).text(count)
-
-
+            $("#" + elementId ).text(count);
         }
 
         function setDateTime(id,elementId,format){
-            var formatted
-            var date = $("#"+id).data("datetimepicker").getDate()
+            var formatted;
+            var date = $("#"+id).data("datetimepicker").getDate();
 
-                if (format === "date"){
+            if (format === "date") {
+                formatted = " " +  date.getDate() + "/" +(date.getMonth() + 1) + "/" +  date.getFullYear();
+            } else {
+                formatted = " " +   date.getHours() + ":" + date.getMinutes() ;
+            }
 
-                    formatted = " " +  date.getDate() + "/" +(date.getMonth() + 1) + "/" +  date.getFullYear();
-
-                }else{
-                    formatted = " " +   date.getHours() + ":" + date.getMinutes() ;
-
-                }
-
-            $("#" + elementId ).text(formatted)
+            $("#" + elementId ).text(formatted);
         }
 
-        function stepFoward($bar){
+        function stepFoward($bar) {
             if ($bar.children(".is-current").length > 0) {
                 $bar.children(".is-current").removeClass("is-current").addClass("is-complete").next().addClass("is-current");
             } else {
@@ -796,19 +733,12 @@
             }
         }
 
-        function selectAll(topCheck,checks){
+        function selectAll(topCheck,checks) {
             $("[name='" + topCheck + "']").click(function() {
                 var checkBoxes = $("[name='" + checks + "']");
                 checkBoxes.prop("checked", !checkBoxes.prop("checked"));
             })
         }
-
-
-
-
-
-        //$("#advance").addClass("disabled")
-
 
         $(document).ready(function() {
             //BEGIN WIZARD METHODS
@@ -816,16 +746,13 @@
                 var currentStep = navigation.find('li');
                 currentStep.removeClass("active");
 
-
                 switch(index) {
                     case 0 :
-
                         $("#wizardStepLabel").text("Dados da Cotação");
                         $("#advance a").addClass('disabled');
+                        $("#previous").hide();
 
                         //BEGIN FORM VALIDATION
-
-
                         var cotacaoForm = $( "#cotacao_form" );
 
                         cotacaoForm.validate({
@@ -834,85 +761,63 @@
                             }
                         });
 
-
                         cotacaoForm.mouseout(function() {
-
                             var validationState = $('#cotacao_form').valid();
 
-                            if(validationState){
+                            if(validationState) {
                                 $("#advance").find("a").removeClass('disabled');
-
-
-
-
                             }
-
                         });
 
+                        if($('#cotacao_form').valid()) {
+                            $("#advance").find("a").removeClass('disabled');
+                        }
                         //END FORM VALIDATION
-
                         break;
-
                     case 1 :
-
                         $("#wizardStepLabel").text("Selecionar Fornecedor");
                         $("#advance a").addClass('disabled');
+                        $("#previous").show();
 
                         var representativeTable = $('#representative-datatable');
 
                         representativeTable.mouseout(function() {
-
                             if( representativeTable.find('tr').find("input").is(":checked") ){
-
                                 $("#advance").find("a").removeClass('disabled');
-
-
-
                             }
-
                         });
 
                         break;
                     case 2 :
-
                         $("#wizardStepLabel").text("Selecionar Lista");
                         $("#advance a").addClass('disabled');
 
                         var listingTable = $('#listing-datatable');
 
                         listingTable.mouseout(function() {
-
-                            if( listingTable.find('tr').find("input").is(":checked") ){
-
+                            if( listingTable.find('tr').find("input").is(":checked") ) {
                                 $("#advance").find("a").removeClass('disabled');
-
-
                             }
-
                         });
 
                         break;
                     case 3 :
                         $("#wizardStepLabel").text("Selecionar Produtos");
                         $("#advance a").addClass('disabled');
+                        $("#advance").show();
 
                         var productTable = $('#product-datatable');
 
                         productTable.mouseout(function() {
-
                             if( productTable.find('tr').find("input").is(":checked") ){
-
                                 $("#advance").find("a").removeClass('disabled');
-
-
                             }
-
                         });
 
                         break;
                     case 4 :
                         $("#wizardStepLabel").text("Confirmação dos Dados");
-                        $("#advance").hide()
+                        $("#advance").hide();
                         setDateTime("datetimepicker1","quote_start","date");
                         setDateTime("datetimepicker1","quote_start_time","time");
                         setDateTime("datetimepicker2","quote_end","date");
@@ -921,26 +826,13 @@
                         setItensSuplliers("product-datatable","quote_itens");
                         setItensSuplliers("representative-datatable","quote_suppliers");
                         break;
-                    default:
-
-                    //console.log("birl")
                 }
-
-
-
             }});
-
-
-
         });
 
-
-
         $("#advance").on("click", function() {
-
             var $bar = $(".ProgressBar");
-
-                stepFoward($bar);
+            stepFoward($bar);
         });
 
         $("#previous").on("click", function() {
@@ -967,8 +859,6 @@
         );
         $('.datetimepicker1.text').addClass('typing');
 
-
-
         $('#datetimepicker2').change(function(){
             $('.datetimepicker2.text').addClass('typing');
             if( $(this).val().length == 0 ) {
@@ -976,11 +866,7 @@
             }
         });
 
-
-
-
         //cotacao field default value
-
         var d = new Date();
 
         var month = d.getMonth()+1;
@@ -994,9 +880,6 @@
 
         $("#cotacao").val(output);
         $('.cotacao.text').addClass('typing');
-
-
-
 
         //BEGIN FLOAT LABEL METHODS
         $('#cotacao').keyup(function(){
@@ -1014,10 +897,9 @@
         });
         //END FLOAT LABEL METHODS
 
-
-
         // BEGIN REPRESENTATIVE TABLE
         $('#representative-datatable').dataTable( {
+            autoWidth: false,
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
                 select: {
@@ -1029,54 +911,43 @@
                 }
             },
             ajax: {
-                            url: "/api/representative",
-                            type: 'GET',
-                           dataSrc: "",
-                           beforeSend : function(xhr) {
-                               xhr.setRequestHeader('Api-Token', token);
-                           }
+                url: "/api/representative",
+                type: 'GET',
+                dataSrc: "",
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader('Api-Token', token);
+                }
             },
-                   columns: [
-                       { "data": "name" },
-                       { "data": "contact_name" },
-                            { "data": "contact_email" },
-                            { "data": "cnpj"},
-                            { "data": "contact_email"},
-                            { "data": "id",
-                                "orderable": false ,
-                                "className": "dt-center",
-                                "render": function ( data, type, row ) {
-                                    return ' <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkRepresentative" value="' + data + '"  /> <span></span>'
-                                }
-                        }
-
-                       ],
+            columns: [
+                { "data": "name" },
+                { "data": "contact_name" },
+                { "data": "contact_email" },
+                { "data": "cnpj"},
+                { "data": "contact_email"},
+                { "data": "id",
+                    "orderable": false ,
+                    "className": "dt-center",
+                    "render": function ( data, type, row ) {
+                        return ' <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkRepresentative" value="' + data + '"  /> <span></span>'
+                    }
+                }
+            ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
             buttons: [
                 {
                     text: '',
                     className: 'datatable-plus-button '
-                    // action: function ( e, dt, node, config ) {
-                     //   console.log(dt);
-                    //}
                 }
             ],
-
-
-
-        } );
-
-
+        });
 
         //select all function
         selectAll("selectAllReprensentative","chkRepresentative");
-
-
         // END REPRESENTATIVE TABLE
 
-
         // BEGIN LISTING TABLE
-        $('#listing-datatable').dataTable( {
+        $('#listing-datatable').dataTable({
+            autoWidth: false,
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
                 select: {
@@ -1088,51 +959,48 @@
                 }
             },
             ajax: {
-                            url: "/api/listing",
-                            type: 'GET',
-                            dataSrc: "",
-                            beforeSend : function(xhr) {
-                                xhr.setRequestHeader('Api-Token', token);
-                            }
-                    },
-                    columns: [
-                        { "data": "name" },
-                        { "data": "description" },
-                        { "data": "type" },
-                        { "data": "listing_products",
-                            "render": function ( data, type, row ) {
-                                return data.length;
-                            }
-                    },
-                    { "data": "id",
-                            "orderable": false ,
-                                "className": "dt-center",
-                                "render": function ( data, type, row ) {
-                                    return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkListing" value="' + data + '"  /> <span></span>';
-                                }
-                        }
+                url: "/api/listing",
+                type: 'GET',
+                dataSrc: "",
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader('Api-Token', token);
+                }
+            },
+            columns: [
+                { "data": "name" },
+                { "data": "description" },
+                { "data": "type" },
+                { "data": "listing_products",
+                    "render": function ( data, type, row ) {
+                        return data.length;
+                    }
+                },
+                {
+                    "data": "id",
+                    "orderable": false ,
+                    "className": "dt-center",
+                    "render": function ( data, type, row ) {
+                        return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkListing" value="' + data + '"  /> <span></span>';
+                    }
+                }
 
-                    ],
+            ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
             buttons: [
                 {
                     text: '',
                     className: 'datatable-plus-button '
-                    // action: function ( e, dt, node, config ) {
-                    //   console.log(dt);
-                    //}
                 }
             ]
         } );
 
         //select all function
         selectAll("selectAllListing","chkListing");
-
         // END LISTING TABLE
 
-
         // BEGIN PRODUCTS TABLE
-        $('#product-datatable').dataTable( {
+        $('#product-datatable').dataTable({
+            autoWidth: false,
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
                 select: {
@@ -1144,36 +1012,33 @@
                 }
             },
             ajax: {
-                            url: "/api/product",
-                            type: 'GET',
-                           dataSrc: "",
-                            beforeSend : function(xhr) {
-                                xhr.setRequestHeader('Api-Token', token);
-                            }
-                    },
-                    columns: [
-                            { "data": "id" },
-                            { "data": "name" },
-                            { "data": "type" },
-                            { "data": "brand"},
-                            { "data": "unit"},
-                            { "data": "id",
-                                "orderable": false ,
-                                "className": "dt-center",
-                                "render": function ( data, type, row ) {
-                                    return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkProducts" value="' + data + '"  /> <span></span>';
-                                }
+                url: "/api/product",
+                type: 'GET',
+               dataSrc: "",
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader('Api-Token', token);
+                }
+            },
+            columns: [
+                    { "data": "id" },
+                    { "data": "name" },
+                    { "data": "type" },
+                    { "data": "brand"},
+                    { "data": "unit"},
+                    { "data": "id",
+                        "orderable": false ,
+                        "className": "dt-center",
+                        "render": function ( data, type, row ) {
+                            return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkProducts" value="' + data + '"  /> <span></span>';
                         }
+                }
 
-                        ],
+            ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
             buttons: [
                 {
                     text: '',
-                    className: 'datatable-plus-button '
-                    // action: function ( e, dt, node, config ) {
-                    //   console.log(dt);
-                    //}
+                    className: 'datatable-plus-button'
                 }
             ]
         } );
@@ -1182,10 +1047,5 @@
         selectAll("selectAllProducts","chkProducts");
 
         // END PRODUCTS TABLE
-
-
-
-
     </script>
-
 {% endblock %}
