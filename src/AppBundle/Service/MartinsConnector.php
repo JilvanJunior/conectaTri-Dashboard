@@ -125,15 +125,13 @@ class MartinsConnector
         $params['produtos'] = $products;
 
         $infos = $this->soap->cadastrarPedido($params)->cadastrarPedidoResult;
-        if(!is_array($infos))
-            $infos = [$infos];
 
         return $infos;
     }
 
     /**
      * @param array $quantitiesByProduct
-     * @return array
+     * @return \stdClass
      */
     public function getMartinsEstoque(array $quantitiesByProduct)
     {
@@ -197,7 +195,12 @@ class MartinsConnector
 
         $params['Mercadorias'] = array_keys($idsByEan);
 
-        $results = $this->soap->consultarInfoMercadoriasPorEAN($params)->consultarInfoMercadoriasPorEANResult->MercadoriasInformacoes->MercadoriaInformacoes;
+        $consulta = $this->soap->consultarInfoMercadoriasPorEAN($params)->consultarInfoMercadoriasPorEANResult;
+        if(!property_exists($consulta, "MercadoriasInformacoes")){
+            return null;
+        }
+
+        $results = $consulta->MercadoriasInformacoes->MercadoriaInformacoes;
         if(!is_array($results))
             $results = [$results];
 
@@ -234,8 +237,8 @@ class MartinsConnector
     {
         $params = $this->getDefaultParams();
 
-        $boletos = $this->soap->consultaBoletosPendente($params)->consultaBoletosPendenteResult->boletosPendentes;
-        if(property_exists($boletos, 'titulosBoleto')) {
+        $boletos = $this->soap->consultaBoletosPendente($params)->consultaBoletosPendenteResult;
+        if(property_exists($boletos, 'boletosPendentes')) {
             if(is_array($boletos->titulosBoleto))
                 $boletos = $boletos->titulosBoleto;
             else
