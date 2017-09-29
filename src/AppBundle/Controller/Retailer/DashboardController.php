@@ -40,6 +40,20 @@ class DashboardController extends Controller
             'average' => $average['average'],
             'status' => $status,
             'types' => $types,
+            'username' => $user->getFantasyName(),
+            'userIsRCA' => $user->isRCAVirtual(),
+        ]);
+    }
+
+    /**
+     * @Route("/varejista/termos", name="use_terms")
+     */
+    public function termsAction(Request $request)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        return $this->render('Retailer/terms.html.twig', [
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }

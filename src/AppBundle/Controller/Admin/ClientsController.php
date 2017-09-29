@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\ActiveRetailer;
 use AppBundle\Entity\Retailer;
+use AppBundle\Entity\Supplier;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -191,7 +192,17 @@ class ClientsController extends Controller
         $data = json_decode($request->getContent());
 
         $client = $em->getRepository('AppBundle:Retailer')->find($data->clientId);
-        $client->setRCAVirtual($data->state);
+        if($data->state) {
+            $martinsSupplier = $em->getRepository('AppBundle:Supplier')->findOneBy(['retailer' => $client, 'rca' => true]);
+            if(empty($martinsSupplier)) {
+                $martinsSupplier = Supplier::newMartinsSupplier();
+                $martinsSupplier->setRetailer($client);
+                $em->persist($martinsSupplier);
+            }
+        } else {
+            $martinsSupplier = false;
+        }
+        $client->setRCAVirtual($data->state, $martinsSupplier, $em);
 
         try {
             $em->flush();

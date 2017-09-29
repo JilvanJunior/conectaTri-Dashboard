@@ -18,7 +18,9 @@ class MartinsConnector
      */
     public function __construct($chave = null, $user = null)
     {
-        $this->soap = new \SoapClient('http://service.martins.com.br/b2bservice.asmx?WSDL');
+        //TODO change to production
+        $this->soap = new \SoapClient('http://servicemarketup.martins.com.br/b2bservice.asmx?WSDL');
+//        $this->soap = new \SoapClient('http://service.martins.com.br/b2bservice.asmx?WSDL');
         $this->chave = $chave;
         $this->user = $user;
     }
@@ -103,6 +105,36 @@ class MartinsConnector
      * @param array $quantitiesByProduct
      * @return array
      */
+    public function saveMartinsPedido(array $quantitiesByProduct)
+    {
+        $params = $this->getDefaultParams();
+        $params += $this->getExtraParams();
+        $params += $this->getFilialParams();
+
+        $products = [];
+        $idsByMartins = [];
+        foreach($quantitiesByProduct as $id => $quantityProduct) {
+            $idMartins = $quantityProduct['idMartins'];
+            $idsByMartins[$idMartins] = $id;
+            $products[$id] = [
+                'CodigoMercadoria' => $idMartins,
+                'Quantidade' => $quantityProduct['quantity']
+            ];
+        }
+
+        $params['produtos'] = $products;
+
+        $infos = $this->soap->cadastrarPedido($params)->cadastrarPedidoResult;
+        if(!is_array($infos))
+            $infos = [$infos];
+
+        return $infos;
+    }
+
+    /**
+     * @param array $quantitiesByProduct
+     * @return array
+     */
     public function getMartinsEstoque(array $quantitiesByProduct)
     {
         $params = $this->getDefaultParams();
@@ -129,34 +161,19 @@ class MartinsConnector
             $infosById[$idsByMartins[$info->CodigoMercadoria]] = $info;
         }
 
-        return $infosById;
+        return $infos;
     }
 
     /**
-     * @param array $quantitiesByProduct
-     * @return array
+     * @param int $orderId
+     * @return stdClass
      */
-    public function saveMartinsPedido(array $quantitiesByProduct)
+    public function trackMartinsPedido(int $orderId)
     {
         $params = $this->getDefaultParams();
-        $params += $this->getExtraParams();
+        $params['pedido'] = $orderId;
 
-        $products = [];
-        $idsByMartins = [];
-        foreach($quantitiesByProduct as $id => $quantityProduct) {
-            $idMartins = $quantityProduct['idMartins'];
-            $idsByMartins[$idMartins] = $id;
-            $products[$id] = [
-                'CodigoMercadoria' => $idMartins,
-                'Quantidade' => $quantityProduct['quantity']
-            ];
-        }
-
-        $params['produtos'] = $products;
-
-        $infos = $this->soap->cadastrarPedido($params)->cadastrarPedidoResult;
-        if(!is_array($infos))
-            $infos = [$infos];
+        $infos = $this->soap->trankingPedido($params)->trankingPedidoResult->trackingData;
 
         return $infos;
     }
@@ -165,7 +182,7 @@ class MartinsConnector
      * @param array $products
      * @return array
      */
-    public function getMartinsCodeByEan(array $products)
+    public function getProductInfoByEan(array $products)
     {
         $params = $this->getDefaultParams();
 
@@ -184,11 +201,27 @@ class MartinsConnector
         if(!is_array($results))
             $results = [$results];
 
-        $codes = [];
+        $infos = [];
         foreach($results as $result) {
             $ean = $result->CODIGO_EAN;
+            $infos[$idsByEan[$ean]] = $result;
+        }
+
+        return $infos;
+    }
+
+    /**
+     * @param array $products
+     * @return array
+     */
+    public function getMartinsCodeByEan(array $products)
+    {
+        $results = $this->getProductInfoByEan($products);
+
+        $codes = [];
+        foreach($results as $id => $result) {
             $idMartins = $result->CODIGO;
-            $codes[$idsByEan[$ean]] = $idMartins;
+            $codes[$id] = $idMartins;
         }
 
         return $codes;
@@ -245,6 +278,20 @@ class MartinsConnector
             'CondicaoPagamento' => $condicao,
             'FilialExpedicao' => $login->FilialExpedicao,
             'FilialFaturamento' => $login->FilialFaturamento
+        ];
+
+        return $params;
+    }
+
+    private function getFilialParams(){
+        if(is_null($this->acesso))
+            $this->login();
+
+        $login = $this->acesso->Login;
+
+        $params = [
+            'FilialDeExpedicao' => $login->FilialExpedicao,
+            'FilialDeFaturamento' => $login->FilialFaturamento
         ];
 
         return $params;

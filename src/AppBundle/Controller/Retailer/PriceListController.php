@@ -48,6 +48,7 @@ class PriceListController extends Controller
             'quotes' => $quotes,
             'types' => $types,
             'status' => $status,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -91,7 +92,8 @@ class PriceListController extends Controller
         }
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', [
-            //'userIsRCA' => $user->isRCAVirtual(),
+            'username' => $user->getFantasyName(),
+            'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
 
@@ -152,6 +154,7 @@ class PriceListController extends Controller
         }
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', [
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -211,6 +214,7 @@ class PriceListController extends Controller
             'quote' => $quote,
             'listings' => $listings,
             'types' => $types,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -272,6 +276,7 @@ class PriceListController extends Controller
             'quote' => $quote,
             'quoteProducts' => $quoteProducts,
             'products' => $products,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -358,6 +363,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/addSuppliers.html.twig', [
             'quote' => $quote,
             'suppliers' => $suppliers,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -403,6 +409,7 @@ class PriceListController extends Controller
 
         return $this->render('Retailer/pricelist/edit.html.twig', [
             'quote' => $quote,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -459,6 +466,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/show.html.twig', [
             'quote' => $quote,
             'supplierStatuses' => $data,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -483,6 +491,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/showQuoteProduct.html.twig', [
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -511,6 +520,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/editQuoteProduct.html.twig', [
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
@@ -611,6 +621,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/editWinnerQuoteProduct.html.twig', [
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
+            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }

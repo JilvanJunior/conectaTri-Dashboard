@@ -6,6 +6,7 @@ use AppBundle\Entity\ApiSession;
 use AppBundle\Entity\FCMToken;
 use AppBundle\Entity\Listing;
 use AppBundle\Entity\ListingProduct;
+use AppBundle\Entity\MartinsOrder;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Quote;
 use AppBundle\Entity\QuoteProduct;
@@ -1341,6 +1342,8 @@ class ApiController extends FOSRestController {
             ->setCep($retailer->cep)
             ->setPhone($retailer->phone)
             ->setCellphone($retailer->cellphone);
+        if(property_exists($retailer, 'complement'))
+            $dbRetailer->setComplement($retailer->complement);
         $sec = $this->get('security.password_encoder');
         $dbRetailer->setPassword($sec->encodePassword($dbRetailer, $retailer->password))
             ->setRoles("ROLE_USER");
@@ -1414,6 +1417,8 @@ class ApiController extends FOSRestController {
             ->setPhone($retailer->phone)
             ->setCellphone($retailer->cellphone)
             ->setUpdatedAt(new \DateTime());
+        if(property_exists($retailer, 'complement'))
+            $dbRetailer->setComplement($retailer->complement);
         if (isset($retailer->password) && strlen($retailer->password) >= 8) {
             $dbRetailer
                 ->setPassword($sec->encodePassword($dbRetailer, $retailer->password));
@@ -1619,7 +1624,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Get("/api/boleto")
+     * @Rest\Get("/api/martins/boleto")
      */
     public function getBoletos(Request $request) {
         $d = $this->getDoctrine();
@@ -1653,7 +1658,49 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\POST("/api/martinsQuote")
+     * @Rest\POST("/api/martins/info")
+     */
+    public function getProductInfo(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $user = $dbToken->getRetailer();
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $acesso = $mc->login();
+
+        $productsData = json_decode($request->getContent());
+        $productsIds = [];
+        foreach($productsData as $productData) {
+            $productsIds[] = $productData->id;
+        }
+
+        $products = $em->getRepository('AppBundle:Product')->findById($productsIds);
+        $infos = $mc->getProductInfoByEan($products);
+
+        $saidaInfos = [];
+        foreach($infos as $id => $info) {
+            $saida = [];
+            foreach(get_object_vars($info) as $varName => $var)
+                $saida[$varName] = $var;
+
+            $saidaInfos[$id] = $saida;
+        }
+
+        return View::create($saidaInfos, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\POST("/api/martins/quote")
      */
     public function getMartinsQuote(Request $request) {
         $d = $this->getDoctrine();
@@ -1706,6 +1753,43 @@ class ApiController extends FOSRestController {
         }
 
         return View::create($saidaInfos, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/api/martins/pedidos")
+     */
+    public function getMartinsOrders(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $user = $dbToken->getRetailer();
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $acesso = $mc->login();
+
+        $martinsOrders = $d->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user]);
+
+        $orders = array();
+
+        /** @var MartinsOrder $martinsOrder */
+        foreach ($martinsOrders as $k => $martinsOrder){
+            $order = $mc->trackMartinsPedido($martinsOrder->getCode());
+            $orders[$k]['order_code'] = $martinsOrder->getCode();
+            $orders[$k]['order_date'] = $order->trackingData->trackingData->DataVenda;
+            $orders[$k]['order_value'] = $martinsOrder->getTotal();
+            $orders[$k]['order_status'] = $order->PedidoStatus;
+        }
+
+        return View::create($orders, Response::HTTP_OK);
     }
 
     /**
