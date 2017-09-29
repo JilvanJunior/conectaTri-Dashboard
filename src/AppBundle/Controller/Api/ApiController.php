@@ -895,7 +895,8 @@ class ApiController extends FOSRestController {
 
         /** @var QuoteProduct $quoteProduct */
         foreach ($quoteProducts as $quoteProduct) {
-            $quotesIds[] = $quoteProduct->getQuote()->getId();
+            if($quoteProduct->getQuote() != null)
+                $quotesIds[] = $quoteProduct->getQuote()->getId();
         }
 
         $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
@@ -958,7 +959,8 @@ class ApiController extends FOSRestController {
 
         /** @var QuoteProduct $quoteProduct */
         foreach ($quoteProducts as $quoteProduct) {
-            $quotesIds[] = $quoteProduct->getQuote()->getId();
+            if($quoteProduct->getQuote() != null)
+                $quotesIds[] = $quoteProduct->getQuote()->getId();
         }
 
         $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
