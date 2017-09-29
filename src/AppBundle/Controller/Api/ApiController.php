@@ -1009,6 +1009,30 @@ class ApiController extends FOSRestController {
     }
 
     /**
+     * @Rest\Get("/api/quote/{id}/updated")
+     */
+    public function getQuoteLink(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $dbQuote = $d->getRepository("AppBundle:Quote")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
+        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'));
+        $em->flush();
+
+        return View::create($dbQuote, Response::HTTP_OK);
+    }
+
+    /**
      * @Rest\Patch("/api/quote/{id}")
      */
     public function sendQuoteLink(Request $request, $id) {
