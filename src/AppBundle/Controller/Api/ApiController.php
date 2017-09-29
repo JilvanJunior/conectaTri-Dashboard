@@ -101,7 +101,7 @@ class ApiController extends FOSRestController {
             'token' => $session->getToken(),
             'isRCAVirtual' => $dbUser->isRCAVirtual(),
             'chpac' => $this->getParameter('chave_martins'),
-            'email' => $user->getEmail()
+            'email' => $dbUser->getEmail()
         ], Response::HTTP_OK);
     }
 
@@ -895,7 +895,8 @@ class ApiController extends FOSRestController {
 
         /** @var QuoteProduct $quoteProduct */
         foreach ($quoteProducts as $quoteProduct) {
-            $quotesIds[] = $quoteProduct->getQuote()->getId();
+            if($quoteProduct->getQuote() != null)
+                $quotesIds[] = $quoteProduct->getQuote()->getId();
         }
 
         $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
@@ -958,7 +959,8 @@ class ApiController extends FOSRestController {
 
         /** @var QuoteProduct $quoteProduct */
         foreach ($quoteProducts as $quoteProduct) {
-            $quotesIds[] = $quoteProduct->getQuote()->getId();
+            if($quoteProduct->getQuote() != null)
+                $quotesIds[] = $quoteProduct->getQuote()->getId();
         }
 
         $quotes = $d->getRepository("AppBundle:Quote")->createQueryBuilder("q")
@@ -1944,6 +1946,42 @@ class ApiController extends FOSRestController {
         }
 
         return View::create($orders, Response::HTTP_OK);
+    }
+
+
+    /**
+     * @Rest\Post("/api/martins/pedido")
+     */
+    public function saveMartinsOrder(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        $user = $dbToken->getRetailer();
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $acesso = $mc->login();
+
+        $products = json_decode($request->getContent());
+
+        //verifica se tem estoque e preco igual
+
+        //faz pedido na martins
+
+        //salva informacoes do pedido
+
+        //retorna pedido salvo
+
+
+        return View::create(array(), Response::HTTP_OK);
     }
 
     /**
