@@ -491,7 +491,7 @@
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
-
+                                                                            {% if suppliers is defined %}
                                                                                 {% for supplier in suppliers %}
                                                                                     {% for representative in supplier.representatives if representative.deleted == 0 %}
                                                                                         <tr>
@@ -507,6 +507,7 @@
                                                                                         </tr>
                                                                                     {% endfor %}
                                                                                 {% endfor %}
+                                                                            {% endif %}
 
                                                                             </tbody>
                                                                         </table>
@@ -528,7 +529,7 @@
                                                                             </thead>
                                                                             <tbody>
 
-
+                                                                            {% if listings is defined %}
                                                                                 {% for listing in listings %}
                                                                                     <tr>
                                                                                         <input type="hidden" value="{{ listing.id }}">
@@ -541,7 +542,7 @@
                                                                                         </td>
                                                                                     </tr>
                                                                                 {% endfor %}
-
+                                                                            {% endif %}
                                                                             </tbody>
                                                                         </table>
 
@@ -565,6 +566,7 @@
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
+                                                                            {% if products is defined %}
                                                                             {% for product in products %}
                                                                                 <tr>
                                                                                     <td> {{ product.id }} </td>
@@ -578,6 +580,7 @@
 
                                                                                 </tr>
                                                                             {% endfor %}
+                                                                            {% endif %}
                                                                             </tbody>
                                                                         </table>
                                                                     </div>
@@ -714,6 +717,11 @@
             <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
         </symbol>
 
+        <span>
+            {{ token }}
+        </span>
+
+
     </svg>
 
 
@@ -733,7 +741,7 @@
 
 
     <script>
-
+        var token = "{{ token }}";
         $(function () {
             $('#datetimepicker1').datetimepicker({
                 format: 'dd/mm/yyyy hh:ii',
@@ -1020,6 +1028,29 @@
                     }
                 }
             },
+            ajax: {
+                            url: "http://localhost/api/representative",
+                            type: 'GET',
+                           dataSrc: "",
+                           beforeSend : function(xhr) {
+                               xhr.setRequestHeader('Api-Token', token);
+                           }
+            },
+                   columns: [
+                       { "data": "name" },
+                       { "data": "contact_name" },
+                            { "data": "contact_email" },
+                            { "data": "cnpj"},
+                            { "data": "contact_email"},
+                            { "data": "id",
+                                "orderable": false ,
+                                "className": "dt-center",
+                                "render": function ( data, type, row ) {
+                                    return ' <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkRepresentative" value="' + data + '"  /> <span></span>'
+                                }
+                        }
+
+                       ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
             buttons: [
                 {
@@ -1030,19 +1061,12 @@
                     //}
                 }
             ],
-            "columnDefs": [
-                { "orderable": false, "targets": 5 }
-            ]
+
+
 
         } );
 
-        /*
 
-         padding-top: 5px;
-         top: 14px;
-         padding-bottom: 5px;
-
-         */
 
         //select all function
         selectAll("selectAllReprensentative","chkRepresentative");
@@ -1063,6 +1087,32 @@
                     }
                 }
             },
+            ajax: {
+                            url: "http://localhost/api/listing",
+                            type: 'GET',
+                            dataSrc: "",
+                            beforeSend : function(xhr) {
+                                xhr.setRequestHeader('Api-Token', token);
+                            }
+                    },
+                    columns: [
+                        { "data": "name" },
+                        { "data": "description" },
+                        { "data": "type" },
+                        { "data": "listing_products",
+                            "render": function ( data, type, row ) {
+                                return data.length;
+                            }
+                    },
+                    { "data": "id",
+                            "orderable": false ,
+                                "className": "dt-center",
+                                "render": function ( data, type, row ) {
+                                    return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkListing" value="' + data + '"  /> <span></span>';
+                                }
+                        }
+
+                    ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
             buttons: [
                 {
@@ -1072,9 +1122,6 @@
                     //   console.log(dt);
                     //}
                 }
-            ],
-            "columnDefs": [
-                { "orderable": false, "targets": 4 }
             ]
         } );
 
@@ -1096,6 +1143,29 @@
                     }
                 }
             },
+            ajax: {
+                            url: "http://localhost/api/product",
+                            type: 'GET',
+                           dataSrc: "",
+                            beforeSend : function(xhr) {
+                                xhr.setRequestHeader('Api-Token', token);
+                            }
+                    },
+                    columns: [
+                            { "data": "id" },
+                            { "data": "name" },
+                            { "data": "type" },
+                            { "data": "brand"},
+                            { "data": "unit"},
+                            { "data": "id",
+                                "orderable": false ,
+                                "className": "dt-center",
+                                "render": function ( data, type, row ) {
+                                    return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkProducts" value="' + data + '"  /> <span></span>';
+                                }
+                        }
+
+                        ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
             buttons: [
                 {
@@ -1105,9 +1175,6 @@
                     //   console.log(dt);
                     //}
                 }
-            ],
-            "columnDefs": [
-                { "orderable": false, "targets": 5 }
             ]
         } );
 
