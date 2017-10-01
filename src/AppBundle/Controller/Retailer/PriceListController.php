@@ -10,6 +10,7 @@ use AppBundle\Entity\QuoteSupplier;
 use AppBundle\Entity\QuoteSupplierStatus;
 use AppBundle\Entity\Representative;
 use AppBundle\Entity\Retailer;
+use AppBundle\Service\MartinsConnector;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,11 +61,29 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
-        return $this->render('Retailer/pricelist/addPriceList.html.twig', [
+        $data = [
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
             'token' => $token->getToken()
-        ]);
+        ];
+
+        if($user->isRCAVirtual()) {
+            $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+            $acesso = $mc->login();
+            $conditions = $acesso->Login->CondicoesPagamento->CondPgto;
+            if(is_array($conditions)) {
+                $conds = [];
+                foreach($conditions as $condition) {
+                    $conds[] = $condition->Descricao;
+                }
+                $conditions = $conds;
+            } else {
+                $conditions = [ $conditions->Descricao ];
+            }
+            $data['conditions'] = $conditions;
+        }
+
+        return $this->render('Retailer/pricelist/addPriceList.html.twig', $data);
     }
 
 

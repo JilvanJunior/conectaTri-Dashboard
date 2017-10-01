@@ -54,6 +54,13 @@ class MartinsOrder
     private $linkToBill;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_due", type="string", length=255, nullable=true)
+     */
+    private $paymentDue;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -183,6 +190,30 @@ class MartinsOrder
     public function getLinkToBill()
     {
         return $this->linkToBill;
+    }
+    
+    /**
+     * Set paymentDue
+     *
+     * @param string $paymentDue
+     *
+     * @return MartinsOrder
+     */
+    public function setPaymentDue($paymentDue)
+    {
+        $this->paymentDue = $paymentDue;
+
+        return $this;
+    }
+
+    /**
+     * Get paymentDue
+     *
+     * @return string
+     */
+    public function getPaymentDue()
+    {
+        return $this->paymentDue;
     }
 
     /**

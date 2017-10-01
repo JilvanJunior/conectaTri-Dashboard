@@ -123,6 +123,7 @@ class ApiController extends FOSRestController {
                 }
 
                 $retorno['condicoesMartins'] = $saidaAcesso;
+                $retorno['previsao'] = $acesso->Login->PrevisaoEntregaTexto;
             }
         }
 
@@ -1963,10 +1964,12 @@ class ApiController extends FOSRestController {
         /** @var MartinsOrder $martinsOrder */
         foreach ($martinsOrders as $k => $martinsOrder){
             $order = $mc->trackMartinsPedido($martinsOrder->getCode());
-            $orders[$k]['order_code'] = $martinsOrder->getCode();
-            $orders[$k]['order_date'] = $order->trackingData->trackingData->DataVenda;
-            $orders[$k]['order_value'] = $martinsOrder->getTotal();
-            $orders[$k]['order_status'] = $order->PedidoStatus;
+            $orders[$k]['code'] = $martinsOrder->getCode();
+            $orders[$k]['date'] = $order->trackingData->trackingData->DataVenda;
+            $orders[$k]['due'] = $martinsOrder->getPaymentDue();
+            $orders[$k]['value'] = $martinsOrder->getTotal();
+            $orders[$k]['status'] = $order->PedidoStatus;
+            $orders[$k]['order'] = $martinsOrder;
         }
 
         return View::create($orders, Response::HTTP_OK);
@@ -1999,7 +2002,7 @@ class ApiController extends FOSRestController {
         $productsIds = [];
         $quantitiesByProduct = [];
         $quantitiesAndPrices = [];
-        foreach($productsData as $productData) {
+        foreach($productsData->products as $productData) {
             $productsIds[] = $productData->id;
 
             $quantitiesByProduct[$productData->id] = [
@@ -2045,10 +2048,11 @@ class ApiController extends FOSRestController {
                 . implode(", ", $productsChange)), Response::HTTP_BAD_REQUEST);
 
         //faz pedido na martins
-        $order = $mc->saveMartinsPedido($quantitiesByProduct);
+        $order = $mc->saveMartinsPedido($quantitiesByProduct, $productsData->code);
         if($order->Status == 0 || $order->Status == 2){
             $martinsOrder = new MartinsOrder();
             $martinsOrder->setCode($order->Pedido->Codigo);
+            $martinsOrder->setPaymentDue($productsData->payment_due);
             $martinsOrder->setLinkToBill($order->LinkBoleto);
             $martinsOrder->setRetailer($user);
             $em->persist($martinsOrder);

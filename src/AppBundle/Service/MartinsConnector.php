@@ -105,11 +105,13 @@ class MartinsConnector
      * @param array $quantitiesByProduct
      * @return array
      */
-    public function saveMartinsPedido(array $quantitiesByProduct)
+    public function saveMartinsPedido(array $quantitiesByProduct, $code)
     {
         $params = $this->getDefaultParams();
         $params += $this->getExtraParams();
         $params += $this->getFilialParams();
+
+        $params['CondicaoPagamento'] = $code;
 
         $products = [];
         $idsByMartins = [];

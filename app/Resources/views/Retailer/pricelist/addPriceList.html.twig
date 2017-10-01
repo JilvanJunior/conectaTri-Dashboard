@@ -101,14 +101,9 @@
         /*
         Float label styles
          */
-
-
-
         label:hover {
             cursor: text;
         }
-
-
 
         @media (max-width: 500px) {
             .contact-form {
@@ -138,14 +133,14 @@
             top: 2px;
         }
 
-        .text input {
+        .text input, .text select {
             margin: 0 auto;
             height: 44px;
             padding-top: 14px;
             width: 284px;
             border: 1px solid #40AE40
         }
-        .text input:focus{
+        .text input:focus, .text select:focus{
             border: 1px solid #40AE40;
         }
 
@@ -246,34 +241,26 @@
 
         }
         .datatable-plus-button{
-
             padding-top: 5px;
             top: 14px;
             padding-bottom: 5px;
             padding-right: 9px;
             background: #40AE40;
-
-
-
         }
-        .datatable-plus-button::before {
 
+        .datatable-plus-button::before {
             font-family: fontAwesome;
             content: "\f067\00a0";
             color: white;
             background-color: transparent;
-
         }
 
         .text-area{
             width: 284px;
             border: 1px solid #40AE40;
             padding-top: 14px;
-
+            resize: vertical;
         }
-
-
-
     </style>
 
     <div class="page-wrapper-row full-height">
@@ -379,18 +366,11 @@
                                                             <div class="tab-content">
                                                                 <!-- BEGIN COTACAO STEP-->
                                                                 <div class="tab-pane" id="tab1">
-
                                                                     <div class="portlet-body form">
-
                                                                         <!-- BEGIN COTACAO FORM-->
-
                                                                         <form action="#" method="POST" id="cotacao_form" class="form-horizontal contact-form">
-
-
                                                                             <div class="form-body ">
-
                                                                                 <div class="row ">
-
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
                                                                                             <div class="form-group cotacao text ">
@@ -399,11 +379,9 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-
                                                                                 </div>
 
                                                                                 <div class="row ">
-
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
                                                                                             <div class="form-group datetimepicker1 text ">
@@ -428,10 +406,17 @@
                                                                                 <div class="row ">
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
-                                                                                            <div class="form-group prazo text ">
-                                                                                                <label for="prazo">Prazo de pagamento</label>
-                                                                                                <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date">
-                                                                                                </textarea>
+                                                                                            <div class="form-group text">
+                                                                                                <label for="prazo" style='position: initial;'>Prazo de pagamento</label>
+                                                                                                {% if userIsRCA %}
+                                                                                                <select class='form-control' style='margin-bottom: 3px;' id='prazoRCA' autocomplete="off">
+                                                                                                    {% for cond in conditions %}
+                                                                                                    <option>{{ cond }}</option>
+                                                                                                    {% endfor %}
+                                                                                                    <option>Outros</option>
+                                                                                                </select>
+                                                                                                {% endif %}
+                                                                                                <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date" autocomplete="off" placeholder="Selecionando Outros não é possível fazer um pedido ao Martins"></textarea>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -519,9 +504,6 @@
                                                                     </div>
                                                                 </div>
 
-
-
-
                                                                 <div class="tab-pane" id="tab4">
                                                                     <div class="wizard-container">
                                                                         <table class="table table-striped table-bordered table-hover" id="product-datatable">
@@ -563,84 +545,57 @@
                                                                                 <h2>
                                                                                     Dados da Cotação
                                                                                 </h2>
-
                                                                                 <h4>
                                                                                     Início
                                                                                 </h4>
-                                                                                </br>
-                                                                                <div class="col-md-3">
+                                                                                <div class='row'>
+                                                                                    <div class="col-md-3">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true" ></i>
+                                                                                        <span id="quote_start"> data</span>
+                                                                                    </div>
 
-                                                                                <i class="fa fa-calendar" aria-hidden="true" ></i><span id="quote_start"> data</span>
+                                                                                    <div class="col-md-3">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                                                        <span id="quote_start_time"> hora</span>
+                                                                                    </div>
                                                                                 </div>
-
-                                                                                <div class="col-md-3">
-
-                                                                                    <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_start_time"> hora</span>
-                                                                                </div>
-
-                                                                                </br>
-                                                                                </br>
                                                                                 <h4>
                                                                                     Fim
                                                                                 </h4>
-                                                                                </br>
-                                                                                <div class="col-md-3">
-                                                                                    <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_end"> data</span>
+                                                                                <div class='row'>
+                                                                                    <div class="col-md-3">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_end"> data</span>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-3">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_end_time"> hora</span>
+                                                                                    </div>
                                                                                 </div>
+                                                                                <div class='row'>
+                                                                                    <div class="col-md-3">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span > Itens</span>
+                                                                                        <span id="quote_itens"></span>
+                                                                                    </div>
 
-                                                                                <div class="col-md-3">
-                                                                                    <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_end_time"> hora</span>
+                                                                                    <div class="col-md-4">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                                                        <span> Fornecedores</span>
+                                                                                        <span id="quote_suppliers"></span>
+                                                                                    </div>
                                                                                 </div>
-
-
-                                                                                </br>
-                                                                                </br>
-
-                                                                                <div class="col-md-3">
-                                                                                    <i class="fa fa-calendar" aria-hidden="true"></i><span > Itens</span>
-                                                                                    </br>
-                                                                                    </br>
-                                                                                    <span id="quote_itens"> </span>
-                                                                                </div>
-
-                                                                                <div class="col-md-4">
-                                                                                    <i class="fa fa-calendar" aria-hidden="true"></i><span > Fornecedores</span>
-                                                                                    </br>
-                                                                                    </br>
-                                                                                    <span id="quote_suppliers"> </span>
-                                                                                </div>
-
-
-
-                                                                                </br>
-                                                                                </br>
-                                                                                </br>
-                                                                                </br>
                                                                                 <h4>
                                                                                     Prazo de Pagamento
                                                                                 </h4>
-
-                                                                                <div class="col-md-3">
-                                                                                    <span id="quote_due_date"> data</span>
+                                                                                <div class='row'>
+                                                                                    <div class="col-md-3">
+                                                                                        <span id="quote_due_date"> data</span>
+                                                                                    </div>
                                                                                 </div>
-
                                                                             </div>
                                                                             <div class="col-md-6" style="margin-top: 50px;margin-left: 0px;padding-left: 110px;">
-
-                                                                                </br>
-                                                                                </br>
-                                                                                </br>
-                                                                                </br>
-                                                                                </br>
-                                                                                </br>
                                                                                 <button  class="btn col-md-6 green-conecta">Salvar Cotação</button>
-                                                                                </br>
-                                                                                </br>
                                                                                 <button  class="btn col-md-6 green-conecta">Iniciar Cotação Presencial</button>
-                                                                                </br>
-                                                                                </br>
                                                                                 <button  class="btn col-md-6 green-conecta">Enviar Para Fornecedor</button>
-
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -686,16 +641,23 @@
 
     <script>
         var token = "{{ token }}";
+
+{% if userIsRCA %}
+$("#prazo").hide();
+$("#prazoRCA").change(function() {
+    if($(this).val() == "Outros")
+        $('#prazo').show();
+    else
+        $('#prazo').hide();
+});
+{% endif %}
+
         $(function () {
             $('#datetimepicker1').datetimepicker({
                 format: 'dd/mm/yyyy hh:ii',
                 language: 'pt-BR'
             });
             $('#datetimepicker2').datetimepicker({
-                format: 'dd/mm/yyyy hh:ii',
-                language: 'pt-BR'
-            });
-            $('#datetimepicker3').datetimepicker({
                 format: 'dd/mm/yyyy hh:ii',
                 language: 'pt-BR'
             });
@@ -822,7 +784,6 @@
                         setDateTime("datetimepicker1","quote_start_time","time");
                         setDateTime("datetimepicker2","quote_end","date");
                         setDateTime("datetimepicker2","quote_end_time","time");
-                        setDateTime("datetimepicker3","quote_due_date","date");
                         setItensSuplliers("product-datatable","quote_itens");
                         setItensSuplliers("representative-datatable","quote_suppliers");
                         break;
