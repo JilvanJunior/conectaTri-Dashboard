@@ -480,9 +480,9 @@ body.page-md {
 }
 
 .scroll-to-top > i {
-  color: #657383;
+  color: #ffffff;
   font-size: 32px;
-  opacity: .7;
+  opacity: .9;
   filter: alpha(opacity=70)
 }
 
