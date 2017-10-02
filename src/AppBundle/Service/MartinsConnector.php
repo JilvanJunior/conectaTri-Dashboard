@@ -80,10 +80,15 @@ class MartinsConnector
         $idsByMartins = [];
         foreach($quantitiesByProduct as $id => $quantityProduct) {
             $idMartins = $quantityProduct['idMartins'];
+            $quantity = $quantityProduct['quantity'];
+
+            if(!is_numeric($idMartins) || !is_numeric($quantity))
+                continue;
+
             $idsByMartins[$idMartins] = $id;
             $products[$id] = [
                 'CodigoMercadoria' => $idMartins,
-                'Quantidade' => $quantityProduct['quantity']
+                'Quantidade' => $quantity
             ];
         }
 
