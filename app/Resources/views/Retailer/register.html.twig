@@ -1,11 +1,37 @@
 <!DOCTYPE html>
 <html>
+
+
+
+
+
 <head>
     <meta charset="utf-8" />
     <title>Cadastro ConectaTri</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/global/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/global/plugins/simple-line-icons/simple-line-icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    {% block page_plugins %}{% endblock %}
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <link href="{{ asset('assets/global/css/components-rounded.min.css') }}" rel="stylesheet" id="style_components" type="text/css" />
+    <link href="{{ asset('assets/global/css/styles.css') }}" rel="stylesheet" id="style_components" type="text/css" />
+    <link href="{{ asset('assets/global/css/plugins.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- END THEME GLOBAL STYLES -->
+    <!-- BEGIN THEME LAYOUT STYLES -->
+    <link href="{{ asset('assets/layouts/layout3/css/layout.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/layouts/layout3/css/themes/default.min.css') }}" rel="stylesheet" type="text/css" id="style_color" />
+    <link href="{{ asset('assets/layouts/layout3/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- END THEME LAYOUT STYLES -->
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     <style>
         /* Base styles */
         *, *:after, *:before {
@@ -17,12 +43,14 @@
             height: 100%;
         }
 
+
         body {
             position: relative;
             margin: 0;
             font-family: 'Work Sans', Arial, Helvetica, sans-serif;
             min-height: 100%;
-            background: #40AE40;
+            background: url({{ asset('assets/global/img/fundo-conecta-8.png') }});
+            background-position: center;
             color: #777;
         }
         img {
@@ -187,6 +215,29 @@
                 top: 50%;
             }
         }
+
+        .mt-checkbox.mt-checkbox-outline:hover>input:not([disabled]):checked ~ span, .mt-checkbox.mt-checkbox-outline>input:checked ~ span {
+
+            background: #319431 !important;
+            border-radius: 2px;
+            border: 1px solid #319431;
+
+        }
+
+        .mt-checkbox.mt-checkbox-outline>span {
+            border: 1px solid #d9d9d9;
+            background: 0;
+            border-radius: 2px;
+        }
+        .mt-checkbox>span:after {
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid #fff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
     </style>
 </head>
 
@@ -216,6 +267,16 @@
                 {{ form_row(form.phone, {'attr' : {'class' : 'input'}}) }}
                 {{ form_row(form.cellphone, {'attr' : {'class' : 'input'}}) }}
                 <br>
+                <div class="form-group ">
+                    <div >
+                        <div >
+                            <label class="mt-checkbox mt-checkbox-outline"/>  <input type="agree" name="agree"   /> <span></span>
+                            Li e aceito os <u style="color:#83BC3C">termos de uso</u> e a <u style="color:#83BC3C">política de privacidade</u>.
+                        </div><i class="form-control-feedback" data-fv-icon-for="agree" style="display: none;"></i>
+                        <small class="help-block" data-fv-validator="notEmpty" data-fv-for="agree" data-fv-result="NOT_VALIDATED" style="display: none;">You must agree with the terms and conditions</small></div>
+                </div>
+                <br>
+
                 <button type="button" class="btn" onclick="window.location.replace('{{ path('login') }}')">Voltar</button>
                 <button id='teste' type="submit" class="btn">Cadastrar-se!</button>
                 {{ form_end(form) }}
