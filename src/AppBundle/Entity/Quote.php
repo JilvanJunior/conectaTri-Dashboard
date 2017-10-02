@@ -452,7 +452,11 @@ class Quote
 
         foreach($this->suppliersStatus as $suppliersStatus) {
             $representative = $suppliersStatus->getRepresentative();
+            if(is_null($representative))
+                continue;
             $supplier = $representative->getSupplier();
+            if(is_null($supplier))
+                continue;
 
             if($supplier->isRca())
                 $this->makeRCAQuote($chave, $url, $supplier);

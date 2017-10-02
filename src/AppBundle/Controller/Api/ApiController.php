@@ -1180,20 +1180,25 @@ class ApiController extends FOSRestController {
         $isFirst = true;
         foreach ($quote->quote_products as $product) {
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
-            $quoteProduct = new QuoteProduct();
-            $quoteProduct->setProduct($dbProduct)
-                ->setQuote($dbQuote);
+            if(is_null($dbProduct))
+                continue;
+            $quoteProduct = (new QuoteProduct())
+                ->setProduct($dbProduct)
+                ->setQuote($dbQuote)
+                ->setQuantity(0);
             $em->persist($quoteProduct);
             foreach ($product->quote_suppliers as $supplier) {
                 $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
+                if(is_null($dbSupplier))
+                    continue;
                 if ($isFirst) {
                     $supplierStatus = new QuoteSupplierStatus();
                     $supplierStatus->setRepresentative($dbSupplier);
                     $supplierStatus->setQuote($dbQuote);
                     $em->persist($supplierStatus);
                     $dbQuote->addSupplierStatus($supplierStatus);
-                    $quoteProduct->setQuantity($supplier->quantity);
                 }
+                $quoteProduct->setQuantity($supplier->quantity);
                 $quoteSupplier = new QuoteSupplier();
                 $quoteSupplier->setRepresentative($dbSupplier)
                     ->setQuantity($supplier->quantity)
