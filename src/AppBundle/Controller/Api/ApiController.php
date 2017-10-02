@@ -1170,6 +1170,8 @@ class ApiController extends FOSRestController {
             ->setType($quote->type)
             ->setRetailer($dbToken->getRetailer())
             ->setClosed(false)
+            ->setBeginsAt($this->createATOMDateTime($quote->begins_at))
+            ->setExpiresAt($this->createATOMDateTime($quote->expires_at))
             ->setSendToSupplier($quote->send_to_supplier);
         if(property_exists($quote, 'payment_date'))
             $dbQuote->setPaymentDate($quote->payment_date);
@@ -1337,9 +1339,9 @@ class ApiController extends FOSRestController {
         }
         $dbQuote->setDeleted(false)
             ->setName($quote->name)
-            ->setExpiresAt($this->createATOMDateTime($quote->expires_at))
             ->setClosed(isset($quote->closed) ? $quote->closed : false)
             ->setBeginsAt($this->createATOMDateTime($quote->begins_at))
+            ->setExpiresAt($this->createATOMDateTime($quote->expires_at))
             ->setSendToSupplier($quote->send_to_supplier);
         if(!is_null($quote->payment_date))
             $dbQuote->setPaymentDate($quote->payment_date);
