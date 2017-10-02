@@ -59,4 +59,21 @@ class MartinsController extends Controller
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
+
+    /**
+     * @Route("/varejista/martins/pedido/novo", name="novo_pedido")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function addPedidoAction(Request $request)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if(!$user->isRCAVirtual())
+            return $this->redirectToRoute('dashboard');
+
+        return $this->render('Retailer/martins/addPedido.html.twig', [
+            'username' => $user->getFantasyName(),
+            'userIsRCA' => $user->isRCAVirtual(),
+        ]);
+    }
 }

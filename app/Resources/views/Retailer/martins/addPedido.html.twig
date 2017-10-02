@@ -1,0 +1,96 @@
+{% extends 'Retailer/base.html.twig' %}
+
+{% block title %}Novo Pedido Martins{% endblock %}
+{% block description %}{% endblock %}
+{% block menu_martins %} active {% endblock %}
+
+{% block page %}
+    <div class="page-wrapper-middle">
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <!-- BEGIN PAGE HEAD-->
+                <div class="page-head">
+                    <div class="container">
+                        <!-- BEGIN PAGE TITLE -->
+                        <div class="page-title">
+                            <h1>Novo Pedido Martins
+                                <small>cadastro de novo Pedido</small>
+                            </h1>
+                        </div>
+                        <!-- END PAGE TITLE -->
+                    </div>
+                </div>
+                <!-- END PAGE HEAD-->
+                <!-- BEGIN PAGE CONTENT BODY -->
+                <div class="page-content">
+                    <div class="container">
+                        {% include '_partial/flashMessages.html.twig' %}
+                        <!-- BEGIN PAGE BREADCRUMBS -->
+                        <ul class="page-breadcrumb breadcrumb">
+                            <li>
+                                <a href="{{ path('dashboard') }}">Painel Inicial</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <a href="#">Martins</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span>Pedidos</span>
+                            </li>
+                        </ul>
+                        <!-- END PAGE BREADCRUMBS -->
+                        <!-- BEGIN PAGE CONTENT INNER -->
+                        <div class="page-content-inner">
+                            <!-- BEGIN SAMPLE TABLE PORTLET-->
+                            <div class="portlet box green-conecta">
+                                <div class='portlet-title'>
+                                    <div class='caption'>
+                                        <i class='fa fa-gift'></i>
+                                        Novo Pedido Martins
+                                    </div>
+                                </div>
+                                <div class='portlet-body form'>
+                                    <div class='form-body'>
+                                        <div class='row'>
+                                            <div class='col-xs-6'>
+                                                Prazo de Pagamento
+                                            </div>
+                                            <div class='col-xs-6'>
+                                                Previsão de entrega
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <table class='table'>
+                                            <thead>
+                                                <tr>
+                                                    <th>Item</th>
+                                                    <th>Quantidade</th>
+                                                    <th>Preço</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        total do pedido
+                                    </div>
+                                    <div class='form-actions'>
+                                        <button class="btn btn-circle green-conecta">Enviar Pedido</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
