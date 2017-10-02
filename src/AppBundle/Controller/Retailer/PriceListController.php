@@ -61,10 +61,20 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
+
+
+
+
+        //quotes types
+        $types = [];
+        $types['1'] = "Remota";
+        $types['2'] = "Presencial";
+
         $data = [
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
-            'token' => $token->getToken()
+            'token' => $token->getToken(),
+            'types' => $types
         ];
 
         if($user->isRCAVirtual()) {
@@ -393,7 +403,10 @@ class PriceListController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction(Request $request, $id)
+
     {
+        /* TODO: Fetch Order Data  */
+
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
