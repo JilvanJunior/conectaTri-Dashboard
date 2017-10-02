@@ -171,9 +171,12 @@ class MartinsConnector
     public function trackMartinsPedido(int $orderId)
     {
         $params = $this->getDefaultParams();
-        $params['pedido'] = $orderId;
+        $params['pedidoId'] = $orderId;
 
-        $infos = $this->soap->trankingPedido($params)->trankingPedidoResult->trackingData;
+        $infos = $this->soap->trankingPedido($params)->trankingPedidoResult;
+        var_dump($infos);exit();
+        if(property_exists($infos, 'trackingData'))
+            $infos = $infos->trackingData;
 
         return $infos;
     }

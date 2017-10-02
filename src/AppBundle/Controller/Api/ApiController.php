@@ -1964,8 +1964,11 @@ class ApiController extends FOSRestController {
         /** @var MartinsOrder $martinsOrder */
         foreach ($martinsOrders as $k => $martinsOrder){
             $order = $mc->trackMartinsPedido($martinsOrder->getCode());
+            if(!property_exists($order, 'trackingData'))
+                continue;
+
             $orders[$k]['code'] = $martinsOrder->getCode();
-            $orders[$k]['date'] = $order->trackingData->trackingData->DataVenda;
+            $orders[$k]['date'] = $order->trackingData->DataVenda;
             $orders[$k]['due'] = $martinsOrder->getPaymentDue();
             $orders[$k]['value'] = $martinsOrder->getTotal();
             $orders[$k]['status'] = $order->PedidoStatus;
@@ -2030,7 +2033,6 @@ class ApiController extends FOSRestController {
         $priceChange = false;
         $productsChange = array();
         $mercadorias = $mc->getMartinsInfos($quantitiesByProduct);
-        var_dump($mercadorias);exit();
         foreach($mercadorias as $key => $mercadoria) {
             if($quantitiesAndPrices[$key]['price'] != $mercadoria->PrecoNormal){
                 $priceChange = true;
@@ -2050,17 +2052,19 @@ class ApiController extends FOSRestController {
 
         //faz pedido na martins
         $order = $mc->saveMartinsPedido($quantitiesByProduct, $productsData->code);
-        if($order->Status == 0 || $order->Status == 2){
+        //if($order->Status == 0 || $order->Status == 2){
             $martinsOrder = new MartinsOrder();
-            $martinsOrder->setCode($order->Pedido->Codigo);
+            $martinsOrder->setCode(2);//$order->Pedido->Codigo);
             $martinsOrder->setPaymentDue($productsData->payment_due);
-            $martinsOrder->setLinkToBill($order->LinkBoleto);
+            $martinsOrder->setTotal(10);
+            $martinsOrder->setLinkToBill("");//$order->LinkBoleto);
+            $martinsOrder->setUpdatedAt(new \DateTime());
             $martinsOrder->setRetailer($user);
             $em->persist($martinsOrder);
             $em->flush();
-        } else {
-            return View::create(new ApiError($order->Mensagem), Response::HTTP_BAD_REQUEST);
-        }
+        //} else {
+        //    return View::create(new ApiError($order->Mensagem), Response::HTTP_BAD_REQUEST);
+        //}
 
         $output = [];
         foreach(get_object_vars($order) as $varName => $var)
