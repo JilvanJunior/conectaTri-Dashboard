@@ -2052,19 +2052,19 @@ class ApiController extends FOSRestController {
 
         //faz pedido na martins
         $order = $mc->saveMartinsPedido($quantitiesByProduct, $productsData->code);
-        //if($order->Status == 0 || $order->Status == 2){
+        if($order->Status == 0 || $order->Status == 2){
             $martinsOrder = new MartinsOrder();
-            $martinsOrder->setCode(2);//$order->Pedido->Codigo);
+            $martinsOrder->setCode($order->Pedido->Codigo);
             $martinsOrder->setPaymentDue($productsData->payment_due);
             $martinsOrder->setTotal(10);
-            $martinsOrder->setLinkToBill("");//$order->LinkBoleto);
+            $martinsOrder->setLinkToBill($order->LinkBoleto);
             $martinsOrder->setUpdatedAt(new \DateTime());
             $martinsOrder->setRetailer($user);
             $em->persist($martinsOrder);
             $em->flush();
-        //} else {
-        //    return View::create(new ApiError($order->Mensagem), Response::HTTP_BAD_REQUEST);
-        //}
+        } else {
+            return View::create(new ApiError($order->Mensagem), Response::HTTP_BAD_REQUEST);
+        }
 
         $output = [];
         foreach(get_object_vars($order) as $varName => $var)
