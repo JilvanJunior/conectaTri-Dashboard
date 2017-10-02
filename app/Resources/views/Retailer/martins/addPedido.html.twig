@@ -73,11 +73,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                {% for mercadoria in mercadorias %}
                                                 <tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
+                                                    <td>{{ mercadoria }}</td>
+                                                    <td>{{ mercadoria.Quantidade }}</td>
+                                                    <td>{{ mercadoria.PrecoNormal }}</td>
                                                 </tr>
+                                                {% endfor %}
                                             </tbody>
                                         </table>
                                         total do pedido

@@ -91,6 +91,8 @@ class MartinsConnector
                 'Quantidade' => $quantity
             ];
         }
+        if(empty($products))
+            return [];
 
         $params['produtos'] = array_values($products);
 

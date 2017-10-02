@@ -71,7 +71,23 @@ class MartinsController extends Controller
         if(!$user->isRCAVirtual())
             return $this->redirectToRoute('dashboard');
 
+        $pedidos = [];
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
+        $codes = $mc->getMartinsCodeByEan($pedidos);
+
+        $quantitiesByProduct = [];
+        foreach($pedidos as $pedido) {
+            $idPedido = $pedido->getId();
+
+            $quantitiesByProduct[$idPedido] = [
+                'idMartins' => $codes[$idPedido],
+                'quantity' => 1,
+            ];
+        }
+        $mercadorias = $mc->getMartinsInfos($quantitiesByProduct);
+
         return $this->render('Retailer/martins/addPedido.html.twig', [
+            'mercadorias' => $mercadorias,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
