@@ -14,12 +14,13 @@ class MartinsConnector
     /**
      * MartinsConnector constructor.
      * @param string $chave
+     * @param string $url
      * @param Retailer $user
      */
-    public function __construct($context, $user = null)
+    public function __construct($chave, $url, $user = null)
     {
-        $this->soap = new \SoapClient($context->getParameter('url_martins').'?WSDL');
-        $this->chave = $context->getParameter('chave_martins');
+        $this->soap = new \SoapClient($url.'?WSDL');
+        $this->chave = $chave;
         $this->user = $user;
     }
 
