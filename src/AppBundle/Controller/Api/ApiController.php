@@ -2010,6 +2010,7 @@ class ApiController extends FOSRestController {
         $productsIds = [];
         $quantitiesByProduct = [];
         $quantitiesAndPrices = [];
+        $total = 0.0;
         foreach($productsData->products as $productData) {
             $productsIds[] = $productData->id;
 
@@ -2021,6 +2022,7 @@ class ApiController extends FOSRestController {
                 'quantity' => $productData->quantity,
                 'price' => $productData->price
             ];
+            $total += $productData->price;
         }
 
         $products = $d->getRepository('AppBundle:Product')->findById($productsIds);
@@ -2061,7 +2063,7 @@ class ApiController extends FOSRestController {
             $martinsOrder = (new MartinsOrder())
                 ->setCode($order->Pedido->Codigo)
                 ->setPaymentDue($productsData->payment_due)
-                ->setTotal(0)
+                ->setTotal($total)
                 ->setLinkToBill($order->LinkBoleto)
                 ->setUpdatedAt(new \DateTime())
                 ->setRetailer($user);

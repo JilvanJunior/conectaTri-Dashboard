@@ -21,7 +21,7 @@ class MartinsController extends Controller
         if(!$user->isRCAVirtual())
             return $this->redirectToRoute('dashboard');
 
-        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
 
         $boletos = $mc->getMartinsBoletos();
@@ -45,7 +45,7 @@ class MartinsController extends Controller
             return $this->redirectToRoute('dashboard');
 
         $em = $this->getDoctrine()->getManager();
-        $pedidos = $em->getRepository('AppBundle:Quote')->getMartinsQuotes($user);
+        $pedidos = $em->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user]);
 
         $types = [
             '1' => "Remota",
