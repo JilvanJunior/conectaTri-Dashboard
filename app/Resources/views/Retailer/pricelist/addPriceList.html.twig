@@ -588,13 +588,13 @@
                                                                                 </h4>
                                                                                 <div class='row'>
                                                                                     <div class="col-md-3">
-                                                                                        <span id="quote_due_date"> data</span>
+                                                                                        <span id="quote_due_date"></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6" style="margin-top: 50px;margin-left: 0px;padding-left: 110px;">
-                                                                                <button  class="btn col-md-6 green-conecta">Salvar Cotação</button>
-                                                                                <button  class="btn col-md-6 green-conecta">Iniciar Cotação Presencial</button>
+                                                                                <button  class="btn col-md-6 green-conecta">Salvar Cotação</button><br/>
+                                                                                <button  class="btn col-md-6 green-conecta">Iniciar Cotação Presencial</button><br/>
                                                                                 <button  class="btn col-md-6 green-conecta">Enviar Para Fornecedor</button>
                                                                             </div>
                                                                         </div>
@@ -786,6 +786,11 @@ $("#prazoRCA").change(function() {
                         setDateTime("datetimepicker2","quote_end_time","time");
                         setItensSuplliers("product-datatable","quote_itens");
                         setItensSuplliers("representative-datatable","quote_suppliers");
+                        if($('#prazoRCA').length && $('#prazoRCA').val() != 'Outros') {
+                            $('#quote_due_date').text($('#prazoRCA').val());
+                        } else {
+                            $('#quote_due_date').text($('#prazo').val());
+                        }
                         break;
                 }
             }});

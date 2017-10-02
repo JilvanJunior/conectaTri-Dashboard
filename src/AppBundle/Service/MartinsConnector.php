@@ -124,7 +124,7 @@ class MartinsConnector
             ];
         }
 
-        $params['produtos'] = $products;
+        $params['produtos'] = array_values($products);
 
         $infos = $this->soap->cadastrarPedido($params)->cadastrarPedidoResult;
 

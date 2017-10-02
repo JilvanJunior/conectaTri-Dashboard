@@ -2030,6 +2030,7 @@ class ApiController extends FOSRestController {
         $priceChange = false;
         $productsChange = array();
         $mercadorias = $mc->getMartinsInfos($quantitiesByProduct);
+        var_dump($mercadorias);exit();
         foreach($mercadorias as $key => $mercadoria) {
             if($quantitiesAndPrices[$key]['price'] != $mercadoria->PrecoNormal){
                 $priceChange = true;
