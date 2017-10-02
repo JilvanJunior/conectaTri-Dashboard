@@ -1067,6 +1067,8 @@
 
 
 
+
+
     //BEGIN MASKS
 
         $(function(){
@@ -1427,15 +1429,30 @@ $("#prazoRCA").change(function() {
         // BEGIN Supplier TABLE
         $('#supplier-datatable').dataTable( {
             language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
-                select: {
-                    rows: {
-                        _: "%d linha selecionadas",
-                        0: "Clique numa linha para selecionar",
-                        1: "1 linha selecionada"
-                    }
-                }
-            },
+
+
+        "sEmptyTable": "Nenhum registro encontrado",
+        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "_MENU_ resultados por página",
+        "sLoadingRecords": "Carregando...",
+        "sProcessing": "Processando...",
+        "sZeroRecords": "Nenhum registro encontrado",
+        "sSearch": "Pesquisar",
+        "oPaginate": {
+        "sNext": '<i class="fa fa-angle-right"></i>',
+            "sPrevious": '<i class="fa fa-angle-left"></i>',
+
+    },
+        "oAria": {
+        "sSortAscending": ": Ordenar colunas de forma ascendente",
+            "sSortDescending": ": Ordenar colunas de forma descendente"
+    }
+    },
+
             ajax: {
                 url: "/api/representative",
                 type: 'GET',
@@ -1459,6 +1476,7 @@ $("#prazoRCA").change(function() {
                 }
             ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
+
              buttons: [
              {
              text: '',
@@ -1566,13 +1584,27 @@ $("#prazoRCA").change(function() {
         // BEGIN LISTING TABLE
         $('#listing-datatable').dataTable({
             language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
-                select: {
-                    rows: {
-                        _: "%d linha selecionadas",
-                        0: "Clique numa linha para selecionar",
-                        1: "1 linha selecionada"
-                    }
+
+
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": '<i class="fa fa-angle-right"></i>',
+                    "sPrevious": '<i class="fa fa-angle-left"></i>',
+
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
             ajax: {
@@ -1690,15 +1722,28 @@ $("#prazoRCA").change(function() {
 
         // BEGIN PRODUCTS TABLE
         $('#product-datatable').dataTable({
-            autoWidth: false,
             language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
-                select: {
-                    rows: {
-                        _: "%d linha selecionadas",
-                        0: "Clique numa linha para selecionar",
-                        1: "1 linha selecionada"
-                    }
+
+
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": '<i class="fa fa-angle-right"></i>',
+                    "sPrevious": '<i class="fa fa-angle-left"></i>',
+
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
             ajax: {
