@@ -1331,6 +1331,7 @@ class ApiController extends FOSRestController {
                     ->setQuantity($supplier->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price));
                 $em->persist($newSupplier);
+                $newProduct->setQuantity($supplier->quantity);
                 $newProduct->addQuoteSupplier($newSupplier);
             }
             $newProduct->setProduct($dbProduct);
