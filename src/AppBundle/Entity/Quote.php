@@ -499,7 +499,7 @@ class Quote
                 if($supplier->getId() != $quoteSupplier->getRepresentative()->getSupplier()->getId())
                     continue;
 
-                $preco = (double) $infos[$product->getId()]->PrecoDeCaixa;
+                $preco = (double) $infos[$product->getId()]->PrecoNormal;
                 if($quoteProduct->getQuantity() > 0)
                     $precoUnitario = $preco/$quoteProduct->getQuantity();
                 else
