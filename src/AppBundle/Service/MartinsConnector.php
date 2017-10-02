@@ -16,12 +16,10 @@ class MartinsConnector
      * @param string $chave
      * @param Retailer $user
      */
-    public function __construct($chave = null, $user = null)
+    public function __construct($context, $user = null)
     {
-        //TODO change to production
-        $this->soap = new \SoapClient('http://servicemarketup.martins.com.br/b2bservice.asmx?WSDL');
-//        $this->soap = new \SoapClient('http://service.martins.com.br/b2bservice.asmx?WSDL');
-        $this->chave = $chave;
+        $this->soap = new \SoapClient($context->getParameter('url_martins').'?WSDL');
+        $this->chave = $context->getParameter('chave_martins');
         $this->user = $user;
     }
 

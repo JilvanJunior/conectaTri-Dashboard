@@ -107,7 +107,7 @@ class ApiController extends FOSRestController {
         ];
 
         if($dbUser->isRCAVirtual()) {
-            $mc = new MartinsConnector($this->getParameter('chave_martins'), $dbUser);
+            $mc = new MartinsConnector($this, $dbUser);
             $acesso = $mc->login();
 
             if(property_exists($acesso, 'Login')) {
@@ -1823,7 +1823,7 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $user = $dbToken->getRetailer();
-        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $mc = new MartinsConnector($this, $user);
         $acesso = $mc->login();
 
         $boletos = $mc->getMartinsBoletos();
@@ -1857,7 +1857,7 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $user = $dbToken->getRetailer();
-        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $mc = new MartinsConnector($this, $user);
         $acesso = $mc->login();
 
         $productsData = json_decode($request->getContent());
@@ -1899,7 +1899,7 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $user = $dbToken->getRetailer();
-        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $mc = new MartinsConnector($this, $user);
         $acesso = $mc->login();
 
         $productsData = json_decode($request->getContent());
@@ -1955,7 +1955,7 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $user = $dbToken->getRetailer();
-        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $mc = new MartinsConnector($this, $user);
         $acesso = $mc->login();
 
         $martinsOrders = $d->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user]);
@@ -2002,7 +2002,7 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $user = $dbToken->getRetailer();
-        $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+        $mc = new MartinsConnector($this, $user);
         $acesso = $mc->login();
 
         $productsData = json_decode($request->getContent());

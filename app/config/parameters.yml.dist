@@ -21,5 +21,6 @@ parameters:
     # Key used for internal hashing
     internal_key: NuZ^?*(7)NWcbl8S+*_m.Bhti<I+L>Y:Yhvy05*o^%%mi*OC;.J/vhT]QeCw*uIy9%%"NYx(hRrM$D(IKvn{e;ut`-e:[c>89~Ia*xTB!?<HS:8/{O#8sT]xw1'}^+w83HFUFl12p@@NY%%^FG_z+C8nk.e$pYNp"J3o+>S4#mY!#/Q-v!ez']$i%%QkvGhhofDOf$xe)lr0_Z\=S{V4np>z>4rkvhP!Qi#GDNuntwg$/u6c.r>)hW+(6:5qd{5kH^6&6
 
-    # Key from Martins SOAP
-    chave_martins: e42628b8e106f8fee0afe113ea6f82d6
+    # Key and url from Martins SOAP
+    chave_martins: 'e42628b8e106f8fee0afe113ea6f82d6'
+    url_martins: 'http://servicemarketup.martins.com.br/b2bservice.asmx'
