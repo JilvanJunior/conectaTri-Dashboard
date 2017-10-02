@@ -61,6 +61,13 @@ class MartinsOrder
     private $paymentDue;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="orde")
+     */
+    private $orderProducts;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -89,7 +96,9 @@ class MartinsOrder
      */
     public function __construct()
     {
+        $this->orderProducts = new ArrayCollection();
         $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -142,6 +151,34 @@ class MartinsOrder
     public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOrderProducts()
+    {
+        return $this->orderProducts;
+    }
+
+    /**
+     * @param OrderProduct $orderProduct
+     * @return Quote
+     */
+    public function addOrderProduct($orderProduct) {
+        if (!$this->orderProducts->contains($orderProduct))
+            $this->orderProducts->add($orderProduct);
+        return $this;
+    }
+
+    /**
+     * @param OrderProduct $orderProduct
+     * @return Quote
+     */
+    public function removeOrderProduct($orderProduct) {
+        if ($this->orderProducts->contains($orderProduct))
+            $this->orderProducts->removeElement($orderProduct);
+        return $this;
     }
 
     /**

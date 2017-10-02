@@ -7,6 +7,7 @@ use AppBundle\Entity\FCMToken;
 use AppBundle\Entity\Listing;
 use AppBundle\Entity\ListingProduct;
 use AppBundle\Entity\MartinsOrder;
+use AppBundle\Entity\OrderProduct;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Quote;
 use AppBundle\Entity\QuoteProduct;
@@ -1968,7 +1969,11 @@ class ApiController extends FOSRestController {
                 continue;
 
             $orders[$k]['code'] = $martinsOrder->getCode();
-            $orders[$k]['date'] = $order->trackingData->DataVenda;
+            $orders[$k]['venda'] = $order->trackingData->DataVenda;
+            $orders[$k]['pagamento'] = $order->trackingData->DataPagamento;
+            $orders[$k]['faturamento'] = $order->trackingData->DataFaturamento;
+            $orders[$k]['entrega'] = $order->trackingData->DataEntrega;
+            $orders[$k]['conclusao'] = $order->trackingData->DataConclusao;
             $orders[$k]['due'] = $martinsOrder->getPaymentDue();
             $orders[$k]['value'] = $martinsOrder->getTotal();
             $orders[$k]['status'] = $order->PedidoStatus;
@@ -2053,13 +2058,28 @@ class ApiController extends FOSRestController {
         //faz pedido na martins
         $order = $mc->saveMartinsPedido($quantitiesByProduct, $productsData->code);
         if($order->Status == 0 || $order->Status == 2){
-            $martinsOrder = new MartinsOrder();
-            $martinsOrder->setCode($order->Pedido->Codigo);
-            $martinsOrder->setPaymentDue($productsData->payment_due);
-            $martinsOrder->setTotal(10);
-            $martinsOrder->setLinkToBill($order->LinkBoleto);
-            $martinsOrder->setUpdatedAt(new \DateTime());
-            $martinsOrder->setRetailer($user);
+            $martinsOrder = (new MartinsOrder())
+                ->setCode($order->Pedido->Codigo)
+                ->setPaymentDue($productsData->payment_due)
+                ->setTotal(0)
+                ->setLinkToBill($order->LinkBoleto)
+                ->setUpdatedAt(new \DateTime())
+                ->setRetailer($user);
+
+            $productsById = [];
+            foreach($products as $product) {
+                $productsById[$product->getId()] = $product;
+            }
+
+            foreach($productsData->products as $productData) {
+                $orderProduct = (new OrderProduct())
+                    ->setOrder($martinsOrder)
+                    ->setProduct($productsById[$productData->id])
+                    ->setQuantity($productData->quantity)
+                    ->setPrice($productData->price);
+                $martinsOrder->addOrderProduct($orderProduct);
+            }
+
             $em->persist($martinsOrder);
             $em->flush();
         } else {
