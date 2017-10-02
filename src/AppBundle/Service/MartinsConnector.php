@@ -201,7 +201,7 @@ class MartinsConnector
 
         $consulta = $this->soap->consultarInfoMercadoriasPorEAN($params)->consultarInfoMercadoriasPorEANResult;
         if(!property_exists($consulta, "MercadoriasInformacoes")){
-            return null;
+            return [];
         }
 
         $results = $consulta->MercadoriasInformacoes->MercadoriaInformacoes;
