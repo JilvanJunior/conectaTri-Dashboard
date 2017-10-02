@@ -2046,10 +2046,11 @@ class ApiController extends FOSRestController {
         $productsChange = array();
         $mercadorias = $mc->getMartinsInfos($quantitiesByProduct);
         foreach($mercadorias as $key => $mercadoria) {
-            if($quantitiesAndPrices[$key]['price'] != $mercadoria->PrecoNormal) {
+            $precoAtual = $quantitiesAndPrices[$key]['price'];
+            $quantidadeAtual = $quantitiesAndPrices[$key]['quantity'];
+            if(($precoAtual*$quantidadeAtual) != $mercadoria->PrecoNormal) {
                 $priceChange = true;
                 $codigoMercadoria = $mercadoria->CodigoMercadoria;
-                $precoAtual = $quantitiesAndPrices[$key]['price'];
                 $precoNovo = $mercadoria->PrecoNormal;
                 $productsChange[$key] = "$codigoMercadoria - atual: $precoAtual novo: $precoNovo";
             }
