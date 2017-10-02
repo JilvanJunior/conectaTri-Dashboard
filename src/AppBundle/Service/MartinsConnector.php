@@ -178,7 +178,6 @@ class MartinsConnector
         $params['pedidoId'] = $orderId;
 
         $infos = $this->soap->trankingPedido($params)->trankingPedidoResult;
-        var_dump($infos);exit();
         if(property_exists($infos, 'trackingData'))
             $infos = $infos->trackingData;
 
