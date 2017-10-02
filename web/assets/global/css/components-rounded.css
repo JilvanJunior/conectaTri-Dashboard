@@ -17502,7 +17502,7 @@ body[ng-controller] .modal {
 }
 
 .table-hover > tbody > tr:hover, .table-hover > tbody > tr:hover > td {
-  background: #f3f4f6 !important
+  background: #eff3f8 !important
 }
 
 .nav-tabs, .nav-pills {

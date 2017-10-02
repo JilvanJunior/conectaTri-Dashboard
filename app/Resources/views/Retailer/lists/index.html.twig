@@ -26,7 +26,7 @@
                         <!-- BEGIN PAGE TITLE -->
                         <div class="page-title">
                             <h1>Listas
-                                <small>tabela de listas cadastradas</small>
+                                <small>Tabela de todas as listas criadas</small>
                             </h1>
                         </div>
                         <!-- END PAGE TITLE -->
@@ -40,7 +40,7 @@
                         <!-- BEGIN PAGE BREADCRUMBS -->
                         <ul class="page-breadcrumb breadcrumb">
                             <li>
-                                <a href="{{ path('dashboard') }}">Home</a>
+                                <a href="{{ path('dashboard') }}">Painel Inicial</a>
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
@@ -86,8 +86,6 @@
                                                         <td>
                                                             <a href="{{ path('lista_produtos', {'id': listing.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
                                                                 <i class="fa fa-edit"></i> Produtos </a>
-                                                            <a href="{{ path('lista_produtos_quantidade', {'id': listing.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
-                                                                <i class="fa fa-edit"></i> Quantidade </a>
                                                             <a href="{{ path('deletar_lista', {'id': listing.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
                                                                 <i class="fa fa-trash"></i> Deletar </a>
                                                         </td>
