@@ -445,7 +445,7 @@ class Quote
      * Verify if quote is made by a RCA flagged Retailer
      * and generate the RCA quote if needed
      */
-    public function checkForRCAQuote($chave)
+    public function checkForRCAQuote($chave, $url)
     {
         if(!$this->retailer->isRCAVirtual())
             return;
@@ -455,11 +455,11 @@ class Quote
             $supplier = $representative->getSupplier();
 
             if($supplier->isRca())
-                $this->makeRCAQuote($chave, $supplier);
+                $this->makeRCAQuote($chave, $url, $supplier);
         }
     }
 
-    private function makeRCAQuote($chave, $supplier)
+    private function makeRCAQuote($chave, $url, $supplier)
     {
         $products = [];
         $quantitiesByProduct = [];
@@ -474,7 +474,7 @@ class Quote
             ];
         }
 
-        $mc = new MartinsConnector($chave, $this->retailer);
+        $mc = new MartinsConnector($chave, $url, $this->retailer);
 
         $codes = $mc->getMartinsCodeByEan($products);
         if(empty($codes))

@@ -1054,7 +1054,7 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $dbQuote = $d->getRepository("AppBundle:Quote")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
-        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'));
+        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
         $em->flush();
 
         return View::create($dbQuote, Response::HTTP_OK);
@@ -1206,7 +1206,7 @@ class ApiController extends FOSRestController {
             $isFirst = false;
             $dbQuote->addQuoteProduct($quoteProduct);
         }
-        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'));
+        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
         $em->flush();
 
         return View::create($dbQuote, Response::HTTP_CREATED);
@@ -1340,7 +1340,7 @@ class ApiController extends FOSRestController {
             $dbQuote->setPaymentDate($quote->payment_date);
         if(!is_null($quote->codigo_martins))
             $dbQuote->setCodeMartins($quote->codigo_martins);
-        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'));
+        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
 
         $em->flush();
         return View::create($dbQuote, Response::HTTP_ACCEPTED);
