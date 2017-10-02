@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -63,7 +64,7 @@ class MartinsOrder
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="orde")
+     * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="order")
      */
     private $orderProducts;
 

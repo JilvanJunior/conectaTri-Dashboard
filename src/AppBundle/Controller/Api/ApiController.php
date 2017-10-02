@@ -2077,6 +2077,7 @@ class ApiController extends FOSRestController {
                     ->setProduct($productsById[$productData->id])
                     ->setQuantity($productData->quantity)
                     ->setPrice($productData->price);
+                $em->persist($orderProduct);
                 $martinsOrder->addOrderProduct($orderProduct);
             }
 
