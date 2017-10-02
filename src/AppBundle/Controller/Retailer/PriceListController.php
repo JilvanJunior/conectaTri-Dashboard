@@ -61,14 +61,21 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
+        //type of listings
+        $types = [];
+        $types['0'] = 'Não Informado';
+        $types['1'] = 'Comum';
+        $types['2'] = 'Sazonal';
+        $types['3'] = 'Semanal';
         $data = [
+            'types' => $types,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
             'token' => $token->getToken()
         ];
 
         if($user->isRCAVirtual()) {
-            $mc = new MartinsConnector($this->getParameter('chave_martins'), $user);
+            $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
             $acesso = $mc->login();
             $conditions = $acesso->Login->CondicoesPagamento->CondPgto;
             if(is_array($conditions)) {

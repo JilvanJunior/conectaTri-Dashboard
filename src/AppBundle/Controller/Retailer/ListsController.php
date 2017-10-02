@@ -181,6 +181,7 @@ class ListsController extends Controller
             );
 
         }
+        var_dump($listing);exit();
         $data['url'] = $this->generateUrl('lista_produtos_quantidade', ['id' => $id]);
         echo json_encode($data);
         exit();
@@ -194,6 +195,7 @@ class ListsController extends Controller
      */
     public function addListingProductAction(Request $request, $id)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         $listing = $em->getRepository('AppBundle:Listing')->find($id);
 
