@@ -191,7 +191,7 @@ class MartinsConnector
         $idsByEan = [];
         foreach($products as $product) {
             $ean = $product->getEan();
-            if(!empty($ean))
+            if(!empty($ean) && is_numeric($ean))
                 $idsByEan[$ean] = $product->getId();
         }
         if(empty($idsByEan))
