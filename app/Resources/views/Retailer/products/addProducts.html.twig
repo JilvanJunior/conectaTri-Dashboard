@@ -5,6 +5,181 @@
 
 {% block page %}
 
+    <style>
+
+
+        /*
+        Float label styles
+         */
+
+
+
+        label:hover {
+            cursor: text;
+        }
+
+
+
+        @media (max-width: 500px) {
+            .contact-form {
+                margin: 0 0 100px;
+                width: 100%;
+            }
+        }
+        .contact-form .email, .contact-form .message, .contact-form .text {
+            position: relative;
+        }
+        .contact-form .email input:focus, .contact-form .email textarea:focus, .contact-form .message input:focus, .contact-form .message textarea:focus, .contact-form .text input:focus, .contact-form .text textarea:focus {
+            background: #f4f5f6;
+        }
+        .contact-form .email label, .contact-form .message label, .contact-form .text label {
+            color: #40AE40;
+            left: 23px;
+            position: absolute;
+            top: 13px;
+            -moz-transition: all, 150ms;
+            -o-transition: all, 150ms;
+            -webkit-transition: all, 150ms;
+            transition: all, 150ms;
+        }
+        .contact-form .email.typing label, .contact-form .message.typing label, .contact-form .text.typing label {
+            color: #40ae40;
+            font-size: 10px;
+            top: 2px;
+        }
+
+        .text input {
+            margin: 0 auto;
+            height: 44px;
+            padding-top: 14px;
+            width: 284px;
+            border: 1px solid #40AE40
+        }
+        .text input:focus{
+            border: 1px solid #40AE40;
+        }
+
+        .contact-form .email {
+            border-left: 1px #e6e6e6 solid;
+            float: right;
+        }
+        @media (max-width: 500px) {
+            .contact-form .email {
+                border-left: none;
+                border-top: 1px #e6e6e6 solid;
+            }
+        }
+        .contact-form .message {
+            border-bottom: 1px #e6e6e6 solid;
+            border-top: 1px #e6e6e6 solid;
+            clear: both;
+        }
+        .contact-form .message textarea {
+            height: 200px;
+            padding: 23px;
+        }
+        .contact-form .text {
+            float: left;
+        }
+        .navbar-inner {
+            background: #319431;
+            width: 100%;
+        }
+
+        #rootwizard{
+            background: #fff;
+        }
+
+        .wizard-container{
+            padding-top: 12px;
+            padding-bottom: 15px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-top-width: 1px;
+        }
+
+        .mt-checkbox.mt-checkbox-outline:hover>input:not([disabled]):checked ~ span, .mt-checkbox.mt-checkbox-outline>input:checked ~ span {
+
+            background: #319431 !important;
+            border-radius: 2px;
+            border: 1px solid #319431;
+
+        }
+
+        .mt-checkbox.mt-checkbox-outline>span {
+            border: 1px solid #d9d9d9;
+            background: 0;
+            border-radius: 2px;
+        }
+        .mt-checkbox>span:after {
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid #fff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .error {
+            border: 1px solid red !important;
+        }
+
+        .valid {
+            border: 1px solid #40AE40 !important;
+        }
+
+        .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+            color: transparent;
+            background-color: transparent;
+        }
+
+        .nav>li>a:hover, .nav>li>a:focus {
+            text-decoration: none;
+            background-color: transparent;
+        }
+        .disabled-click {
+            pointer-events: none;
+            cursor: default;
+        }
+        td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        th {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+
+        .text-area{
+            width: 284px;
+            border: 1px solid #40AE40;
+            padding-top: 14px;
+
+        }
+
+        .text select {
+            margin: 0 auto;
+            height: 44px;
+            padding-top: 14px;
+            width: 284px;
+            border: 1px solid #40AE40
+        }
+        .text select:focus{
+            border: 1px solid #40AE40;
+        }
+        .modal .modal-header{
+            background-color: #40AE40;
+        }
+        .modal-title{
+            color: #FFFFFF;
+        }
+
+
+
+    </style>
+
     <div class="page-wrapper-row full-height">
         <div class="page-wrapper-middle">
             <!-- BEGIN CONTAINER -->
@@ -58,90 +233,143 @@
                                                         </div>
                                                         <div class="portlet-body form">
                                                             <!-- BEGIN FORM-->
-                                                            <form action="#" class="form-horizontal" method="POST">
-                                                                <div class="form-body">
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Nome do Produto*</label>
-                                                                        <div class="col-md-4">
-                                                                            <input type="text" id="product" list="product-datalist" name="name" class="form-control input-circle" required
-                                                                                   placeholder="Nome do Produto" value="{% if product is defined %}{{ product.name }}{% endif %}">
-                                                                            <datalist id="product-datalist"></datalist>
+                                                            <form action="#" class="form-horizontal contact-form" method="POST">
+
+                                                                <div class="form-body ">
+
+                                                                    <div class="row ">
+
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group product text ">
+                                                                                    <label for="product">Nome do Produto*</label>
+                                                                                    <input class="form-control" type="text" name="product" id="product" value="{% if product is defined %}{{ product.name }}{% endif %}" required />
+                                                                                    <datalist id="product-datalist"></datalist>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <div class="row ">
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group ean text ">
+                                                                                    <label for="ean">Código de Barras do Produto*</label>
+                                                                                    <input class="form-control" type="text" name="ean" id="ean" value="{% if product is defined %}{{ product.ean }}{% endif %}" required/>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Código de Barras do Produto</label>
-                                                                        <div class="col-md-4">
-                                                                            <input type="text" name="ean" class="form-control input-circle"
-                                                                                   placeholder="Código de barras" value="{% if product is defined %}{{ product.ean }}{% endif %}">
+
+                                                                    <div class="row ">
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group brand text ">
+                                                                                    <label for="brand">Marca do Produto*</label>
+                                                                                    <input class="form-control" type="text" name="brand" id="brand" value="{% if product is defined %}{{ product.brand }}{% endif %}" required/>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Marca do Produto</label>
-                                                                        <div class="col-md-4">
-                                                                            <input type="text" name="brand" class="form-control input-circle"
-                                                                                   placeholder="Marca do Produto" value="{% if product is defined %}{{ product.brand }}{% endif %}">
+
+
+
+                                                                    <div class="row ">
+
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group type text typing">
+                                                                                    <label for="type">Tipo*</label>
+                                                                                    <select name="type" id="type"  class="form-control select-circle " required>
+                                                                                        {% if product is defined %}
+                                                                                            <option value="{{ product.type }}" selected>{{ product.type }}</option>
+                                                                                        {% else %}
+                                                                                            <option value="" disabled selected>Selecione um Tipo</option>
+                                                                                        {% endif %}
+                                                                                        <option value="Geral">Geral</option>
+                                                                                        <option value="Mercearia">Mercearia</option>
+                                                                                        <option value="Limpeza">Limpeza</option>
+                                                                                        <option value="Perfumaria">Perfumaria</option>
+                                                                                        <option value="Bazar">Bazar</option>
+                                                                                        <option value="Bebidas">Bebidas</option>
+                                                                                        <option value="Eletro">Eletro</option>
+                                                                                        <option value="Perecíveis">Perecíveis</option>
+                                                                                        <option value="Rotisseria">Rotisseria</option>
+                                                                                        <option value="Textil">Textil</option>
+                                                                                        <option value="Açougue">Açougue</option>
+                                                                                        <option value="Hortifruti">Hortifruti</option>
+                                                                                        <option value="Padaria">Padaria</option>
+                                                                                        <option value="Insumos De Producao">Insumos de Produção</option>
+                                                                                        <option value="Materiais Para Uso">Materiais para Uso</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <div class="row ">
+
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group unit text typing">
+                                                                                    <label for="unit">Unidade de Medida*</label>
+                                                                                    <select name="unit" id="unit"  class="form-control select-circle " required>
+                                                                                        {% if product is defined %}
+                                                                                            <option value="{{ product.unit }}" selected>{{ product.unit }}</option>
+                                                                                        {% else %}
+                                                                                            <option value="" disabled selected>Selecione uma Unidade de Medida</option>
+                                                                                        {% endif %}
+                                                                                        <option value="Unidade">Unidade</option>
+                                                                                        <option value="Caixa">Caixa</option>
+                                                                                        <option value="Kg">Kg</option>
+                                                                                        <option value="Litro">Litro</option>
+                                                                                        <option value="Fardo">Fardo</option>
+                                                                                        <option value="Pacote">Pacote</option>
+                                                                                        <option value="Pack">Pack</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+
+
+                                                                    <div class="row ">
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group quantity text ">
+                                                                                    <label for="quantity">Peso / Quantidade*</label>
+                                                                                    <input class="form-control" type="text" name="quantity" id="quantity" required/>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Tipo</label>
-                                                                        <div class="col-md-4">
-                                                                            <select name="type" class="form-control select-circle">
-                                                                                {% if product is defined %}
-                                                                                    <option value="{{ product.type }}" selected>{{ product.type }}</option>
-                                                                                {% else %}
-                                                                                    <option value="" disabled selected>Selecione um Tipo</option>
-                                                                                {% endif %}
-                                                                                <option value="Geral">Geral</option>
-                                                                                <option value="Mercearia">Mercearia</option>
-                                                                                <option value="Limpeza">Limpeza</option>
-                                                                                <option value="Perfumaria">Perfumaria</option>
-                                                                                <option value="Bazar">Bazar</option>
-                                                                                <option value="Bebidas">Bebidas</option>
-                                                                                <option value="Eletro">Eletro</option>
-                                                                                <option value="Perecíveis">Perecíveis</option>
-                                                                                <option value="Rotisseria">Rotisseria</option>
-                                                                                <option value="Textil">Textil</option>
-                                                                                <option value="Açougue">Açougue</option>
-                                                                                <option value="Hortifruti">Hortifruti</option>
-                                                                                <option value="Padaria">Padaria</option>
-                                                                                <option value="Insumos De Producao">Insumos de Produção</option>
-                                                                                <option value="Materiais Para Uso">Materiais para Uso</option>
-                                                                            </select>
+
+                                                                    <div class="row ">
+
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group full-description text ">
+                                                                                    <label for="full-description">Descrição Completa*</label>
+                                                                                    <textarea rows="7" class="form-control text-area" type="text" id="full-description" name="full-description"  >
+                                                                                                                </textarea>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
+
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Unidade de Medida</label>
-                                                                        <div class="col-md-4">
-                                                                            <select name="unit" class="form-control select-circle">
-                                                                                {% if product is defined %}
-                                                                                    <option value="{{ product.unit }}" selected>{{ product.unit }}</option>
-                                                                                {% else %}
-                                                                                    <option value="" disabled selected>Selecione uma Unidade de Medida</option>
-                                                                                {% endif %}
-                                                                                <option value="Unidade">Unidade</option>
-                                                                                <option value="Caixa">Caixa</option>
-                                                                                <option value="Kg">Kg</option>
-                                                                                <option value="Litro">Litro</option>
-                                                                                <option value="Fardo">Fardo</option>
-                                                                                <option value="Pacote">Pacote</option>
-                                                                                <option value="Pack">Pack</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Peso / Quantidade</label>
-                                                                        <div class="col-md-4">
-                                                                            <input type="number" name="quantity" class="form-control input-circle"
-                                                                                   placeholder="Peso / Quantidade" value="{% if product is defined %}{{ product.quantity }}{% endif %}">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group last">
-                                                                        <label class="col-md-3 control-label">Descrição Completa</label>
-                                                                        <div class="col-md-4">
-                                                                            <textarea name="full-description" class="form-control textarea-circle" cols="50" rows="10">{% if product is defined %}{{ product.fullDescription }}{% endif %}</textarea>
-                                                                        </div>
-                                                                    </div>
+
+
+
+
                                                                 </div>
+
+
+
                                                                 <div class="form-actions">
                                                                     <div class="row">
                                                                         <div class="col-md-offset-3 col-md-9">
@@ -190,6 +418,46 @@
                     console.log("Um problema ocorreu ao listar os produtos");
                 }
             });
+        });
+
+
+
+
+
+        //BEGIN FLOAT LABEL METHODS
+        $('#product').keyup(function(){
+            $('.product.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.product.text').removeClass('typing');
+            }
+        });
+
+
+        $('#ean').keyup(function(){
+            $('.ean.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.ean.text').removeClass('typing');
+            }
+        });
+        $('#brand').keyup(function(){
+            $('.brand.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.brand.text').removeClass('typing');
+            }
+        });
+
+
+        $('#quantity').keyup(function(){
+            $('.quantity.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.quantity.text').removeClass('typing');
+            }
+        });
+        $('#full-description').keyup(function(){
+            $('.full-description.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.full-description.text').removeClass('typing');
+            }
         });
     </script>
 {% endblock %}

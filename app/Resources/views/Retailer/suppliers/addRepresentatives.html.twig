@@ -6,6 +6,182 @@
 
 {% block page %}
 
+    <style>
+
+
+        /*
+        Float label styles
+         */
+
+
+
+        label:hover {
+            cursor: text;
+        }
+
+
+
+        @media (max-width: 500px) {
+            .contact-form {
+                margin: 0 0 100px;
+                width: 100%;
+            }
+        }
+        .contact-form .email, .contact-form .message, .contact-form .text {
+            position: relative;
+        }
+        .contact-form .email input:focus, .contact-form .email textarea:focus, .contact-form .message input:focus, .contact-form .message textarea:focus, .contact-form .text input:focus, .contact-form .text textarea:focus {
+            background: #f4f5f6;
+        }
+        .contact-form .email label, .contact-form .message label, .contact-form .text label {
+            color: #40AE40;
+            left: 23px;
+            position: absolute;
+            top: 13px;
+            -moz-transition: all, 150ms;
+            -o-transition: all, 150ms;
+            -webkit-transition: all, 150ms;
+            transition: all, 150ms;
+        }
+        .contact-form .email.typing label, .contact-form .message.typing label, .contact-form .text.typing label {
+            color: #40ae40;
+            font-size: 10px;
+            top: 2px;
+        }
+
+        .text input {
+            margin: 0 auto;
+            height: 44px;
+            padding-top: 14px;
+            width: 284px;
+            border: 1px solid #40AE40
+        }
+        .text input:focus{
+            border: 1px solid #40AE40;
+        }
+
+        .contact-form .email {
+            border-left: 1px #e6e6e6 solid;
+            float: right;
+        }
+        @media (max-width: 500px) {
+            .contact-form .email {
+                border-left: none;
+                border-top: 1px #e6e6e6 solid;
+            }
+        }
+        .contact-form .message {
+            border-bottom: 1px #e6e6e6 solid;
+            border-top: 1px #e6e6e6 solid;
+            clear: both;
+        }
+        .contact-form .message textarea {
+            height: 200px;
+            padding: 23px;
+        }
+        .contact-form .text {
+            float: left;
+        }
+        .navbar-inner {
+            background: #319431;
+            width: 100%;
+        }
+
+        #rootwizard{
+            background: #fff;
+        }
+
+        .wizard-container{
+            padding-top: 12px;
+            padding-bottom: 15px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-top-width: 1px;
+        }
+
+        .mt-checkbox.mt-checkbox-outline:hover>input:not([disabled]):checked ~ span, .mt-checkbox.mt-checkbox-outline>input:checked ~ span {
+
+            background: #319431 !important;
+            border-radius: 2px;
+            border: 1px solid #319431;
+
+        }
+
+        .mt-checkbox.mt-checkbox-outline>span {
+            border: 1px solid #d9d9d9;
+            background: 0;
+            border-radius: 2px;
+        }
+        .mt-checkbox>span:after {
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid #fff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .error {
+            border: 1px solid red !important;
+        }
+
+        .valid {
+            border: 1px solid #40AE40 !important;
+        }
+
+        .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+            color: transparent;
+            background-color: transparent;
+        }
+
+        .nav>li>a:hover, .nav>li>a:focus {
+            text-decoration: none;
+            background-color: transparent;
+        }
+        .disabled-click {
+            pointer-events: none;
+            cursor: default;
+        }
+        td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        th {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+
+        .text-area{
+            width: 284px;
+            border: 1px solid #40AE40;
+            padding-top: 14px;
+
+        }
+
+        .text select {
+            margin: 0 auto;
+            height: 44px;
+            padding-top: 14px;
+            width: 284px;
+            border: 1px solid #40AE40
+        }
+        .text select:focus{
+            border: 1px solid #40AE40;
+        }
+        .modal .modal-header{
+            background-color: #40AE40;
+        }
+        .modal-title{
+            color: #FFFFFF;
+        }
+
+
+
+    </style>
+
+
     <div class="page-wrapper-row full-height">
         <div class="page-wrapper-middle">
             <!-- BEGIN CONTAINER -->
@@ -59,51 +235,78 @@
                                                         </div>
                                                         <div class="portlet-body form">
                                                             <!-- BEGIN FORM-->
-                                                            <form action="#" class="form-horizontal" method="POST">
-                                                                <div class="form-body">
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Fornecedor*</label>
-                                                                        <div class="col-md-4">
-                                                                            <select name="supplier" class="form-control select-circle" required>
-                                                                                {% if representative is defined %}
-                                                                                    <option value="{{ representative.supplier.id }}" selected>
-                                                                                        {{ representative.supplier.cnpj }} - {{ representative.supplier.name }}</option>
-                                                                                {% else %}
-                                                                                    <option value="" disabled selected>Selecione um Fornecedor</option>
-                                                                                {% endif %}
-                                                                                {% for supplier in suppliers %}
-                                                                                    <option value="{{ supplier.id }}">{{ supplier.cnpj }} - {{ supplier.name }}</option>
-                                                                                {% endfor %}
-                                                                            </select>
+                                                            <form action="#" class="form-horizontal contact-form" method="POST">
+
+                                                                <div class="form-body ">
+
+                                                                    <div class="row ">
+
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group supplier text typing">
+                                                                                    <label for="supplier">Fornecedor*</label>
+                                                                                    <select name="supplier" id="supplier" class="form-control select-circle" required>
+                                                                                        {% if representative is defined %}
+                                                                                            <option value="{{ representative.supplier.id }}" selected>
+                                                                                                {{ representative.supplier.cnpj }} - {{ representative.supplier.name }}</option>
+                                                                                        {% else %}
+                                                                                            <option value="" disabled selected>Selecione um Fornecedor</option>
+                                                                                        {% endif %}
+                                                                                        {% for supplier in suppliers %}
+                                                                                            <option value="{{ supplier.id }}">{{ supplier.cnpj }} - {{ supplier.name }}</option>
+                                                                                        {% endfor %}
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
+
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Nome do Representante*</label>
-                                                                        <div class="col-md-4">
-                                                                            <input type="text" name="name" class="form-control input-circle" placeholder="Nome do Representante"
-                                                                                   required value="{% if representative is defined %}{{ representative.name }}{% endif %}">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">E-mail*</label>
-                                                                        <div class="col-md-4">
-                                                                            <div class="input-group">
-                                                                                <span class="input-group-addon input-circle-left">
-                                                                                    <i class="fa fa-envelope"></i>
-                                                                                </span>
-                                                                                <input type="email" name="email" class="form-control input-circle-right" placeholder="E-mail"
-                                                                                       required value="{% if representative is defined %}{{ representative.email }}{% endif %}">
+
+                                                                    <div class="row ">
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group name text ">
+                                                                                    <label for="name">Nome do Representante*</label>
+                                                                                    <input class="form-control" value="{% if representative is defined %}{{ representative.name }}{% endif %}" type="text" name="name" id="name" required />
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-3 control-label">Telefone</label>
-                                                                        <div class="col-md-4">
-                                                                            <input type="text" id="phone" name="phone" class="form-control input-circle" placeholder="Telefone"
-                                                                                   value="{% if representative is defined %}{{ representative.phone }}{% endif %}">
+
+                                                                    <div class="row ">
+
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group email text ">
+                                                                                    <label for="email">E-mail*</label>
+                                                                                    <input class="form-control" type="text" id="email" name="email" value="{% if representative is defined %}{{ representative.email }}{% endif %}"  required/>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
+
                                                                     </div>
+
+                                                                    <div class="row ">
+
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group phone text ">
+                                                                                    <label for="phone">Telefone</label>
+                                                                                    <input class="form-control" type="text" id="phone" name="phone" value="{% if representative is defined %}{{ representative.phone }}{% endif %}"  required/>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+
+
+
+
                                                                 </div>
+
+
+
                                                                 <div class="form-actions">
                                                                     <div class="row">
                                                                         <div class="col-md-offset-3 col-md-9">
@@ -148,6 +351,30 @@
                 };
 
             $('#phone').mask(SPMaskBehavior, spOptions);
+        });
+
+        //BEGIN FLOAT LABEL METHODS
+        $('#name').keyup(function(){
+            $('.name.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.name.text').removeClass('typing');
+            }
+        });
+
+
+        $('#email').keyup(function(){
+            $('.email.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.email.text').removeClass('typing');
+            }
+        });
+
+
+        $('#phone').keyup(function(){
+            $('.phone.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.phone.text').removeClass('typing');
+            }
         });
     </script>
 {% endblock %}
