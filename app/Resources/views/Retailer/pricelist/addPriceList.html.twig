@@ -332,7 +332,7 @@
                                                     <div class="portlet box green-conecta" style="border-left-width: 0px;border-bottom-width: 0px;border-right-width: 0px;">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <i class="fa fa-gift"></i><span id="wizardStepLabel">Dados da Cotação</span>
+                                                                <image id="wizardStepImage" ></image><span id="wizardStepLabel">Dados da Cotação</span>
                                                             </div>
                                                         </div>
                                                         <!-- BEGIN WIZARD-->
@@ -1158,7 +1158,8 @@ $("#prazoRCA").change(function() {
 
                 switch(index) {
                     case 0 :
-                        $("#wizardStepLabel").text("Dados da Cotação");
+                        $("#wizardStepLabel").text(" Dados da Cotação");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/dados-da-cotacao/24x24.png') }}")
                         $("#advance a").addClass('disabled');
                         $("#previous").hide();
 
@@ -1185,7 +1186,8 @@ $("#prazoRCA").change(function() {
                         //END FORM VALIDATION
                         break;
                     case 1 :
-                        $("#wizardStepLabel").text("Selecionar Fornecedor");
+                        $("#wizardStepLabel").text(" Selecionar Fornecedor");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/fornecedores/24x24.png') }}")
                         $("#advance a").addClass('disabled');
                         $("#previous").show();
 
@@ -1199,7 +1201,8 @@ $("#prazoRCA").change(function() {
 
                         break;
                     case 2 :
-                        $("#wizardStepLabel").text("Selecionar Lista");
+                        $("#wizardStepLabel").text(" Selecionar Lista");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/minhas-listas/24x24.png') }}")
                         $("#advance a").addClass('disabled');
 
                         var listingTable = $('#listing-datatable');
@@ -1212,7 +1215,8 @@ $("#prazoRCA").change(function() {
 
                         break;
                     case 3 :
-                        $("#wizardStepLabel").text("Selecionar Produtos");
+                        $("#wizardStepLabel").text(" Selecionar Produtos");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/produtos/24x24.png') }}")
                         $("#advance a").addClass('disabled');
                         $("#advance").show();
 
@@ -1226,7 +1230,8 @@ $("#prazoRCA").change(function() {
 
                         break;
                     case 4 :
-                        $("#wizardStepLabel").text("Confirmação dos Dados");
+                        $("#wizardStepLabel").text(" Confirmação dos Dados");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/confirmacao-dos-dados/24x24.png') }}")
                         $("#advance").hide();
                         setDateTime("datetimepicker1","quote_start","date");
                         setDateTime("datetimepicker1","quote_start_time","time");
