@@ -171,10 +171,10 @@ class MartinsConnector
     }
 
     /**
-     * @param int $orderId
+     * @param $orderId
      * @return stdClass
      */
-    public function trackMartinsPedido(int $orderId)
+    public function trackMartinsPedido($orderId)
     {
         $params = $this->getDefaultParams();
         $params['pedidoId'] = $orderId;
