@@ -61,35 +61,63 @@ class MartinsController extends Controller
     }
 
     /**
-     * @Route("/varejista/martins/pedido/novo", name="novo_pedido")
+     * @Route("/varejista/martins/pedido/novo/{idQuote}", name="novo_pedido")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addPedidoAction(Request $request)
+    public function addPedidoAction(Request $request, $idQuote)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if(!$user->isRCAVirtual())
             return $this->redirectToRoute('dashboard');
 
-        $pedidos = [];
-        $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
-        $codes = $mc->getMartinsCodeByEan($pedidos);
+        $em = $this->getDoctrine()->getManager();
+        $quote = $em->getRepository('AppBundle:Quote')->findOneById($idQuote);
 
+        $products = [];
         $quantitiesByProduct = [];
-        foreach($pedidos as $pedido) {
-            $idPedido = $pedido->getId();
+        foreach($quote->getQuoteProducts() as $quoteProduct) {
+            $idProduct = $quoteProduct->getProduct()->getId();
+            $products[$idProduct] = $quoteProduct->getProduct();
 
-            $quantitiesByProduct[$idPedido] = [
-                'idMartins' => $codes[$idPedido],
-                'quantity' => 1,
+            $quantitiesByProduct[$idProduct] = [
+                'idMartins' => 0,
+                'quantity' => $quoteProduct->getQuantity(),
             ];
         }
+
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
+        $acesso = $mc->login();
+        $codes = $mc->getMartinsCodeByEan($products);
+
+        foreach($products as $product) {
+            $idProduct = $product->getId();
+            if(!isset($codes[$idProduct]))
+                continue;
+            $quantitiesByProduct[$idProduct]['idMartins'] = $codes[$idProduct];
+        }
+
         $mercadorias = $mc->getMartinsInfos($quantitiesByProduct);
+        
+        $total = 0.0;
+        $mercadoriasSaida = [];
+        foreach($mercadorias as $idProduct => $mercadoria) {
+            $total += $mercadoria->PrecoNormal;
+
+            $mercadoriasSaida[] = [
+                'nome' => $products[$idProduct]->getName(),
+                'quantidade' => $quantitiesByProduct[$idProduct]['quantity'],
+                'preco' => $mercadoria->PrecoNormal,
+            ];
+        }
 
         return $this->render('Retailer/martins/addPedido.html.twig', [
-            'mercadorias' => $mercadorias,
+            'mercadorias' => $mercadoriasSaida,
+            'prazo' => $quote->getPaymentDate(),
+            'previsaoEntrega' => $acesso->Login->PrevisaoEntregaTexto,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
+            'total' => $total,
         ]);
     }
 }

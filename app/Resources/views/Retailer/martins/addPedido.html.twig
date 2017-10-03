@@ -57,10 +57,10 @@
                                     <div class='form-body'>
                                         <div class='row'>
                                             <div class='col-xs-6'>
-                                                Prazo de Pagamento
+                                                Prazo de Pagamento: {{ prazo }}
                                             </div>
                                             <div class='col-xs-6'>
-                                                Previsão de entrega
+                                                Previsão de entrega: {{ previsaoEntrega }}
                                             </div>
                                         </div>
                                         <hr/>
@@ -75,14 +75,14 @@
                                             <tbody>
                                                 {% for mercadoria in mercadorias %}
                                                 <tr>
-                                                    <td>{{ mercadoria }}</td>
-                                                    <td>{{ mercadoria.Quantidade }}</td>
-                                                    <td>{{ mercadoria.PrecoNormal }}</td>
+                                                    <td>{{ mercadoria.nome }}</td>
+                                                    <td>{{ mercadoria.quantidade }}</td>
+                                                    <td>{{ mercadoria.preco }}</td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
                                         </table>
-                                        total do pedido
+                                        Total do Pedido: {{ total }}
                                     </div>
                                     <div class='form-actions'>
                                         <button class="btn btn-circle green-conecta">Enviar Pedido</button>

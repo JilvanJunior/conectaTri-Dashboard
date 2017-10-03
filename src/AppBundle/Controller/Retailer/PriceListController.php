@@ -434,6 +434,7 @@ class PriceListController extends Controller
                 'representativeId' => $representative->getId(),
                 'representativeName' => $representative->getName(),
                 'supplierName' => $supplier->getName(),
+                'supplierIsRCA' => $supplier->isRCA(),
                 'moreThanMinimum' => $moreThanMinimum,
                 'filledIn' => $filledIn,
                 'observation' => $observation
@@ -483,6 +484,7 @@ class PriceListController extends Controller
      */
     public function editQuoteProductAction(Request $request, $id)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
         $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);

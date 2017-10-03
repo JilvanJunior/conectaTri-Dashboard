@@ -108,7 +108,7 @@
                                                     <th>Status</th>
                                                     <th>Atende ao mínimo</th>
                                                     <th>Observação</th>
-                                                    {% if quote.closed == 1 %}
+                                                    {% if userIsRCA or quote.closed == 1 %}
                                                         <th>Ação</th>
                                                     {% endif %}
                                                 </tr>
@@ -121,10 +121,20 @@
                                                         <td> {{ supplierStatus.filledIn }} </td>
                                                         <td> {{ supplierStatus.moreThanMinimum }} </td>
                                                         <td> {{ supplierStatus.observation }} </td>
-                                                        {% if quote.closed == 1 %}
-                                                            <td> <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': supplierStatus.representativeId}) }}"
+                                                        {% if userIsRCA or quote.closed == 1 %}
+                                                            <td>
+                                                                {% if quote.closed == 1 %}
+                                                                <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': supplierStatus.representativeId}) }}"
                                                                     class="btn btn-outline btn-circle btn-sm purple">
-                                                                    <i class="fa fa-file"></i> Exportar Pedido </a>
+                                                                    <i class="fa fa-file"></i> Exportar Pedido
+                                                                </a>
+                                                                {% endif %}
+                                                                {% if userIsRCA and supplierStatus.supplierIsRCA %}
+                                                                <a href="{{ path('novo_pedido', {'idQuote': quote.id}) }}"
+                                                                    class="btn btn-outline btn-circle btn-sm purple">
+                                                                    <i class="fa fa-file"></i> Novo Pedido Martins
+                                                                </a>
+                                                                {% endif %}
                                                             </td>
                                                         {% endif %}
                                                     </tr>
