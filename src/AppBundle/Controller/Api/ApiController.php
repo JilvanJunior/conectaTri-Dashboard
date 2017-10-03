@@ -2190,6 +2190,67 @@ class ApiController extends FOSRestController {
     }
 
     /**
+     * @Rest\Get("/api/martins/pedido/{id}/update")
+     */
+    public function updateMartinsOrder(Request $request, $id) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        /** @var Retailer $user */
+        $user = $dbToken->getRetailer();
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
+        $acesso = $mc->login();
+
+        $martinsOrder = $d->getRepository('AppBundle:MartinsOrder')->findOneBy(['id' => $id, 'retailer' => $user, 'deleted' => 0]);
+
+        //starts update
+        $martinsOrder->setUpdating(true);
+        $em->flush();
+
+        $retOrder = array();
+
+        /** @var \stdClass $order */
+        $order = $mc->trackMartinsPedido($martinsOrder->getCode());
+        $trackingData = $order->trackingData->trackingData;
+
+        //update MartinsOrder
+        $martinsOrder->setSaleDate($trackingData->DataVenda)
+            ->setPaymentDate($trackingData->DataPagamento)
+            ->setBillingDate($trackingData->DataFaturamento)
+            ->setDeliveryDate($trackingData->DataEntrega)
+            ->setCompletionDate($trackingData->DataConclusao)
+            ->setStatus($order->PedidoStatus)
+            ->setUpdatedAt(new \DateTime());
+
+        $martinsOrder->setUpdating(false);
+
+        $em->flush();
+
+        $retOrder['code'] = $martinsOrder->getCode();
+        $retOrder['venda'] = $order->trackingData->DataVenda;
+        $retOrder['pagamento'] = $order->trackingData->DataPagamento;
+        $retOrder['faturamento'] = $order->trackingData->DataFaturamento;
+        $retOrder['entrega'] = $order->trackingData->DataEntrega;
+        $retOrder['conclusao'] = $order->trackingData->DataConclusao;
+        $retOrder['due'] = $martinsOrder->getPaymentDue();
+        $retOrder['value'] = $martinsOrder->getTotal();
+        $retOrder['status'] = $order->PedidoStatus;
+        $retOrder['order'] = $martinsOrder;
+
+        return View::create($retOrder, Response::HTTP_OK);
+    }
+
+    /**
      * Finds one element in an array, searching by ID properties.
      * @param $array array Array in which to search for the element.
      * @param $element object Element whose ID to search for.
