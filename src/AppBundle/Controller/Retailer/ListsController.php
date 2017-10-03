@@ -45,6 +45,7 @@ class ListsController extends Controller
     public function addListAction(Request $request)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
         //type of listings
         $types = [];
         $types['0'] = 'Não Informado';
@@ -54,17 +55,43 @@ class ListsController extends Controller
 
 
         if($request->getMethod() == "POST"){
-            $em = $this->getDoctrine()->getManager();
 
+
+            $requestData = json_decode($request->getContent());
+            $productsIds = $requestData->products;
             $listing = new Listing();
-            $listing->setName($request->get('name'));
-            $listing->setDescription($request->get('description'));
-            $listing->setType($request->get('type'));
+            $listing->setName($requestData->name);
+            $listing->setDescription($requestData->description);
+            $listing->setType($requestData->type);
             $listing->setRetailer($user);
 
             $em->persist($listing);
 
             $em->flush();
+
+            $id = $listing->getId();
+
+            //remove not added listingProducts
+            $em->getRepository('AppBundle:ListingProduct')->removeExcludedListingProducts($id, implode(',', $productsIds));
+
+            //add news listingProducts
+            foreach ($productsIds as $productsId) {
+                $listingProduct = $em->getRepository('AppBundle:ListingProduct')->findBy(['listing' => $listing, 'product' => $productsId]);
+
+                if($listingProduct == null) {
+                    $product = $em->getRepository('AppBundle:Product')->findOneBy(['id' => $productsId, 'deleted' => false]);
+
+                    $listingProduct = new ListingProduct();
+                    $listingProduct->setQuantity(1);
+                    /** @var Listing $listing */
+                    $listingProduct->setListing($listing);
+                    /** @var Product $product */
+                    $listingProduct->setProduct($product);
+
+                    $em->persist($listingProduct);
+                    $em->flush();
+                }
+            }
 
             $this->addFlash(
                 'success',
@@ -79,11 +106,15 @@ class ListsController extends Controller
             return $this->redirectToRoute('lista_produtos', ['id' => $listing->getId()]);
         }
 
+        $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user,'deleted' => false]);
+        $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
+
         return $this->render('Retailer/lists/addList.html.twig', [
             'types' => $types,
             'username' => $user->getFantasyName(),
-            'username' => $user->getFantasyName(),
+            'products' => $products,
             'userIsRCA' => $user->isRCAVirtual(),
+            'token' => $token->getToken()
         ]);
     }
 

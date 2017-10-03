@@ -4,184 +4,16 @@
 {% block description %}{% endblock %}
 {% block menu_list %} active {% endblock %}
 
+{% block page_plugins %}
+
+    <link href="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
 {% block page %}
 
 
 
-    <style>
-
-
-        /*
-        Float label styles
-         */
-
-
-
-        label:hover {
-            cursor: text;
-        }
-
-
-
-        @media (max-width: 500px) {
-            .contact-form {
-                margin: 0 0 100px;
-                width: 100%;
-            }
-        }
-        .contact-form .email, .contact-form .message, .contact-form .text {
-            position: relative;
-        }
-        .contact-form .email input:focus, .contact-form .email textarea:focus, .contact-form .message input:focus, .contact-form .message textarea:focus, .contact-form .text input:focus, .contact-form .text textarea:focus {
-            background: #f4f5f6;
-        }
-        .contact-form .email label, .contact-form .message label, .contact-form .text label {
-            color: #40AE40;
-            left: 23px;
-            position: absolute;
-            top: 13px;
-            -moz-transition: all, 150ms;
-            -o-transition: all, 150ms;
-            -webkit-transition: all, 150ms;
-            transition: all, 150ms;
-        }
-        .contact-form .email.typing label, .contact-form .message.typing label, .contact-form .text.typing label {
-            color: #40ae40;
-            font-size: 10px;
-            top: 2px;
-        }
-
-        .text input {
-            margin: 0 auto;
-            height: 44px;
-            padding-top: 14px;
-            width: 284px;
-            border: 1px solid #40AE40
-        }
-        .text input:focus{
-            border: 1px solid #40AE40;
-        }
-
-        .contact-form .email {
-            border-left: 1px #e6e6e6 solid;
-            float: right;
-        }
-        @media (max-width: 500px) {
-            .contact-form .email {
-                border-left: none;
-                border-top: 1px #e6e6e6 solid;
-            }
-        }
-        .contact-form .message {
-            border-bottom: 1px #e6e6e6 solid;
-            border-top: 1px #e6e6e6 solid;
-            clear: both;
-        }
-        .contact-form .message textarea {
-            height: 200px;
-            padding: 23px;
-        }
-        .contact-form .text {
-            float: left;
-        }
-        .navbar-inner {
-            background: #319431;
-            width: 100%;
-        }
-
-        #rootwizard{
-            background: #fff;
-        }
-
-        .wizard-container{
-            padding-top: 12px;
-            padding-bottom: 15px;
-            padding-left: 20px;
-            padding-right: 20px;
-            border-top-width: 1px;
-        }
-
-        .mt-checkbox.mt-checkbox-outline:hover>input:not([disabled]):checked ~ span, .mt-checkbox.mt-checkbox-outline>input:checked ~ span {
-
-            background: #319431 !important;
-            border-radius: 2px;
-            border: 1px solid #319431;
-
-        }
-
-        .mt-checkbox.mt-checkbox-outline>span {
-            border: 1px solid #d9d9d9;
-            background: 0;
-            border-radius: 2px;
-        }
-        .mt-checkbox>span:after {
-            left: 6px;
-            top: 2px;
-            width: 5px;
-            height: 10px;
-            border: solid #fff;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-
-        .error {
-            border: 1px solid red !important;
-        }
-
-        .valid {
-            border: 1px solid #40AE40 !important;
-        }
-
-        .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
-            color: transparent;
-            background-color: transparent;
-        }
-
-        .nav>li>a:hover, .nav>li>a:focus {
-            text-decoration: none;
-            background-color: transparent;
-        }
-        .disabled-click {
-            pointer-events: none;
-            cursor: default;
-        }
-        td {
-            text-align: center;
-            vertical-align: middle;
-        }
-        th {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-
-        .text-area{
-            width: 284px;
-            border: 1px solid #40AE40;
-            padding-top: 14px;
-
-        }
-
-        .text select {
-            margin: 0 auto;
-            height: 44px;
-            padding-top: 14px;
-            width: 284px;
-            border: 1px solid #40AE40
-        }
-        .text select:focus{
-            border: 1px solid #40AE40;
-        }
-        .modal .modal-header{
-            background-color: #40AE40;
-        }
-        .modal-title{
-            color: #FFFFFF;
-        }
-
-
-
-    </style>
 
     <div class="page-wrapper-row full-height">
         <div class="page-wrapper-middle">
@@ -229,85 +61,415 @@
                                         <div class="tabbable-line boxless tabbable-reversed">
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="tab_0">
-                                                    <div class="portlet box green-conecta">
+                                                    <div class="portlet box green-conecta" style="border-left-width: 0px;border-bottom-width: 0px;border-right-width: 0px;">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <i class="fa fa-gift"></i>Criar Nova Lista</div>
+                                                                <image id="wizardStepImage" ></image><span id="wizardStepLabel">Dados da Cotação</span>
+                                                            </div>
                                                         </div>
-                                                        <div class="portlet-body form">
-                                                            <!-- BEGIN FORM-->
-                                                            <form action="#" class="form-horizontal contact-form" method="POST">
-                                                                <div class="form-body ">
+                                                        <!-- BEGIN WIZARD-->
+                                                        <div id="rootwizard">
+                                                            <div class="navbar" style="border-top-width: 0px;border-left-width: 0px;border-right-width: 0px;">
+                                                                <div class="navbar-inner portlet-title">
+                                                                    <div class="container">
+                                                                        <ul class="ProgressBar">
+                                                                            <li class="ProgressBar-step is-current">
+                                                                                <a href="#tab1" class="disabled-click" data-toggle="tab">
+                                                                                    <svg class="ProgressBar-icon"><use xlink:href="#checkmark-bold"/></svg>
+                                                                                    <span class="ProgressBar-stepLabel"><!--1--></span>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="ProgressBar-step" disabled="">
+                                                                                <a href="#tab2" class="disabled-click" data-toggle="tab">
+                                                                                    <svg class="ProgressBar-icon"><use xlink:href="#checkmark-bold"/></svg>
+                                                                                    <span class="ProgressBar-stepLabel"><!--2--></span>
+                                                                                </a>
+                                                                            </li>
 
-                                                                    <div class="row ">
 
-                                                                        <div class="col-lg-4 col-lg-offset-5">
-                                                                            <div class="">
-                                                                                <div class="form-group name text ">
-                                                                                    <label for="name">Lista*</label>
-                                                                                    <input class="form-control" type="text" name="name" id="name" required />
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
+                                                                        </ul>
                                                                     </div>
+                                                                </div>
+                                                            </div>
 
+                                                            <ul class="pager wizard">
+                                                                <li class="previous first" style="display:none;"><a href="#">Início</a></li>
+                                                                <li class="previous"   id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
+                                                                <li class="next last" id="last" style="display:none;">
+                                                                    <button type="button"  id="salvar_lista" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Lista" class="btn green-conecta btn-circle pull-right disabled" data-style="expand-right">
+                                                                        Salvar
+                                                                    </button>
 
+                                                                </li>
+                                                                <li class="next" id="advance"><a class="btn btn-circle green-conecta pull-right disabled" href="#" style="margin-right: 5px;margin-bottom: 5px;">Próximo</a></li>
+                                                            </ul>
 
-                                                                    <div class="row ">
+                                                            <div class="tab-content">
+                                                                <!-- BEGIN InforMACAO STEP-->
+                                                                <div class="tab-pane " id="tab1">
+                                                                    <div class="portlet-body form">
+                                                                        <!-- BEGIN FORM-->
+                                                                        <form action="#" id="informacao" class="form-horizontal contact-form" method="POST">
+                                                                            <div class="form-body ">
 
-                                                                        <div class="col-lg-4 col-lg-offset-5">
-                                                                            <div class="">
-                                                                                <div class="form-group description text ">
-                                                                                    <label for="description">Descrição</label>
-                                                                                    <input class="form-control" type="text" id="description" name="description"   required/>
+                                                                                <div class="row ">
+
+                                                                                    <div class="col-lg-4 col-lg-offset-5">
+                                                                                        <div class="">
+                                                                                            <div class="form-group name text ">
+                                                                                                <label for="name">Lista*</label>
+                                                                                                <input class="form-control" type="text" name="name" id="name" required />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
                                                                                 </div>
-                                                                            </div>
-                                                                        </div>
 
-                                                                    </div>
 
-                                                                    <div class="row ">
 
-                                                                        <div class="col-lg-4 col-lg-offset-5">
-                                                                            <div class="">
-                                                                                <div class="form-group type text typing">
-                                                                                    <label for="type">Tipo</label>
-                                                                                    <select name="type" id="type" class="form-control select-circle">
-                                                                                        <option value="" disabled selected>Selecione um Estado</option>
-                                                                                        {% for type in types %}
-                                                                                        <option value="{{ loop.index0 }}">{{ type }}</option>
-                                                                                        {% endfor %}
-                                                                                    </select>
+
+                                                                                <div class="row ">
+
+                                                                                    <div class="col-lg-4 col-lg-offset-5">
+                                                                                        <div class="">
+                                                                                            <div class="form-group description text ">
+                                                                                                <label for="description">Descrição</label>
+                                                                                                <input class="form-control" type="text" id="description" name="description"   required/>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
                                                                                 </div>
+
+                                                                                <div class="row ">
+
+                                                                                    <div class="col-lg-4 col-lg-offset-5">
+                                                                                        <div class="">
+                                                                                            <div class="form-group type text typing">
+                                                                                                <label for="type">Tipo</label>
+                                                                                                <select name="type" id="type" class="form-control select-circle">
+                                                                                                    <option value="" disabled selected>Selecione um Tipo</option>
+                                                                                                    {% for type in types %}
+                                                                                                        <option value="{{ loop.index0 }}">{{ type }}</option>
+                                                                                                    {% endfor %}
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+
+
+
                                                                             </div>
-                                                                        </div>
 
+
+
+                                                                        </form>
+                                                                        <!-- END FORM-->
                                                                     </div>
-
-
 
                                                                 </div>
 
+                                                                <!-- END COTACAO FORM-->
 
-                                                                <div class="form-actions">
-                                                                    <div class="row">
-                                                                        <div class="col-md-offset-3 col-md-9">
-                                                                            <button type="submit" class="btn btn-circle green-conecta">Salvar</button>
+                                                                <div class="tab-pane " id="tab2">
+                                                                    <div class="wizard-container">
+                                                                        <div class="wizard-container">
+                                                                            <table class="table table-striped table-bordered table-hover" style="width:100%"  id="product-datatable">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th width="20%"> Código </th>
+                                                                                    <th> Nome do Produto </th>
+                                                                                    <th> Tipo </th>
+                                                                                    <th> Fabricante </th>
+                                                                                    <th> Embalagem de Compra </th>
+                                                                                    <th><label class="mt-checkbox mt-checkbox-outline"/>  <input  type="checkbox"  name="selectAllProducts" /> <span></span></th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                {% if products is defined %}
+                                                                                    {% for product in products %}
+                                                                                        <tr>
+                                                                                            <td> {{ product.id }} </td>
+                                                                                            <td> {{ product.name }} </td>
+                                                                                            <td> {{ product.type }} </td>
+                                                                                            <td> {{ product.brand }} </td>
+                                                                                            <td> {{ product.unit }} {{ product.quantity }} </td>
+                                                                                            <td>
+                                                                                                <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ product.id }}" name="chkProducts" /> <span></span>
+                                                                                            </td>
+
+                                                                                        </tr>
+                                                                                    {% endfor %}
+                                                                                {% endif %}
+                                                                                </tbody>
+                                                                            </table>
+
+
+                                                                            <!-- LISTING Modal -->
+                                                                            <div id="productModal" class="modal fade" role="dialog">
+                                                                                <div class="modal-dialog">
+
+                                                                                    <!-- Modal content-->
+                                                                                    <div class="modal-content">
+                                                                                        <div class="modal-header">
+                                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                            <h4 class="modal-title">Adicionar Produto</h4>
+                                                                                        </div>
+                                                                                        <div class="modal-body">
+
+
+                                                                                            <form action="#" method="POST" id="product_form" class="form-horizontal contact-form">
+
+
+                                                                                                <div class="form-body ">
+
+                                                                                                    <div class="row ">
+
+                                                                                                        <div class="col-lg-4 col-lg-offset-3">
+                                                                                                            <div class="">
+                                                                                                                <div class="form-group produto text ">
+                                                                                                                    <label for="produto">Nome do Produto*</label>
+                                                                                                                    <input class="form-control" type="text" name="produto" id="produto" required />
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                    </div>
+
+                                                                                                    <div class="row ">
+                                                                                                        <div class="col-lg-4 col-lg-offset-3">
+                                                                                                            <div class="">
+                                                                                                                <div class="form-group codigo text ">
+                                                                                                                    <label for="codigo">Código de Barras do Produto*</label>
+                                                                                                                    <input class="form-control" type="text" name="codigo" id="codigo" required/>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="row ">
+                                                                                                        <div class="col-lg-4 col-lg-offset-3">
+                                                                                                            <div class="">
+                                                                                                                <div class="form-group marca text ">
+                                                                                                                    <label for="marca">Marca do Produto*</label>
+                                                                                                                    <input class="form-control" type="text" name="marca" id="marca" required/>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="row ">
+
+                                                                                                        <div class="col-lg-4 col-lg-offset-3">
+                                                                                                            <div class="">
+                                                                                                                <div class="form-group tipo text typing">
+                                                                                                                    <label for="tipo-produto">Tipo*</label>
+                                                                                                                    <select name="tipo-produto" id="tipo-produto"  class="form-control select-circle " required>
+                                                                                                                        {% if product is defined %}
+                                                                                                                            <option value="{{ product.type }}" selected>{{ product.type }}</option>
+                                                                                                                        {% else %}
+                                                                                                                            <option value="" disabled selected>Selecione um Tipo</option>
+                                                                                                                        {% endif %}
+                                                                                                                        <option value="Geral">Geral</option>
+                                                                                                                        <option value="Mercearia">Mercearia</option>
+                                                                                                                        <option value="Limpeza">Limpeza</option>
+                                                                                                                        <option value="Perfumaria">Perfumaria</option>
+                                                                                                                        <option value="Bazar">Bazar</option>
+                                                                                                                        <option value="Bebidas">Bebidas</option>
+                                                                                                                        <option value="Eletro">Eletro</option>
+                                                                                                                        <option value="Perecíveis">Perecíveis</option>
+                                                                                                                        <option value="Rotisseria">Rotisseria</option>
+                                                                                                                        <option value="Textil">Textil</option>
+                                                                                                                        <option value="Açougue">Açougue</option>
+                                                                                                                        <option value="Hortifruti">Hortifruti</option>
+                                                                                                                        <option value="Padaria">Padaria</option>
+                                                                                                                        <option value="Insumos De Producao">Insumos de Produção</option>
+                                                                                                                        <option value="Materiais Para Uso">Materiais para Uso</option>
+                                                                                                                    </select>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                    </div>
+
+                                                                                                    <div class="row ">
+
+                                                                                                        <div class="col-lg-4 col-lg-offset-3">
+                                                                                                            <div class="">
+                                                                                                                <div class="form-group unidade text typing">
+                                                                                                                    <label for="tipo-produto">Unidade de Medida*</label>
+                                                                                                                    <select name="unidade" id="unidade"  class="form-control select-circle " required>
+                                                                                                                        {% if product is defined %}
+                                                                                                                            <option value="{{ product.unit }}" selected>{{ product.unit }}</option>
+                                                                                                                        {% else %}
+                                                                                                                            <option value="" disabled selected>Selecione uma Unidade de Medida</option>
+                                                                                                                        {% endif %}
+                                                                                                                        <option value="Unidade">Unidade</option>
+                                                                                                                        <option value="Caixa">Caixa</option>
+                                                                                                                        <option value="Kg">Kg</option>
+                                                                                                                        <option value="Litro">Litro</option>
+                                                                                                                        <option value="Fardo">Fardo</option>
+                                                                                                                        <option value="Pacote">Pacote</option>
+                                                                                                                        <option value="Pack">Pack</option>
+                                                                                                                    </select>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                    </div>
+
+
+
+                                                                                                    <div class="row ">
+                                                                                                        <div class="col-lg-4 col-lg-offset-3">
+                                                                                                            <div class="">
+                                                                                                                <div class="form-group peso text ">
+                                                                                                                    <label for="peso">Peso / Quantidade*</label>
+                                                                                                                    <input class="form-control" type="text" name="peso" id="peso" required/>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="row ">
+
+                                                                                                        <div class="col-lg-4 col-lg-offset-3">
+                                                                                                            <div class="">
+                                                                                                                <div class="form-group descricao-produto text ">
+                                                                                                                    <label for="descricao-produto">Descrição Completa*</label>
+                                                                                                                    <textarea rows="3" class="form-control text-area" type="text" id="descricao-produto" name="descricao-produto"  >
+                                                                                                                </textarea>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                    </div>
+
+
+
+
+                                                                                                </div>
+
+                                                                                                <!--
+                                                                                                <div class="form-actions">
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-offset-3 col-md-9">
+                                                                                                            <button type="submit" class="btn btn-circle green-conecta">Salvar</button>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                -->
+
+
+                                                                                            </form>
+
+
+
+                                                                                        </div>
+                                                                                        <div class="modal-footer">
+                                                                                            <button type="button"  id="salvar_produto" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Produto" class="btn green-conecta btn-circle" data-style="expand-right">
+                                                                                                Salvar
+                                                                                            </button>
+
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div>
+
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </form>
-                                                            <!-- END FORM-->
+
+                                                           <!--     <div class="tab-pane" id="tab3">
+
+                                                                  <div class="wizard-container">
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <h2>
+                                                                                    Dados da Cotação
+                                                                                </h2>
+                                                                                <h4>
+                                                                                    Início
+                                                                                </h4>
+                                                                                <div class='row'>
+                                                                                    <div class="col-md-3">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true" ></i>
+                                                                                        <span id="quote_start"> data</span>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-3">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                                                        <span id="quote_start_time"> hora</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <h4>
+                                                                                    Fim
+                                                                                </h4>
+                                                                                <div class='row'>
+                                                                                    <div class="col-md-3">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_end"> data</span>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-3">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_end_time"> hora</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class='row'>
+                                                                                    <div class="col-md-3">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span > Itens</span>
+                                                                                        <span id="quote_itens"></span>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-4">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                                                        <span> Fornecedores</span>
+                                                                                        <span id="quote_suppliers"></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <h4>
+                                                                                    Prazo de Pagamento
+                                                                                </h4>
+                                                                                <div class='row'>
+                                                                                    <div class="col-md-3">
+                                                                                        <span id="quote_due_date"></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6" style="margin-top: 50px;margin-left: 0px;padding-left: 110px;">
+                                                                                <button  class="btn col-md-6 green-conecta">Salvar Cotação</button><br/>
+                                                                                <button  class="btn col-md-6 green-conecta">Iniciar Cotação Presencial</button><br/>
+                                                                                <button  class="btn col-md-6 green-conecta">Enviar Para Fornecedor</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div> -->
+
+                                                                
+                                                            </div>
                                                         </div>
+
+                                                        <!-- END WIZARD-->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             <!-- END PAGE CONTENT INNER -->
+
+
+
+
+
+
+
                         </div>
                     </div>
                     <!-- END PAGE CONTENT BODY -->
@@ -318,11 +480,162 @@
             <!-- END CONTAINER -->
         </div>
     </div>
+
+    <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="checkmark-bold" viewBox="0 0 24 24">
+            <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+        </symbol>
+    </svg>
 {% endblock %}
 
 {% block script %}
+    <script src="{{ asset('assets/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/jquery-validation/js/localization/messages_pt_BR.min.js') }}" type="text/javascript"></script>
 
     <script>
+
+        var token = "{{ token }}";
+
+        function stepFoward($bar) {
+            if ($bar.children(".is-current").length > 0) {
+                $bar.children(".is-current").removeClass("is-current").addClass("is-complete").next().addClass("is-current");
+            } else {
+                $bar.children().first().addClass("is-current");
+            }
+        }
+
+        function selectAll(topCheck,checks) {
+            $("[name='" + topCheck + "']").click(function() {
+                var checkBoxes = $("[name='" + checks + "']");
+                checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+            })
+        }
+
+        $(document).ready(function() {
+            //BEGIN WIZARD METHODS
+            $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
+                var currentStep = navigation.find('li');
+                currentStep.removeClass("active");
+
+                switch(index) {
+                    case 0 :
+                        $("#wizardStepLabel").text(" Informação");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/dados-da-cotacao/24x24.png') }}")
+                        $("#advance a").addClass('disabled');
+                        $("#previous").hide();
+
+
+                        //BEGIN FORM VALIDATION
+                        var informacaoForm = $("#informacao");
+
+                        informacaoForm.validate({
+                            errorPlacement: function(){
+                                return false;
+                            }
+                        });
+
+                        informacaoForm.mouseout(function() {
+                            var validationState = informacaoForm.valid();
+
+                            if(validationState) {
+                                $("#advance").find("a").removeClass('disabled');
+                            }
+                        });
+
+                        if(informacaoForm.valid()) {
+                            $("#advance").find("a").removeClass('disabled');
+                        }
+                        //END FORM VALIDATION
+                        break;
+                    case 1 :
+                        $("#wizardStepLabel").text(" Selecionar Produtos");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/produtos/24x24.png') }}")
+                        $("#advance a").addClass('disabled');
+                        $("#previous").show();
+                     //   $("#advance a").text('Salvar');
+                        $("#advance").hide();
+                        $("#last").show();
+
+                        var productTable = $('#product-datatable');
+
+                        productTable.mouseout(function() {
+                            if( productTable.find('tr').find("input").is(":checked") ){
+                                $("#last").find("button").removeClass('disabled');
+                                $("#last").removeClass('disabled');
+                            }
+                        });
+
+                        break;
+
+
+                }
+            }});
+        });
+
+        $("#advance").on("click", function() {
+            var $bar = $(".ProgressBar");
+            stepFoward($bar);
+        });
+
+        $("#salvar_lista").on("click", function() {
+
+            var $this = $(this);
+            $this.button('loading');
+
+            var name = $('#name').val();
+            var description = $('#description').val();
+            var type = $('#type').val();
+            var products = [];
+
+            $("input:checked", $("#product-datatable").dataTable().fnGetNodes()).each(function(){
+                products.push($(this).val());
+            });
+
+
+
+
+            $.ajax(
+                {
+                    url: '/varejista/listas/novalista',
+                    type: 'POST',
+                    contentType: "application/json",
+                    dataType: "json",
+                   // headers: {'Api-Token': token},
+                    data:  JSON.stringify({
+                        name: name,
+                        description: description,
+                        type: type,
+                        products: products
+                    }),
+                    success: function (response) {
+                        console.log("Lista salva com sucesso");
+                        $this.button('reset');
+
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        $this.button('reset');
+
+                    }
+
+                })
+
+
+        });
+
+        $("#previous").on("click", function() {
+            var $bar = $(".ProgressBar");
+            if ($bar.children(".is-current").length > 0) {
+                $bar.children(".is-current").removeClass("is-current").prev().removeClass("is-complete").addClass("is-current");
+            } else {
+                $bar.children(".is-complete").last().removeClass("is-complete").addClass("is-current");
+            }
+        });
+
+        //END WIZARD METHODS
 
 
 
@@ -341,6 +654,140 @@
                 $('.description.text').removeClass('typing');
             }
         });
+
+        // BEGIN PRODUCTS TABLE
+        $('#product-datatable').dataTable({
+            language: {
+
+
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": '<i class="fa fa-angle-right"></i>',
+                    "sPrevious": '<i class="fa fa-angle-left"></i>',
+
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                }
+            },
+            ajax: {
+                url: "/api/product",
+                type: 'GET',
+                dataSrc: "",
+                beforeSend : function(xhr) {
+                    xhr.setRequestHeader('Api-Token', token);
+                }
+            },
+            columns: [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "type" },
+                { "data": "brand"},
+                { "data": "unit"},
+                { "data": "id",
+                    "orderable": false ,
+                    "className": "dt-center",
+                    "render": function ( data, type, row ) {
+                        return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkProducts" value="' + data + '"  /> <span></span>';
+                    }
+                }
+
+            ],
+            dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
+            buttons: [
+                {
+                    text: '',
+                    className: 'datatable-plus-button ',
+                    action: function ( e, dt, node, config ) {
+                        $('#productModal').modal('toggle');
+                    }
+                }
+            ]
+        } );
+
+        $('#salvar_produto').on('click', function() {
+
+
+
+            var $this = $(this);
+
+            var produto = $('#produto').val();
+            var marca = $('#marca').val();
+            var tipo = $('#tipo-produto').val();
+            var codigo = $('#codigo').val();
+            var unidade = $('#unidade').val();;
+            var peso = $('#peso').val();
+            var descricao = $('#descricao-produto').val();;
+
+
+            $this.button('loading');
+            var productForm = $( "#product_form" );
+
+            productForm.validate({
+                errorPlacement: function(){
+                    return false;
+                }
+
+
+            });
+            var validationState = productForm.valid();
+
+            if(validationState) {
+
+                $.ajax(
+                    {
+                        url: '/api/product',
+                        type: 'POST',
+                        contentType: "application/json",
+                        dataType: "json",
+                        headers: {'Api-Token': token},
+                        data:  JSON.stringify({
+                            name: produto,
+                            brand: marca,
+                            type: tipo,
+                            ean: codigo,
+                            full_description: descricao,
+                            quantity: peso,
+                            unit: unidade
+                        }),
+                        success: function (response) {
+                            console.log(response);
+                            $('#product-datatable').DataTable().ajax.reload();
+                            $this.button('reset');
+                            $('#productModal').modal('toggle');
+                            $("#product_form").trigger("reset")
+
+                        },
+                        error: function (error) {
+                            alert(error.responseJSON.error.exception["0"].message);
+                            $this.button('reset');
+                            $('#productModal').modal('toggle');
+                            $("#product_form").trigger("reset")
+                        }
+
+                    }).done(function () {
+                    $this.button('reset');
+                });
+            }else{
+                $this.button('reset');
+            }
+
+        });
+        //select all function
+        selectAll("selectAllProducts","chkProducts");
+
+        // END PRODUCTS TABLE
 
 
        
