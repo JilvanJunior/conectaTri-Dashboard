@@ -244,17 +244,103 @@ fieldset[disabled] .btn.green-conecta:not(.btn-outline).focus {
     border-right-color: #88D000 !important; }
 
 
-/*
-      Float label styles
-       */
 
 
 
-label:hover {
-    cursor: text;
+
+
+
+.ProgressBar {
+    margin: 0 auto;
+    /*  padding: 2em 0 3em;*/
+    list-style: none;
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    width: 50% !important;
+}
+
+.ProgressBar-step {
+    text-align: center;
+    position: relative;
+    width: 100%;
+}
+.ProgressBar-step:before, .ProgressBar-step:after {
+    content: "";
+    height: 0.2em;
+    background-color: #40AE40;;
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    left: -50%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    -webkit-transition: all .25s ease-out;
+    transition: all .25s ease-out;
+
+}
+.ProgressBar-step:first-child:before, .ProgressBar-step:first-child:after {
+    display: none;
+}
+.ProgressBar-step:after {
+    background-color: #40AE40;
+    border:1px solid #40AE40;
+    width: 0;
+}
+.ProgressBar-step.is-complete + .ProgressBar-step.is-current:after, .ProgressBar-step.is-complete + .ProgressBar-step.is-complete:after {
+    width: 100%;
+}
+
+.ProgressBar-icon {
+    width: 2.0em;
+    height: 2.0em;
+    background-color: #319431;
+    fill: #319431;
+    border-radius: 50%;
+    padding: 0.5em;
+    max-width: 100%;
+    z-index: 10;
+    position: relative;
+    margin-top: 4px;
+    -webkit-transition: all .25s ease-out;
+    transition: all .25s ease-out;
+    border:2px solid #40AE40
+}
+.is-current .ProgressBar-icon {
+    fill: yellow;
+    background-color: yellow;
+}
+.is-complete .ProgressBar-icon {
+    fill: #fff;
+    background-color: #40AE40;
+}
+
+.ProgressBar-stepLabel {
+    display: block;
+    text-transform: uppercase;
+    color: #9F9FA3;
+    position: absolute;
+    padding-top: 0.5em;
+    width: 100%;
+    -webkit-transition: all .25s ease-out;
+    transition: all .25s ease-out;
+}
+.is-current > .ProgressBar-stepLabel, .is-complete > .ProgressBar-stepLabel {
+    color: #00637C;
 }
 
 
+/*
+Float label styles
+ */
+label:hover {
+    cursor: text;
+}
 
 @media (max-width: 500px) {
     .contact-form {
@@ -284,14 +370,14 @@ label:hover {
     top: 2px;
 }
 
-.text input {
+.text input, .text select {
     margin: 0 auto;
     height: 44px;
     padding-top: 14px;
     width: 284px;
     border: 1px solid #40AE40
 }
-.text input:focus{
+.text input:focus, .text select:focus{
     border: 1px solid #40AE40;
 }
 
@@ -386,13 +472,31 @@ th {
     text-align: center;
     vertical-align: middle;
 }
+.dataTables_filter{
 
+    padding-right: 40px;
+
+}
+.datatable-plus-button{
+    padding-top: 5px;
+    top: 14px;
+    padding-bottom: 5px;
+    padding-right: 9px;
+    background: #40AE40;
+}
+
+.datatable-plus-button::before {
+    font-family: fontAwesome;
+    content: "\f067\00a0";
+    color: white;
+    background-color: transparent;
+}
 
 .text-area{
     width: 284px;
     border: 1px solid #40AE40;
     padding-top: 14px;
-
+    resize: vertical;
 }
 
 .text select {
