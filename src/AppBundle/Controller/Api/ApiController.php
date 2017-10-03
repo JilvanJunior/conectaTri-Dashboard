@@ -1182,6 +1182,7 @@ class ApiController extends FOSRestController {
         $em->persist($dbQuote);
         $isFirst = true;
         foreach ($quote->quote_products as $product) {
+            /** @var Product $dbProduct */
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             if(is_null($dbProduct))
                 continue;
@@ -1191,6 +1192,7 @@ class ApiController extends FOSRestController {
                 ->setQuantity(0);
             $em->persist($quoteProduct);
             foreach ($product->quote_suppliers as $supplier) {
+                /** @var Representative $dbSupplier */
                 $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                 if(is_null($dbSupplier))
                     continue;
@@ -1253,7 +1255,7 @@ class ApiController extends FOSRestController {
         /** @var QuoteProduct $quoteProduct */
         foreach ($dbQuote->getQuoteProducts() as $quoteProduct) {
             $rcvProduct = self::arrayContains($quote->quote_products, $quoteProduct);
-            if ($rcvProduct == false) {
+            if ($rcvProduct == false) { //if product not in array
                 $quoteProduct->setDeleted(true)
                     ->setUpdatedAt(new \DateTime());
 
@@ -1263,7 +1265,7 @@ class ApiController extends FOSRestController {
                     $quoteSupplier->setDeleted(true)
                         ->setUpdatedAt(new \DateTime());
                 }
-            } else {
+            } else { // if product in array
                 $quoteProduct->setDeleted(false)
                     ->setUpdatedAt(new \DateTime());
                 $tmp3 = [];
@@ -1281,9 +1283,13 @@ class ApiController extends FOSRestController {
                     $quoteProduct->addWinner($dbWinner);
                 }
                 $tmp2 = [];
+
+                // check quoteSuppliers
                 /** @var QuoteSupplier $quoteSupplier */
                 foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                     $rcvSupplier = self::arrayContains($rcvProduct->quote_suppliers, $quoteSupplier);
+
+                    //if supplier is not in array
                     if ($rcvSupplier == false || (isset($rcvSupplier->deleted) && $rcvSupplier->deleted == true)) {
                         if ($isFirst) {
                             /** @var QuoteSupplierStatus $quoteSupplierStatus */
@@ -1294,17 +1300,17 @@ class ApiController extends FOSRestController {
                                 $em->remove($quoteSupplierStatus);
                             }
                         }
-                        if ($quoteProduct->getWinner() == $quoteSupplier)
-                            $quoteProduct->setWinner(null);
+                        $quoteProduct->removeWinner($quoteSupplier);
                         $quoteSupplier->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
-                    } else {
+                    } else { //if supplier in array
                         $quoteProduct->setQuantity($rcvSupplier->quantity);
                         $quoteSupplier->setQuantity($rcvSupplier->quantity)
                             ->setPrice(str_replace(",", ".", $rcvSupplier->price))
                             ->setDeleted(false)
                             ->setUpdatedAt(new \DateTime());
                         if ($isFirst) {
+                            /** @var QuoteSupplierStatus $quoteSupplierStatus */
                             $quoteSupplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote,
                                 "representative" => $quoteSupplier->getRepresentative()]);
                             if ($quoteSupplierStatus == null) {
@@ -1340,22 +1346,22 @@ class ApiController extends FOSRestController {
         self::array_diff($quote->quote_products, $tmp);
         /** @var \stdClass $product */
         foreach ($quote->quote_products as $product) {
-            $newProduct = new QuoteProduct();
+            $newQuoteProduct = new QuoteProduct();
             /** @var Product $dbProduct */
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             foreach ($product->quote_suppliers as $supplier) {
-                $newSupplier = new QuoteSupplier();
+                $newQuoteSupplier = new QuoteSupplier();
                 $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
-                $newSupplier->setRepresentative($dbSupplier)
+                $newQuoteSupplier->setRepresentative($dbSupplier)
                     ->setQuantity($supplier->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price));
-                $em->persist($newSupplier);
-                $newProduct->setQuantity($supplier->quantity);
-                $newProduct->addQuoteSupplier($newSupplier);
+                $em->persist($newQuoteSupplier);
+                $newQuoteProduct->setQuantity($supplier->quantity);
+                $newQuoteProduct->addQuoteSupplier($newQuoteSupplier);
             }
-            $newProduct->setProduct($dbProduct);
-            $em->persist($newProduct);
-            $dbQuote->addQuoteProduct($newProduct);
+            $newQuoteProduct->setProduct($dbProduct);
+            $em->persist($newQuoteProduct);
+            $dbQuote->addQuoteProduct($newQuoteProduct);
         }
         $dbQuote->setDeleted(false)
             ->setName($quote->name)
