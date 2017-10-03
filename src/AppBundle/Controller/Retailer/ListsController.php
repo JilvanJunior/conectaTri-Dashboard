@@ -57,15 +57,41 @@ class ListsController extends Controller
         if($request->getMethod() == "POST"){
 
 
+            $requestData = json_decode($request->getContent());
+            $productsIds = $requestData->products;
             $listing = new Listing();
-            $listing->setName($request->get('name'));
-            $listing->setDescription($request->get('description'));
-            $listing->setType($request->get('type'));
+            $listing->setName($requestData->name);
+            $listing->setDescription($requestData->description);
+            $listing->setType($requestData->type);
             $listing->setRetailer($user);
 
             $em->persist($listing);
 
             $em->flush();
+
+            $id = $listing->getId();
+
+            //remove not added listingProducts
+            $em->getRepository('AppBundle:ListingProduct')->removeExcludedListingProducts($id, implode(',', $productsIds));
+
+            //add news listingProducts
+            foreach ($productsIds as $productsId) {
+                $listingProduct = $em->getRepository('AppBundle:ListingProduct')->findBy(['listing' => $listing, 'product' => $productsId]);
+
+                if($listingProduct == null) {
+                    $product = $em->getRepository('AppBundle:Product')->findOneBy(['id' => $productsId, 'deleted' => false]);
+
+                    $listingProduct = new ListingProduct();
+                    $listingProduct->setQuantity(1);
+                    /** @var Listing $listing */
+                    $listingProduct->setListing($listing);
+                    /** @var Product $product */
+                    $listingProduct->setProduct($product);
+
+                    $em->persist($listingProduct);
+                    $em->flush();
+                }
+            }
 
             $this->addFlash(
                 'success',
