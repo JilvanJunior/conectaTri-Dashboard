@@ -332,7 +332,7 @@
                                                     <div class="portlet box green-conecta" style="border-left-width: 0px;border-bottom-width: 0px;border-right-width: 0px;">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <i class="fa fa-gift"></i><span id="wizardStepLabel">Dados da Cotação</span>
+                                                                <image id="wizardStepImage" ></image><span id="wizardStepLabel">Dados da Cotação</span>
                                                             </div>
                                                         </div>
                                                         <!-- BEGIN WIZARD-->
@@ -1067,6 +1067,8 @@
 
 
 
+
+
     //BEGIN MASKS
 
         $(function(){
@@ -1158,7 +1160,8 @@ $("#prazoRCA").change(function() {
 
                 switch(index) {
                     case 0 :
-                        $("#wizardStepLabel").text("Dados da Cotação");
+                        $("#wizardStepLabel").text(" Dados da Cotação");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/dados-da-cotacao/24x24.png') }}")
                         $("#advance a").addClass('disabled');
                         $("#previous").hide();
 
@@ -1185,7 +1188,8 @@ $("#prazoRCA").change(function() {
                         //END FORM VALIDATION
                         break;
                     case 1 :
-                        $("#wizardStepLabel").text("Selecionar Fornecedor");
+                        $("#wizardStepLabel").text(" Selecionar Fornecedor");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/fornecedores/24x24.png') }}")
                         $("#advance a").addClass('disabled');
                         $("#previous").show();
 
@@ -1199,7 +1203,8 @@ $("#prazoRCA").change(function() {
 
                         break;
                     case 2 :
-                        $("#wizardStepLabel").text("Selecionar Lista");
+                        $("#wizardStepLabel").text(" Selecionar Lista");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/minhas-listas/24x24.png') }}")
                         $("#advance a").addClass('disabled');
 
                         var listingTable = $('#listing-datatable');
@@ -1212,7 +1217,8 @@ $("#prazoRCA").change(function() {
 
                         break;
                     case 3 :
-                        $("#wizardStepLabel").text("Selecionar Produtos");
+                        $("#wizardStepLabel").text(" Selecionar Produtos");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/produtos/24x24.png') }}")
                         $("#advance a").addClass('disabled');
                         $("#advance").show();
 
@@ -1226,7 +1232,8 @@ $("#prazoRCA").change(function() {
 
                         break;
                     case 4 :
-                        $("#wizardStepLabel").text("Confirmação dos Dados");
+                        $("#wizardStepLabel").text(" Confirmação dos Dados");
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/confirmacao-dos-dados/24x24.png') }}")
                         $("#advance").hide();
                         setDateTime("datetimepicker1","quote_start","date");
                         setDateTime("datetimepicker1","quote_start_time","time");
@@ -1422,15 +1429,30 @@ $("#prazoRCA").change(function() {
         // BEGIN Supplier TABLE
         $('#supplier-datatable').dataTable( {
             language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
-                select: {
-                    rows: {
-                        _: "%d linha selecionadas",
-                        0: "Clique numa linha para selecionar",
-                        1: "1 linha selecionada"
-                    }
-                }
-            },
+
+
+        "sEmptyTable": "Nenhum registro encontrado",
+        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "_MENU_ resultados por página",
+        "sLoadingRecords": "Carregando...",
+        "sProcessing": "Processando...",
+        "sZeroRecords": "Nenhum registro encontrado",
+        "sSearch": "Pesquisar",
+        "oPaginate": {
+        "sNext": '<i class="fa fa-angle-right"></i>',
+            "sPrevious": '<i class="fa fa-angle-left"></i>',
+
+    },
+        "oAria": {
+        "sSortAscending": ": Ordenar colunas de forma ascendente",
+            "sSortDescending": ": Ordenar colunas de forma descendente"
+    }
+    },
+
             ajax: {
                 url: "/api/representative",
                 type: 'GET',
@@ -1454,6 +1476,7 @@ $("#prazoRCA").change(function() {
                 }
             ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
+
              buttons: [
              {
              text: '',
@@ -1561,13 +1584,27 @@ $("#prazoRCA").change(function() {
         // BEGIN LISTING TABLE
         $('#listing-datatable').dataTable({
             language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
-                select: {
-                    rows: {
-                        _: "%d linha selecionadas",
-                        0: "Clique numa linha para selecionar",
-                        1: "1 linha selecionada"
-                    }
+
+
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": '<i class="fa fa-angle-right"></i>',
+                    "sPrevious": '<i class="fa fa-angle-left"></i>',
+
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
             ajax: {
@@ -1685,15 +1722,28 @@ $("#prazoRCA").change(function() {
 
         // BEGIN PRODUCTS TABLE
         $('#product-datatable').dataTable({
-            autoWidth: false,
             language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json",
-                select: {
-                    rows: {
-                        _: "%d linha selecionadas",
-                        0: "Clique numa linha para selecionar",
-                        1: "1 linha selecionada"
-                    }
+
+
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": '<i class="fa fa-angle-right"></i>',
+                    "sPrevious": '<i class="fa fa-angle-left"></i>',
+
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
             ajax: {

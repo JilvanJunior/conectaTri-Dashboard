@@ -51,12 +51,12 @@ Bootstrap Datepicker
   filter: none !important; }
 
 .datepicker .active {
-  background-color: #4b8df8 !important;
+  background-color: #40AE40 !important;
   background-image: none !important;
   filter: none !important; }
 
 .datepicker .active:hover {
-  background-color: #2678FC !important;
+  background-color: #40AE40 !important;
   background-image: none !important;
   filter: none !important; }
 

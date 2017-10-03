@@ -1331,6 +1331,7 @@ class ApiController extends FOSRestController {
                     ->setQuantity($supplier->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price));
                 $em->persist($newSupplier);
+                $newProduct->setQuantity($supplier->quantity);
                 $newProduct->addQuoteSupplier($newSupplier);
             }
             $newProduct->setProduct($dbProduct);
@@ -1945,7 +1946,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Get("/api/martins/pedidos")
+     * @Rest\Get("/api/martins/pedido")
      */
     public function getMartinsOrders(Request $request) {
         $d = $this->getDoctrine();
