@@ -1966,7 +1966,7 @@ class ApiController extends FOSRestController {
         $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
 
-        $martinsOrders = $d->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user]);
+        $martinsOrders = $d->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user, 'deleted' => 0]);
 
         $orders = array();
 
