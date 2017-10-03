@@ -819,23 +819,26 @@ class ApiController extends FOSRestController {
             ->orderBy("q.createdAt", "DESC")
             ->getQuery()->getResult();
         $responseArray = [];
+        /** @var Quote $quote */
         foreach($quotes as $quote) {
             $em->detach($quote);
             if (!$quote->isDeleted()) {
-                foreach ($quote->getQuoteProducts() as $product) {
-                    $em->detach($product);
-                    if (!$product->isDeleted()) {
-                        foreach ($product->getQuoteSuppliers() as $supplier) {
-                            $em->detach($supplier);
-                            if ($supplier->getRepresentative()->isDeleted())
-                                $product->removeQuoteSupplier($supplier);
+                /** @var QuoteProduct $quoteProduct */
+                foreach ($quote->getQuoteProducts() as $quoteProduct) {
+                    $em->detach($quoteProduct);
+                    if (!$quoteProduct->isDeleted()) {
+                        /** @var QuoteSupplier $quoteSupplier */
+                        foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                            $em->detach($quoteSupplier);
+                            if ($quoteSupplier->getRepresentative()->isDeleted())
+                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
                             /* TODO: Add this
                             else
-                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
+                                $quoteSupplier->setRepresentative(new ApiSupplier($quoteSupplier->getRepresentative()));
                             */
                         }
                     } else {
-                        $quote->removeQuoteProduct($product);
+                        $quote->removeQuoteProduct($quoteProduct);
                     }
                 }
                 $responseArray[] = $quote;
@@ -937,23 +940,26 @@ class ApiController extends FOSRestController {
             ->orderBy("q.createdAt", "DESC")
             ->getQuery()->getResult();
         $responseArray = [];
+        /** @var Quote $quote */
         foreach($quotes as $quote) {
             $em->detach($quote);
             if (!$quote->isDeleted()) {
-                foreach ($quote->getQuoteProducts() as $product) {
-                    $em->detach($product);
-                    if (!$product->isDeleted()) {
-                        foreach ($product->getQuoteSuppliers() as $supplier) {
-                            $em->detach($supplier);
-                            if ($supplier->getRepresentative()->isDeleted())
-                                $product->removeQuoteSupplier($supplier);
+                /** @var QuoteProduct $quoteProduct */
+                foreach ($quote->getQuoteProducts() as $quoteProduct) {
+                    $em->detach($quoteProduct);
+                    if (!$quoteProduct->isDeleted()) {
+                        /** @var quoteSupplier $quoteSupplier */
+                        foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                            $em->detach($quoteSupplier);
+                            if ($quoteSupplier->getRepresentative()->isDeleted())
+                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
                             /* TODO: Add this
                             else
                                 $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
                             */
                         }
                     } else {
-                        $quote->removeQuoteProduct($product);
+                        $quote->removeQuoteProduct($quoteProduct);
                     }
                 }
                 $responseArray[] = $quote;
