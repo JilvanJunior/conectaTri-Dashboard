@@ -45,6 +45,7 @@ class ListsController extends Controller
     public function addListAction(Request $request)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
         //type of listings
         $types = [];
         $types['0'] = 'Não Informado';
@@ -54,7 +55,7 @@ class ListsController extends Controller
 
 
         if($request->getMethod() == "POST"){
-            $em = $this->getDoctrine()->getManager();
+
 
             $listing = new Listing();
             $listing->setName($request->get('name'));
@@ -79,11 +80,15 @@ class ListsController extends Controller
             return $this->redirectToRoute('lista_produtos', ['id' => $listing->getId()]);
         }
 
+        $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user,'deleted' => false]);
+        $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
+
         return $this->render('Retailer/lists/addList.html.twig', [
             'types' => $types,
             'username' => $user->getFantasyName(),
-            'username' => $user->getFantasyName(),
+            'products' => $products,
             'userIsRCA' => $user->isRCAVirtual(),
+            'token' => $token->getToken()
         ]);
     }
 
