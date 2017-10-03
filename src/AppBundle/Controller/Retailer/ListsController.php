@@ -72,7 +72,7 @@ class ListsController extends Controller
             $id = $listing->getId();
 
             //remove not added listingProducts
-            $em->getRepository('AppBundle:ListingProduct')->removeExcludedListingProducts($id, implode(',', $productsIds));
+            $em->getRepository('AppBundle:ListingProduct')->removeExcludedListingProducts($id, $productsIds);
 
             //add news listingProducts
             foreach ($productsIds as $productsId) {
@@ -103,7 +103,8 @@ class ListsController extends Controller
                 'Selecione os produtos para adicionar à lista.'
             );
 
-            return $this->redirectToRoute('lista_produtos', ['id' => $listing->getId()]);
+            //return $this->redirectToRoute('lista_produtos', ['id' => $listing->getId()]);
+            return $this->json(['message' => 'Lista salva com sucesso!']);
         }
 
         $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user,'deleted' => false]);

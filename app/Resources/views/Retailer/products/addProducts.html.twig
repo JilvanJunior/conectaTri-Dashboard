@@ -243,7 +243,7 @@
                                                                             <div class="">
                                                                                 <div class="form-group product text ">
                                                                                     <label for="product">Nome do Produto*</label>
-                                                                                    <input class="form-control" type="text" name="product" id="product" value="{% if product is defined %}{{ product.name }}{% endif %}" required />
+                                                                                    <input class="form-control" type="text" name="name" id="product" value="{% if product is defined %}{{ product.name }}{% endif %}" required />
                                                                                     <datalist id="product-datalist"></datalist>
                                                                                 </div>
 
@@ -343,7 +343,7 @@
                                                                             <div class="">
                                                                                 <div class="form-group quantity text ">
                                                                                     <label for="quantity">Peso / Quantidade*</label>
-                                                                                    <input class="form-control" type="text" name="quantity" id="quantity" required/>
+                                                                                    <input class="form-control" type="text" name="quantity" id="quantity" value="{{ product.quantity }}" required/>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -354,9 +354,8 @@
                                                                         <div class="col-lg-4 col-lg-offset-5">
                                                                             <div class="">
                                                                                 <div class="form-group full-description text ">
-                                                                                    <label for="full-description">Descrição Completa*</label>
-                                                                                    <textarea rows="7" class="form-control text-area" type="text" id="full-description" name="full-description"  >
-                                                                                                                </textarea>
+                                                                                    <label for="full-description">Descrição Completa</label>
+                                                                                    <textarea rows="7" class="form-control text-area" type="text" id="full-description" name="full-description"></textarea>
                                                                                 </div>
                                                                             </div>
                                                                         </div>

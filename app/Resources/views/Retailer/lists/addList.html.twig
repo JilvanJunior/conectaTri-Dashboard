@@ -378,81 +378,11 @@
 
                                                                                 </div>
                                                                             </div>
-
-
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
-                                                           <!--     <div class="tab-pane" id="tab3">
-
-                                                                  <div class="wizard-container">
-                                                                        <div class="row">
-                                                                            <div class="col-md-6">
-                                                                                <h2>
-                                                                                    Dados da Cotação
-                                                                                </h2>
-                                                                                <h4>
-                                                                                    Início
-                                                                                </h4>
-                                                                                <div class='row'>
-                                                                                    <div class="col-md-3">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true" ></i>
-                                                                                        <span id="quote_start"> data</span>
-                                                                                    </div>
-
-                                                                                    <div class="col-md-3">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                                                        <span id="quote_start_time"> hora</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <h4>
-                                                                                    Fim
-                                                                                </h4>
-                                                                                <div class='row'>
-                                                                                    <div class="col-md-3">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_end"> data</span>
-                                                                                    </div>
-
-                                                                                    <div class="col-md-3">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_end_time"> hora</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class='row'>
-                                                                                    <div class="col-md-3">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span > Itens</span>
-                                                                                        <span id="quote_itens"></span>
-                                                                                    </div>
-
-                                                                                    <div class="col-md-4">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                                                        <span> Fornecedores</span>
-                                                                                        <span id="quote_suppliers"></span>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <h4>
-                                                                                    Prazo de Pagamento
-                                                                                </h4>
-                                                                                <div class='row'>
-                                                                                    <div class="col-md-3">
-                                                                                        <span id="quote_due_date"></span>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-md-6" style="margin-top: 50px;margin-left: 0px;padding-left: 110px;">
-                                                                                <button  class="btn col-md-6 green-conecta">Salvar Cotação</button><br/>
-                                                                                <button  class="btn col-md-6 green-conecta">Iniciar Cotação Presencial</button><br/>
-                                                                                <button  class="btn col-md-6 green-conecta">Enviar Para Fornecedor</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div> -->
-
-                                                                
                                                             </div>
                                                         </div>
-
                                                         <!-- END WIZARD-->
                                                     </div>
                                                 </div>
@@ -463,13 +393,6 @@
 
                             </div>
                             <!-- END PAGE CONTENT INNER -->
-
-
-
-
-
-
-
                         </div>
                     </div>
                     <!-- END PAGE CONTENT BODY -->
@@ -554,7 +477,6 @@
                         $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/produtos/24x24.png') }}")
                         $("#advance a").addClass('disabled');
                         $("#previous").show();
-                     //   $("#advance a").text('Salvar');
                         $("#advance").hide();
                         $("#last").show();
 
@@ -568,8 +490,6 @@
                         });
 
                         break;
-
-
                 }
             }});
         });
@@ -593,16 +513,12 @@
                 products.push($(this).val());
             });
 
-
-
-
             $.ajax(
                 {
                     url: '/varejista/listas/novalista',
                     type: 'POST',
                     contentType: "application/json",
                     dataType: "json",
-                   // headers: {'Api-Token': token},
                     data:  JSON.stringify({
                         name: name,
                         description: description,
@@ -611,19 +527,13 @@
                     }),
                     success: function (response) {
                         console.log("Lista salva com sucesso");
-                        $this.button('reset');
-
-
+                        location.href = "{{ path('listas') }}";
                     },
                     error: function (error) {
                         console.log(error);
                         $this.button('reset');
-
                     }
-
                 })
-
-
         });
 
         $("#previous").on("click", function() {
