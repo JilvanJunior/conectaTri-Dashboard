@@ -1222,6 +1222,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Put("/api/quote/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function putQuote(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -1283,6 +1286,7 @@ class ApiController extends FOSRestController {
                     $rcvSupplier = self::arrayContains($rcvProduct->quote_suppliers, $quoteSupplier);
                     if ($rcvSupplier == false || (isset($rcvSupplier->deleted) && $rcvSupplier->deleted == true)) {
                         if ($isFirst) {
+                            /** @var QuoteSupplierStatus $quoteSupplierStatus */
                             $quoteSupplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote,
                                 "representative" => $quoteSupplier->getRepresentative()]);
                             if ($quoteSupplierStatus != null) {
@@ -1428,14 +1432,6 @@ class ApiController extends FOSRestController {
         }
 
         $details = json_decode($request->getContent());
-        if(is_null($details)) {
-            $force = false;
-        } else {
-            $force = $details->force;
-        }
-        if(!$force && !$dbQuote->mustSendToSupplier()) {
-            return View::create(new ApiError("Quotação marcada para não enviar."), Response::HTTP_OK);
-        }
 
         $link = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
         $mailer = $this->get('swiftmailer.mailer.default');
