@@ -95,7 +95,12 @@
                                                             <ul class="pager wizard">
                                                                 <li class="previous first" style="display:none;"><a href="#">Início</a></li>
                                                                 <li class="previous"   id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
-                                                                <li class="next last" style="display:none;"><a href="#">Último</a></li>
+                                                                <li class="next last" id="last" style="display:none;">
+                                                                    <button type="button"  id="salvar_lista" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Lista" class="btn green-conecta btn-circle pull-right disabled" data-style="expand-right">
+                                                                        Salvar
+                                                                    </button>
+
+                                                                </li>
                                                                 <li class="next" id="advance"><a class="btn btn-circle green-conecta pull-right disabled" href="#" style="margin-right: 5px;margin-bottom: 5px;">Próximo</a></li>
                                                             </ul>
 
@@ -521,6 +526,7 @@
                         $("#advance a").addClass('disabled');
                         $("#previous").hide();
 
+
                         //BEGIN FORM VALIDATION
                         var informacaoForm = $("#informacao");
 
@@ -547,36 +553,23 @@
                         $("#wizardStepLabel").text(" Selecionar Produtos");
                         $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/produtos/24x24.png') }}")
                         $("#advance a").addClass('disabled');
-                        $("#advance").show();
+                        $("#previous").show();
+                     //   $("#advance a").text('Salvar');
+                        $("#advance").hide();
+                        $("#last").show();
 
                         var productTable = $('#product-datatable');
 
                         productTable.mouseout(function() {
                             if( productTable.find('tr').find("input").is(":checked") ){
-                                $("#advance").find("a").removeClass('disabled');
+                                $("#last").find("button").removeClass('disabled');
+                                $("#last").removeClass('disabled');
                             }
                         });
 
                         break;
 
-/*
-                    case 2 :
-                        $("#wizardStepLabel").text(" Confirmação dos Dados");
-                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/confirmacao-dos-dados/24x24.png') }}")
-                        $("#advance").hide();
-                        setDateTime("datetimepicker1","quote_start","date");
-                        setDateTime("datetimepicker1","quote_start_time","time");
-                        setDateTime("datetimepicker2","quote_end","date");
-                        setDateTime("datetimepicker2","quote_end_time","time");
-                        setItensSuplliers("product-datatable","quote_itens");
-                        setItensSuplliers("representative-datatable","quote_suppliers");
-                        if($('#prazoRCA').length && $('#prazoRCA').val() != 'Outros') {
-                            $('#quote_due_date').text($('#prazoRCA').val());
-                        } else {
-                            $('#quote_due_date').text($('#prazo').val());
-                        }
-                        break;
-                        */
+
                 }
             }});
         });
@@ -584,6 +577,53 @@
         $("#advance").on("click", function() {
             var $bar = $(".ProgressBar");
             stepFoward($bar);
+        });
+
+        $("#salvar_lista").on("click", function() {
+
+            var $this = $(this);
+            $this.button('loading');
+
+            var name = $('#name').val();
+            var description = $('#description').val();
+            var type = $('#type').val();
+            var products = [];
+
+            $("input:checked", $("#product-datatable").dataTable().fnGetNodes()).each(function(){
+                products.push($(this).val());
+            });
+
+
+
+
+            $.ajax(
+                {
+                    url: '/varejista/listas/novalista',
+                    type: 'POST',
+                    contentType: "application/json",
+                    dataType: "json",
+                   // headers: {'Api-Token': token},
+                    data:  JSON.stringify({
+                        name: name,
+                        description: description,
+                        type: type,
+                        products: products
+                    }),
+                    success: function (response) {
+                        console.log("Lista salva com sucesso");
+                        $this.button('reset');
+
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        $this.button('reset');
+
+                    }
+
+                })
+
+
         });
 
         $("#previous").on("click", function() {
