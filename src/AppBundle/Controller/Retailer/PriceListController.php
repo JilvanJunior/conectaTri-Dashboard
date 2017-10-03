@@ -559,6 +559,7 @@ class PriceListController extends Controller
      */
     public function editWinnerQuoteProductAction(Request $request, $id)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
         $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);

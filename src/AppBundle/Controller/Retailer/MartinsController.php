@@ -81,9 +81,28 @@ class MartinsController extends Controller
             $idProduct = $quoteProduct->getProduct()->getId();
             $products[$idProduct] = $quoteProduct->getProduct();
 
+            $usableQuoteSupplier = null;
+            foreach($quoteProduct->getWinners() as $quoteSupplier) {
+                if($quoteSupplier->getRepresentative()->getSupplier()->isRCA()) {
+                    $usableQuoteSupplier = $quoteSupplier;
+                    break;
+                }
+            }
+            if(is_null($usableQuoteSupplier)) {
+                foreach($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                    if($quoteSupplier->getRepresentative()->getSupplier()->isRCA()) {
+                        $foundRCA = true;
+                        break;
+                    }
+                }
+            }
+
+            if(is_null($usableQuoteSupplier))
+                continue;
+
             $quantitiesByProduct[$idProduct] = [
                 'idMartins' => 0,
-                'quantity' => $quoteProduct->getQuantity(),
+                'quantity' => $usableQuoteSupplier->getQuantity(),
             ];
         }
 
