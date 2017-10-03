@@ -73,6 +73,7 @@ class MartinsController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $quote = $em->getRepository('AppBundle:Quote')->findOneById($idQuote);
+        $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
         $products = [];
         $quantitiesByProduct = [];
@@ -105,7 +106,9 @@ class MartinsController extends Controller
             $total += $mercadoria->PrecoNormal;
 
             $mercadoriasSaida[] = [
+                'idProduto' => $idProduct,
                 'nome' => $products[$idProduct]->getName(),
+                'estoque' => $mercadoria->Estoque,
                 'quantidade' => $quantitiesByProduct[$idProduct]['quantity'],
                 'preco' => $mercadoria->PrecoNormal,
             ];
@@ -117,6 +120,7 @@ class MartinsController extends Controller
             'previsaoEntrega' => $acesso->Login->PrevisaoEntregaTexto,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
+            'token' => $token->getToken(),
             'total' => $total,
         ]);
     }

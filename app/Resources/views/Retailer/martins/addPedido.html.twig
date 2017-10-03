@@ -68,14 +68,18 @@
                                             <thead>
                                                 <tr>
                                                     <th>Item</th>
+                                                    <th>Em Estoque</th>
                                                     <th>Quantidade</th>
                                                     <th>Preço</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {% for mercadoria in mercadorias %}
-                                                <tr>
+                                                    <tr data-idproduto='{{ mercadoria.idProduto }}'
+                                                        data-quantity='{{ mercadoria.quantidade }}'
+                                                        data-price='{{ mercadoria.preco }}'>
                                                     <td>{{ mercadoria.nome }}</td>
+                                                    <td>{{ mercadoria.estoque?'Sim':'Não' }}</td>
                                                     <td>{{ mercadoria.quantidade }}</td>
                                                     <td>{{ mercadoria.preco }}</td>
                                                 </tr>
@@ -85,7 +89,7 @@
                                         Total do Pedido: {{ total }}
                                     </div>
                                     <div class='form-actions'>
-                                        <button class="btn btn-circle green-conecta">Enviar Pedido</button>
+                                        <button id='enviar' class="btn btn-circle green-conecta">Enviar Pedido</button>
                                     </div>
                                 </div>
                             </div>
@@ -95,4 +99,45 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        let token = '{{ token }}';
+        
+        $('#enviar').click(function() {
+            let products = [];
+
+            $('table tbody tr').each(function(index, tr) {
+                tr = $(tr);
+
+                let product = {
+                    id: tr.data('idproduto'),
+                    quantity: tr.data('quantity'),
+                    price: tr.data('price'),
+                }
+
+                products.push(product);
+            });
+
+            $.ajax({
+                url: '{{ absolute_url('/api/martins/pedido') }}',
+                type: 'POST',
+                headers: {
+                    "Api-Token": token
+                },
+                data: JSON.stringify({
+                    code: 111,
+                    products: products,
+                }),
+                success: function(res) {
+                    location.href = '{{ path('pedidos_martins') }}'
+                },
+                error: function(jqXHR, status, error) {
+                    let message = JSON.parse(jqXHR.responseText);
+                    alert(message.message);
+                }
+            })
+        });
+    </script>
 {% endblock %}
