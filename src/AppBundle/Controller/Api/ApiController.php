@@ -1992,14 +1992,14 @@ class ApiController extends FOSRestController {
                 continue;
 
             $orders[$k]['code'] = $martinsOrder->getCode();
-            $orders[$k]['venda'] = $order->trackingData->DataVenda;
-            $orders[$k]['pagamento'] = $order->trackingData->DataPagamento;
-            $orders[$k]['faturamento'] = $order->trackingData->DataFaturamento;
-            $orders[$k]['entrega'] = $order->trackingData->DataEntrega;
-            $orders[$k]['conclusao'] = $order->trackingData->DataConclusao;
+            $orders[$k]['venda'] = $martinsOrder->getSaleDate();
+            $orders[$k]['pagamento'] = $martinsOrder->getPaymentDate();
+            $orders[$k]['faturamento'] = $martinsOrder->getBillingDate();
+            $orders[$k]['entrega'] = $martinsOrder->getDeliveryDate();
+            $orders[$k]['conclusao'] = $martinsOrder->getCompletionDate();
             $orders[$k]['due'] = $martinsOrder->getPaymentDue();
             $orders[$k]['value'] = $martinsOrder->getTotal();
-            $orders[$k]['status'] = $order->PedidoStatus;
+            $orders[$k]['status'] = $martinsOrder->getStatus();
             $orders[$k]['order'] = $martinsOrder;
         }
 
@@ -2126,7 +2126,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Get("/api/martins/pedido/")
+     * @Rest\Get("/api/martins/pedido/update")
      */
     public function updateMartinsOrders(Request $request) {
         $d = $this->getDoctrine();
@@ -2160,6 +2160,9 @@ class ApiController extends FOSRestController {
 
         /** @var MartinsOrder $martinsOrder */
         foreach ($martinsOrders as $k => $martinsOrder){
+            if($martinsOrder->getStatus() == 4)
+                continue;
+
             /** @var \stdClass $order */
             $order = $mc->trackMartinsPedido($martinsOrder->getCode());
             if(!property_exists($order, 'trackingData'))
@@ -2172,7 +2175,8 @@ class ApiController extends FOSRestController {
                 ->setBillingDate($trackingData->DataFaturamento)
                 ->setDeliveryDate($trackingData->DataEntrega)
                 ->setCompletionDate($trackingData->DataConclusao)
-                ->setStatus($order->PedidoStatus);
+                ->setStatus($order->PedidoStatus)
+                ->setUpdatedAt(new \DateTime());
 
         }
 
