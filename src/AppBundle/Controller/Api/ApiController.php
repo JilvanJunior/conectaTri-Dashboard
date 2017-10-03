@@ -1053,6 +1053,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
+        /** @var Quote $dbQuote */
         $dbQuote = $d->getRepository("AppBundle:Quote")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
         $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
         $em->flush();
@@ -1236,6 +1237,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
+        /** @var Quote $dbQuote */
         $dbQuote = $d->getRepository("AppBundle:Quote")->find($id);
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Esta cotação não está cadastrada"), Response::HTTP_NOT_FOUND);
@@ -1243,64 +1245,77 @@ class ApiController extends FOSRestController {
         $quote = json_decode($request->getContent());
         $tmp = [];
         $isFirst = true;
-        /** @var QuoteProduct $product */
-        foreach ($dbQuote->getQuoteProducts() as $product) {
-            $rcvProduct = self::arrayContains($quote->quote_products, $product);
+
+        //check existing QuoteProducts
+        /** @var QuoteProduct $quoteProduct */
+        foreach ($dbQuote->getQuoteProducts() as $quoteProduct) {
+            $rcvProduct = self::arrayContains($quote->quote_products, $quoteProduct);
             if ($rcvProduct == false) {
-                $product->setDeleted(true)
+                $quoteProduct->setDeleted(true)
                     ->setUpdatedAt(new \DateTime());
+
+                //if quoteProduct is deleted, the quoteSupplier should be deleted
+                /** @var QuoteSupplier $quoteSupplier */
+                foreach($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                    $quoteSupplier->setDeleted(true)
+                        ->setUpdatedAt(new \DateTime());
+                }
             } else {
-                $product->setDeleted(false)
+                $quoteProduct->setDeleted(false)
                     ->setUpdatedAt(new \DateTime());
                 $tmp3 = [];
-                foreach ($product->getWinners() as $winner) {
+                foreach ($quoteProduct->getWinners() as $winner) {
                     $rcvWinner = self::arrayContains($rcvProduct->winners, $winner);
                     if ($rcvWinner == false) {
-                        $product->removeWinner($winner);
+                        $quoteProduct->removeWinner($winner);
                     } else {
                         $tmp3[] = $winner;
                     }
                 }
                 self::array_diff($rcvProduct->winners, $tmp3);
                 foreach ($rcvProduct->winners as $winner) {
-                    $dbWinner = self::array_item_by_id($product->getQuoteSuppliers(), $winner->id);
-                    $product->addWinner($dbWinner);
+                    $dbWinner = self::array_item_by_id($quoteProduct->getQuoteSuppliers(), $winner->id);
+                    $quoteProduct->addWinner($dbWinner);
                 }
                 $tmp2 = [];
-                /** @var QuoteSupplier $supplier */
-                foreach ($product->getQuoteSuppliers() as $supplier) {
-                    $rcvSupplier = self::arrayContains($rcvProduct->quote_suppliers, $supplier);
+                /** @var QuoteSupplier $quoteSupplier */
+                foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                    $rcvSupplier = self::arrayContains($rcvProduct->quote_suppliers, $quoteSupplier);
                     if ($rcvSupplier == false || (isset($rcvSupplier->deleted) && $rcvSupplier->deleted == true)) {
                         if ($isFirst) {
-                            $supplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote, "representative" => $supplier->getRepresentative()]);
-                            if ($supplierStatus != null) {
-                                $dbQuote->removeSupplierStatus($supplierStatus);
-                                $em->remove($supplierStatus);
+                            $quoteSupplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote,
+                                "representative" => $quoteSupplier->getRepresentative()]);
+                            if ($quoteSupplierStatus != null) {
+                                $dbQuote->removeSupplierStatus($quoteSupplierStatus);
+                                $em->remove($quoteSupplierStatus);
                             }
                         }
-                        if ($product->getWinner() == $supplier) $product->setWinner(null);
-                        $supplier->setDeleted(true)
+                        if ($quoteProduct->getWinner() == $quoteSupplier)
+                            $quoteProduct->setWinner(null);
+                        $quoteSupplier->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
                     } else {
-                        $product->setQuantity($rcvSupplier->quantity);
-                        $supplier->setQuantity($rcvSupplier->quantity)
+                        $quoteProduct->setQuantity($rcvSupplier->quantity);
+                        $quoteSupplier->setQuantity($rcvSupplier->quantity)
                             ->setPrice(str_replace(",", ".", $rcvSupplier->price))
                             ->setDeleted(false)
                             ->setUpdatedAt(new \DateTime());
                         if ($isFirst) {
-                            $supplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote, "representative" => $supplier->getRepresentative()]);
-                            if ($supplierStatus == null) {
-                                $supplierStatus = new QuoteSupplierStatus();
-                                $supplierStatus->setQuote($dbQuote)->setRepresentative($supplier->getRepresentative());
-                                $em->persist($supplierStatus);
+                            $quoteSupplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote,
+                                "representative" => $quoteSupplier->getRepresentative()]);
+                            if ($quoteSupplierStatus == null) {
+                                $quoteSupplierStatus = new QuoteSupplierStatus();
+                                $quoteSupplierStatus->setQuote($dbQuote)->setRepresentative($quoteSupplier->getRepresentative());
+                                $em->persist($quoteSupplierStatus);
                             }
                         }
-                        $tmp2[] = $supplier;
+                        $tmp2[] = $quoteSupplier;
                     }
                 }
                 self::array_diff($rcvProduct->quote_suppliers, $tmp2);
                 /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
+                    /** @var Representative $dbSupplier */
                     $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                     if ($isFirst) {
                         $supplierStatus = new QuoteSupplierStatus();
@@ -1312,7 +1327,7 @@ class ApiController extends FOSRestController {
                         ->setQuantity($supplier->quantity)
                         ->setPrice(str_replace(",", ".", $supplier->price));
                     $em->persist($quoteSupplier);
-                    $product->addQuoteSupplier($quoteSupplier);
+                    $quoteProduct->addQuoteSupplier($quoteSupplier);
                 }
                 $tmp[] = $rcvProduct;
             }
@@ -2071,6 +2086,7 @@ class ApiController extends FOSRestController {
                 . implode(", ", $productsChange)), Response::HTTP_BAD_REQUEST);
 
         //faz pedido na martins
+        /** @var \stdClass $order */
         $order = $mc->saveMartinsPedido($quantitiesByProduct, $productsData->code);
         if($order->Status == 0 || $order->Status == 2){
             $martinsOrder = (new MartinsOrder())
@@ -2107,6 +2123,66 @@ class ApiController extends FOSRestController {
             $output[$varName] = $var;
 
         return View::create($output, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/api/martins/pedido/")
+     */
+    public function updateMartinsOrders(Request $request) {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+        $token = $request->headers->get("Api-Token");
+        if (is_null($token)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
+        }
+        $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
+        if (is_null($dbToken)) {
+            return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
+        }
+        $dbToken->setLastUsed(new \DateTime());
+        $em->flush();
+
+        /** @var Retailer $user */
+        $user = $dbToken->getRetailer();
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
+        $acesso = $mc->login();
+
+        $martinsOrders = $d->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user, 'deleted' => 0, 'updating' => false]);
+
+        $orders = array();
+
+        //starts update
+        /** @var MartinsOrder $martinsOrder */
+        foreach ($martinsOrders as $k => $martinsOrder){
+            $martinsOrder->setUpdating(true);
+        }
+        $em->flush();
+
+        /** @var MartinsOrder $martinsOrder */
+        foreach ($martinsOrders as $k => $martinsOrder){
+            /** @var \stdClass $order */
+            $order = $mc->trackMartinsPedido($martinsOrder->getCode());
+            if(!property_exists($order, 'trackingData'))
+                continue;
+
+            $trackingData = $order->trackingData->trackingData;
+
+            $martinsOrder->setSaleDate($trackingData->DataVenda)
+                ->setPaymentDate($trackingData->DataPagamento)
+                ->setBillingDate($trackingData->DataFaturamento)
+                ->setDeliveryDate($trackingData->DataEntrega)
+                ->setCompletionDate($trackingData->DataConclusao)
+                ->setStatus($order->PedidoStatus);
+
+        }
+
+        //finish update
+        foreach ($martinsOrders as $k => $martinsOrder){
+            $martinsOrder->setUpdating(false);
+        }
+        $em->flush();
+
+        return View::create(null, Response::HTTP_OK);
     }
 
     /**

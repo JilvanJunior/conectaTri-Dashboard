@@ -62,6 +62,56 @@ class MartinsOrder
     private $paymentDue;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="sale_date", type="string", length=45, nullable=true)
+     */
+    private $saleDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_date", type="string", length=45, nullable=true)
+     */
+    private $paymentDate;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="billing_date", type="string", length=45, nullable=true)
+     */
+    private $billingDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="delivery_date", type="string", length=45, nullable=true)
+     */
+    private $deliveryDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="completion_date", type="string", length=45, nullable=true)
+     */
+    private $completionDate;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="updating", type="boolean")
+     * @Serializer\Exclude()
+     */
+    private $updating = false;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="order")
@@ -164,7 +214,7 @@ class MartinsOrder
 
     /**
      * @param OrderProduct $orderProduct
-     * @return Quote
+     * @return MartinsOrder
      */
     public function addOrderProduct($orderProduct) {
         if (!$this->orderProducts->contains($orderProduct))
@@ -174,7 +224,7 @@ class MartinsOrder
 
     /**
      * @param OrderProduct $orderProduct
-     * @return Quote
+     * @return MartinsOrder
      */
     public function removeOrderProduct($orderProduct) {
         if ($this->orderProducts->contains($orderProduct))
@@ -187,7 +237,7 @@ class MartinsOrder
      *
      * @param float $total
      *
-     * @return Product
+     * @return MartinsOrder
      */
     public function setTotal($total)
     {
@@ -255,6 +305,54 @@ class MartinsOrder
     }
 
     /**
+     * Set saleDate
+     *
+     * @param string $saleDate
+     *
+     * @return MartinsOrder
+     */
+    public function setSaleDate($saleDate)
+    {
+        $this->saleDate = $saleDate;
+
+        return $this;
+    }
+
+    /**
+     * Get saleDate
+     *
+     * @return string
+     */
+    public function getSaleDate()
+    {
+        return $this->saleDate;
+    }
+
+    /**
+     * Set paymentDate
+     *
+     * @param string $paymentDate
+     *
+     * @return MartinsOrder
+     */
+    public function setPaymentDate($paymentDate)
+    {
+        $this->paymentDate = $paymentDate;
+
+        return $this;
+    }
+
+    /**
+     * Get paymentDate
+     *
+     * @return string
+     */
+    public function getPaymentDate()
+    {
+        return $this->paymentDate;
+    }
+
+    /**
      * @return DateTime
      */
     public function getCreatedAt()
@@ -264,7 +362,7 @@ class MartinsOrder
 
     /**
      * @param DateTime $createdAt
-     * @return Retailer
+     * @return MartinsOrder
      */
     public function setCreatedAt($createdAt)
     {
@@ -282,7 +380,7 @@ class MartinsOrder
 
     /**
      * @param DateTime $updatedAt
-     * @return Retailer
+     * @return MartinsOrder
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -300,12 +398,141 @@ class MartinsOrder
 
     /**
      * @param bool $deleted
-     * @return Retailer
+     * @return MartinsOrder
      */
     public function setDeleted($deleted)
     {
         $this->deleted = $deleted;
         return $this;
     }
-}
 
+    /**
+     * Set billingDate
+     *
+     * @param string $billingDate
+     *
+     * @return MartinsOrder
+     */
+    public function setBillingDate($billingDate)
+    {
+        $this->billingDate = $billingDate;
+
+        return $this;
+    }
+
+    /**
+     * Get billingDate
+     *
+     * @return string
+     */
+    public function getBillingDate()
+    {
+        return $this->billingDate;
+    }
+
+    /**
+     * Set deliveryDate
+     *
+     * @param string $deliveryDate
+     *
+     * @return MartinsOrder
+     */
+    public function setDeliveryDate($deliveryDate)
+    {
+        $this->deliveryDate = $deliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * Get deliveryDate
+     *
+     * @return string
+     */
+    public function getDeliveryDate()
+    {
+        return $this->deliveryDate;
+    }
+
+    /**
+     * Set completionDate
+     *
+     * @param string $completionDate
+     *
+     * @return MartinsOrder
+     */
+    public function setCompletionDate($completionDate)
+    {
+        $this->completionDate = $completionDate;
+
+        return $this;
+    }
+
+    /**
+     * Get completionDate
+     *
+     * @return string
+     */
+    public function getCompletionDate()
+    {
+        return $this->completionDate;
+    }
+
+    /**
+     * Set updating
+     *
+     * @param boolean $updating
+     *
+     * @return MartinsOrder
+     */
+    public function setUpdating($updating)
+    {
+        $this->updating = $updating;
+
+        return $this;
+    }
+
+    /**
+     * Get updating
+     *
+     * @return boolean
+     */
+    public function getUpdating()
+    {
+        return $this->updating;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     *
+     * @return MartinsOrder
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+}
