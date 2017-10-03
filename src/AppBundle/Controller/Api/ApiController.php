@@ -1974,19 +1974,11 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $user = $dbToken->getRetailer();
-        $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
-        $acesso = $mc->login();
-
         $martinsOrders = $d->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user, 'deleted' => 0]);
 
         $orders = array();
-
         /** @var MartinsOrder $martinsOrder */
         foreach ($martinsOrders as $k => $martinsOrder){
-            $order = $mc->trackMartinsPedido($martinsOrder->getCode());
-            if(!property_exists($order, 'trackingData'))
-                continue;
-
             $orders[$k]['code'] = $martinsOrder->getCode();
             $orders[$k]['venda'] = $martinsOrder->getSaleDate();
             $orders[$k]['pagamento'] = $martinsOrder->getPaymentDate();
