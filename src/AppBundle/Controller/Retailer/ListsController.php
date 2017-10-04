@@ -157,7 +157,14 @@ class ListsController extends Controller
         $listingProducts = $em->getRepository('AppBundle:ListingProduct')->findBy(['listing' => $listing]);
         $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user,'deleted' => false]);
 
+        $checkeds = [];
+        foreach($products as $product)
+            $checkeds[$product->getId()] = false;
+        foreach($listingProducts as $listingProduct)
+            $checkeds[$listingProduct->getProduct()->getId()] = true;
+
         return $this->render('Retailer/lists/addProducts.html.twig', [
+            'checked' => $checkeds,
             'listing' => $listing,
             'listingProducts' => $listingProducts,
             'products' => $products,
