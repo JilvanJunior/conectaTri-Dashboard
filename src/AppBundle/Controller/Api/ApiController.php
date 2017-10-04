@@ -15,6 +15,7 @@ use AppBundle\Entity\QuoteSupplier;
 use AppBundle\Entity\QuoteSupplierStatus;
 use AppBundle\Entity\Representative;
 use AppBundle\Entity\Retailer;
+use AppBundle\Entity\State;
 use AppBundle\Entity\Supplier;
 use AppBundle\Model\ApiError;
 use AppBundle\Model\ApiSupplier;
@@ -37,6 +38,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Post("/api/login")
+     * @param Request $request
+     * @return View
      */
     public function loginAction(Request $request) {
         $d = $this->getDoctrine();
@@ -45,6 +48,7 @@ class ApiController extends FOSRestController {
         if (!isset($user->cnpj) || !isset($user->password)) {
             return View::create(new ApiError("Usuário ou senha inválidos"), Response::HTTP_BAD_REQUEST);
         }
+        /** @var Retailer $dbUser */
         $dbUser = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $user->cnpj]);
         if (is_null($dbUser)) {
             return View::create(new ApiError("Usuário ou senha inválidos"), Response::HTTP_BAD_REQUEST);
@@ -133,6 +137,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/login")
+     * @param Request $request
+     * @return View
      */
     public function refreshLoginAction(Request $request) {
         $d = $this->getDoctrine();
@@ -153,6 +159,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Delete("/api/logout")
+     * @param Request $request
+     * @return View
      */
     public function logoutAction(Request $request) {
         $d = $this->getDoctrine();
@@ -172,6 +180,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Post("/api/fcm")
+     * @param Request $request
+     * @return View
      */
     public function postFCMAction(Request $request) {
         $d = $this->getDoctrine();
@@ -180,6 +190,7 @@ class ApiController extends FOSRestController {
         if (is_null($token)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
+        /** @var ApiSession $dbToken */
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
@@ -200,6 +211,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/email/{email}")
+     * @param $email
+     * @return View
      */
     public function getVerifyEmail($email) {
         $valid = \Swift_Validate::email($email);
@@ -208,6 +221,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/product")
+     * @param Request $request
+     * @return View
      */
     public function getProducts(Request $request) {
         $d = $this->getDoctrine();
@@ -229,6 +244,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/product/{id}")
+     * @param $id
+     * @param Request $request
+     * @return View
      */
     public function getProduct($id, Request $request) {
         $d = $this->getDoctrine();
@@ -253,6 +271,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Post("/api/product")
+     * @param Request $request
+     * @return View
      */
     public function postProduct(Request $request) {
         $d = $this->getDoctrine();
@@ -289,6 +309,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Put("/api/product/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function putProduct(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -325,6 +348,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Delete("/api/product/{id}")
+     * @param $id
+     * @param Request $request
+     * @return View
      */
     public function deleteProduct($id, Request $request) {
         $d = $this->getDoctrine();
@@ -352,6 +378,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/supplier")
+     * @param Request $request
+     * @return View
      */
     public function getSuppliers(Request $request) {
         $d = $this->getDoctrine();
@@ -373,6 +401,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/supplier/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function getSupplier(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -397,6 +428,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/representative")
+     * @param Request $request
+     * @return View
      */
     public function getRepresentatives(Request $request) {
         $d = $this->getDoctrine();
@@ -422,6 +455,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/representative/{supplierId}")
+     * @param Request $request
+     * @param $supplierId
+     * @return View
      */
     public function getSupplierRepresentatives(Request $request, $supplierId) {
         $d = $this->getDoctrine();
@@ -448,6 +484,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Post("/api/representative")
+     * @param Request $request
+     * @return View
      */
     public function postRepresentative(Request $request) {
         $d = $this->getDoctrine();
@@ -498,6 +536,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Put("/api/representative/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function putRepresentative(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -514,6 +555,7 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $representative = json_decode($request->getContent());
+        /** @var Representative $dbRepresentative */
         $dbRepresentative = $d->getRepository("AppBundle:Representative")->findOneBy(["email" => $representative->contactEmail, "retailer" => $dbToken->getRetailer()]);
         if (!is_null($dbRepresentative)) {
             if ($dbRepresentative->getId() != $id)
@@ -544,6 +586,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Delete("/api/representative/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function deleteRepresentative(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -559,6 +604,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
+        /** @var Representative $dbRepresentative */
         $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($id);
         if (is_null($dbRepresentative)) {
             return View::create(new ApiError("Este representante não está cadastrado"), Response::HTTP_NOT_FOUND);
@@ -575,6 +621,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/listing")
+     * @param Request $request
+     * @return View
      */
     public function getListings(Request $request) {
         $d = $this->getDoctrine();
@@ -591,11 +639,12 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         $dbListings = $d->getRepository("AppBundle:Listing")->findBy(["retailer" => $dbToken->getRetailer(), "deleted" => false]);
+        /** @var Listing $listing */
         foreach ($dbListings as $listing) {
             $em->detach($listing);
-            foreach ($listing->getListingProducts() as $product) {
-                if ($product->getProduct()->isDeleted() == true) {
-                    $listing->removeListingProduct($product);
+            foreach ($listing->getListingProducts() as $listingProduct) {
+                if ($listingProduct->getProduct()->isDeleted() == true) {
+                    $listing->removeListingProduct($listingProduct);
                 }
             }
             foreach ($listing->getRepresentatives() as $representative) {
@@ -609,6 +658,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Post("/api/listing")
+     * @param Request $request
+     * @return View
      */
     public function postListing(Request $request) {
         $d = $this->getDoctrine();
@@ -631,6 +682,7 @@ class ApiController extends FOSRestController {
             ->setDescription($listing->description)
             ->setRetailer($dbToken->getRetailer());
         foreach ($listing->listing_products as $product) {
+            /** @var Product $dbProduct */
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             if (is_null($dbProduct)) continue;
             $listingProduct = new ListingProduct();
@@ -641,6 +693,7 @@ class ApiController extends FOSRestController {
             $dbListing->addListingProduct($listingProduct);
         }
         foreach ($listing->representatives as $representative) {
+            /** @var Representative $dbSupplier */
             $dbSupplier = $d->getRepository("AppBundle:Representative")->find($representative->id);
             if (!is_null($dbSupplier)) $dbListing->addRepresentative($dbSupplier);
         }
@@ -652,6 +705,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Put("/api/listing/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function putListing(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -667,25 +723,28 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
+        /** @var Listing $dbListing */
         $dbListing = $d->getRepository("AppBundle:Listing")->find($id);
         if (is_null($dbListing)) {
             return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
         }
         $listing = json_decode($request->getContent());
         $tmp = [];
-        foreach ($dbListing->getListingProducts() as $product) {
-            $rcvProduct = self::arrayContains($listing->listing_products, $product);
+        /** @var ListingProduct $listingProduct */
+        foreach ($dbListing->getListingProducts() as $listingProduct) {
+            $rcvProduct = self::arrayContains($listing->listing_products, $listingProduct);
             if ($rcvProduct == false) {
-                $dbListing->removeListingProduct($product);
-                $em->remove($product);
+                $dbListing->removeListingProduct($listingProduct);
+                $em->remove($listingProduct);
             } else {
-                $product->setQuantity($rcvProduct->quantity);
+                $listingProduct->setQuantity($rcvProduct->quantity);
                 $tmp[] = $rcvProduct;
             }
         }
         self::array_diff($listing->listing_products, $tmp);
         foreach ($listing->listing_products as $product) {
             $newProduct = new ListingProduct();
+            /** @var Product $dbProduct */
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
             $newProduct->setProduct($dbProduct)
                 ->setQuantity($product->quantity)
@@ -704,6 +763,7 @@ class ApiController extends FOSRestController {
         }
         self::array_diff($listing->suppliers, $tmp);
         foreach ($listing->suppliers as $representative) {
+            /** @var Representative $dbRepresentative */
             $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($representative->id);
             $dbListing->addRepresentative($dbRepresentative);
         }
@@ -718,6 +778,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Delete("/api/listing/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function deleteListing(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -745,6 +808,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/quote")
+     * @param Request $request
+     * @return View
      */
     public function getAllQuotes(Request $request) {
         $d = $this->getDoctrine();
@@ -767,23 +832,25 @@ class ApiController extends FOSRestController {
             ->orderBy("q.createdAt", "DESC")
             ->getQuery()->getResult();
         $responseArray = [];
+        /** @var Quote $quote */
         foreach($quotes as $quote) {
             $em->detach($quote);
             if (!$quote->isDeleted()) {
-                foreach ($quote->getQuoteProducts() as $product) {
-                    $em->detach($product);
-                    if (!$product->isDeleted()) {
-                        foreach ($product->getQuoteSuppliers() as $supplier) {
+                /** @var QuoteProduct $quoteProduct */
+                foreach ($quote->getQuoteProducts() as $quoteProduct) {
+                    $em->detach($quoteProduct);
+                    if (!$quoteProduct->isDeleted()) {
+                        foreach ($quoteProduct->getQuoteSuppliers() as $supplier) {
                             $em->detach($supplier);
                             if ($supplier->getRepresentative()->isDeleted())
-                                $product->removeQuoteSupplier($supplier);
+                                $quoteProduct->removeQuoteSupplier($supplier);
                             /* TODO: Add this
                             else
                                 $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
                             */
                         }
                     } else {
-                        $quote->removeQuoteProduct($product);
+                        $quote->removeQuoteProduct($quoteProduct);
                     }
                 }
                 $responseArray[] = $quote;
@@ -794,6 +861,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/quote/current")
+     * @param Request $request
+     * @return View
      */
     public function getCurrentQuotes(Request $request) {
         $d = $this->getDoctrine();
@@ -849,6 +918,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/quote/closed")
+     * @param Request $request
+     * @return View
      */
     public function getClosedQuotes(Request $request) {
         $d = $this->getDoctrine();
@@ -876,23 +947,26 @@ class ApiController extends FOSRestController {
             ->orderBy("q.createdAt", "DESC")
             ->getQuery()->getResult();
         $responseArray = [];
+        /** @var Quote $quote */
         foreach($quotes as $quote) {
             $em->detach($quote);
             if (!$quote->isDeleted()) {
-                foreach ($quote->getQuoteProducts() as $product) {
-                    $em->detach($product);
-                    if (!$product->isDeleted()) {
-                        foreach ($product->getQuoteSuppliers() as $supplier) {
-                            $em->detach($supplier);
-                            if ($supplier->getRepresentative()->isDeleted())
-                                $product->removeQuoteSupplier($supplier);
+                /** @var QuoteProduct $quoteProduct */
+                foreach ($quote->getQuoteProducts() as $quoteProduct) {
+                    $em->detach($quoteProduct);
+                    if (!$quoteProduct->isDeleted()) {
+                        /** @var QuoteSupplier $quoteSupplier */
+                        foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                            $em->detach($quoteSupplier);
+                            if ($quoteSupplier->getRepresentative()->isDeleted())
+                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
                             /* TODO: Add this
                             else
                                 $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
                             */
                         }
                     } else {
-                        $quote->removeQuoteProduct($product);
+                        $quote->removeQuoteProduct($quoteProduct);
                     }
                 }
                 $responseArray[] = $quote;
@@ -903,6 +977,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/quote/current/product/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function getCurrentQuotesByProduct(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -970,6 +1047,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/quote/closed/product/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function getClosedQuotesByProduct(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -1009,23 +1089,26 @@ class ApiController extends FOSRestController {
             ->orderBy("q.createdAt", "DESC")
             ->getQuery()->getResult();
         $responseArray = [];
+        /** @var Quote $quote */
         foreach($quotes as $quote) {
             $em->detach($quote);
             if (!$quote->isDeleted()) {
-                foreach ($quote->getQuoteProducts() as $product) {
-                    $em->detach($product);
-                    if (!$product->isDeleted()) {
-                        foreach ($product->getQuoteSuppliers() as $supplier) {
-                            $em->detach($supplier);
-                            if ($supplier->getRepresentative()->isDeleted())
-                                $product->removeQuoteSupplier($supplier);
+                /** @var QuoteProduct $quoteProduct */
+                foreach ($quote->getQuoteProducts() as $quoteProduct) {
+                    $em->detach($quoteProduct);
+                    if (!$quoteProduct->isDeleted()) {
+                        /** @var QuoteSupplier $quoteSupplier */
+                        foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                            $em->detach($quoteSupplier);
+                            if ($quoteSupplier->getRepresentative()->isDeleted())
+                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
                             /* TODO: Add this
                             else
                                 $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
                             */
                         }
                     } else {
-                        $quote->removeQuoteProduct($product);
+                        $quote->removeQuoteProduct($quoteProduct);
                     }
                 }
                 $responseArray[] = $quote;
@@ -1036,6 +1119,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/quote/{id}/link")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function getQuoteLink(Request $request, $id) {
         $url = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -1044,6 +1130,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/quote/{id}/updated")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function updateQuote(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -1069,6 +1158,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Patch("/api/quote/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function sendQuoteLink(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -1084,6 +1176,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
+        /** @var Quote $dbQuote */
         $dbQuote = $d->getRepository("AppBundle:Quote")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Cotação não encontrada"), Response::HTTP_NOT_FOUND);
@@ -1156,6 +1249,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Post("/api/quote")
+     * @param Request $request
+     * @return View
      */
     public function postQuote(Request $request) {
         $d = $this->getDoctrine();
@@ -1387,6 +1482,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Delete("/api/quote/{id}")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function deleteQuote(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -1406,11 +1504,13 @@ class ApiController extends FOSRestController {
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
         }
-        foreach($dbQuote->getQuoteProducts() as $product) {
-            $product->setDeleted(true)
+        /** @var QuoteProduct $quoteProduct */
+        foreach($dbQuote->getQuoteProducts() as $quoteProduct) {
+            $quoteProduct->setDeleted(true)
                 ->setUpdatedAt(new \DateTime());
-            foreach($product->getQuoteSuppliers() as $supplier) {
-                $supplier->setDeleted(true)
+            /** @var QuoteSupplier $quoteSupplier */
+            foreach($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                $quoteSupplier->setDeleted(true)
                     ->setUpdatedAt(new \DateTime());
             }
         }
@@ -1422,6 +1522,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Patch("/api/quote/{id}/suppliers")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function sendQuoteLinkToSuppliers(Request $request, $id) {
         $d = $this->getDoctrine();
@@ -1442,8 +1545,6 @@ class ApiController extends FOSRestController {
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Cotação não encontrada"), Response::HTTP_NOT_FOUND);
         }
-
-        $details = json_decode($request->getContent());
 
         $link = $this->get('router')->generate('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
         $mailer = $this->get('swiftmailer.mailer.default');
@@ -1503,6 +1604,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/retailer")
+     * @param Request $request
+     * @return View
      */
     public function getRetailer(Request $request) {
         $d = $this->getDoctrine();
@@ -1523,6 +1626,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Post("/api/retailer")
+     * @param Request $request
+     * @return View
      */
     public function postRetailer(Request $request) {
         $d = $this->getDoctrine();
@@ -1540,6 +1645,7 @@ class ApiController extends FOSRestController {
                 return View::create(new ApiError("Este CNPJ já está cadastrado"), Response::HTTP_CONFLICT);
             }
         }
+        /** @var State $dbState */
         $dbState = $d->getRepository("AppBundle:State")->findOneBy(["uf" => $retailer->state]);
         $dbRetailer = new Retailer();
         $dbRetailer
@@ -1592,6 +1698,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Put("/api/retailer")
+     * @param Request $request
+     * @return View
      */
     public function putRetailer(Request $request) {
         $d = $this->getDoctrine();
@@ -1609,6 +1717,7 @@ class ApiController extends FOSRestController {
 
         $sec = $this->get("security.password_encoder");
         $jsonRequest = json_decode($request->getContent());
+        /** @var Retailer $dbRetailer */
         $dbRetailer = $dbToken->getRetailer();
         $retailer = $jsonRequest->retailer;
         if (isset($retailer->password) && strlen($retailer->password) < 8 && strlen($retailer->password) > 0) {
@@ -1617,6 +1726,7 @@ class ApiController extends FOSRestController {
         if (!isset($jsonRequest->password) || !$sec->isPasswordValid($dbRetailer, $jsonRequest->password)) {
             return View::create(new ApiError("Senha incorreta"), Response::HTTP_BAD_REQUEST);
         }
+        /** @var State $dbState */
         $dbState = $d->getRepository("AppBundle:State")->findOneBy(["uf" => $retailer->state]);
         $dbRetailer
             ->setCompanyName($retailer->company_name)
@@ -1672,6 +1782,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Patch("/api/product")
+     * @param Request $request
+     * @return View
      */
     public function searchProduct(Request $request) {
         $d = $this->getDoctrine();
@@ -1700,6 +1812,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Patch("/api/product/all")
+     * @param Request $request
+     * @return View
      */
     public function searchAllProducts(Request $request) {
         $d = $this->getDoctrine();
@@ -1727,6 +1841,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Patch("/api/listing")
+     * @param Request $request
+     * @return View
      */
     public function searchListing(Request $request) {
         $d = $this->getDoctrine();
@@ -1750,11 +1866,14 @@ class ApiController extends FOSRestController {
             ->setParameter("listing", "%$search->query%")
             ->setParameter("retailer", $dbToken->getRetailer())
             ->getQuery()->getResult();
+
         return View::create($results, Response::HTTP_OK);
     }
 
     /**
      * @Rest\Post("/api/recovery/begin")
+     * @param Request $request
+     * @return View
      */
     public function postBeginPasswordRecovery(Request $request) {
         $r = $this->get('router');
@@ -1800,6 +1919,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Post("/api/recovery/end")
+     * @param Request $request
+     * @return View
      */
     public function postEndPasswordRecovery(Request $request) {
         $d = $this->getDoctrine();
@@ -1838,6 +1959,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/martins/boleto")
+     * @param Request $request
+     * @return View
      */
     public function getBoletos(Request $request) {
         $d = $this->getDoctrine();
@@ -1872,6 +1995,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\POST("/api/martins/info")
+     * @param Request $request
+     * @return View
      */
     public function getProductInfo(Request $request) {
         $d = $this->getDoctrine();
@@ -1914,6 +2039,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\POST("/api/martins/quote")
+     * @param Request $request
+     * @return View
      */
     public function getMartinsQuote(Request $request) {
         $d = $this->getDoctrine();
@@ -1970,6 +2097,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/martins/pedido")
+     * @param Request $request
+     * @return View
      */
     public function getMartinsOrders(Request $request) {
         $d = $this->getDoctrine();
@@ -2009,6 +2138,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Post("/api/martins/pedido")
+     * @param Request $request
+     * @return View
      */
     public function saveMartinsOrder(Request $request) {
         $d = $this->getDoctrine();
@@ -2098,6 +2229,7 @@ class ApiController extends FOSRestController {
                 ->setRetailer($user);
 
             $productsById = [];
+            /** @var Product $product */
             foreach($products as $product) {
                 $productsById[$product->getId()] = $product;
             }
@@ -2127,6 +2259,8 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/martins/pedido/update")
+     * @param Request $request
+     * @return View
      */
     public function updateMartinsOrders(Request $request) {
         $d = $this->getDoctrine();
@@ -2191,6 +2325,9 @@ class ApiController extends FOSRestController {
 
     /**
      * @Rest\Get("/api/martins/pedido/{id}/update")
+     * @param Request $request
+     * @param $id
+     * @return View
      */
     public function updateMartinsOrder(Request $request, $id) {
         $d = $this->getDoctrine();
