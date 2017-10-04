@@ -58,6 +58,7 @@ class PriceListController extends Controller
     public function getRestApiToken(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 

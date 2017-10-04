@@ -220,7 +220,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Get("/api/product")
+     * @Rest\Get("/api/product", name="get_api_product")
      * @param Request $request
      * @return View
      */
@@ -270,7 +270,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Post("/api/product")
+     * @Rest\Post("/api/product", name="post_api_product")
      * @param Request $request
      * @return View
      */
@@ -427,7 +427,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Get("/api/representative")
+     * @Rest\Get("/api/representative", name="get_api_representative")
      * @param Request $request
      * @return View
      */
@@ -483,7 +483,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Post("/api/representative")
+     * @Rest\Post("/api/representative", name="post_api_representative")
      * @param Request $request
      * @return View
      */
@@ -620,7 +620,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Get("/api/listing")
+     * @Rest\Get("/api/listing", name="get_api_listing")
      * @param Request $request
      * @return View
      */
@@ -657,7 +657,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Post("/api/listing")
+     * @Rest\Post("/api/listing", name="post_api_listing")
      * @param Request $request
      * @return View
      */

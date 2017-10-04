@@ -360,7 +360,7 @@
                                                                                 </a>
                                                                             </li>
                                                                             <li class="ProgressBar-step">
-                                                                                <a href="#tab4" class="disabled-click" class="disabled-click" data-toggle="tab">
+                                                                                <a href="#tab4" class="disabled-click" data-toggle="tab">
                                                                                     <svg class="ProgressBar-icon"><use xlink:href="#checkmark-bold"/></svg>
                                                                                     <span class="ProgressBar-stepLabel"><!--4--></span>
                                                                                 </a>
@@ -378,7 +378,7 @@
 
                                                             <ul class="pager wizard">
                                                                 <li class="previous first" style="display:none;"><a href="#">Início</a></li>
-                                                                <li class="previous"   id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
+                                                                <li class="previous" id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
                                                                 <li class="next last" style="display:none;"><a href="#">Último</a></li>
                                                                 <li class="next" id="advance"><a class="btn btn-circle green-conecta pull-right disabled" href="#" style="margin-right: 5px;margin-bottom: 5px;">Próximo</a></li>
                                                             </ul>
@@ -632,7 +632,7 @@
                                                                                 <th> Descrição </th>
                                                                                 <th> Tipo </th>
                                                                                 <th> Itens </th>
-                                                                                <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllListing" type="checkbox" name="test" /> <span></span></th>
+                                                                                <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllListing" type="checkbox" /> <span></span></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -1161,7 +1161,7 @@ $("#prazoRCA").change(function() {
                 switch(index) {
                     case 0 :
                         $("#wizardStepLabel").text(" Dados da Cotação");
-                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/dados-da-cotacao/24x24.png') }}")
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/dados-da-cotacao/24x24.png') }}");
                         $("#advance a").addClass('disabled');
                         $("#previous").hide();
 
@@ -1193,10 +1193,10 @@ $("#prazoRCA").change(function() {
                         $("#advance a").addClass('disabled');
                         $("#previous").show();
 
-                        var representativeTable = $('#representative-datatable');
+                        var supplierTable = $('#supplier-datatable');
 
-                        representativeTable.mouseout(function() {
-                            if( representativeTable.find('tr').find("input").is(":checked") ){
+                        supplierTable.mouseout(function() {
+                            if( supplierTable.find('tr').find("input").is(":checked") ){
                                 $("#advance").find("a").removeClass('disabled');
                             }
                         });
@@ -1233,14 +1233,14 @@ $("#prazoRCA").change(function() {
                         break;
                     case 4 :
                         $("#wizardStepLabel").text(" Confirmação dos Dados");
-                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/confirmacao-dos-dados/24x24.png') }}")
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/confirmacao-dos-dados/24x24.png') }}");
                         $("#advance").hide();
                         setDateTime("datetimepicker1","quote_start","date");
                         setDateTime("datetimepicker1","quote_start_time","time");
                         setDateTime("datetimepicker2","quote_end","date");
                         setDateTime("datetimepicker2","quote_end_time","time");
                         setItensSuplliers("product-datatable","quote_itens");
-                        setItensSuplliers("representative-datatable","quote_suppliers");
+                        setItensSuplliers("supplier-datatable","quote_suppliers");
                         if($('#prazoRCA').length && $('#prazoRCA').val() != 'Outros') {
                             $('#quote_due_date').text($('#prazoRCA').val());
                         } else {
@@ -1454,7 +1454,7 @@ $("#prazoRCA").change(function() {
     },
 
             ajax: {
-                url: "/api/representative",
+                url: "{{ path('get_api_representative') }}",
                 type: 'GET',
                 dataSrc: "",
                 beforeSend : function(xhr) {
@@ -1534,7 +1534,7 @@ $("#prazoRCA").change(function() {
 
                 $.ajax(
                     {
-                        url: '/api/representative',
+                        url: "{{ path('post_api_representative') }}",
                         type: 'POST',
                         contentType: "application/json",
                         dataType: "json",
@@ -1608,7 +1608,7 @@ $("#prazoRCA").change(function() {
                 }
             },
             ajax: {
-                url: "/api/listing",
+                url: "{{ path('get_api_listing') }}",
                 type: 'GET',
                 dataSrc: "",
                 beforeSend : function(xhr) {
@@ -1682,7 +1682,7 @@ $("#prazoRCA").change(function() {
 
                 $.ajax(
                     {
-                        url: '/api/listing',
+                        url: "{{ path('post_api_listing') }}",
                         type: 'POST',
                         contentType: "application/json",
                         dataType: "json",
@@ -1694,7 +1694,7 @@ $("#prazoRCA").change(function() {
                         }),
                         success: function (response) {
                             console.log(response);
-                            $('#listing-datatable').DataTable().ajax.reload()
+                            $('#listing-datatable').DataTable().ajax.reload();
                             $this.button('reset');
                             $('#listingModal').modal('toggle');
                             $("#list_form").trigger("reset")
@@ -1738,7 +1738,7 @@ $("#prazoRCA").change(function() {
                 "sSearch": "Pesquisar",
                 "oPaginate": {
                     "sNext": '<i class="fa fa-angle-right"></i>',
-                    "sPrevious": '<i class="fa fa-angle-left"></i>',
+                    "sPrevious": '<i class="fa fa-angle-left"></i>'
 
                 },
                 "oAria": {
@@ -1747,7 +1747,7 @@ $("#prazoRCA").change(function() {
                 }
             },
             ajax: {
-                url: "/api/product",
+                url: "{{ path('get_api_product') }}",
                 type: 'GET',
                dataSrc: "",
                 beforeSend : function(xhr) {
@@ -1804,9 +1804,9 @@ $("#prazoRCA").change(function() {
             var marca = $('#marca').val();
             var tipo = $('#tipo-produto').val();
             var codigo = $('#codigo').val();
-            var unidade = $('#unidade').val();;
+            var unidade = $('#unidade').val();
             var peso = $('#peso').val();
-            var descricao = $('#descricao-produto').val();;
+            var descricao = $('#descricao-produto').val();
 
 
             $this.button('loading');
@@ -1825,7 +1825,7 @@ $("#prazoRCA").change(function() {
 
                 $.ajax(
                     {
-                        url: '/api/product',
+                        url: "{{ path('post_api_product') }}",
                         type: 'POST',
                         contentType: "application/json",
                         dataType: "json",
