@@ -2354,6 +2354,9 @@ class ApiController extends FOSRestController {
 
         $martinsOrder = $d->getRepository('AppBundle:MartinsOrder')->findOneBy(['id' => $id, 'retailer' => $user, 'deleted' => 0]);
 
+        if(is_null($martinsOrder))
+            return View::create(new ApiError("Pedido inválido"), Response::HTTP_BAD_REQUEST);
+
         //starts update
         $martinsOrder->setUpdating(true);
         $em->flush();
