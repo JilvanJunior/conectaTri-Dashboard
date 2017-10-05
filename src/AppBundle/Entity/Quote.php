@@ -99,6 +99,12 @@ class Quote
     private $paymentDate;
 
     /**
+     * @var int
+     * @ORM\Column(name="id_order", type="integer", nullable=true)
+     */
+    private $idOrder;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="closed", type="boolean")
@@ -422,6 +428,25 @@ class Quote
     }
 
     /**
+     * Get IdOrder
+     * @return int
+     */
+    public function getIdOrder()
+    {
+        return $this->idOrder;
+    }
+
+    /**
+     * @param int $idOrder
+     * @return Quote
+     */
+    public function setIdOrder($idOrder)
+    {
+        $this->idOrder = $idOrder;
+        return $this;
+    }
+
+    /**
      * @param bool $deleted
      * @return Quote
      */
@@ -433,7 +458,6 @@ class Quote
 
     /**
      * Get deleted
-     *
      * @return boolean
      */
     public function getDeleted()

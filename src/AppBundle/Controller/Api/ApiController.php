@@ -2246,6 +2246,10 @@ class ApiController extends FOSRestController {
 
             $em->persist($martinsOrder);
             $em->flush();
+
+            $quote = $em->getRepository('AppBundle:Quote')->findOneById($this->productsData->quoteId);
+            $quote->setIdOrder($martinsOrder->getId());
+            $em->flush();
         } else {
             return View::create(new ApiError($order->Mensagem), Response::HTTP_BAD_REQUEST);
         }
