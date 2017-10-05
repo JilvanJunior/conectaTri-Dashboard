@@ -967,12 +967,11 @@
                                                                                 <h2>Dados da Cotação</h2>
                                                                                 <div class="row">
                                                                                     <div class="col-md-6">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span > Itens:</span>
+                                                                                        <span > Itens:</span>
                                                                                         <span id="quote_itens"></span>
                                                                                     </div>
 
                                                                                     <div class="col-md-6">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
                                                                                         <span>Fornecedores:</span>
                                                                                         <span id="quote_suppliers"></span>
                                                                                     </div>
@@ -1010,9 +1009,9 @@
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="col-md-offset-4 col-md-4" style="margin-top: 20px">
-                                                                                <button class="btn green-conecta" style="width: 100%;margin: 5px 0;">Salvar Cotação</button><br/>
-                                                                                <button class="btn green-conecta" style="width: 100%;margin: 5px 0;">Iniciar Cotação Presencial</button><br/>
-                                                                                <button class="btn green-conecta" style="width: 100%;margin: 5px 0;">Enviar Para Fornecedor</button>
+                                                                                <button id="save-quote" class="btn green-conecta" style="width: 100%;margin: 5px 0;">Salvar Cotação</button><br/>
+                                                                                <button id="presential-quote" class="btn green-conecta" style="width: 100%;margin: 5px 0;">Iniciar Cotação Presencial</button><br/>
+                                                                                <button id="sent-suppliers" class="btn green-conecta" style="width: 100%;margin: 5px 0;">Enviar Para Fornecedor</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1110,7 +1109,7 @@
             $.each($("#" + id + " tr").find("input"), function( index, value ) {
                 if ( $(this)["0"].checked ){
                     count = count + 1
-                };
+                }
             });
             $("#" + elementId ).text(count);
         }
@@ -1836,5 +1835,118 @@
         selectAll("selectAllProducts","chkProducts");
 
         // END PRODUCTS TABLE
+
+        // FINISH QUOTE
+        $('#save-quote').on('click', function() {
+
+            var name = $("#cotacao").val();
+            var paymentDate = $('#prazoRCA').val();
+
+            var startDate = $("#datetimepicker1").data("datetimepicker").getDate();
+            startDate = startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + "-" + startDate.getDate() + "T"
+                + startDate.getHours() + ":" + startDate.getMinutes() + ":00+00:00";
+
+            var endDate = $("#datetimepicker2").data("datetimepicker").getDate();
+            endDate = endDate.getFullYear() + "-" + (endDate.getMonth() + 1) + "-" + endDate.getDate() + "T"
+                + endDate.getHours() + ":" + endDate.getMinutes() + ":00+00:00";
+
+            var productsId = [];
+            var suppliersId = [];
+
+            $.each($('#supplier-datatable tr input:checked'), function(i, v){
+                suppliersId.push({representative: {id: $(this).val()}, quantity: 0, price: 0});
+            });
+
+            $.each($('#product-datatable tr input:checked'), function(i, v){
+                productsId.push({
+                    product: {id: $(this).val()},
+                    quote_suppliers: suppliersId
+                });
+            });
+
+            $.ajax({
+                url: "{{ path('post_api_quote') }}",
+                type: 'POST',
+                contentType: "application/json",
+                dataType: "json",
+                headers: {'Api-Token': token},
+                data:  JSON.stringify({
+                    name: name,
+                    type: 1,
+                    begins_at: startDate,
+                    expires_at: endDate,
+                    send_to_supplier: false,
+                    paymente_date: paymentDate,
+                    quote_products: productsId,
+                    quote_suppliers: suppliersId
+                }),
+                success: function (response) {
+                    location.href = '{{ path('cotacoes') }}'
+                },
+                error: function (error) {
+                    alert(error.responseJSON.error.exception["0"].message);
+
+                }
+
+            });
+
+        });
+
+        $('#presential-quote').on('click', function() {
+
+            var name = $("#cotacao").val();
+            var paymentDate = $('#prazoRCA').val();
+
+            var startDate = $("#datetimepicker1").data("datetimepicker").getDate();
+            startDate = startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + "-" + startDate.getDate() + "T"
+                + startDate.getHours() + ":" + startDate.getMinutes() + ":00+00:00";
+
+            var endDate = $("#datetimepicker2").data("datetimepicker").getDate();
+            endDate = endDate.getFullYear() + "-" + (endDate.getMonth() + 1) + "-" + endDate.getDate() + "T"
+                + endDate.getHours() + ":" + endDate.getMinutes() + ":00+00:00";
+
+            var productsId = [];
+            var suppliersId = [];
+
+            $.each($('#supplier-datatable tr input:checked'), function(i, v){
+                suppliersId.push({representative: {id: $(this).val()}, quantity: 0, price: 0});
+            });
+
+            $.each($('#product-datatable tr input:checked'), function(i, v){
+                productsId.push({
+                    product: {id: $(this).val()},
+                    quote_suppliers: suppliersId
+                });
+            });
+
+            $.ajax({
+                url: "{{ path('post_api_quote') }}",
+                type: 'POST',
+                contentType: "application/json",
+                dataType: "json",
+                headers: {'Api-Token': token},
+                data:  JSON.stringify({
+                    name: name,
+                    type: 2,
+                    begins_at: startDate,
+                    expires_at: endDate,
+                    send_to_supplier: false,
+                    paymente_date: paymentDate,
+                    quote_products: productsId,
+                    quote_suppliers: suppliersId
+                }),
+                success: function (response) {
+                    location.href = '{{ path('cotacoes') }}'
+                },
+                error: function (error) {
+                    alert(error.responseJSON.error.exception["0"].message);
+
+                }
+
+            });
+
+        });
+
+        // END FINISH QUOTE
     </script>
 {% endblock %}
