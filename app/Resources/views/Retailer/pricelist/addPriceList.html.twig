@@ -15,7 +15,7 @@
     <style>
         .ProgressBar {
             margin: 0 auto;
-          /*  padding: 2em 0 3em;*/
+            /*  padding: 2em 0 3em;*/
             list-style: none;
             position: relative;
             display: -webkit-box;
@@ -429,12 +429,12 @@
                                                                                             <div class="form-group text">
                                                                                                 <label for="prazo" style='position: initial;'>Prazo de pagamento</label>
                                                                                                 {% if userIsRCA %}
-                                                                                                <select class='form-control' style='margin-bottom: 3px;' id='prazoRCA' autocomplete="off">
-                                                                                                    {% for cond in conditions %}
-                                                                                                    <option>{{ cond }}</option>
-                                                                                                    {% endfor %}
-                                                                                                    <option>Outros</option>
-                                                                                                </select>
+                                                                                                    <select class='form-control' style='margin-bottom: 3px;' id='prazoRCA' autocomplete="off">
+                                                                                                        {% for cond in conditions %}
+                                                                                                            <option>{{ cond }}</option>
+                                                                                                        {% endfor %}
+                                                                                                        <option>Outros</option>
+                                                                                                    </select>
                                                                                                 {% endif %}
                                                                                                 <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date" autocomplete="off" placeholder="Selecionando Outros não é possível fazer um pedido ao Martins"></textarea>
                                                                                             </div>
@@ -608,7 +608,7 @@
                                                                                 </div>
                                                                                 <div class="modal-footer">
                                                                                     <button type="button"  id="salvar_fornecedor" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Fornecedor" class="btn green-conecta btn-circle" data-style="expand-right">
-                                                                                    Salvar
+                                                                                        Salvar
                                                                                     </button>
 
                                                                                 </div>
@@ -766,19 +766,19 @@
                                                                             </thead>
                                                                             <tbody>
                                                                             {% if products is defined %}
-                                                                            {% for product in products %}
-                                                                                <tr>
-                                                                                    <td> {{ product.id }} </td>
-                                                                                    <td> {{ product.name }} </td>
-                                                                                    <td> {{ product.type }} </td>
-                                                                                    <td> {{ product.brand }} </td>
-                                                                                    <td> {{ product.unit }} {{ product.quantity }} </td>
-                                                                                    <td>
-                                                                                        <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ product.id }}" name="chkProducts" /> <span></span>
-                                                                                    </td>
+                                                                                {% for product in products %}
+                                                                                    <tr>
+                                                                                        <td> {{ product.id }} </td>
+                                                                                        <td> {{ product.name }} </td>
+                                                                                        <td> {{ product.type }} </td>
+                                                                                        <td> {{ product.brand }} </td>
+                                                                                        <td> {{ product.unit }} {{ product.quantity }} </td>
+                                                                                        <td>
+                                                                                            <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ product.id }}" name="chkProducts" /> <span></span>
+                                                                                        </td>
 
-                                                                                </tr>
-                                                                            {% endfor %}
+                                                                                    </tr>
+                                                                                {% endfor %}
                                                                             {% endif %}
                                                                             </tbody>
                                                                         </table>
@@ -960,64 +960,59 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="tab-pane" id="tab5">
+                                                                <div class="tab-pane" id="tab5" style="text-align: center">
                                                                     <div class="wizard-container">
                                                                         <div class="row">
-                                                                            <div class="col-md-6">
-                                                                                <h2>
-                                                                                    Dados da Cotação
-                                                                                </h2>
-                                                                                <h4>
-                                                                                    Início
-                                                                                </h4>
-                                                                                <div class='row'>
-                                                                                    <div class="col-md-3">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true" ></i>
-                                                                                        <span id="quote_start"> data</span>
-                                                                                    </div>
-
-                                                                                    <div class="col-md-3">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                                                        <span id="quote_start_time"> hora</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <h4>
-                                                                                    Fim
-                                                                                </h4>
-                                                                                <div class='row'>
-                                                                                    <div class="col-md-3">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_end"> data</span>
-                                                                                    </div>
-
-                                                                                    <div class="col-md-3">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span id="quote_end_time"> hora</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class='row'>
-                                                                                    <div class="col-md-3">
-                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span > Itens</span>
+                                                                            <div class="col-md-offset-4 col-md-4">
+                                                                                <h2>Dados da Cotação</h2>
+                                                                                <div class="row">
+                                                                                    <div class="col-md-6">
+                                                                                        <i class="fa fa-calendar" aria-hidden="true"></i><span > Itens:</span>
                                                                                         <span id="quote_itens"></span>
                                                                                     </div>
 
-                                                                                    <div class="col-md-4">
+                                                                                    <div class="col-md-6">
                                                                                         <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                                                        <span> Fornecedores</span>
+                                                                                        <span>Fornecedores:</span>
                                                                                         <span id="quote_suppliers"></span>
                                                                                     </div>
                                                                                 </div>
-                                                                                <h4>
-                                                                                    Prazo de Pagamento
-                                                                                </h4>
-                                                                                <div class='row'>
-                                                                                    <div class="col-md-3">
+                                                                                <h4>Validade da Cotação</h4>
+                                                                                <div class="row">
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="col-md-12">
+                                                                                            <i class="fa fa-calendar" aria-hidden="true" ></i>
+                                                                                            <span id="quote_start"> data</span>
+                                                                                        </div>
+                                                                                        <div class="col-md-12">
+                                                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                                                            <span id="quote_start_time"> hora</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="col-md-12">
+                                                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                                                            <span id="quote_end"> data</span>
+                                                                                        </div>
+                                                                                        <div class="col-md-12">
+                                                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                                                            <span id="quote_end_time"> hora</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <h4>Prazo de Pagamento</h4>
+                                                                                <div class="row">
+                                                                                    <div class="col-md-12">
                                                                                         <span id="quote_due_date"></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-md-6" style="margin-top: 50px;margin-left: 0px;padding-left: 110px;">
-                                                                                <button  class="btn col-md-6 green-conecta">Salvar Cotação</button><br/>
-                                                                                <button  class="btn col-md-6 green-conecta">Iniciar Cotação Presencial</button><br/>
-                                                                                <button  class="btn col-md-6 green-conecta">Enviar Para Fornecedor</button>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-offset-4 col-md-4" style="margin-top: 20px">
+                                                                                <button class="btn green-conecta" style="width: 100%;margin: 5px 0;">Salvar Cotação</button><br/>
+                                                                                <button class="btn green-conecta" style="width: 100%;margin: 5px 0;">Iniciar Cotação Presencial</button><br/>
+                                                                                <button class="btn green-conecta" style="width: 100%;margin: 5px 0;">Enviar Para Fornecedor</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1065,42 +1060,38 @@
 
     <script>
 
-
-
-
-
-    //BEGIN MASKS
+        //BEGIN MASKS
 
         $(function(){
             $('#cnpj').mask('00.000.000/0000-00');
             $('#valor_minimo').mask('000.000.000.000.000,00', {reverse: true});
         });
 
-    var SPMaskBehavior = function (val) {
-            return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
-        },
-        spOptions = {
-            onKeyPress: function(val, e, field, options) {
-                field.mask(SPMaskBehavior.apply({}, arguments), options);
-            }
-        };
+        var SPMaskBehavior = function (val) {
+                return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+            },
+            spOptions = {
+                onKeyPress: function(val, e, field, options) {
+                    field.mask(SPMaskBehavior.apply({}, arguments), options);
+                }
+            };
 
-    $('#telefone_representante').mask(SPMaskBehavior, spOptions);
+        $('#telefone_representante').mask(SPMaskBehavior, spOptions);
 
         //END MASKS
 
 
         var token = "{{ token }}";
 
-{% if userIsRCA %}
-$("#prazo").hide();
-$("#prazoRCA").change(function() {
-    if($(this).val() == "Outros")
-        $('#prazo').show();
-    else
-        $('#prazo').hide();
-});
-{% endif %}
+        {% if userIsRCA %}
+        $("#prazo").hide();
+        $("#prazoRCA").change(function() {
+            if($(this).val() == "Outros")
+                $('#prazo').show();
+            else
+                $('#prazo').hide();
+        });
+        {% endif %}
 
         $(function () {
             $('#datetimepicker1').datetimepicker({
@@ -1416,13 +1407,6 @@ $("#prazoRCA").change(function() {
                 $('.descricao-produto.text').removeClass('typing');
             }
         })
-
-
-
-
-
-
-
         //END FLOAT LABEL METHODS
 
 
@@ -1431,27 +1415,27 @@ $("#prazoRCA").change(function() {
             language: {
 
 
-        "sEmptyTable": "Nenhum registro encontrado",
-        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-        "sInfoPostFix": "",
-        "sInfoThousands": ".",
-        "sLengthMenu": "_MENU_ resultados por página",
-        "sLoadingRecords": "Carregando...",
-        "sProcessing": "Processando...",
-        "sZeroRecords": "Nenhum registro encontrado",
-        "sSearch": "Pesquisar",
-        "oPaginate": {
-        "sNext": '<i class="fa fa-angle-right"></i>',
-            "sPrevious": '<i class="fa fa-angle-left"></i>',
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": '<i class="fa fa-angle-right"></i>',
+                    "sPrevious": '<i class="fa fa-angle-left"></i>',
 
-    },
-        "oAria": {
-        "sSortAscending": ": Ordenar colunas de forma ascendente",
-            "sSortDescending": ": Ordenar colunas de forma descendente"
-    }
-    },
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                }
+            },
 
             ajax: {
                 url: "{{ path('get_api_representative') }}",
@@ -1477,31 +1461,26 @@ $("#prazoRCA").change(function() {
             ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
 
-             buttons: [
-             {
-             text: '',
-             className: 'datatable-plus-button add-supplier green-conecta',
-                  action: function ( e, dt, node, config ) {
+            buttons: [
+                {
+                    text: '',
+                    className: 'datatable-plus-button add-supplier green-conecta',
+                    action: function ( e, dt, node, config ) {
 
-                      $('#myModal').modal('toggle');
+                        $('#myModal').modal('toggle');
 
-                 }
+                    }
 
-             }
-             ],
+                }
+            ],
             initComplete: function(){
 
-
-
             }
-
 
         } );
 
 
         $('#salvar_fornecedor').on('click', function() {
-
-
 
             var $this = $(this);
 
@@ -1525,7 +1504,6 @@ $("#prazoRCA").change(function() {
                 errorPlacement: function(){
                     return false;
                 }
-
 
             });
             var validationState = supplierForm.valid();
@@ -1573,18 +1551,13 @@ $("#prazoRCA").change(function() {
         //select all function
         selectAll("selectAllSupplier","chkSupplier");
 
-
-
-
         // END Supplier TABLE
-
 
 
 
         // BEGIN LISTING TABLE
         $('#listing-datatable').dataTable({
             language: {
-
 
                 "sEmptyTable": "Nenhum registro encontrado",
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -1639,8 +1612,8 @@ $("#prazoRCA").change(function() {
                 {
                     text: '',
                     className: 'datatable-plus-button ',
-                     action: function ( e, dt, node, config ) {
-                         $('#listingModal').modal('toggle');
+                    action: function ( e, dt, node, config ) {
+                        $('#listingModal').modal('toggle');
                     }
                 }
             ]
@@ -1664,8 +1637,6 @@ $("#prazoRCA").change(function() {
 
 
 
-
-
             $this.button('loading');
             var listingForm = $( "#list_form" );
 
@@ -1673,7 +1644,6 @@ $("#prazoRCA").change(function() {
                 errorPlacement: function(){
                     return false;
                 }
-
 
             });
             var validationState = listingForm.valid();
@@ -1749,23 +1719,23 @@ $("#prazoRCA").change(function() {
             ajax: {
                 url: "{{ path('get_api_product') }}",
                 type: 'GET',
-               dataSrc: "",
+                dataSrc: "",
                 beforeSend : function(xhr) {
                     xhr.setRequestHeader('Api-Token', token);
                 }
             },
             columns: [
-                    { "data": "id" },
-                    { "data": "name" },
-                    { "data": "type" },
-                    { "data": "brand"},
-                    { "data": "unit"},
-                    { "data": "id",
-                        "orderable": false ,
-                        "className": "dt-center",
-                        "render": function ( data, type, row ) {
-                            return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkProducts" value="' + data + '"  /> <span></span>';
-                        }
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "type" },
+                { "data": "brand"},
+                { "data": "unit"},
+                { "data": "id",
+                    "orderable": false ,
+                    "className": "dt-center",
+                    "render": function ( data, type, row ) {
+                        return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkProducts" value="' + data + '"  /> <span></span>';
+                    }
                 }
 
             ],
