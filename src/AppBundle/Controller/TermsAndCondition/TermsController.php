@@ -16,9 +16,9 @@ class TermsController extends Controller
     public function indexAction(Request $request)
     {
         // set default timezone
-        date_default_timezone_set('	Brazil/East'); // CDT
+        date_default_timezone_set('America/Sao_Paulo'); // CDT
         $current_date = date('d/m/Y == H:i:s');
 
-        return $this->render('views/TermsAndConditions/index.html.twig', ['current_date' => $current_date]);
+        return $this->render('TermsAndConditions/index.html.twig', ['current_date' => $current_date]);
     }
 }
