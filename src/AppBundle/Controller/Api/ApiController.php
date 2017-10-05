@@ -2246,6 +2246,10 @@ class ApiController extends FOSRestController {
 
             $em->persist($martinsOrder);
             $em->flush();
+
+            $quote = $em->getRepository('AppBundle:Quote')->findOneById($this->productsData->quoteId);
+            $quote->setIdOrder($martinsOrder->getId());
+            $em->flush();
         } else {
             return View::create(new ApiError($order->Mensagem), Response::HTTP_BAD_REQUEST);
         }
@@ -2350,6 +2354,9 @@ class ApiController extends FOSRestController {
 
         $martinsOrder = $d->getRepository('AppBundle:MartinsOrder')->findOneBy(['id' => $id, 'retailer' => $user, 'deleted' => 0]);
 
+        if(is_null($martinsOrder))
+            return View::create(new ApiError("Pedido inválido"), Response::HTTP_BAD_REQUEST);
+
         //starts update
         $martinsOrder->setUpdating(true);
         $em->flush();
@@ -2358,7 +2365,11 @@ class ApiController extends FOSRestController {
 
         /** @var \stdClass $order */
         $order = $mc->trackMartinsPedido($martinsOrder->getCode());
-        $trackingData = $order->trackingData->trackingData;
+        $trackingData = $order->trackingData;
+        if(!property_exists($trackingData, 'trackingData'))
+            return View::create(new ApiError("Pedido Martins inválido"), Response::HTTP_BAD_REQUEST);
+
+        $trackingData = $trackingData->trackingData;
 
         //update MartinsOrder
         $martinsOrder->setSaleDate($trackingData->DataVenda)

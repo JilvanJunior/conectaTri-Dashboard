@@ -415,42 +415,44 @@ class PriceListController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
-        $data = array();
+        $data = [];
 
         $products = $quote->getQuoteProducts();
-        foreach($products[0]->getQuoteSuppliers() as $quoteSupplier) {
-            if($quoteSupplier->isDeleted())
-                continue;
+        if(!empty($products->toArray())) {
+            foreach($products[0]->getQuoteSuppliers() as $quoteSupplier) {
+                if($quoteSupplier->isDeleted())
+                    continue;
 
-            $representative = $quoteSupplier->getRepresentative();
-            $supplier = $representative->getSupplier();
-            $sum = $em->getRepository('AppBundle:QuoteSupplier')->getQuoteSupplierSum($quote, $supplier);
-            $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
-                ->findOneBy(['quote' => $quote, 'representative' => $representative]);
-            if(is_null($quoteSupplierStatus))
-                $observation = '';
-            else
-                $observation = $quoteSupplierStatus->getObservation();
+                $representative = $quoteSupplier->getRepresentative();
+                $supplier = $representative->getSupplier();
+                $sum = $em->getRepository('AppBundle:QuoteSupplier')->getQuoteSupplierSum($quote, $supplier);
+                $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
+                    ->findOneBy(['quote' => $quote, 'representative' => $representative]);
+                if(is_null($quoteSupplierStatus))
+                    $observation = '';
+                else
+                    $observation = $quoteSupplierStatus->getObservation();
 
-            if($quoteSupplier->isFilledIn()) {
-                $moreThanMinimum = ($supplier->getMinimumValue() <= $sum)?'Sim':'Não';
-                $filledIn = 'Preencheu a Cotação';
-            } else {
-                $moreThanMinimum = '-';
-                $filledIn = 'Pendente';
+                if($quoteSupplier->isFilledIn()) {
+                    $moreThanMinimum = ($supplier->getMinimumValue() <= $sum)?'Sim':'Não';
+                    $filledIn = 'Preencheu a Cotação';
+                } else {
+                    $moreThanMinimum = '-';
+                    $filledIn = 'Pendente';
+                }
+
+                $status = array(
+                    'representativeId' => $representative->getId(),
+                    'representativeName' => $representative->getName(),
+                    'supplierName' => $supplier->getName(),
+                    'supplierIsRCA' => $supplier->isRCA(),
+                    'moreThanMinimum' => $moreThanMinimum,
+                    'filledIn' => $filledIn,
+                    'observation' => $observation
+                );
+
+                $data[] = $status;
             }
-
-            $status = array(
-                'representativeId' => $representative->getId(),
-                'representativeName' => $representative->getName(),
-                'supplierName' => $supplier->getName(),
-                'supplierIsRCA' => $supplier->isRCA(),
-                'moreThanMinimum' => $moreThanMinimum,
-                'filledIn' => $filledIn,
-                'observation' => $observation
-            );
-
-            $data[] = $status;
         }
 
         return $this->render('Retailer/pricelist/show.html.twig', [

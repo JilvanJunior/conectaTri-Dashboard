@@ -249,6 +249,7 @@ class MartinsConnector
 
         $boletos = $this->soap->consultaBoletosPendente($params)->consultaBoletosPendenteResult;
         if(property_exists($boletos, 'boletosPendentes')) {
+            $boletos = $boletos->boletosPendentes;
             if(is_array($boletos->titulosBoleto))
                 $boletos = $boletos->titulosBoleto;
             else

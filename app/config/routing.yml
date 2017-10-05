@@ -1,7 +1,7 @@
 app:
 
     resource: "@AppBundle/Controller/"
-    type:     annotation
+    type: annotation
 
     resource: '@AppBundle/Controller/Retailer'
     type: annotation
@@ -13,4 +13,7 @@ app:
     type: annotation
 
     resource: '@AppBundle/Controller/Api'
+    type: annotation
+
+    resource: '@AppBundle/Controller/TermsAndCondition'
     type: annotation
