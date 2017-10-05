@@ -68,6 +68,15 @@ class PriceListController extends Controller
         $types['1'] = 'Comum';
         $types['2'] = 'Sazonal';
         $types['3'] = 'Semanal';
+
+
+
+
+        //quotes types
+        $types = [];
+        $types['1'] = "Remota";
+        $types['2'] = "Presencial";
+
         $data = [
             'types' => $types,
             'username' => $user->getFantasyName(),
