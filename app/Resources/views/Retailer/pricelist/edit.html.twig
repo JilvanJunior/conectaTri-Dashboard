@@ -82,10 +82,6 @@
                                                                             <input type="text" id="datetimepicker2" name="expires-at" class="form-control input-circle" placeholder="Validade Até" value="{{ quote.expiresAt|date('d/m/Y H:i') }}">
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group last">
-                                                                        <label class="col-md-3 control-label">Cotação Finalizada</label>
-                                                                        <input type="checkbox" name="closed" {% if quote.closed %}checked{% endif %}>
-                                                                    </div>
                                                                 </div>
                                                                 <div class="form-actions">
                                                                     <div class="row">
