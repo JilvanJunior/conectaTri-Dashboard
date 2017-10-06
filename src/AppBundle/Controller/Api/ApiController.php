@@ -1248,7 +1248,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Post("/api/quote")
+     * @Rest\Post("/api/quote", name="post_api_quote")
      * @param Request $request
      * @return View
      */
