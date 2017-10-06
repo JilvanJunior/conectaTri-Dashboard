@@ -146,8 +146,9 @@
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
                                                                                             <div class="form-group type text typing">
-                                                                                                <label for="type">Tipo</label>
-                                                                                                <select name="type" id="type" class="form-control select-circle">
+                                                                                                <label for="type">Tipo *</label>
+                                                                                                <select name="type" id="type"
+                                                                                                    class="form-control select-circle" required>
                                                                                                     <option value="" disabled selected>Selecione um Tipo</option>
                                                                                                     {% for type in types %}
                                                                                                         <option value="{{ loop.index0 }}">{{ type }}</option>
