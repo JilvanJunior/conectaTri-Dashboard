@@ -81,15 +81,25 @@
                                                         <td>{{ types[quote.type] }}</td>
                                                         <td>{{ status[quote.closed] }}</td>
                                                         <td>
-                                                            <a href="{{ path('acompanhar_cotacao', {'id': quote.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
-                                                                <i class="fa fa-eye"></i> Ver </a>
-                                                                {% if( quote.closed == 0) %}
-                                                            <a href="{{ path('editar_cotacao', {'id': quote.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
-                                                                <i class="fa fa-edit"></i> Editar </a>
-                                                                {%endif %}
-                                                                {#TODO: Add option to clone closed quotes#}
-                                                            <a href="{{ path('deletar_cotacao', {'id': quote.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
-                                                                <i class="fa fa-trash"></i> Deletar </a>
+                                                            <a href="{{ path('acompanhar_cotacao', {'id': quote.id}) }}"
+                                                                class="btn btn-outline btn-circle btn-sm purple">
+                                                                <i class="fa fa-eye"></i> Ver
+                                                            </a>
+                                                            {% if( quote.closed == 0) %}
+                                                                <a href="{{ path('editar_cotacao', {'id': quote.id}) }}"
+                                                                    class="btn btn-outline btn-circle btn-sm purple">
+                                                                    <i class="fa fa-edit"></i> Editar
+                                                                </a>
+                                                            {% else %}
+                                                                <a href="{{ path('copiar_cotacao', {'id': quote.id}) }}"
+                                                                    class="btn btn-outline btn-circle btn-sm purple">
+                                                                    <i class="fa fa-clone"></i> Copiar
+                                                                </a>
+                                                            {%endif %}
+                                                            <a href="{{ path('deletar_cotacao', {'id': quote.id}) }}"
+                                                                class="btn btn-outline btn-circle btn-sm purple">
+                                                                <i class="fa fa-trash"></i> Deletar
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 {% endfor %}

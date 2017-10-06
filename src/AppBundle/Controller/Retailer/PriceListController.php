@@ -355,6 +355,39 @@ class PriceListController extends Controller
     }
 
     /**
+     * @Route("/varejista/cotacao/{id}/copiar", name="copiar_cotacao")
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function copyAction(Request $request, $id)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
+        $newQuote = clone($quote);
+
+        $tomorrow = (new \DateTime())->add(new \DateInterval('P1D'));
+        $expireDate = $newQuote->getExpiresAt();
+        
+        $newQuote
+            ->setIdOrder(0)
+            ->setCreatedAt(new \DateTime())
+            ->setUpdatedAt(new \DateTime());
+
+        if($expireDate < $tomorrow)
+            $newQuote->setExpiresAt($tomorrow);
+        else
+            $newQuote->setExpiresAt($expireDate);
+
+        $em->persist($newQuote);
+        $em->flush();
+
+        return $this->redirectToRoute('cotacoes');
+    }
+
+    /**
      * @Route("/varejista/cotacao/{id}/editar", name="editar_cotacao")
      * @param Request $request
      * @param $id

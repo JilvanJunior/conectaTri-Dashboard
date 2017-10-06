@@ -43,7 +43,7 @@ class Quote
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="QuoteProduct", mappedBy="quote")
+     * @ORM\OneToMany(targetEntity="QuoteProduct", mappedBy="quote", cascade={"persist"})
      */
     private $quoteProducts;
 
@@ -59,7 +59,7 @@ class Quote
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuoteSupplierStatus", mappedBy="quote")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuoteSupplierStatus", mappedBy="quote", cascade={"persist"})
      */
     private $suppliersStatus;
 
@@ -145,6 +145,25 @@ class Quote
         $this->createdAt = new \DateTime();
         $this->expiresAt = new \DateTime("2500-01-01");
         $this->beginsAt = new \DateTime();
+    }
+
+    public function __clone()
+    {
+        $newQuoteProducts = new ArrayCollection();
+        foreach($this->quoteProducts as $quoteProduct) {
+            $clone = clone($quoteProduct);
+            $clone->setQuote($this);
+            $newQuoteProducts->add($clone);
+        }
+        $this->quoteProducts = $newQuoteProducts;
+
+        $newSuppliersStatus = new ArrayCollection();
+        foreach($this->suppliersStatus as $supplierStatus) {
+            $clone = clone($supplierStatus);
+            $clone->setQuote($this);
+            $newSuppliersStatus->add($clone);
+        }
+        $this->suppliersStatus = $newSuppliersStatus;
     }
 
     /**

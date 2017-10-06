@@ -36,7 +36,7 @@ class QuoteProduct
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuoteSupplier", mappedBy="quoteProduct")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuoteSupplier", mappedBy="quoteProduct", cascade={"persist"})
      */
     private $quoteSuppliers;
 
@@ -98,6 +98,20 @@ class QuoteProduct
     public function __construct()
     {
         $this->quoteSuppliers = new ArrayCollection();
+        $this->winners = new ArrayCollection();
+        $this->createdAt = new DateTime();
+    }
+
+    public function __clone()
+    {
+        $newQuoteSuppliers = new ArrayCollection();
+        foreach($this->quoteSuppliers as $quoteSupplier) {
+            $clone = clone($quoteSupplier);
+            $clone->setQuoteProduct($this);
+            $newQuoteSuppliers->add($clone);
+        }
+        $this->quoteSuppliers = $newQuoteSuppliers;
+        
         $this->winners = new ArrayCollection();
         $this->createdAt = new DateTime();
     }
