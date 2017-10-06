@@ -69,9 +69,6 @@ class PriceListController extends Controller
         $types['2'] = 'Sazonal';
         $types['3'] = 'Semanal';
 
-
-
-
         //quotes types
         $types = [];
         $types['1'] = "Remota";
@@ -418,40 +415,55 @@ class PriceListController extends Controller
         $data = [];
 
         $products = $quote->getQuoteProducts();
-        if(!empty($products->toArray())) {
-            foreach($products[0]->getQuoteSuppliers() as $quoteSupplier) {
+        foreach($products as $product) {
+            foreach($product->getQuoteSuppliers() as $quoteSupplier) {
                 if($quoteSupplier->isDeleted())
                     continue;
 
                 $representative = $quoteSupplier->getRepresentative();
                 $supplier = $representative->getSupplier();
-                $sum = $em->getRepository('AppBundle:QuoteSupplier')->getQuoteSupplierSum($quote, $supplier);
-                $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
-                    ->findOneBy(['quote' => $quote, 'representative' => $representative]);
-                if(is_null($quoteSupplierStatus))
-                    $observation = '';
-                else
-                    $observation = $quoteSupplierStatus->getObservation();
+                $idSupplier = $supplier->getId();
 
-                if($quoteSupplier->isFilledIn()) {
-                    $moreThanMinimum = ($supplier->getMinimumValue() <= $sum)?'Sim':'Não';
-                    $filledIn = 'Preencheu a Cotação';
-                } else {
-                    $moreThanMinimum = '-';
-                    $filledIn = 'Pendente';
+                if(!isset($data[$idSupplier])) {
+                    $sum = $em->getRepository('AppBundle:QuoteSupplier')->getQuoteSupplierSum($quote, $supplier);
+                    $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
+                        ->findOneBy(['quote' => $quote, 'representative' => $representative]);
+
+                    if(is_null($quoteSupplierStatus))
+                        $observation = '';
+                    else
+                        $observation = $quoteSupplierStatus->getObservation();
+
+                    if($quoteSupplier->isFilledIn()) {
+                        $moreThanMinimum = ($supplier->getMinimumValue() <= $sum)?'Sim':'Não';
+                        $filledIn = 'Preencheu a Cotação';
+                    } else {
+                        $moreThanMinimum = '-';
+                        $filledIn = 'Pendente';
+                    }
+
+                    $status = array(
+                        'representativeId' => $representative->getId(),
+                        'representativeName' => $representative->getName(),
+                        'supplierName' => $supplier->getName(),
+                        'supplierIsRCA' => $supplier->isRCA(),
+                        'moreThanMinimum' => $moreThanMinimum,
+                        'countWins' => 0,
+                        'total' => 0,
+                        'filledIn' => $filledIn,
+                        'observation' => $observation
+                    );
+
+                    $data[$idSupplier] = $status;
                 }
 
-                $status = array(
-                    'representativeId' => $representative->getId(),
-                    'representativeName' => $representative->getName(),
-                    'supplierName' => $supplier->getName(),
-                    'supplierIsRCA' => $supplier->isRCA(),
-                    'moreThanMinimum' => $moreThanMinimum,
-                    'filledIn' => $filledIn,
-                    'observation' => $observation
-                );
+                foreach($product->calculateWinners() as $quoteSupplier) {
+                    $supplier = $quoteSupplier->getRepresentative()->getSupplier();
+                    $idSupplier = $supplier->getId();
 
-                $data[] = $status;
+                    $data[$idSupplier]['countWins']++;
+                    $data[$idSupplier]['total'] += $quoteSupplier->getPrice() * $quoteSupplier->getQuantity();
+                }
             }
         }
 

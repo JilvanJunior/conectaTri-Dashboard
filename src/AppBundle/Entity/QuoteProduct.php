@@ -281,4 +281,34 @@ class QuoteProduct
     {
         return $this->deleted;
     }
+
+    /**
+     * @return QuoteSupplier
+     */
+    public function calculateWinners()
+    {
+        if(!empty($this->winners))
+            return $this->winners;
+
+        $winners = [];
+        $minimum = PHP_INT_MAX;
+        foreach($this->quoteSuppliers as $quoteSupplier) {
+            if($quoteSupplier->isDeleted())
+                continue;
+
+            $preco = $quoteSupplier->getPrice();
+            if($preco <= 0)
+                continue;
+
+            if($preco < $minimum) {
+                $winners = [];
+                $winners[] = $quoteSupplier;
+                $minimum = $preco;
+            } elseif($preco == $minimum) {
+                $winners[] = $quoteSupplier;
+            }
+        }
+
+        return $winners;
+    }
 }
