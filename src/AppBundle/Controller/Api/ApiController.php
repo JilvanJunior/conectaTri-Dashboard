@@ -1367,7 +1367,9 @@ class ApiController extends FOSRestController {
                         ->setUpdatedAt(new \DateTime());
                 }
             } else { // if product in array
-                $quoteProduct->setDeleted(false)
+                $quoteProduct
+                    ->setQuantity($rcvProduct->product->quantity)
+                    ->setDeleted(false)
                     ->setUpdatedAt(new \DateTime());
                 $tmp3 = [];
                 foreach ($quoteProduct->getWinners() as $winner) {
@@ -1405,7 +1407,7 @@ class ApiController extends FOSRestController {
                         $quoteSupplier->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
                     } else { //if supplier in array
-                        $quoteProduct->setQuantity($rcvSupplier->quantity);
+//                        $quoteProduct->setQuantity($rcvSupplier->quantity);
                         $quoteSupplier->setQuantity($rcvSupplier->quantity)
                             ->setPrice(str_replace(",", ".", $rcvSupplier->price))
                             ->setDeleted(false)
@@ -1444,7 +1446,7 @@ class ApiController extends FOSRestController {
             }
             $isFirst = false;
         }
-        self::array_diff($quote->quote_products, $tmp);
+        self::array_diff_product($quote->quote_products, $tmp);
         /** @var \stdClass $product */
         foreach ($quote->quote_products as $product) {
             $newQuoteProduct = new QuoteProduct();
@@ -1457,11 +1459,14 @@ class ApiController extends FOSRestController {
                     ->setQuantity($supplier->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price));
                 $em->persist($newQuoteSupplier);
-                $newQuoteProduct->setQuantity($supplier->quantity);
+                $em->flush();
                 $newQuoteProduct->addQuoteSupplier($newQuoteSupplier);
             }
+            $newQuoteProduct->setQuantity($product->product->quantity);
             $newQuoteProduct->setProduct($dbProduct);
+            $newQuoteProduct->setQuote($dbQuote);
             $em->persist($newQuoteProduct);
+            $em->flush();
             $dbQuote->addQuoteProduct($newQuoteProduct);
         }
         $dbQuote->setDeleted(false)
@@ -2482,6 +2487,21 @@ class ApiController extends FOSRestController {
                         $contains = true;
                         break;
                     }
+                }
+            }
+            if (!$contains) $ret[] = $aEle;
+        }
+        $array = $ret;
+    }
+
+    private static function array_diff_product(&$array, $diff) {
+        $ret = [];
+        foreach ($array as $aEle) {
+            $contains = false;
+            foreach ($diff as $dEle) {
+                if ($aEle->product->id == $dEle->product->id) {
+                    $contains = true;
+                    break;
                 }
             }
             if (!$contains) $ret[] = $aEle;
