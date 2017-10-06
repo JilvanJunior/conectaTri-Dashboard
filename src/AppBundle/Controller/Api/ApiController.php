@@ -1157,7 +1157,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Patch("/api/quote/{id}")
+     * @Rest\Patch("/api/quote/{id}", name="patch_api_send_quote")
      * @param Request $request
      * @param $id
      * @return View

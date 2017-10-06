@@ -1839,61 +1839,23 @@
         // FINISH QUOTE
         $('#save-quote').on('click', function() {
 
-            var name = $("#cotacao").val();
-            var paymentDate = $('#prazoRCA').val();
-
-            var startDate = $("#datetimepicker1").data("datetimepicker").getDate();
-            startDate = startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + "-" + startDate.getDate() + "T"
-                + startDate.getHours() + ":" + startDate.getMinutes() + ":00+00:00";
-
-            var endDate = $("#datetimepicker2").data("datetimepicker").getDate();
-            endDate = endDate.getFullYear() + "-" + (endDate.getMonth() + 1) + "-" + endDate.getDate() + "T"
-                + endDate.getHours() + ":" + endDate.getMinutes() + ":00+00:00";
-
-            var productsId = [];
-            var suppliersId = [];
-
-            $.each($('#supplier-datatable tr input:checked'), function(i, v){
-                suppliersId.push({representative: {id: $(this).val()}, quantity: 0, price: 0});
-            });
-
-            $.each($('#product-datatable tr input:checked'), function(i, v){
-                productsId.push({
-                    product: {id: $(this).val()},
-                    quote_suppliers: suppliersId
-                });
-            });
-
-            $.ajax({
-                url: "{{ path('post_api_quote') }}",
-                type: 'POST',
-                contentType: "application/json",
-                dataType: "json",
-                headers: {'Api-Token': token},
-                data:  JSON.stringify({
-                    name: name,
-                    type: 1,
-                    begins_at: startDate,
-                    expires_at: endDate,
-                    send_to_supplier: false,
-                    paymente_date: paymentDate,
-                    quote_products: productsId,
-                    quote_suppliers: suppliersId
-                }),
-                success: function (response) {
-                    location.href = '{{ path('cotacoes') }}'
-                },
-                error: function (error) {
-                    alert(error.responseJSON.error.exception["0"].message);
-
-                }
-
-            });
+            saveQuote(1, false);
 
         });
 
         $('#presential-quote').on('click', function() {
 
+            saveQuote(2, false);
+
+        });
+
+        $('#sent-suppliers').on('click', function() {
+
+            saveQuote(1, true);
+
+        });
+
+        function saveQuote(type, force) {
             var name = $("#cotacao").val();
             var paymentDate = $('#prazoRCA').val();
 
@@ -1927,14 +1889,38 @@
                 headers: {'Api-Token': token},
                 data:  JSON.stringify({
                     name: name,
-                    type: 2,
+                    type: type,
                     begins_at: startDate,
                     expires_at: endDate,
                     send_to_supplier: false,
-                    paymente_date: paymentDate,
+                    payment_date: paymentDate,
                     quote_products: productsId,
                     quote_suppliers: suppliersId
                 }),
+                success: function (response) {
+                    if(force)
+                        sendLink(response.id);
+                    else
+                        location.href = '{{ path('cotacoes') }}'
+                },
+                error: function (error) {
+                    alert(error.responseJSON.error.exception["0"].message);
+
+                }
+
+            });
+        }
+
+        function sendLink(quoteId){
+
+            var url = '{{ path("patch_api_send_quote", {'id': 0}) }}';
+            url = url.replace(0, quoteId);
+            $.ajax({
+                url: url,
+                type: 'PATCH',
+                contentType: "application/json",
+                dataType: "json",
+                headers: {'Api-Token': token},
                 success: function (response) {
                     location.href = '{{ path('cotacoes') }}'
                 },
@@ -1944,8 +1930,7 @@
                 }
 
             });
-
-        });
+        }
 
         // END FINISH QUOTE
     </script>
