@@ -1355,7 +1355,7 @@ class ApiController extends FOSRestController {
         //check existing QuoteProducts
         /** @var QuoteProduct $quoteProduct */
         foreach ($dbQuote->getQuoteProducts() as $quoteProduct) {
-            $rcvProduct = self::arrayContains($quote->quote_products, $quoteProduct);
+            $rcvProduct = self::arrayContainsProduct($quote->quote_products, $quoteProduct->getProduct());
             if ($rcvProduct == false) { //if product not in array
                 $quoteProduct->setDeleted(true)
                     ->setUpdatedAt(new \DateTime());
@@ -2432,6 +2432,16 @@ class ApiController extends FOSRestController {
                 if ($item->getId() == $element->getId()) {
                     return $item;
                 }
+            }
+        }
+        return false;
+    }
+
+
+    private static function arrayContainsProduct($array, $element) {
+        foreach ($array as $item) {
+            if ($item->product->id == $element->getId()) {
+                return $item;
             }
         }
         return false;
