@@ -1385,7 +1385,6 @@ class ApiController extends FOSRestController {
                 }
             } else { // if product in array
                 $quoteProduct
-                    ->setQuantity($rcvProduct->product->quantity)
                     ->setDeleted(false)
                     ->setUpdatedAt(new \DateTime());
                 $tmp3 = [];
@@ -1483,7 +1482,7 @@ class ApiController extends FOSRestController {
                 $em->flush();
                 $newQuoteProduct->addQuoteSupplier($newQuoteSupplier);
             }
-            $newQuoteProduct->setQuantity($product->product->quantity);
+            $newQuoteProduct->setQuantity($supplier->quantity);
             $newQuoteProduct->setProduct($dbProduct);
             $newQuoteProduct->setQuote($dbQuote);
             $em->persist($newQuoteProduct);
