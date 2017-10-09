@@ -26,6 +26,7 @@ class PriceListController extends Controller
      */
     public function indexAction(Request $request)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
