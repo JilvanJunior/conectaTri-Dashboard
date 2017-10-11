@@ -1,0 +1,187 @@
+<div class="tab-pane" id="tab4">
+    <div class="wizard-container">
+        <table class="table table-striped table-bordered table-hover" id="product-datatable">
+            <thead>
+                <tr>
+                    <th width="20%"> Código </th>
+                    <th> Nome do Produto </th>
+                    <th> Tipo </th>
+                    <th> Fabricante </th>
+                    <th> Embalagem de Compra </th>
+                    <th><label class="mt-checkbox mt-checkbox-outline"/>  <input  type="checkbox"  name="selectAllProducts" autocomplete='off'/> <span></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if products is defined %}
+                        {% for product in products %}
+                            <tr>
+                                <td> {{ product.id }} </td>
+                                <td> {{ product.name }} </td>
+                                <td> {{ product.type }} </td>
+                                <td> {{ product.brand }} </td>
+                                <td> {{ product.unit }} {{ product.quantity }} </td>
+                                <td>
+                                    <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ product.id }}" name="chkProducts" /> <span></span>
+                                    </td>
+
+                                </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+
+
+            <!-- LISTING Modal -->
+            <div id="productModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Adicionar Produto</h4>
+                        </div>
+                        <div class="modal-body">
+
+
+                            <form action="#" method="POST" id="product_form" class="form-horizontal contact-form">
+
+
+                                <div class="form-body ">
+
+                                    <div class="row ">
+
+                                        <div class="col-lg-4 col-lg-offset-3">
+                                            <div class="">
+                                                <div class="form-group produto text ">
+                                                    <label for="produto">Nome do Produto*</label>
+                                                    <input class="form-control" type="text" name="produto" id="produto" required />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row ">
+                                        <div class="col-lg-4 col-lg-offset-3">
+                                            <div class="">
+                                                <div class="form-group codigo text ">
+                                                    <label for="codigo">Código de Barras do Produto*</label>
+                                                    <input class="form-control" type="text" name="codigo" id="codigo" required/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row ">
+                                        <div class="col-lg-4 col-lg-offset-3">
+                                            <div class="">
+                                                <div class="form-group marca text ">
+                                                    <label for="marca">Marca do Produto*</label>
+                                                    <input class="form-control" type="text" name="marca" id="marca" required/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row ">
+
+                                        <div class="col-lg-4 col-lg-offset-3">
+                                            <div class="">
+                                                <div class="form-group tipo text typing">
+                                                    <label for="tipo-produto">Tipo*</label>
+                                                    <select name="tipo-produto" id="tipo-produto"  class="form-control select-circle " required>
+                                                        {% if product is defined %}
+                                                            <option value="{{ product.type }}" selected>{{ product.type }}</option>
+                                                        {% else %}
+                                                            <option value="" disabled selected>Selecione um Tipo</option>
+                                                        {% endif %}
+                                                        <option value="Geral">Geral</option>
+                                                        <option value="Mercearia">Mercearia</option>
+                                                        <option value="Limpeza">Limpeza</option>
+                                                        <option value="Perfumaria">Perfumaria</option>
+                                                        <option value="Bazar">Bazar</option>
+                                                        <option value="Bebidas">Bebidas</option>
+                                                        <option value="Eletro">Eletro</option>
+                                                        <option value="Perecíveis">Perecíveis</option>
+                                                        <option value="Rotisseria">Rotisseria</option>
+                                                        <option value="Textil">Textil</option>
+                                                        <option value="Açougue">Açougue</option>
+                                                        <option value="Hortifruti">Hortifruti</option>
+                                                        <option value="Padaria">Padaria</option>
+                                                        <option value="Insumos De Producao">Insumos de Produção</option>
+                                                        <option value="Materiais Para Uso">Materiais para Uso</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row ">
+
+                                        <div class="col-lg-4 col-lg-offset-3">
+                                            <div class="">
+                                                <div class="form-group unidade text typing">
+                                                    <label for="tipo-produto">Unidade de Medida*</label>
+                                                    <select name="unidade" id="unidade"  class="form-control select-circle " required>
+                                                        {% if product is defined %}
+                                                            <option value="{{ product.unit }}" selected>{{ product.unit }}</option>
+                                                        {% else %}
+                                                            <option value="" disabled selected>Selecione uma Unidade de Medida</option>
+                                                        {% endif %}
+                                                        <option value="Unidade">Unidade</option>
+                                                        <option value="Caixa">Caixa</option>
+                                                        <option value="Kg">Kg</option>
+                                                        <option value="Litro">Litro</option>
+                                                        <option value="Fardo">Fardo</option>
+                                                        <option value="Pacote">Pacote</option>
+                                                        <option value="Pack">Pack</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="row ">
+                                        <div class="col-lg-4 col-lg-offset-3">
+                                            <div class="">
+                                                <div class="form-group peso text ">
+                                                    <label for="peso">Peso / Quantidade*</label>
+                                                    <input class="form-control" type="text" name="peso" id="peso" required/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row ">
+
+                                        <div class="col-lg-4 col-lg-offset-3">
+                                            <div class="">
+                                                <div class="form-group descricao-produto text ">
+                                                    <label for="descricao-produto">Descrição Completa*</label>
+                                                    <textarea rows="3" class="form-control text-area" type="text" id="descricao-produto" name="descricao-produto"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button"  id="salvar_produto" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Produto" class="btn green-conecta btn-circle" data-style="expand-right">
+                                Salvar
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>

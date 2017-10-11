@@ -414,7 +414,7 @@
                                                                         <i class="fa fa-file"></i> Exportar Pedido de Cotação
                                                                     </a>
                                                                 {% endif %}
-                                                                {% if userIsRCA and supplierStatus.countWins > 0 and supplierStatus.supplierIsRCA %}
+                                                                {% if userIsRCA and supplierStatus.supplierIsRCA and (not quote.hasIdOrder) %}
                                                                     <a href="{{ path('novo_pedido', {'idQuote': quote.id}) }}"
                                                                         class="btn btn-outline btn-circle btn-sm purple">
                                                                         <i class="fa fa-file"></i> Novo Pedido Martins
@@ -497,8 +497,9 @@
 
         function selectAll(topCheck,checks) {
             $("[name='" + topCheck + "']").click(function() {
-                var checkBoxes = $("[name='" + checks + "']");
-                checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+                let state = $(this).prop('checked');
+                let checkBoxes = $("[name='" + checks + "']");
+                checkBoxes.prop("checked", state);
             })
         }
 

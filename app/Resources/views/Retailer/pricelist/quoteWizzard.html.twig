@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable-line boxless tabbable-reversed">
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_0">
+                    <div class="portlet box green-conecta" style="border-left-width: 0px;border-bottom-width: 0px;border-right-width: 0px;">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <image id="wizardStepImage" ></image><span id="wizardStepLabel">Dados da Cotação</span>
+                            </div>
+                        </div>
+                        <!-- BEGIN WIZARD-->
+                        <div id="rootwizard">
+                            {{ include('Retailer/pricelist/wizzard/progressbar.html.twig') }}
+
+                            <ul class="pager wizard">
+                                <li class="previous first" style="display:none;">
+                                    <a href="#">Início</a>
+                                </li>
+                                <li class="previous" id="previous">
+                                    <a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a>
+                                </li>
+                                <li class="next last" style="display:none;"
+                                    ><a href="#">Último</a>
+                                </li>
+                                <li class="next" id="advance">
+                                    <a class="btn btn-circle green-conecta pull-right disabled" href="#"
+                                        style="margin-right: 5px;margin-bottom: 5px;">Próximo</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+                                {{ include('Retailer/pricelist/wizzard/step1.html.twig') }}
+                                {{ include('Retailer/pricelist/wizzard/step2.html.twig') }}
+                                {{ include('Retailer/pricelist/wizzard/step3.html.twig') }}
+                                {{ include('Retailer/pricelist/wizzard/step4.html.twig') }}
+                                {{ include('Retailer/pricelist/wizzard/step5.html.twig') }}
+                            </div>
+                        </div>
+                        <!-- END WIZARD-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

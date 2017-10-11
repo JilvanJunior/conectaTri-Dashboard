@@ -456,6 +456,15 @@ class Quote
     }
 
     /**
+     * Check IdOrder
+     * @return bool
+     */
+    public function hasIdOrder()
+    {
+        return !is_null($this->idOrder);
+    }
+
+    /**
      * @param int $idOrder
      * @return Quote
      */
