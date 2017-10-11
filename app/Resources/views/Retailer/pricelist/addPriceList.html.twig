@@ -481,15 +481,9 @@
                                                                                     {% endfor %}
                                                                                 {% endfor %}
                                                                             {% endif %}
-
                                                                             </tbody>
                                                                         </table>
-
                                                                     </div>
-
-
-
-
 
                                                                     <!-- Supplier Modal -->
                                                                     <div id="myModal" class="modal fade" role="dialog">
@@ -569,12 +563,9 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-
                                                                                             </div>
 
-
                                                                                             <div class="row ">
-
                                                                                                 <div class="col-lg-4 col-lg-offset-3">
                                                                                                     <div class="">
                                                                                                         <div class="form-group telefone_representante text ">
@@ -583,35 +574,28 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-
                                                                                             </div>
 
-                                                                                        </div>
-
-                                                                                        <!--
-                                                                                        <div class="form-actions">
-                                                                                            <div class="row">
-                                                                                                <div class="col-md-offset-3 col-md-9">
-                                                                                                    <button type="submit" class="btn btn-circle green-conecta">Salvar</button>
+                                                                                            <div class="row ">
+                                                                                                <div class="col-lg-4 col-lg-offset-3">
+                                                                                                    <div class="">
+                                                                                                        <div class="form-group celular_representante text ">
+                                                                                                            <label for="celular_representante">Celular do Representante</label>
+                                                                                                            <input class="form-control" type="text"  id="celular_representante"/>
+                                                                                                        </div>
+                                                                                                    </div>
                                                                                                 </div>
                                                                                             </div>
+
                                                                                         </div>
-                                                                                        -->
-
-
                                                                                     </form>
-
-
-
                                                                                 </div>
                                                                                 <div class="modal-footer">
                                                                                     <button type="button"  id="salvar_fornecedor" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Fornecedor" class="btn green-conecta btn-circle" data-style="expand-right">
                                                                                         Salvar
                                                                                     </button>
-
                                                                                 </div>
                                                                             </div>
-
                                                                         </div>
                                                                     </div>
 
@@ -1053,6 +1037,7 @@
             };
 
         $('#telefone_representante').mask(SPMaskBehavior, spOptions);
+        $('#celular_representante').mask(SPMaskBehavior, spOptions);
 
         //END MASKS
 
@@ -1328,6 +1313,13 @@
             }
         })
 
+        $('#celular_representante').keyup(function(){
+            $('.celular_representante.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.celular_representante.text').removeClass('typing');
+            }
+        })
+
         $('#lista').keyup(function(){
             $('.lista.text').addClass('typing');
             if( $(this).val().length == 0 ) {
@@ -1470,6 +1462,7 @@
 
             var contact_name = $('#representante').val();
             var contact_phone = $('#telefone_representante').val()
+            var contact_cellphone = $('#celular_representante').val()
             var contact_email = $('#email_representante').val();
 
             $this.button('loading');
@@ -1498,6 +1491,7 @@
                             minimum_value: minimum_value,
                             contact_name: contact_name,
                             contact_phone: contact_phone,
+                            contact_cellphone: contact_cellphone,
                             contact_email: contact_email
                         }),
                         success: function (response) {
