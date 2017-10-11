@@ -268,9 +268,12 @@
                 {{ form_row(form.cellphone, {'attr' : {'class' : 'input'}}) }}
                 <br>
                 <div class="form-group ">
-                    <div >
-                        <div >
-                            <label class="mt-checkbox mt-checkbox-outline"/>  <input type="agree" name="agree"   /> <span></span>
+                    <div>
+                        <div>
+                            <label class="mt-checkbox mt-checkbox-outline">
+                                <input type="checkbox" name="agree"/>
+                                <span></span>
+                            </label>
                             Li e aceito os <u style="color:#83BC3C">termos de uso</u> e a <u style="color:#83BC3C">política de privacidade</u>.
                         </div><i class="form-control-feedback" data-fv-icon-for="agree" style="display: none;"></i>
                         <small class="help-block" data-fv-validator="notEmpty" data-fv-for="agree" data-fv-result="NOT_VALIDATED" style="display: none;">You must agree with the terms and conditions</small></div>
