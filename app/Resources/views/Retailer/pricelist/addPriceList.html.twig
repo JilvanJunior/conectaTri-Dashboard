@@ -459,7 +459,7 @@
                                                                                 <th>E-mail</th>
                                                                                 <th>CNPJ</th>
                                                                                 <th>Telefone</th>
-                                                                                <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllSupplier" type="checkbox"   /> <span></span></th>
+                                                                                <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllSupplier" type="checkbox" autocomplete='off'/> <span></span></th>
 
                                                                             </tr>
                                                                             </thead>
@@ -614,7 +614,7 @@
                                                                                 <th> Descrição </th>
                                                                                 <th> Tipo </th>
                                                                                 <th> Itens </th>
-                                                                                <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllListing" type="checkbox" /> <span></span></th>
+                                                                                <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllListing" type="checkbox" autocomplete='off'/> <span></span></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -743,7 +743,7 @@
                                                                                 <th> Tipo </th>
                                                                                 <th> Fabricante </th>
                                                                                 <th> Embalagem de Compra </th>
-                                                                                <th><label class="mt-checkbox mt-checkbox-outline"/>  <input  type="checkbox"  name="selectAllProducts" /> <span></span></th>
+                                                                                <th><label class="mt-checkbox mt-checkbox-outline"/>  <input  type="checkbox"  name="selectAllProducts" autocomplete='off'/> <span></span></th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -1068,12 +1068,12 @@
         function setItensSuplliers(id,elementId) {
             var count = 0;
 
-            $.each($("#" + id + " tr").find("input"), function( index, value ) {
-                if ( $(this)["0"].checked ){
+            $.each($("#" + id + " tr").find("input"), function(index, value) {
+                if($(this)["0"].checked) {
                     count = count + 1
                 }
             });
-            $("#" + elementId ).text(count);
+            $("#" + elementId).text(count);
         }
 
         function setDateTime(id,elementId,format){
@@ -1097,10 +1097,11 @@
             }
         }
 
-        function selectAll(topCheck,checks) {
+        function selectAll(topCheck, checks) {
             $("[name='" + topCheck + "']").click(function() {
-                var checkBoxes = $("[name='" + checks + "']");
-                checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+                let state = $(this).prop('checked');
+                let checkBoxes = $("[name='" + checks + "']");
+                checkBoxes.prop("checked", state);
             })
         }
 
@@ -1518,7 +1519,7 @@
         });
 
         //select all function
-        selectAll("selectAllSupplier","chkSupplier");
+        selectAll("selectAllSupplier","chkRepresentative");
 
         // END Supplier TABLE
 
@@ -1528,7 +1529,6 @@
         $('#listing-datatable').dataTable({
             autoWidth: false,
             language: {
-
                 "sEmptyTable": "Nenhum registro encontrado",
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
                 "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
