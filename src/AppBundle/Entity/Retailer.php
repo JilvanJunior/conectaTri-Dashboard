@@ -504,7 +504,7 @@ class Retailer implements UserInterface, \Serializable
      * @param string $district
      * @return Retailer
      */
-    public function setDistricit($district)
+    public function setDistrict($district)
     {
         $this->district = $district;
         return $this;
