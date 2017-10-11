@@ -1669,9 +1669,8 @@
         // BEGIN PRODUCTS TABLE
         $('#product-datatable').dataTable({
             autoWidth: false,
+            pageLength: 100,
             language: {
-
-
                 "sEmptyTable": "Nenhum registro encontrado",
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
                 "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
@@ -1686,7 +1685,6 @@
                 "oPaginate": {
                     "sNext": '<i class="fa fa-angle-right"></i>',
                     "sPrevious": '<i class="fa fa-angle-left"></i>'
-
                 },
                 "oAria": {
                     "sSortAscending": ": Ordenar colunas de forma ascendente",
@@ -1714,7 +1712,6 @@
                         return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkProducts" value="' + data + '"  /> <span></span>';
                     }
                 }
-
             ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
             buttons: [
