@@ -342,6 +342,8 @@
                                                     <th> Representante </th>
                                                     <th> Itens Vencedores </th>
                                                     <th> Total do Pedido </th>
+                                                    <th>Atende ao mínimo</th>
+                                                    <th>Observação</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -351,6 +353,8 @@
                                                         <td> {{ supplierStatus.representativeName }} </td>
                                                         <td> {{ supplierStatus.countWins }} </td>
                                                         <td> {{ supplierStatus.total }} </td>
+                                                        <td> {{ supplierStatus.moreThanMinimum }} </td>
+                                                        <td> {{ supplierStatus.observation }} </td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>
@@ -376,8 +380,6 @@
                                                     <th>Fornecedor</th>
                                                     <th>Representante</th>
                                                     <th>Status</th>
-                                                    <th>Atende ao mínimo</th>
-                                                    <th>Observação</th>
                                                     {% if userIsRCA or quote.closed == 1 %}
                                                         <th>
                                                             <label class="mt-checkbox mt-checkbox-outline">
@@ -397,8 +399,6 @@
                                                         <td> {{ supplierStatus.supplierName }} </td>
                                                         <td> {{ supplierStatus.representativeName }} </td>
                                                         <td> {{ supplierStatus.filledIn }} </td>
-                                                        <td> {{ supplierStatus.moreThanMinimum }} </td>
-                                                        <td> {{ supplierStatus.observation }} </td>
                                                         {% if userIsRCA or quote.closed == 1 %}
                                                             <td>
                                                                 <label class="mt-checkbox mt-checkbox-outline">
