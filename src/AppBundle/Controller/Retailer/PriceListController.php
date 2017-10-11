@@ -445,6 +445,7 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
+        $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
         $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
         $data = [];
 
@@ -506,6 +507,7 @@ class PriceListController extends Controller
             'supplierStatuses' => $data,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
+            'token' => $token->getToken(),
         ]);
     }
 
