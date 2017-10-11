@@ -1418,7 +1418,7 @@
                 { "data": "contact_name" },
                 { "data": "contact_email" },
                 { "data": "cnpj"},
-                { "data": "contact_email"},
+                { "data": "contact_phone"},
                 { "data": "id",
                     "orderable": false ,
                     "className": "dt-center",
@@ -1463,7 +1463,6 @@
 
             var contact_name = $('#representante').val();
             var contact_phone = $('#telefone_representante').val()
-            var contact_cellphone = $('#celular_representante').val()
             var contact_email = $('#email_representante').val();
 
             $this.button('loading');
@@ -1519,6 +1518,7 @@
         });
 
         //select all function
+        selectAll("selectAllSupplier","chkSupplier");
         selectAll("selectAllSupplier","chkRepresentative");
 
         // END Supplier TABLE
