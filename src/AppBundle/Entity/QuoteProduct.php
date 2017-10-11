@@ -301,7 +301,7 @@ class QuoteProduct
      */
     public function calculateWinners()
     {
-        if(!empty($this->winners))
+        if(!empty($this->winners->toArray()))
             return $this->winners;
 
         $winners = [];

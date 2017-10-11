@@ -491,14 +491,16 @@ class PriceListController extends Controller
 
                     $data[$idSupplier] = $status;
                 }
+            }
+        }
 
-                foreach($product->calculateWinners() as $quoteSupplier) {
-                    $supplier = $quoteSupplier->getRepresentative()->getSupplier();
-                    $idSupplier = $supplier->getId();
+        foreach($products as $product) {
+            foreach($product->calculateWinners() as $quoteSupplier) {
+                $supplier = $quoteSupplier->getRepresentative()->getSupplier();
+                $idSupplier = $supplier->getId();
 
-                    $data[$idSupplier]['countWins']++;
-                    $data[$idSupplier]['total'] += $quoteSupplier->getPrice() * $quoteSupplier->getQuantity();
-                }
+                $data[$idSupplier]['countWins']++;
+                $data[$idSupplier]['total'] += $quoteSupplier->getPrice() * $quoteSupplier->getQuantity();
             }
         }
 
@@ -589,6 +591,7 @@ class PriceListController extends Controller
 
                 $quoteSupplier->setPrice($price);
                 $quoteSupplier->setQuantity($item['quantity']);
+                $quoteSupplier->setFilledIn(true);
                 $quoteSupplier->setUpdatedAt(new \DateTime());
 
                 $em->persist($quoteSupplier);
