@@ -96,20 +96,20 @@
                                     </a>
                                 </li>
                                 <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown {% block menu_pricelist %}{% endblock %} ">
-                                    <a href="#"> Cotações
+                                    <a href="{{ path('cotacoes') }}"> Cotações
                                         <span class="arrow"></span>
                                     </a>
                                     <ul class="dropdown-menu pull-left">
                                         <li aria-haspopup="true" class=" ">
-                                            <a href="{{ path('nova_cotacao_remota') }}" class="nav-link  "> Criar cotação</a>
+                                            <a href="{{ path('nova_cotacao_remota') }}" class="nav-link "> Criar cotação</a>
                                         </li>
                                         <li aria-haspopup="true" class=" ">
-                                            <a href="{{ path('cotacoes') }}" class="nav-link  "> Minhas Cotações</a>
+                                            <a href="{{ path('cotacoes') }}" class="nav-link">Minhas Cotações</a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown {% block menu_list %}{% endblock %}">
-                                    <a href="#"> Listas
+                                    <a href="{{ path('listas') }}"> Listas
                                         <span class="arrow"></span>
                                     </a>
                                     <ul class="dropdown-menu pull-left">
@@ -122,7 +122,7 @@
                                     </ul>
                                 </li>
                                 <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown {% block menu_products %}{% endblock %}">
-                                    <a href="#"> Produtos
+                                    <a href="{{ path('produtos') }}"> Produtos
                                         <span class="arrow"></span>
                                     </a>
                                     <ul class="dropdown-menu pull-left">
@@ -135,7 +135,7 @@
                                     </ul>
                                 </li>
                                 <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown {% block menu_suppliers %}{% endblock %}">
-                                    <a href="#"> Fornecedores
+                                    <a href="{{ path('fornecedores') }}"> Fornecedores
                                         <span class="arrow"></span>
                                     </a>
                                     <ul class="dropdown-menu pull-left">
@@ -152,7 +152,7 @@
                                 </li>
                                 {% if userIsRCA %}
                                     <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown {% block menu_martins %}{% endblock %}">
-                                        <a href="#"> Martins
+                                        <a href="{{ path('pedidos_martins') }}"> Martins
                                             <span class="arrow"></span>
                                         </a>
                                         <ul class="dropdown-menu pull-left">
@@ -166,7 +166,7 @@
                                     </li>
                                 {% endif %}
                                 <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown">
-                                    <a href="#"> Tribanco
+                                    <a href="http://www.tribanco.com.br/"> Tribanco
                                         <span class="arrow"></span>
                                     </a>
                                     <ul class="dropdown-menu pull-left">

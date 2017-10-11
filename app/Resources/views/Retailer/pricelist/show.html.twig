@@ -385,7 +385,9 @@
                                                                 <span></span>
                                                             </label>
                                                         </th>
-                                                        <th>Ação</th>
+                                                        {% if quote.getType == 1 %}
+                                                            <th>Ação</th>
+                                                        {% endif %}
                                                     {% endif %}
                                                 </tr>
                                                 </thead>
@@ -404,26 +406,28 @@
                                                                     <span></span>
                                                                 </label>
                                                             </td>
+                                                            {% if quote.getType == 1 %}
                                                             <td>
                                                                 {% if quote.closed == 1 %}
-                                                                <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': supplierStatus.representativeId}) }}"
-                                                                    class="btn btn-outline btn-circle btn-sm purple">
-                                                                    <i class="fa fa-file"></i> Exportar Pedido de Cotação
-                                                                </a>
+                                                                    <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': supplierStatus.representativeId}) }}"
+                                                                        class="btn btn-outline btn-circle btn-sm purple">
+                                                                        <i class="fa fa-file"></i> Exportar Pedido de Cotação
+                                                                    </a>
                                                                 {% endif %}
-                                                                {% if userIsRCA and supplierStatus.supplierIsRCA %}
-                                                                <a href="{{ path('novo_pedido', {'idQuote': quote.id}) }}"
-                                                                    class="btn btn-outline btn-circle btn-sm purple">
-                                                                    <i class="fa fa-file"></i> Novo Pedido Martins
-                                                                </a>
+                                                                {% if userIsRCA and supplierStatus.countWins > 0 and supplierStatus.supplierIsRCA %}
+                                                                    <a href="{{ path('novo_pedido', {'idQuote': quote.id}) }}"
+                                                                        class="btn btn-outline btn-circle btn-sm purple">
+                                                                        <i class="fa fa-file"></i> Novo Pedido Martins
+                                                                    </a>
                                                                 {% endif %}
                                                             </td>
+                                                            {% endif %}
                                                         {% endif %}
                                                     </tr>
                                                 {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     </div>
                                     <!-- END SAMPLE TABLE PORTLET-->
                                 </div>

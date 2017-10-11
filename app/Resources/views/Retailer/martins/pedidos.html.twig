@@ -23,7 +23,7 @@
                         <!-- BEGIN PAGE TITLE -->
                         <div class="page-title">
                             <h1>Pedidos Martins
-                                <small>tabela de Pedidos cadastrados</small>
+                                <small>Tabela de Pedidos cadastrados</small>
                             </h1>
                         </div>
                         <!-- END PAGE TITLE -->
@@ -79,7 +79,7 @@
                                                         <td>{{ pedido.createdAt|date('d/m/Y') }}</td>
                                                         <td>{{ pedido.orderProducts|length }}</td>
                                                         <td>{{ pedido.total }}</td>
-                                                        <td><a href="{{ pedido.linkToBill }}">Link</a></td>
+                                                        <td><a href="{{ pedido.linkToBill }}" style="color:green">Link</a></td>
                                                         <td>{{ pedido.paymentDue }}</td>
                                                     </tr>
                                                 {% endfor %}
