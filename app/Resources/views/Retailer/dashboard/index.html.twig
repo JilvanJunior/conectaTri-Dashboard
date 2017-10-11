@@ -73,20 +73,22 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                        <div class="dashboard-stat green-conecta">
-                                            <div class="details card-green-border">
-                                                <div class="number"> {{ quotes|length }} </div>
-                                                <div class="desc"> Pedidos </div>
+                                    {% if userIsRCA %}
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                            <div class="dashboard-stat green-conecta">
+                                                <div class="details card-green-border">
+                                                    <div class="number"> {{ martinsOrders|length }} </div>
+                                                    <div class="desc"> Pedidos </div>
+                                                </div>
+                                                <div class="visual">
+                                                    <img src='{{ asset('assets/pages/img/cart.png') }}'/>
+                                                </div>
+                                                <a class="more card-green-background" href="{{ path('pedidos_martins') }}"> Ver Mais
+                                                    <i class="fa fa-chevron-right"></i>
+                                                </a>
                                             </div>
-                                            <div class="visual">
-                                                <img src='{{ asset('assets/pages/img/cart.png') }}'/>
-                                            </div>
-                                            <a class="more card-green-background" href="{{ path('cotacoes') }}"> Ver Mais
-                                                <i class="fa fa-chevron-right"></i>
-                                            </a>
                                         </div>
-                                    </div>
+                                    {% endif %}
 
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" >
                                         <div class="dashboard-stat green-conecta">
@@ -112,13 +114,6 @@
                                                     <i class="icon-share font-blue"></i>
                                                     <span class="caption-subject font-blue bold uppercase">Visão Geral</span>
                                                 </div>
-                                                <!--<div class="actions">
-                                                    <div class="btn-group">
-                                                        <a class="btn blue btn-circle btn-sm" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Ações
-                                                            <i class="fa fa-angle-down"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>-->
                                             </div>
                                             <div class="portlet-body">
                                                 <div class="tabbable-line">
@@ -229,13 +224,6 @@
                                                     <span class="caption-subject font-green-steel bold uppercase">Fornecedores</span>
                                                     <span class="caption-helper"> </span>
                                                 </div>
-                                                {#<div class="inputs">
-                                                    <div class="portlet-input input-inline input-small ">
-                                                        <div class="input-icon right">
-                                                            <i class="icon-magnifier"></i>
-                                                            <input type="text" class="form-control form-control-solid input-circle" placeholder="buscar..."> </div>
-                                                    </div>
-                                                </div>#}
                                             </div>
                                             <div class="portlet-body">
                                                 <div class="scroller" style="height: 393px;" data-always-visible="1" data-rail-visible1="0" data-handle-color="#D7DCE2">
@@ -261,245 +249,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    {#<div class="col-md-6">
-                                        <!-- Begin: life time stats -->
-                                        <!-- BEGIN PORTLET-->
-                                        <div class="portlet light ">
-                                            <div class="portlet-title tabbable-line">
-                                                <div class="caption">
-                                                    <i class="icon-globe font-red"></i>
-                                                    <span class="caption-subject font-red bold uppercase">Preços Cotados</span>
-                                                </div>
-                                                <ul class="nav nav-tabs">
-                                                    <li class="active">
-                                                        <a href="#portlet_ecommerce_tab_1" data-toggle="tab"> Preço Médio </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#portlet_ecommerce_tab_2" id="statistics_orders_tab" data-toggle="tab"> Pedidos </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="portlet-body">
-                                                <div class="tab-content">
-                                                    <div class="tab-pane active" id="portlet_ecommerce_tab_1">
-                                                        <div id="statistics_1" class="chart"> </div>
-                                                    </div>
-                                                    <div class="tab-pane" id="portlet_ecommerce_tab_2">
-                                                        <div id="statistics_2" class="chart"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="well margin-top-20">
-                                                    <div class="row">
-                                                        <div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-                                                            <span class="label label-success"> Tag 1: </span>
-                                                            <h3>$1,234,112.20</h3>
-                                                        </div>
-                                                        <div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-                                                            <span class="label label-info"> Tag 2: </span>
-                                                            <h3>$134,90.10</h3>
-                                                        </div>
-                                                        <div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-                                                            <span class="label label-danger"> Tag 3: </span>
-                                                            <h3>$1,134,90.10</h3>
-                                                        </div>
-                                                        <div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-                                                            <span class="label label-warning"> Tag 4: </span>
-                                                            <h3>235090</h3>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- End: life time stats -->
-                                    </div>#}
-                                    {#<div class="col-md-6 col-sm-6">
-                                        <!-- BEGIN PORTLET-->
-                                        <div class="portlet light ">
-                                            <div class="portlet-title tabbable-line">
-                                                <div class="caption">
-                                                    <i class="icon-globe font-dark hide"></i>
-                                                    <span class="caption-subject font-green-steel bold uppercase">Feeds</span>
-                                                </div>
-                                                <ul class="nav nav-tabs">
-                                                    <li class="active">
-                                                        <a href="#tab_1_1" class="active" data-toggle="tab"> Cotações </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#tab_1_2" data-toggle="tab"> Atividades </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="portlet-body">
-                                                <!--BEGIN TABS-->
-                                                <div class="tab-content">
-                                                    <div class="tab-pane active" id="tab_1_1">
-                                                        <div class="scroller" style="height: 339px;" data-always-visible="1" data-rail-visible="0">
-                                                            <ul class="feeds">
-                                                                <li>
-                                                                    <div class="col1">
-                                                                        <div class="cont">
-                                                                            <div class="cont-col1">
-                                                                                <div class="label label-sm label-success">
-                                                                                    <i class="fa fa-bell-o"></i>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="cont-col2">
-                                                                                <div class="desc"> Cotação <strong>Cotação Semanal</strong> encerrada</div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col2">
-                                                                        <div class="date"> Agora </div>
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div class="col1">
-                                                                        <div class="cont">
-                                                                            <div class="cont-col1">
-                                                                                <div class="label label-sm label-info">
-                                                                                    <i class="fa fa-bullhorn"></i>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="cont-col2">
-                                                                                <div class="desc"> Pedido enviado. </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col2">
-                                                                        <div class="date"> 30 min </div>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="tab-pane" id="tab_1_2">
-                                                        <div class="scroller" style="height: 290px;" data-always-visible="1" data-rail-visible1="1">
-                                                            <ul class="feeds">
-                                                                <li>
-                                                                    <a href="#">
-                                                                        <div class="col1">
-                                                                            <div class="cont">
-                                                                                <div class="cont-col1">
-                                                                                    <div class="label label-sm label-success">
-                                                                                        <i class="fa fa-bell-o"></i>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="cont-col2">
-                                                                                    <div class="desc"> Cotação Cadastrada: <strong>Cotação Semanal</strong>  </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col2">
-                                                                            <div class="date"> 15 min </div>
-                                                                        </div>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="#">
-                                                                        <div class="col1">
-                                                                            <div class="cont">
-                                                                                <div class="cont-col1">
-                                                                                    <div class="label label-sm label-success">
-                                                                                        <i class="fa fa-bell-o"></i>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="cont-col2">
-                                                                                    <div class="desc"> Cotação Enviada: <strong>Cotação Semanal</strong>  </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col2">
-                                                                            <div class="date"> 15 min </div>
-                                                                        </div>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="#">
-                                                                        <div class="col1">
-                                                                            <div class="cont">
-                                                                                <div class="cont-col1">
-                                                                                    <div class="label label-sm label-success">
-                                                                                        <i class="fa fa-bell-o"></i>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="cont-col2">
-                                                                                    <div class="desc"> Cotação Enviada: <strong>Cotação Semanal</strong>  </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col2">
-                                                                            <div class="date"> 15 min </div>
-                                                                        </div>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="#">
-                                                                        <div class="col1">
-                                                                            <div class="cont">
-                                                                                <div class="cont-col1">
-                                                                                    <div class="label label-sm label-success">
-                                                                                        <i class="fa fa-bell-o"></i>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="cont-col2">
-                                                                                    <div class="desc"> Produto Cadastrado: <strong>Nescafé em pó</strong>  </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col2">
-                                                                            <div class="date"> 15 min </div>
-                                                                        </div>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="#">
-                                                                        <div class="col1">
-                                                                            <div class="cont">
-                                                                                <div class="cont-col1">
-                                                                                    <div class="label label-sm label-success">
-                                                                                        <i class="fa fa-bell-o"></i>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="cont-col2">
-                                                                                    <div class="desc"> Fornecedor Cadastrado: <strong>Aki</strong>  </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col2">
-                                                                            <div class="date"> 2 horas</div>
-                                                                        </div>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="#">
-                                                                        <div class="col1">
-                                                                            <div class="cont">
-                                                                                <div class="cont-col1">
-                                                                                    <div class="label label-sm label-success">
-                                                                                        <i class="fa fa-bell-o"></i>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="cont-col2">
-                                                                                    <div class="desc"> Fornecedor Cadastrado: <strong>Atacado Martins</strong> </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col2">
-                                                                            <div class="date"> 2 horas </div>
-                                                                        </div>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--END TABS-->
-                                            </div>
-                                        </div>
-                                        <!-- END PORTLET-->
-                                    </div>#}
                                 </div>
                             </div>
                         </div>

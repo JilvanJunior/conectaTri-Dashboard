@@ -1150,6 +1150,23 @@ class ApiController extends FOSRestController {
 
         /** @var Quote $dbQuote */
         $dbQuote = $d->getRepository("AppBundle:Quote")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
+
+        //foreach to remove all deleted quoteProducts and deleted quoteSuppliers
+        /** @var QuoteProduct $quoteProduct */
+        foreach($dbQuote->getQuoteProducts() as $k => $quoteProduct){
+            if($quoteProduct->getDeleted()){
+                //remove quoteProduct if is deleted
+                $dbQuote->removeQuoteProduct($quoteProduct);
+            } else {
+                /** @var QuoteSupplier $quoteSupplier */
+                foreach($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
+                    if($quoteSupplier->getDeleted()){
+                        //remove quoteSupplier if is deleted
+                        $dbQuote->getQuoteProducts()[$k]->removeQuoteSupplier($quoteSupplier);
+                    }
+                }
+            }
+        }
         $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
         $em->flush();
 
@@ -1157,7 +1174,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Patch("/api/quote/{id}")
+     * @Rest\Patch("/api/quote/{id}", name="patch_api_send_quote")
      * @param Request $request
      * @param $id
      * @return View
@@ -1355,7 +1372,7 @@ class ApiController extends FOSRestController {
         //check existing QuoteProducts
         /** @var QuoteProduct $quoteProduct */
         foreach ($dbQuote->getQuoteProducts() as $quoteProduct) {
-            $rcvProduct = self::arrayContains($quote->quote_products, $quoteProduct);
+            $rcvProduct = self::arrayContainsProduct($quote->quote_products, $quoteProduct->getProduct());
             if ($rcvProduct == false) { //if product not in array
                 $quoteProduct->setDeleted(true)
                     ->setUpdatedAt(new \DateTime());
@@ -1367,7 +1384,8 @@ class ApiController extends FOSRestController {
                         ->setUpdatedAt(new \DateTime());
                 }
             } else { // if product in array
-                $quoteProduct->setDeleted(false)
+                $quoteProduct
+                    ->setDeleted(false)
                     ->setUpdatedAt(new \DateTime());
                 $tmp3 = [];
                 foreach ($quoteProduct->getWinners() as $winner) {
@@ -1390,7 +1408,7 @@ class ApiController extends FOSRestController {
                 foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                     $rcvSupplier = self::arrayContains($rcvProduct->quote_suppliers, $quoteSupplier);
 
-                    //if supplier is not in array
+                    //if quote_supplier is not in array or is deleted
                     if ($rcvSupplier == false || (isset($rcvSupplier->deleted) && $rcvSupplier->deleted == true)) {
                         if ($isFirst) {
                             /** @var QuoteSupplierStatus $quoteSupplierStatus */
@@ -1404,12 +1422,13 @@ class ApiController extends FOSRestController {
                         $quoteProduct->removeWinner($quoteSupplier);
                         $quoteSupplier->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
-                    } else { //if supplier in array
-                        $quoteProduct->setQuantity($rcvSupplier->quantity);
+                    } else { //if quote_supplier in array
                         $quoteSupplier->setQuantity($rcvSupplier->quantity)
                             ->setPrice(str_replace(",", ".", $rcvSupplier->price))
                             ->setDeleted(false)
                             ->setUpdatedAt(new \DateTime());
+                        $em->persist($quoteSupplier);
+                        $em->flush();
                         if ($isFirst) {
                             /** @var QuoteSupplierStatus $quoteSupplierStatus */
                             $quoteSupplierStatus = $d->getRepository("AppBundle:QuoteSupplierStatus")->findOneBy(["quote" => $dbQuote,
@@ -1426,6 +1445,7 @@ class ApiController extends FOSRestController {
                 self::array_diff($rcvProduct->quote_suppliers, $tmp2);
                 /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
+                    file_put_contents('/var/www/html/conectaTri/var/logs/test.json', json_encode($supplier));
                     /** @var Representative $dbSupplier */
                     $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                     if ($isFirst) {
@@ -1437,14 +1457,16 @@ class ApiController extends FOSRestController {
                     $quoteSupplier->setRepresentative($dbSupplier)
                         ->setQuantity($supplier->quantity)
                         ->setPrice(str_replace(",", ".", $supplier->price));
+                    $quoteSupplier->setQuoteProduct($quoteProduct);
                     $em->persist($quoteSupplier);
+                    $em->flush();
                     $quoteProduct->addQuoteSupplier($quoteSupplier);
                 }
                 $tmp[] = $rcvProduct;
             }
             $isFirst = false;
         }
-        self::array_diff($quote->quote_products, $tmp);
+        self::array_diff_product($quote->quote_products, $tmp);
         /** @var \stdClass $product */
         foreach ($quote->quote_products as $product) {
             $newQuoteProduct = new QuoteProduct();
@@ -1457,11 +1479,14 @@ class ApiController extends FOSRestController {
                     ->setQuantity($supplier->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price));
                 $em->persist($newQuoteSupplier);
-                $newQuoteProduct->setQuantity($supplier->quantity);
+                $em->flush();
                 $newQuoteProduct->addQuoteSupplier($newQuoteSupplier);
             }
+            $newQuoteProduct->setQuantity($supplier->quantity);
             $newQuoteProduct->setProduct($dbProduct);
+            $newQuoteProduct->setQuote($dbQuote);
             $em->persist($newQuoteProduct);
+            $em->flush();
             $dbQuote->addQuoteProduct($newQuoteProduct);
         }
         $dbQuote->setDeleted(false)
@@ -2437,6 +2462,16 @@ class ApiController extends FOSRestController {
         return false;
     }
 
+
+    private static function arrayContainsProduct($array, $element) {
+        foreach ($array as $item) {
+            if ($item->product->id == $element->getId()) {
+                return $item;
+            }
+        }
+        return false;
+    }
+
     private static function array_diff(&$array, $diff) {
         $arrayProp = false;
         try {
@@ -2472,6 +2507,21 @@ class ApiController extends FOSRestController {
                         $contains = true;
                         break;
                     }
+                }
+            }
+            if (!$contains) $ret[] = $aEle;
+        }
+        $array = $ret;
+    }
+
+    private static function array_diff_product(&$array, $diff) {
+        $ret = [];
+        foreach ($array as $aEle) {
+            $contains = false;
+            foreach ($diff as $dEle) {
+                if ($aEle->product->id == $dEle->product->id) {
+                    $contains = true;
+                    break;
                 }
             }
             if (!$contains) $ret[] = $aEle;
