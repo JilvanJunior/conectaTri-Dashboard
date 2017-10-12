@@ -487,11 +487,9 @@
 
                         supplierTable.mouseout(function() {
                             if(supplierTable.find('tr').find("input").is(":checked")){
-                                console.log("entrou na função");
                                 $("#advance").find("a").removeClass('disabled');
                             return;
                             }
-                            console.log("saiu da função");
                                 $("#advance").find("a").addClass('disabled');
                         });
 
@@ -745,6 +743,8 @@
                     "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
+            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
+            iDisplayLength: -1,
 
             ajax: {
                 url: "{{ path('get_api_representative') }}",
@@ -892,6 +892,8 @@
                     "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
+            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
+            iDisplayLength: -1,
             ajax: {
                 url: "{{ path('get_api_listing') }}",
                 type: 'GET',
@@ -1027,6 +1029,8 @@
                     "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
+            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
+            iDisplayLength: -1,
             ajax: {
                 url: "{{ path('get_api_product') }}",
                 type: 'GET',
