@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Ramsey\Uuid\Uuid;
 
 class PriceListController extends Controller
 {
@@ -97,9 +98,21 @@ class PriceListController extends Controller
             $data['conditions'] = $conditions;
         }
 
-        if($token->getToken() != null){
+        if (!is_null($token)) {
             $data['token'] = $token->getToken();
-        } else $data['token'] = "";
+        } else {
+            $d = $this->getDoctrine();
+            $em = $d->getManager();
+            $dbUser = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $this->get('security.token_storage')->getToken()->getUser()]);
+            $session = new ApiSession();
+            $uuid = Uuid::uuid5(Uuid::uuid1(), $dbUser->getCnpj());
+            $session->setToken($uuid->toString());
+            $session->setRetailer($dbUser);
+            $em->persist($session);
+            $em->flush();
+            $data['token'] = $token->getToken();
+        }
+
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', $data);
     }
