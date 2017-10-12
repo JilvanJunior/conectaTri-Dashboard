@@ -504,7 +504,9 @@
                         listingTable.mouseout(function() {
                             if( listingTable.find('tr').find("input").is(":checked") ) {
                                 $("#advance").find("a").removeClass('disabled');
+                            return;
                             }
+                            $("#advance").find("a").addClass('disabled');
                         });
 
                         break;
@@ -519,7 +521,9 @@
                         productTable.mouseout(function() {
                             if( productTable.find('tr').find("input").is(":checked") ){
                                 $("#advance").find("a").removeClass('disabled');
+                            return;
                             }
+                            $("#advance").find("a").addClass('disabled');
                         });
 
                         break;
