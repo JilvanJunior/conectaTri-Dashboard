@@ -63,10 +63,6 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
-        if($token->getToken() != null){
-            $data['token'] = $token->getToken();
-        } else $data['token'] = "";
-
         //type of listings
         $types = [];
         $types['0'] = 'Não Informado';
@@ -100,6 +96,10 @@ class PriceListController extends Controller
             }
             $data['conditions'] = $conditions;
         }
+
+        if($token->getToken() != null){
+            $data['token'] = $token->getToken();
+        } else $data['token'] = "";
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', $data);
     }
