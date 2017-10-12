@@ -486,9 +486,13 @@
                         var supplierTable = $('#supplier-datatable');
 
                         supplierTable.mouseout(function() {
-                            if( supplierTable.find('tr').find("input").is(":checked") ){
+                            if(supplierTable.find('tr').find("input").is(":checked")){
+                                console.log("entrou na função");
                                 $("#advance").find("a").removeClass('disabled');
+                            return;
                             }
+                            console.log("saiu da função");
+                                $("#advance").find("a").addClass('disabled');
                         });
 
                         break;
