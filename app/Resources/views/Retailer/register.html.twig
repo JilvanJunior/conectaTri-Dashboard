@@ -68,7 +68,7 @@
         .container {
             position: absolute;
             width: 90%;
-            max-width: 24em;
+            max-width: 30em;
             left: 50%;
             transform: translate(-50%);
         }
@@ -160,7 +160,7 @@
             background-color: transparent;
             border: solid 1px green;
             border-radius: 5px;
-            color: #777;
+            color: #40ae40;
             height: 3rem;
             line-height: 2rem;
             margin-bottom: 0.3rem;
@@ -274,9 +274,9 @@
                                 <input type="checkbox" name="agree"/>
                                 <span></span>
                             </label>
-                            Li e aceito os <u style="color:#83BC3C">termos de uso</u> e a <u style="color:#83BC3C">política de privacidade</u>.
+                            Li e aceito os <a href="{{ path('termsandcondition') }}"><u style="color:#83BC3C">termos de uso</u></a> e a <a href="{{ path('termsandcondition') }}"><u style="color:#83BC3C">política de privacidade</u></a>.
                         </div><i class="form-control-feedback" data-fv-icon-for="agree" style="display: none;"></i>
-                        <small class="help-block" data-fv-validator="notEmpty" data-fv-for="agree" data-fv-result="NOT_VALIDATED" style="display: none;">You must agree with the terms and conditions</small></div>
+                        <small class="help-block" data-fv-validator="notEmpty" data-fv-for="agree" data-fv-result="NOT_VALIDATED" style="display: none;">Você deve aceitar os termos e condições.</small></div>
                 </div>
                 <br>
 

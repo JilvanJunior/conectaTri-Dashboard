@@ -114,7 +114,7 @@ class RegistrationController extends Controller
             $link = $this->get('router')->generate("verify-email", ["data" => $encoded], UrlGeneratorInterface::ABSOLUTE_URL);
             $mailer = $this->get('swiftmailer.mailer.default');
             $message = (new \Swift_Message('Verificação de E-mail - Conecta Tri'))
-                ->setFrom('noreply@conectatri.com.br')
+                ->setFrom('cadastro@conectatri.com.br')
                 ->setTo($user->getEmail())
                 ->setBody(
                     $this->renderView(
@@ -126,7 +126,7 @@ class RegistrationController extends Controller
 
             $result = $mailer->send($message);
 
-            if ($result > 0) {
+            if ($result > 0 ) {
                 $this->addFlash(
                     'success',
                     "Cadastro efetuado com sucesso. Foi enviado um link de ativação no e-mail cadastrado."
