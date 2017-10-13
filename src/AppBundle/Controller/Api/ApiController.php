@@ -74,7 +74,7 @@ class ApiController extends FOSRestController {
                     //send e-mail from format
                     $message = (new \Swift_Message('Verificação de E-mail - Conecta Tri'))
                         ->setFrom('noreply@conectatri.com.br')
-                        ->setTo($user->getEmail())
+                        ->setTo($dbUser->getEmail())
                         ->setBody(
                             $this->renderView(
                                 'email/confirm_email.html.twig',
