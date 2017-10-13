@@ -65,19 +65,22 @@ class PriceListController extends Controller
         $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
         //type of listings
-        $types = [];
-        $types['0'] = 'Não Informado';
-        $types['1'] = 'Comum';
-        $types['2'] = 'Sazonal';
-        $types['3'] = 'Semanal';
+        $listingTypes = [];
+        $listingTypes['0'] = 'Não Informado';
+        $listingTypes['1'] = 'Comum';
+        $listingTypes['2'] = 'Sazonal';
+        $listingTypes['3'] = 'Semanal';
 
         //quotes types
-        $types = [];
-        $types['1'] = "Remota";
-        $types['2'] = "Presencial";
+        $quoteTypes = [];
+        $quoteTypes['1'] = "Remota";
+        $quoteTypes['2'] = "Presencial";
 
         $data = [
-            'types' => $types,
+            'quoteTypes' => $quoteTypes,
+            'listingTypes' => $listingTypes,
+            'listings' => $user->getListings(),
+            'products' => $user->getProducts(),
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ];

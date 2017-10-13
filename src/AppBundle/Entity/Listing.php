@@ -333,4 +333,16 @@ class Listing
     {
         return $this->deleted;
     }
+
+
+    public function getProductsIdsList()
+    {
+        $ids = [];
+        foreach($this->listingProducts as $listingProduct)
+            $ids[] = $listingProduct->getProduct()->getId();
+
+        $ids = implode(', ', $ids);
+
+        return "[$ids]";
+    }
 }

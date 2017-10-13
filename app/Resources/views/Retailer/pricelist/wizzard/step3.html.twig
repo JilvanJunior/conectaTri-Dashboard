@@ -7,121 +7,100 @@
                     <th> Descrição </th>
                     <th> Tipo </th>
                     <th> Itens </th>
-                    <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllListing" type="checkbox" autocomplete='off'/> <span></span></th>
-                    </tr>
-                </thead>
-                <tbody>
+                    <th name="removeSort" class="no-sort">
+                        <label class="mt-checkbox mt-checkbox-outline">
+                            <input name="selectAllListing" type="checkbox" autocomplete='off'/>
+                            <span></span>
+                        </label>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if listings is defined %}
+                    {% for listing in listings %}
+                        <tr>
+                            <input type="hidden" value="{{ listing.id }}">
+                            <td width="20%">{{ listing.name }}</td>
+                            <td >{{ listing.description }}</td>
+                            <td>{{ listingTypes[listing.type] }}</td>
+                            <td>{{ listing.listingProducts|length }}</td>
+                            <td>
+                                <label class="mt-checkbox mt-checkbox-outline">
+                                    <input type="checkbox" value="{{ listing.id }}" name="chkListing"
+                                        data-products='{{ listing.getProductsIdsList }}'/>
+                                    <span></span>
+                                </label>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
 
-                    {% if listings is defined %}
-                        {% for listing in listings %}
-                            <tr>
-                                <input type="hidden" value="{{ listing.id }}">
-                                <td width="20%">{{ listing.name }}</td>
-                                <td >{{ listing.description }}</td>
-                                <td>{{ types[listing.type] }}</td>
-                                <td>{{ listing.listingProducts|length }}</td>
-                                <td>
-                                    <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ listing.id }}" name="chkListing" /> <span></span>
-                                    </td>
-                                </tr>
-                        {% endfor %}
-                    {% endif %}
-                </tbody>
-            </table>
+        <!-- LISTING Modal -->
+        <div id="listingModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
 
-
-
-            <!-- LISTING Modal -->
-            <div id="listingModal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Adicionar Lista</h4>
-                        </div>
-                        <div class="modal-body">
-
-
-                            <form action="#" method="POST" id="list_form" class="form-horizontal contact-form">
-
-
-                                <div class="form-body ">
-
-                                    <div class="row ">
-
-                                        <div class="col-lg-4 col-lg-offset-3">
-                                            <div class="">
-                                                <div class="form-group lista text ">
-                                                    <label for="lista">Lista*</label>
-                                                    <input class="form-control" type="text" name="lista" id="lista" required />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row ">
-                                        <div class="col-lg-4 col-lg-offset-3">
-                                            <div class="">
-                                                <div class="form-group descricao text ">
-                                                    <label for="descricao">Descrição*</label>
-                                                    <input class="form-control" type="text" name="descricao" id="descricao" required/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row ">
-
-                                        <div class="col-lg-4 col-lg-offset-3">
-                                            <div class="">
-                                                <div class="form-group tipo text typing">
-                                                    <label for="tipo">Tipo*</label>
-                                                    <select name="tipo" id="tipo" class="form-control select-circle " required>
-                                                        {% for type in types %}
-                                                            <option value="{{ loop.index0 }}">{{ type }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-
-
-                                </div>
-
-                                <!--
-                                <div class="form-actions">
-                                    <div class="row">
-                                        <div class="col-md-offset-3 col-md-9">
-                                            <button type="submit" class="btn btn-circle green-conecta">Salvar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                -->
-
-
-                            </form>
-
-
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button"  id="salvar_lista" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Lista" class="btn green-conecta btn-circle" data-style="expand-right">
-                                Salvar
-                            </button>
-
-                        </div>
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Adicionar Lista</h4>
                     </div>
+                    <div class="modal-body">
+                        <form action="#" method="POST" id="list_form" class="form-horizontal contact-form">
+                            <div class="form-body ">
+                                <div class="row ">
+                                    <div class="col-lg-4 col-lg-offset-3">
+                                        <div class="">
+                                            <div class="form-group lista text ">
+                                                <label for="lista">Lista*</label>
+                                                <input class="form-control" type="text" name="lista" id="lista" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-lg-4 col-lg-offset-3">
+                                        <div class="">
+                                            <div class="form-group descricao text ">
+                                                <label for="descricao">Descrição*</label>
+                                                <input class="form-control" type="text" name="descricao" id="descricao" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div class="row ">
+                                    <div class="col-lg-4 col-lg-offset-3">
+                                        <div class="">
+                                            <div class="form-group tipo text typing">
+                                                <label for="tipo">Tipo*</label>
+                                                <select name="tipo" id="tipo" class="form-control select-circle " required>
+                                                    {% for type in listingTypes %}
+                                                        <option value="{{ loop.index0 }}">{{ type }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  id="salvar_lista" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Lista" class="btn green-conecta btn-circle" data-style="expand-right">
+                            Salvar
+                        </button>
+
+                    </div>
                 </div>
+
             </div>
-
-
-
         </div>
+
+
+
     </div>
+</div>

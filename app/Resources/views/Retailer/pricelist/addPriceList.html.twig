@@ -721,6 +721,19 @@
         })
         //END FLOAT LABEL METHODS
 
+        $('[name=selectAllListing]').click(function() {
+            let state = $(this).prop('checked');
+            $('[name=selectAllProducts]').prop('checked', state);
+            $('[name=chkProducts]').prop('checked', state);
+        });
+        $('[name=chkListing]').click(function() {
+            let state = $(this).prop('checked');
+            let ids = $(this).data('products');
+
+            $(ids).each(function(index, id) {
+                $('[name=chkProducts][value='+id+']').prop('checked', state);
+            });
+        });
 
         // BEGIN Supplier TABLE
         $('#supplier-datatable').dataTable( {
@@ -898,33 +911,6 @@
             },
             lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
             iDisplayLength: -1,
-            ajax: {
-                url: "{{ path('get_api_listing') }}",
-                type: 'GET',
-                dataSrc: "",
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader('Api-Token', token);
-                }
-            },
-            columns: [
-                { "data": "name" },
-                { "data": "description" },
-                { "data": "type" },
-                { "data": "listing_products",
-                    "render": function ( data, type, row ) {
-                        return data.length;
-                    }
-                },
-                {
-                    "data": "id",
-                    "orderable": false ,
-                    "className": "dt-center",
-                    "render": function ( data, type, row ) {
-                        return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkListing" value="' + data + '"  /> <span></span>';
-                    }
-                }
-
-            ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
             buttons: [
                 {
@@ -1035,28 +1021,6 @@
             },
             lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
             iDisplayLength: -1,
-            ajax: {
-                url: "{{ path('get_api_product') }}",
-                type: 'GET',
-                dataSrc: "",
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader('Api-Token', token);
-                }
-            },
-            columns: [
-                { "data": "id" },
-                { "data": "name" },
-                { "data": "type" },
-                { "data": "brand"},
-                { "data": "unit"},
-                { "data": "id",
-                    "orderable": false ,
-                    "className": "dt-center",
-                    "render": function ( data, type, row ) {
-                        return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkProducts" value="' + data + '"  /> <span></span>';
-                    }
-                }
-            ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
             buttons: [
                 {
