@@ -377,9 +377,6 @@
                                             <table class="table table-striped table-bordered table-hover" id="status_datatable">
                                                 <thead>
                                                 <tr>
-                                                    <th>Fornecedor</th>
-                                                    <th>Representante</th>
-                                                    <th>Status</th>
                                                     {% if userIsRCA or quote.closed == 1 %}
                                                         <th>
                                                             <label class="mt-checkbox mt-checkbox-outline">
@@ -387,6 +384,11 @@
                                                                 <span></span>
                                                             </label>
                                                         </th>
+                                                    {% endif %}
+                                                    <th>Fornecedor</th>
+                                                    <th>Representante</th>
+                                                    <th>Status</th>
+                                                    {% if userIsRCA or quote.closed == 1 %}
                                                         {% if quote.getType == 1 %}
                                                             <th>Ação</th>
                                                         {% endif %}
@@ -396,16 +398,18 @@
                                                 <tbody>
                                                 {% for supplierStatus in supplierStatuses %}
                                                     <tr>
+                                                        {% if userIsRCA or quote.closed == 1 %}
+                                                        <td>
+                                                            <label class="mt-checkbox mt-checkbox-outline">
+                                                                <input type="checkbox" value="{{ quote.id }}" name="chkStatus" />
+                                                                <span></span>
+                                                            </label>
+                                                        </td>
+                                                        {% endif %}
                                                         <td> {{ supplierStatus.supplierName }} </td>
                                                         <td> {{ supplierStatus.representativeName }} </td>
                                                         <td> {{ supplierStatus.filledIn }} </td>
                                                         {% if userIsRCA or quote.closed == 1 %}
-                                                            <td>
-                                                                <label class="mt-checkbox mt-checkbox-outline">
-                                                                    <input type="checkbox" value="{{ quote.id }}" name="chkStatus" />
-                                                                    <span></span>
-                                                                </label>
-                                                            </td>
                                                             {% if quote.getType == 1 %}
                                                             <td>
                                                                 {% if quote.closed == 1 %}
