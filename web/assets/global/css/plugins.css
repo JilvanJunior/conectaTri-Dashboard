@@ -169,12 +169,12 @@ Bootstrap  Datetimepicker
   padding: 5px; }
 
 .datetimepicker .active {
-  background-color: #4b8df8 !important;
+  background-color: #40ae40 !important;
   background-image: none !important;
   filter: none !important; }
 
 .datetimepicker .active:hover {
-  background-color: #2678FC !important;
+  background-color: #319431 !important;
   background-image: none !important;
   filter: none !important; }
 
