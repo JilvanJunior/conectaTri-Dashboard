@@ -126,18 +126,6 @@ class RegistrationController extends Controller
 
             $result = $mailer->send($message);
 
-            if ($result > 0 ) {
-                $this->addFlash(
-                    'success',
-                    "Cadastro efetuado com sucesso. Foi enviado um link de ativação no e-mail cadastrado."
-                );
-            } else {
-                $this->addFlash(
-                    'info',
-                    "Usuário cadastrado com sucesso, porém houve um problema ao tentar enviar o e-mail de verificação."
-                );
-            }
-
             return $this->redirect($this->generateUrl('login') . "?varejista=1");
         }
 
