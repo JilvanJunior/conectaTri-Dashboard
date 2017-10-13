@@ -53,7 +53,7 @@ class PriceListController extends Controller
     }
 
     /**
-     * @Route("/varejista/cotacao/remota/nova", name="nova_cotacao_remota")
+     * @Route("/varejista/cotacao/nova", name="nova_cotacao_remota")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -81,6 +81,7 @@ class PriceListController extends Controller
             'listingTypes' => $listingTypes,
             'listings' => $user->getListings(),
             'products' => $user->getProducts(),
+            'suppliers' => $user->getSuppliers(),
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ];
@@ -166,215 +167,6 @@ class PriceListController extends Controller
     }
 
     /**
-     * @Route("/varejista/cotacao/{id}/listas", name="cotacao_listas")
-     * @param Request $request
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function addListAction(Request $request, $id)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $em = $this->getDoctrine()->getManager();
-
-        $quote = $em->getRepository('AppBundle:Quote')->find($id);
-
-        $listings = $em->getRepository('AppBundle:Listing')->findBy(['retailer' => $user, 'deleted' => false]);
-
-        //type of listings
-        $types = [];
-        $types['0'] = 'Não Informado';
-        $types['1'] = 'Comum';
-        $types['2'] = 'Sazonal';
-        $types['3'] = 'Semanal';
-
-        if($request->getMethod() == "POST"){
-
-            $listingIds = $request->get('listings');
-
-            $products = $em->getRepository('AppBundle:ListingProduct')->findProductsByListings(implode(',', $listingIds));
-
-            //add products to quoteProduct
-            foreach ($products as $product) {
-
-                $quoteProduct = new QuoteProduct();
-                /** @var Quote $quote */
-                $quoteProduct->setQuote($quote);
-                $quoteProduct->setProduct($product);
-
-                $em->persist($quoteProduct);
-
-                $em->flush();
-            }
-
-            $this->addFlash(
-                'info',
-                'Selecione os produtos para adicionar à cotação.'
-            );
-
-            $data['url'] = $this->generateUrl('cotacao_produtos', ['id' => $id]);
-            echo json_encode($data);
-            exit();
-        }
-
-        return $this->render('Retailer/pricelist/addListings.html.twig', [
-            'quote' => $quote,
-            'listings' => $listings,
-            'types' => $types,
-            'username' => $user->getFantasyName(),
-            'userIsRCA' => $user->isRCAVirtual(),
-        ]);
-    }
-
-    /**
-     * @Route("/varejista/cotacao/{id}/produtos", name="cotacao_produtos")
-     * @param Request $request
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function addProductsAction(Request $request, $id)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $em = $this->getDoctrine()->getManager();
-
-        $quote = $em->getRepository('AppBundle:Quote')->find($id);
-
-        $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user, 'deleted' => false]);
-
-        $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $id, 'deleted' => false]);
-
-        if($request->getMethod() == "POST"){
-
-            $productsIds = $request->get('products');
-
-            //remove not added quoteProducts
-            $em->getRepository('AppBundle:QuoteProduct')->removeExcludedQuoteProducts($id, implode(',', $productsIds));
-
-            //add new quoteProducts
-            foreach ($productsIds as $productsId) {
-                $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $id, 'product' => $productsId]);
-
-                if($quoteProduct == null) {
-                    $product = $em->getRepository('AppBundle:Product')->findOneBy(['id' => $productsId, 'deleted' => false]);
-
-                    $quoteProduct = new QuoteProduct();
-                    /** @var Quote $quote */
-                    $quoteProduct->setQuote($quote);
-                    /** @var Product $product */
-                    $quoteProduct->setProduct($product);
-
-                    $em->persist($quoteProduct);
-                    $em->flush();
-                }
-
-            }
-
-            $this->addFlash(
-                'info',
-                'Selecione os fornecedores da cotação.'
-            );
-
-            $data['url'] = $this->generateUrl('cotacao_fornecedores', ['id' => $id]);
-            echo json_encode($data);
-            exit();
-        }
-
-        return $this->render('Retailer/pricelist/addProducts.html.twig', [
-            'quote' => $quote,
-            'quoteProducts' => $quoteProducts,
-            'products' => $products,
-            'username' => $user->getFantasyName(),
-            'userIsRCA' => $user->isRCAVirtual(),
-        ]);
-    }
-
-    /**
-     * @Route("/varejista/cotacao/{id}/fornecedores", name="cotacao_fornecedores")
-     * @param Request $request
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function addSuppliersAction(Request $request, $id)
-    {
-        /** @var Retailer $quote */
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var Quote $quote */
-        $quote = $em->getRepository('AppBundle:Quote')->find($id);
-
-        $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
-
-        if($request->getMethod() == "POST"){
-
-            $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $id, 'deleted' => false]);
-            $representativesIds = $request->get('suppliers');
-
-            //add new quoteSuppliers
-            foreach ($representativesIds as $representativesId) {
-
-                /** @var Representative $representative */
-                $representative = $em->getRepository('AppBundle:Representative')->find($representativesId);
-
-                foreach ($quoteProducts as $quoteProduct) {
-
-                    $quoteSupplier = new QuoteSupplier();
-                    $quoteSupplier->setQuoteProduct($quoteProduct);
-                    $quoteSupplier->setRepresentative($representative);
-                    $quoteSupplier->setPrice(0);
-                    $quoteSupplier->setQuantity(1);
-
-                    $em->persist($quoteSupplier);
-                    $em->flush();
-                }
-
-                //create QuoteSupplierStatus
-                $quoteSupplierStatus = new QuoteSupplierStatus();
-                $quoteSupplierStatus->setQuote($quote);
-                $quoteSupplierStatus->setRepresentative($representative);
-                $em->persist($quoteSupplierStatus);
-                $em->flush();
-
-                if($quote->getType() == 1){
-                    //send mail to representative
-                    $link = $this->generateUrl('quote_representative', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
-                    $message = (new \Swift_Message('Cotação - Conecta Tri'))
-                        ->setFrom('noreply@conectatri.com.br')
-                        ->setTo($representative->getEmail())
-                        ->setBody(
-                            $this->renderView(
-                                'email/quote_representative.html.twig',
-                                array('link' => $link,
-                                    'companyName' => $user->getFantasyName()->getCompanyName(),
-                                    'fantasyName' => $user->getFantasyName(),
-                                    'expiresAt' => $quote->getExpiresAt())
-                            ),
-                            'text/html'
-                        );
-
-                    $mailer = $this->get('swiftmailer.mailer.default');
-                    $mailer->send($message);
-                }
-            }
-
-            $this->addFlash(
-                'success',
-                'Cotação adicionada!'
-            );
-
-            $data['url'] = $this->generateUrl('cotacoes');
-            echo json_encode($data);
-            exit();
-        }
-
-        return $this->render('Retailer/pricelist/addSuppliers.html.twig', [
-            'quote' => $quote,
-            'suppliers' => $suppliers,
-            'username' => $user->getFantasyName(),
-            'userIsRCA' => $user->isRCAVirtual(),
-        ]);
-    }
-
-    /**
      * @Route("/varejista/cotacao/{id}/copiar", name="copiar_cotacao")
      * @param Request $request
      * @param $id
@@ -415,42 +207,67 @@ class PriceListController extends Controller
      */
     public function editAction(Request $request, $id)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
+        /** @var Retailer $user */
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
+        $quote = $em->getRepository('AppBundle:Quote')->findOneById($id);
 
-        $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
+        //type of listings
+        $listingTypes = [];
+        $listingTypes['0'] = 'Não Informado';
+        $listingTypes['1'] = 'Comum';
+        $listingTypes['2'] = 'Sazonal';
+        $listingTypes['3'] = 'Semanal';
 
-        if($request->getMethod() == "POST"){
+        //quotes types
+        $quoteTypes = [];
+        $quoteTypes['1'] = "Remota";
+        $quoteTypes['2'] = "Presencial";
 
-            if($request->get('closed') == "on")
-                $quote->setClosed(true);
-            else
-                $quote->setClosed(false);
-
-            $quote->setName($request->get('name'));
-            $beginsAt = date_create_from_format('d/m/Y H:i', $request->get('begins-at'));
-            $quote->setBeginsAt($beginsAt);
-            $expiresAt = date_create_from_format('d/m/Y H:i', $request->get('expires-at'));
-            $quote->setExpiresAt($expiresAt);
-            $quote->setUpdatedAt(new \DateTime());
-
-            $em->persist($quote);
-
-            $em->flush();
-
-            $this->addFlash(
-                'success',
-                'Cotação editada!'
-            );
-
-            return $this->redirectToRoute('cotacoes');
-        }
-
-        return $this->render('Retailer/pricelist/edit.html.twig', [
+        $data = [
+            'listingTypes' => $listingTypes,
+            'listings' => $user->getListings(),
+            'products' => $user->getProducts(),
             'quote' => $quote,
+            'quoteTypes' => $quoteTypes,
+            'suppliers' => $user->getSuppliers(),
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
-        ]);
+        ];
+
+        if($user->isRCAVirtual()) {
+            $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
+            $acesso = $mc->login();
+            $conditions = $acesso->Login->CondicoesPagamento->CondPgto;
+            if(is_array($conditions)) {
+                $conds = [];
+                foreach($conditions as $condition) {
+                    $conds[] = $condition->Descricao;
+                }
+                $conditions = $conds;
+            } else {
+                $conditions = [ $conditions->Descricao ];
+            }
+            $data['conditions'] = $conditions;
+        }
+
+        if (!is_null($token)) {
+            $data['token'] = $token->getToken();
+        } else {
+            $d = $this->getDoctrine();
+            $em = $d->getManager();
+            $dbUser = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $this->get('security.token_storage')->getToken()->getUser()]);
+            $session = new ApiSession();
+            $uuid = Uuid::uuid5(Uuid::uuid1(), $dbUser->getCnpj());
+            $session->setToken($uuid->toString());
+            $session->setRetailer($dbUser);
+            $em->persist($session);
+            $em->flush();
+            $data['token'] = $token->getToken();
+        }
+
+        return $this->render('Retailer/pricelist/addPriceList.html.twig', $data);
     }
 
     /**

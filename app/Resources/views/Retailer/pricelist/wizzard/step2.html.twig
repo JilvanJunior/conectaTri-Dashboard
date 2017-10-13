@@ -8,148 +8,156 @@
                     <th>E-mail</th>
                     <th>CNPJ</th>
                     <th>Telefone</th>
-                    <th name="removeSort" class="no-sort"><label class="mt-checkbox mt-checkbox-outline"/>  <input name="selectAllSupplier" type="checkbox" autocomplete='off'/> <span></span></th>
+                    <th name="removeSort" class="no-sort">
+                        <label class="mt-checkbox mt-checkbox-outline">
+                            <input name="selectAllSupplier" type="checkbox" autocomplete='off'/>
+                            <span></span>
+                        </label>
+                    </th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if suppliers is defined %}
-                        {% for supplier in suppliers %}
-                            {% for representative in supplier.representatives if representative.deleted == 0 %}
-                                <tr>
-                                    <td> {{ supplier.name }} </td>
-                                    <td> {{ representative.name }} </td>
-                                    <td class="numeric"> {{ representative.email }} </td>
-                                    <td class="numeric"> {{ supplier.cnpj }} </td>
-                                    <td class="numeric"> {{ representative.phone }} </td>
-                                    <td>
-                                        <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkSupplier" value="{{ supplier.id }}"  /> <span></span>
-                                        </td>
-
-                                    </tr>
-                            {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% if suppliers is defined %}
+                    {% for supplier in suppliers %}
+                        {% for representative in supplier.representatives if representative.deleted == 0 %}
+                            <tr>
+                                <td> {{ supplier.name }} </td>
+                                <td> {{ representative.name }} </td>
+                                <td class="numeric"> {{ representative.email }} </td>
+                                <td class="numeric"> {{ supplier.cnpj }} </td>
+                                <td class="numeric"> {{ representative.phone }} </td>
+                                <td>
+                                    <label class="mt-checkbox mt-checkbox-outline">
+                                        <input type="checkbox" name="chkSupplier"
+                                            value="{{ supplier.id }}" {{ quote.hasSupplier(supplier)?'checked="true"':'' }}/>
+                                        <span></span>
+                                    </label>
+                                </td>
+                            </tr>
                         {% endfor %}
-                    {% endif %}
-                </tbody>
-            </table>
-        </div>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
 
-        <!-- Supplier Modal -->
-        <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
+    <!-- Supplier Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Adicionar Fornecedor</h4>
-                    </div>
-                    <div class="modal-body">
-
-
-                        <form action="#" method="POST" id="supplier_form" class="form-horizontal contact-form">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Adicionar Fornecedor</h4>
+                </div>
+                <div class="modal-body">
 
 
-                            <div class="form-body ">
+                    <form action="#" method="POST" id="supplier_form" class="form-horizontal contact-form">
 
-                                <div class="row ">
 
-                                    <div class="col-lg-4 col-lg-offset-3">
-                                        <div class="">
-                                            <div class="form-group fornecedor text ">
-                                                <label for="fornecedor">Fornecedor*</label>
-                                                <input class="form-control" type="text" name="fornecedor" id="fornecedor" required />
-                                            </div>
-                                        </div>
-                                    </div>
+                        <div class="form-body ">
 
-                                </div>
+                            <div class="row ">
 
-                                <div class="row ">
-                                    <div class="col-lg-4 col-lg-offset-3">
-                                        <div class="">
-                                            <div class="form-group cnpj text ">
-                                                <label for="cnpj">CNPJ*</label>
-                                                <input class="form-control" type="text" name="cnpj" id="cnpj" required />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row ">
-
-                                    <div class="col-lg-4 col-lg-offset-3">
-                                        <div class="">
-                                            <div class="form-group valor_minimo text ">
-                                                <label for="valor_minimo">Pedido Mínimo</label>
-                                                <input class="form-control" type="text" id="valor_minimo"   />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row ">
-
-                                    <div class="col-lg-4 col-lg-offset-3">
-                                        <div class="">
-                                            <div class="form-group representante text ">
-                                                <label for="representante">Nome do Representante*</label>
-                                                <input class="form-control" type="text" name="representante" id="representante" required/>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row ">
-
-                                    <div class="col-lg-4 col-lg-offset-3">
-                                        <div class="">
-                                            <div class="form-group email_representante text ">
-                                                <label for="email_representante">E-Mail do Representate*</label>
-                                                <input class="form-control" type="email" name="email_representante" id="email_representante" required/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row ">
-                                    <div class="col-lg-4 col-lg-offset-3">
-                                        <div class="">
-                                            <div class="form-group telefone_representante text ">
-                                                <label for="telefone_representante">Telefone do Representante</label>
-                                                <input class="form-control" type="text"  id="telefone_representante"   />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row ">
-                                    <div class="col-lg-4 col-lg-offset-3">
-                                        <div class="">
-                                            <div class="form-group celular_representante text ">
-                                                <label for="celular_representante">Celular do Representante</label>
-                                                <input class="form-control" type="text"  id="celular_representante"/>
-                                            </div>
+                                <div class="col-lg-4 col-lg-offset-3">
+                                    <div class="">
+                                        <div class="form-group fornecedor text ">
+                                            <label for="fornecedor">Fornecedor*</label>
+                                            <input class="form-control" type="text" name="fornecedor" id="fornecedor" required />
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button"  id="salvar_fornecedor" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Fornecedor" class="btn green-conecta btn-circle" data-style="expand-right">
-                            Salvar
-                        </button>
-                    </div>
+
+                            <div class="row ">
+                                <div class="col-lg-4 col-lg-offset-3">
+                                    <div class="">
+                                        <div class="form-group cnpj text ">
+                                            <label for="cnpj">CNPJ*</label>
+                                            <input class="form-control" type="text" name="cnpj" id="cnpj" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row ">
+
+                                <div class="col-lg-4 col-lg-offset-3">
+                                    <div class="">
+                                        <div class="form-group valor_minimo text ">
+                                            <label for="valor_minimo">Pedido Mínimo</label>
+                                            <input class="form-control" type="text" id="valor_minimo"   />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row ">
+
+                                <div class="col-lg-4 col-lg-offset-3">
+                                    <div class="">
+                                        <div class="form-group representante text ">
+                                            <label for="representante">Nome do Representante*</label>
+                                            <input class="form-control" type="text" name="representante" id="representante" required/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row ">
+
+                                <div class="col-lg-4 col-lg-offset-3">
+                                    <div class="">
+                                        <div class="form-group email_representante text ">
+                                            <label for="email_representante">E-Mail do Representate*</label>
+                                            <input class="form-control" type="email" name="email_representante" id="email_representante" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row ">
+                                <div class="col-lg-4 col-lg-offset-3">
+                                    <div class="">
+                                        <div class="form-group telefone_representante text ">
+                                            <label for="telefone_representante">Telefone do Representante</label>
+                                            <input class="form-control" type="text"  id="telefone_representante"   />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row ">
+                                <div class="col-lg-4 col-lg-offset-3">
+                                    <div class="">
+                                        <div class="form-group celular_representante text ">
+                                            <label for="celular_representante">Celular do Representante</label>
+                                            <input class="form-control" type="text"  id="celular_representante"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  id="salvar_fornecedor" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Fornecedor" class="btn green-conecta btn-circle" data-style="expand-right">
+                        Salvar
+                    </button>
                 </div>
             </div>
         </div>
-
-
-
-
-
     </div>
+
+
+
+
+
+</div>

@@ -8,7 +8,8 @@
                         <div class="">
                             <div class="form-group cotacao text ">
                                 <label for="cotacao">Nome da Cotação*</label>
-                                <input class="form-control"  name="name" type="text" id="cotacao" required />
+                                <input class="form-control"  name="name" type="text" id="cotacao"
+                                    value="{{ quote is defined?quote.name:'' }}" autocomplete="off" required />
                             </div>
                         </div>
                     </div>
@@ -19,7 +20,8 @@
                         <div class="">
                             <div class="form-group datetimepicker1 text ">
                                 <label for="datetimepicker1">Validade de</label>
-                                <input class="form-control " type="text" id="datetimepicker1" name="begins-at" required />
+                                <input class="form-control " type="text" autocomplete="off" id="datetimepicker1"
+                                    value="{{ quote is defined?quote.beginsAt|date('d-m-Y H:i'):'' }}" name="begins-at" required />
                             </div>
                         </div>
                     </div>
@@ -30,7 +32,8 @@
                         <div class="">
                             <div class="form-group datetimepicker2 text ">
                                 <label for="datetimepicker2">Validade Até</label>
-                                <input class="form-control " type="text" id="datetimepicker2" name="expires-at" required />
+                                <input class="form-control " type="text" autocomplete="off" id="datetimepicker2"
+                                    value="{{ quote is defined?quote.expiresAt|date('d/m/Y H:i'):'' }}" name="expires-at" required />
                             </div>
                         </div>
                     </div>
@@ -44,7 +47,9 @@
                                 {% if userIsRCA %}
                                     <select class='form-control' style='margin-bottom: 3px;' id='prazoRCA' autocomplete="off">
                                         {% for cond in conditions %}
-                                            <option>{{ cond }}</option>
+                                            <option {{ (quote is defined and quote.paymentDate == cond)?'selected="true"':'' }}>
+                                                {{ cond }}
+                                            </option>
                                         {% endfor %}
                                         <option>Outros</option>
                                     </select>

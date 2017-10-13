@@ -571,4 +571,13 @@ class Quote
             break;
         }
     }
+
+    public function hasSupplier($supplier)
+    {
+        foreach($this->suppliersStatus as $quoteSupplierStatus)
+            if($quoteSupplierStatus->getRepresentative()->getSupplier()->getId() == $supplier->getId())
+                return true;
+
+        return false;
+    }
 }

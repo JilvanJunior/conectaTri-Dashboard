@@ -48,8 +48,10 @@
         <div class="row">
             <div class="col-md-offset-4 col-md-4" style="margin-top: 20px">
                 <button id="save-quote" class="btn green-conecta" style="width: 100%;margin: 5px 0;">Salvar Cotação</button><br/>
-                <button id="presential-quote" class="btn green-conecta" style="width: 100%;margin: 5px 0;">Iniciar Cotação Presencial</button><br/>
-                <button id="sent-suppliers" class="btn green-conecta" style="width: 100%;margin: 5px 0;">Enviar Para Fornecedor</button>
+                {% if quote is not defined %}
+                    <button id="presential-quote" class="btn green-conecta" style="width: 100%;margin: 5px 0;">Iniciar Cotação Presencial</button><br/>
+                    <button id="sent-suppliers" class="btn green-conecta" style="width: 100%;margin: 5px 0;">Enviar Para Fornecedor</button>
+                {% endif %}
             </div>
         </div>
     </div>

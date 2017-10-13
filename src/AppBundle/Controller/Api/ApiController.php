@@ -1341,7 +1341,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Put("/api/quote/{id}")
+     * @Rest\Put("/api/quote/{id}", name="put_api_quote")
      * @param Request $request
      * @param $id
      * @return View
@@ -1497,7 +1497,7 @@ class ApiController extends FOSRestController {
             ->setSendToSupplier($quote->send_to_supplier);
         if(!is_null($quote->payment_date))
             $dbQuote->setPaymentDate($quote->payment_date);
-        if(!is_null($quote->codigo_martins))
+        if(property_exists($quote, 'codigo_martins'))
             $dbQuote->setCodeMartins($quote->codigo_martins);
         $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
 

@@ -762,31 +762,7 @@
             },
             lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
             iDisplayLength: -1,
-
-            ajax: {
-                url: "{{ path('get_api_representative') }}",
-                type: 'GET',
-                dataSrc: "",
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader('Api-Token', token);
-                }
-            },
-            columns: [
-                { "data": "name" },
-                { "data": "contact_name" },
-                { "data": "contact_email" },
-                { "data": "cnpj"},
-                { "data": "contact_phone"},
-                { "data": "id",
-                    "orderable": false ,
-                    "className": "dt-center",
-                    "render": function ( data, type, row ) {
-                        return ' <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkRepresentative" value="' + data + '"  /> <span></span>'
-                    }
-                }
-            ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
-
             buttons: [
                 {
                     text: '',
@@ -802,8 +778,7 @@
             initComplete: function(){
 
             }
-
-        } );
+        });
 
 
         $('#salvar_fornecedor').on('click', function() {
@@ -1154,19 +1129,20 @@
             var suppliersId = [];
 
             $.each($('#supplier-datatable tr input:checked'), function(i, v){
-                suppliersId.push({representative: {id: $(this).val()}, quantity: 0, price: 0});
+                suppliersId.push({id:0, representative: {id: $(this).val()}, quantity: 0, price: 0});
             });
 
             $.each($('#product-datatable tr input:checked'), function(i, v){
                 productsId.push({
                     product: {id: $(this).val()},
+                    winners: [],
                     quote_suppliers: suppliersId
                 });
             });
 
             $.ajax({
-                url: "{{ path('post_api_quote') }}",
-                type: 'POST',
+                url: "{{ quote is defined?path('put_api_quote', {id: quote.id}):path('post_api_quote') }}",
+                type: '{{ quote is defined?'PUT':'POST' }}',
                 contentType: "application/json",
                 dataType: "json",
                 headers: {'Api-Token': token},
@@ -1178,7 +1154,7 @@
                     send_to_supplier: false,
                     payment_date: paymentDate,
                     quote_products: productsId,
-                    quote_suppliers: suppliersId
+                    quote_suppliers: suppliersId,
                 }),
                 success: function (response) {
                     if(force)
