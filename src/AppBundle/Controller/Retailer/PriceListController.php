@@ -526,11 +526,22 @@ class PriceListController extends Controller
 
         $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
         $quote = $quoteProduct->getQuote();
+        $prev = $curr = null;
+        foreach($quote->getQuoteProducts() as $quoteProduct) {
+            $idQuoteProduct = $quoteProduct->getId();
+
+            $prev = $curr;
+            $curr = $idQuoteProduct;
+
+            if($prev == $id)
+                break;
+        }
 
         if($quote->getType() == 2)
             return $this->redirectToRoute('editar_cotacao_produto', ['id' => $id]);
 
         return $this->render('Retailer/pricelist/showQuoteProduct.html.twig', [
+            'next' => ($curr == $id)?0:$curr,
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
             'username' => $user->getFantasyName(),
@@ -551,6 +562,16 @@ class PriceListController extends Controller
 
         $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
         $quote = $quoteProduct->getQuote();
+        $prev = $curr = null;
+        foreach($quote->getQuoteProducts() as $quoteProduct) {
+            $idQuoteProduct = $quoteProduct->getId();
+
+            $prev = $curr;
+            $curr = $idQuoteProduct;
+
+            if($prev == $id)
+                break;
+        }
 
         if($quote->getType() == 1)
             return $this->redirectToRoute('acompanhar_cotacao_produto', ['id' => $id]);
@@ -561,6 +582,7 @@ class PriceListController extends Controller
         );
 
         return $this->render('Retailer/pricelist/editQuoteProduct.html.twig', [
+            'next' => ($curr == $id)?0:$curr,
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
             'username' => $user->getFantasyName(),
