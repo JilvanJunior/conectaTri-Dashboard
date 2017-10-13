@@ -84,7 +84,7 @@
                                                         <td>{{ types[listing.type] }}</td>
                                                         <td>{{ listing.listingProducts|length }}</td>
                                                         <td>
-                                                            <a href="{{ path('lista_produtos', {'id': listing.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
+                                                            <a href="{{ path('lista_editar', {'id': listing.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
                                                                 <i class="fa fa-edit"></i> Produtos </a>
                                                             <a href="{{ path('deletar_lista', {'id': listing.id}) }}" class="btn btn-outline btn-circle btn-sm purple">
                                                                 <i class="fa fa-trash"></i> Deletar </a>

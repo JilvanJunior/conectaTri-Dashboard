@@ -206,6 +206,18 @@ class Listing
     }
 
     /**
+     * @param Product $product
+     * @return $this
+     */
+    public function hasProduct($product) {
+        foreach($this->listingProducts as $listingProduct)
+            if($listingProduct->getProduct()->getId() == $product->getId())
+                return true;
+
+        return false;
+    }
+
+    /**
      * @param ListingProduct $product
      * @return $this
      */

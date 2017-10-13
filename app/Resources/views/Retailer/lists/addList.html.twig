@@ -5,16 +5,10 @@
 {% block menu_list %} active {% endblock %}
 
 {% block page_plugins %}
-
     <link href="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
-
 {% endblock %}
 
 {% block page %}
-
-
-
-
     <div class="page-wrapper-row full-height">
         <div class="page-wrapper-middle">
             <!-- BEGIN CONTAINER -->
@@ -61,15 +55,17 @@
                                         <div class="tabbable-line boxless tabbable-reversed">
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="tab_0">
-                                                    <div class="portlet box green-conecta" style="border-left-width: 0px;border-bottom-width: 0px;border-right-width: 0px;">
+                                                    <div class="portlet box green-conecta"
+                                                        style="border-left-width: 0px;border-bottom-width: 0px;border-right-width: 0px;">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <image id="wizardStepImage" ></image><span id="wizardStepLabel">Dados da Cotação</span>
+                                                                <image id="wizardStepImage"/><span id="wizardStepLabel">Dados da Cotação</span>
                                                             </div>
                                                         </div>
                                                         <!-- BEGIN WIZARD-->
                                                         <div id="rootwizard">
-                                                            <div class="navbar" style="border-top-width: 0px;border-left-width: 0px;border-right-width: 0px;">
+                                                            <div class="navbar"
+                                                                style="border-top-width: 0px;border-left-width: 0px;border-right-width: 0px;">
                                                                 <div class="navbar-inner portlet-title">
                                                                     <div class="container">
                                                                         <ul class="ProgressBar">
@@ -85,18 +81,19 @@
                                                                                     <span class="ProgressBar-stepLabel"><!--2--></span>
                                                                                 </a>
                                                                             </li>
-
-
                                                                         </ul>
                                                                     </div>
                                                                 </div>
                                                             </div>
-
                                                             <ul class="pager wizard">
                                                                 <li class="previous first" style="display:none;"><a href="#">Início</a></li>
-                                                                <li class="previous"   id="previous"><a style="margin-left: 5px;" class="btn btn-circle green-conecta" href="#">Anterior</a></li>
+                                                                <li class="previous" id="previous"><a style="margin-left: 5px;"
+                                                                        class="btn btn-circle green-conecta" href="#">Anterior</a></li>
                                                                 <li class="next last" id="last" style="display:none;">
-                                                                    <button type="button"  id="salvar_lista" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Lista" class="btn green-conecta btn-circle pull-right disabled" data-style="expand-right">
+                                                                    <button type="button" id="salvar_lista"
+                                                                        data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Salvando Lista"
+                                                                        class="btn green-conecta btn-circle pull-right disabled"
+                                                                        data-style="expand-right">
                                                                         Salvar
                                                                     </button>
 
@@ -116,68 +113,60 @@
 
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
-                                                                                            <div class="form-group name text ">
+                                                                                            <div class="form-group name text">
                                                                                                 <label for="name">Lista*</label>
-                                                                                                <input class="form-control" type="text" name="name" id="name" required />
+                                                                                                <input class="form-control" type="text"
+                                                                                                    value="{{ (list is defined)?list.name:'' }}"
+                                                                                                    name="name" id="name" required />
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-
                                                                                 </div>
-
-
-
-
                                                                                 <div class="row ">
 
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
                                                                                             <div class="form-group description text ">
                                                                                                 <label for="description">Descrição</label>
-                                                                                                <input class="form-control" type="text" id="description" name="description"/>
+                                                                                                <input class="form-control" type="text"
+                                                                                                    value="{{ (list is defined)?list.description:'' }}"
+                                                                                                    id="description" name="description"/>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-
                                                                                 </div>
-
                                                                                 <div class="row ">
-
                                                                                     <div class="col-lg-4 col-lg-offset-5">
                                                                                         <div class="">
                                                                                             <div class="form-group type text typing">
                                                                                                 <label for="type">Tipo *</label>
                                                                                                 <select name="type" id="type"
                                                                                                     class="form-control select-circle" required>
-                                                                                                    <option value="" disabled selected>Selecione um Tipo</option>
+                                                                                                    <option value="" disabled>
+                                                                                                        Selecione um Tipo
+                                                                                                    </option>
                                                                                                     {% for type in types %}
-                                                                                                        <option value="{{ loop.index0 }}">{{ type }}</option>
+                                                                                                        <option value="{{ loop.index0 }}"
+                                                                                                            {{ (list is defined and list.type == loop.index0)?'selected="true"':'' }}>
+                                                                                                            {{ type }}
+                                                                                                        </option>
                                                                                                     {% endfor %}
                                                                                                 </select>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-
                                                                                 </div>
-
-
-
                                                                             </div>
-
-
-
                                                                         </form>
                                                                         <!-- END FORM-->
                                                                     </div>
-
                                                                 </div>
-
                                                                 <!-- END COTACAO FORM-->
-
                                                                 <div class="tab-pane " id="tab2">
                                                                     <div class="wizard-container">
                                                                         <div class="wizard-container">
-                                                                            <table class="table table-striped table-bordered table-hover" style="width:100%"  id="product-datatable">
+                                                                            <table class="table table-striped table-bordered table-hover"
+                                                                                style="width:100%"  id="product-datatable">
                                                                                 <thead>
                                                                                 <tr>
                                                                                     <th width="20%"> Código </th>
@@ -185,7 +174,12 @@
                                                                                     <th> Tipo </th>
                                                                                     <th> Fabricante </th>
                                                                                     <th> Embalagem de Compra </th>
-                                                                                    <th><label class="mt-checkbox mt-checkbox-outline"/>  <input  type="checkbox"  name="selectAllProducts" /> <span></span></th>
+                                                                                    <th>
+                                                                                        <label class="mt-checkbox mt-checkbox-outline">
+                                                                                            <input  type="checkbox"  name="selectAllProducts" />
+                                                                                            <span></span>
+                                                                                        </label>
+                                                                                    </th>
                                                                                 </tr>
                                                                                 </thead>
                                                                                 <tbody>
@@ -198,7 +192,13 @@
                                                                                             <td> {{ product.brand }} </td>
                                                                                             <td> {{ product.unit }} {{ product.quantity }} </td>
                                                                                             <td>
-                                                                                                <label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" value="{{ product.id }}" name="chkProducts" /> <span></span>
+                                                                                                <label class="mt-checkbox mt-checkbox-outline">
+                                                                                                    <input type="checkbox"
+                                                                                                        value="{{ product.id }}"
+                                                                                                        {{ (list is defined and list.hasProduct(product)?'checked="true"':'') }}
+                                                                                                        name="chkProducts" />
+                                                                                                    <span></span>
+                                                                                                </label>
                                                                                             </td>
 
                                                                                         </tr>
@@ -345,28 +345,9 @@
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
-
-                                                                                                    </div>
-
-
-
-
-                                                                                                </div>
-
-                                                                                                <!--
-                                                                                                <div class="form-actions">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-md-offset-3 col-md-9">
-                                                                                                            <button type="submit" class="btn btn-circle green-conecta">Salvar</button>
-                                                                                                        </div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                -->
-
-
                                                                                             </form>
-
-
 
                                                                                         </div>
                                                                                         <div class="modal-footer">
@@ -516,7 +497,7 @@
 
             $.ajax(
                 {
-                    url: '/varejista/listas/novalista',
+                    url: '{{ list is defined?path('lista_editar', { 'id':list.id }):path('novalista') }}',
                     type: 'POST',
                     contentType: "application/json",
                     dataType: "json",
@@ -592,31 +573,8 @@
                     "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
-            ajax: {
-                url: "/api/product",
-                type: 'GET',
-                dataSrc: "",
-                beforeSend : function(xhr) {
-                    xhr.setRequestHeader('Api-Token', token);
-                }
-            },
             lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
             iDisplayLength: -1,
-            columns: [
-                { "data": "id" },
-                { "data": "name" },
-                { "data": "type" },
-                { "data": "brand"},
-                { "data": "unit"},
-                { "data": "id",
-                    "orderable": false ,
-                    "className": "dt-center",
-                    "render": function ( data, type, row ) {
-                        return '<label class="mt-checkbox mt-checkbox-outline"/>  <input type="checkbox" name="chkProducts" value="' + data + '"  /> <span></span>';
-                    }
-                }
-
-            ],
             dom: '<"top"<"pull-left"l><"pull-right"fB>>t<"bottom"ip><"clear">',
             buttons: [
                 {
@@ -630,9 +588,6 @@
         } );
 
         $('#salvar_produto').on('click', function() {
-
-
-
             var $this = $(this);
 
             var produto = $('#produto').val();
@@ -651,8 +606,6 @@
                 errorPlacement: function(){
                     return false;
                 }
-
-
             });
             var validationState = productForm.valid();
 
@@ -699,11 +652,6 @@
         });
         //select all function
         selectAll("selectAllProducts","chkProducts");
-
         // END PRODUCTS TABLE
-
-
-       
-
     </script>
 {% endblock %}

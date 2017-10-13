@@ -46,13 +46,13 @@ class ListsController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
+
         //type of listings
         $types = [];
         $types['0'] = 'Não Informado';
         $types['1'] = 'Comum';
         $types['2'] = 'Sazonal';
         $types['3'] = 'Semanal';
-
 
         if($request->getMethod() == "POST"){
 
@@ -144,55 +144,44 @@ class ListsController extends Controller
     }
 
     /**
-     * @Route("/varejista/lista/{id}/produtos", name="lista_produtos")
+     * @Route("/varejista/lista/{id}/editar", name="lista_editar")
      * @param Request $request
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addProductToListAction(Request $request, $id)
+    public function editAction(Request $request, $id)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $list = $em->getRepository('AppBundle:Listing')->findOneById($id);
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $em = $this->getDoctrine()->getManager();
-        $listing = $em->getRepository('AppBundle:Listing')->find($id);
-        $listingProducts = $em->getRepository('AppBundle:ListingProduct')->findBy(['listing' => $listing]);
         $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user,'deleted' => false]);
+        $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
-        $checkeds = [];
-        foreach($products as $product)
-            $checkeds[$product->getId()] = false;
-        foreach($listingProducts as $listingProduct)
-            $checkeds[$listingProduct->getProduct()->getId()] = true;
+        //type of listings
+        $types = [];
+        $types['0'] = 'Não Informado';
+        $types['1'] = 'Comum';
+        $types['2'] = 'Sazonal';
+        $types['3'] = 'Semanal';
 
-        return $this->render('Retailer/lists/addProducts.html.twig', [
-            'checked' => $checkeds,
-            'listing' => $listing,
-            'listingProducts' => $listingProducts,
-            'products' => $products,
-            'username' => $user->getFantasyName(),
-            'userIsRCA' => $user->isRCAVirtual(),
-        ]);
-    }
+        if($request->getMethod() == "POST") {
+            $requestData = json_decode($request->getContent());
+            $productsIds = $requestData->products;
 
-    /**
-     * @Route("/varejista/lista/{id}/produtos/save", name="lista_produtos_save")
-     * @param Request $request
-     * @param $id
-     */
-    public function addProductToListSaveAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $listing = $em->getRepository('AppBundle:Listing')->find($id);
+            $list->setName($requestData->name);
+            $list->setDescription($requestData->description);
+            $list->setType($requestData->type);
+            $list->setRetailer($user);
 
-        if($request->getMethod() == "POST"){
-
-            $productsIds = $request->get('products');
+            $id = $list->getId();
 
             //remove not added listingProducts
-            $em->getRepository('AppBundle:ListingProduct')->removeExcludedListingProducts($id, implode(',', $productsIds));
+            $em->getRepository('AppBundle:ListingProduct')->removeExcludedListingProducts($id, $productsIds);
 
             //add news listingProducts
             foreach ($productsIds as $productsId) {
-                $listingProduct = $em->getRepository('AppBundle:ListingProduct')->findBy(['listing' => $listing, 'product' => $productsId]);
+                $listingProduct = $em->getRepository('AppBundle:ListingProduct')->findBy(['listing' => $list, 'product' => $productsId]);
 
                 if($listingProduct == null) {
                     $product = $em->getRepository('AppBundle:Product')->findOneBy(['id' => $productsId, 'deleted' => false]);
@@ -200,30 +189,27 @@ class ListsController extends Controller
                     $listingProduct = new ListingProduct();
                     $listingProduct->setQuantity(1);
                     /** @var Listing $listing */
-                    $listingProduct->setListing($listing);
+                    $listingProduct->setListing($list);
                     /** @var Product $product */
                     $listingProduct->setProduct($product);
 
                     $em->persist($listingProduct);
-                    $em->flush();
                 }
             }
 
-            $this->addFlash(
-                'success',
-                'Produtos adicionados à lista!'
-            );
+            $em->flush();
 
-            $this->addFlash(
-                'info',
-                'Edite a quantidade de produtos da lista.'
-            );
-
+            return $this->json([ 'msg' => 'ok' ]);
         }
-        var_dump($listing);exit();
-        $data['url'] = $this->generateUrl('lista_produtos_quantidade', ['id' => $id]);
-        echo json_encode($data);
-        exit();
+
+        return $this->render('Retailer/lists/addList.html.twig', [
+            'list' => $list,
+            'products' => $products,
+            'token' => $token->getToken(),
+            'types' => $types,
+            'username' => $user->getFantasyName(),
+            'userIsRCA' => $user->isRCAVirtual(),
+        ]);
     }
 
     /**
