@@ -5,16 +5,10 @@
 {% block menu_suppliers %} active {% endblock %}
 
 {% block page %}
-
     <style>
-
-
         /*
         Float label styles
          */
-
-
-
         label:hover {
             cursor: text;
         }
@@ -176,11 +170,7 @@
         .modal-title{
             color: #FFFFFF;
         }
-
-
-
     </style>
-
 
     <div class="page-wrapper-row full-height">
         <div class="page-wrapper-middle">
@@ -231,82 +221,122 @@
                                                     <div class="portlet box green-conecta">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <i class="fa fa-gift"></i>Representante</div>
+                                                                <i class="fa fa-gift"></i>Representante
+                                                            </div>
                                                         </div>
                                                         <div class="portlet-body form">
                                                             <!-- BEGIN FORM-->
                                                             <form action="#" class="form-horizontal contact-form" method="POST">
-
                                                                 <div class="form-body ">
-
-                                                                    <div class="row ">
-
+                                                                    <div class="row">
                                                                         <div class="col-lg-4 col-lg-offset-5">
                                                                             <div class="">
                                                                                 <div class="form-group supplier text typing">
                                                                                     <label for="supplier">Fornecedor*</label>
-                                                                                    <select name="supplier" id="supplier" class="form-control select-circle" required>
+                                                                                    <select name="supplier" id="supplier" autocomplete="off"
+                                                                                        class="form-control select-circle" required>
                                                                                         {% if representative is defined %}
-                                                                                            <option value="{{ representative.supplier.id }}" selected>
-                                                                                                {{ representative.supplier.cnpj }} - {{ representative.supplier.name }}</option>
+                                                                                            <option value="{{ representative.supplier.id }}"
+                                                                                                selected>
+                                                                                                {{ representative.supplier.cnpj }} - {{ representative.supplier.name }}
+                                                                                            </option>
                                                                                         {% else %}
-                                                                                            <option value="" disabled selected>Selecione um Fornecedor</option>
+                                                                                            <option value="" disabled selected>
+                                                                                                Selecione um Fornecedor
+                                                                                            </option>
                                                                                         {% endif %}
+                                                                                        <option value='new'>Novo Fornecedor</option>
                                                                                         {% for supplier in suppliers %}
-                                                                                            <option value="{{ supplier.id }}">{{ supplier.cnpj }} - {{ supplier.name }}</option>
+                                                                                            <option value="{{ supplier.id }}">
+                                                                                                {{ supplier.cnpj }} - {{ supplier.name }}
+                                                                                            </option>
                                                                                         {% endfor %}
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
                                                                     </div>
-
-                                                                    <div class="row ">
+                                                                    <div class="row supplier-row hide">
                                                                         <div class="col-lg-4 col-lg-offset-5">
                                                                             <div class="">
-                                                                                <div class="form-group name text typing">
+                                                                                <div class="form-group supplierName text ">
+                                                                                    <label for="supplierName">Fornecedor*</label>
+                                                                                    <input class="form-control" type="text" name="supplierName"
+                                                                                        id="supplierName" required />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row supplier-row hide">
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group cnpj text ">
+                                                                                    <label for="supplierCnpj">CNPJ*</label>
+                                                                                    <input class="form-control" type="text" name="supplierCnpj"
+                                                                                        id="supplierCnpj" required />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row supplier-row hide">
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group minimumValue text ">
+                                                                                    <label for="supplierMinimumValue">Pedido Mínimo</label>
+                                                                                    <input class="form-control" type="text"
+                                                                                        id="supplierMinimumValue" name="supplierMinimumValue"/>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row supplier-row hide">
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group state text typing">
+                                                                                    <label for="supplierState">Estado</label>
+                                                                                    <select name="supplierState"
+                                                                                        class="form-control select-circle">
+                                                                                        <option value="" disabled selected>Selecione um Estado</option>
+                                                                                        {% for state in states %}
+                                                                                            <option value="{{ state.id }}">{{ state.name }}</option>
+                                                                                        {% endfor %}
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-4 col-lg-offset-5">
+                                                                            <div class="">
+                                                                                <div class="form-group name text">
                                                                                     <label for="name">Nome do Representante*</label>
                                                                                     <input class="form-control" value="{% if representative is defined %}{{ representative.name }}{% endif %}" type="text" name="name" id="name" required />
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-
-                                                                    <div class="row ">
-
+                                                                    <div class="row">
                                                                         <div class="col-lg-4 col-lg-offset-5">
                                                                             <div class="">
-                                                                                <div class="form-group email text typing">
+                                                                                <div class="form-group email text">
                                                                                     <label for="email">E-mail*</label>
                                                                                     <input class="form-control" type="text" id="email" name="email" value="{% if representative is defined %}{{ representative.email }}{% endif %}"  required/>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
                                                                     </div>
-
-                                                                    <div class="row ">
-
+                                                                    <div class="row">
                                                                         <div class="col-lg-4 col-lg-offset-5">
                                                                             <div class="">
-                                                                                <div class="form-group phone text typing">
+                                                                                <div class="form-group phone text">
                                                                                     <label for="phone">Telefone</label>
-                                                                                    <input class="form-control" type="text" id="phone" name="phone" value="{% if representative is defined %}{{ representative.phone }}{% endif %}"  required/>
+                                                                                    <input class="form-control" type="text" id="phone"
+                                                                                        name="phone" value="{% if representative is defined %}{{ representative.phone }}{% endif %}"  required/>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
                                                                     </div>
-
-
-
-
-
                                                                 </div>
-
-
-
                                                                 <div class="form-actions">
                                                                     <div class="row">
                                                                         <div class="col-md-offset-3 col-md-9">
@@ -351,16 +381,37 @@
                 };
 
             $('#phone').mask(SPMaskBehavior, spOptions);
+            checkSelected();
         });
 
         //BEGIN FLOAT LABEL METHODS
+        $('#supplierName').keyup(function(){
+            $('.supplierName.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.supplierName.text').removeClass('typing');
+            }
+        });
+
+        $('#supplierCnpj').keyup(function(){
+            $('.cnpj.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.cnpj.text').removeClass('typing');
+            }
+        });
+
+        $('#supplierMinimumValue').keyup(function(){
+            $('.minimumValue.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.minimumValue.text').removeClass('typing');
+            }
+        });
+
         $('#name').keyup(function(){
             $('.name.text').addClass('typing');
             if( $(this).val().length == 0 ) {
                 $('.name.text').removeClass('typing');
             }
         });
-
 
         $('#email').keyup(function(){
             $('.email.text').addClass('typing');
@@ -376,5 +427,20 @@
                 $('.phone.text').removeClass('typing');
             }
         });
+
+        $('#supplier').change(function() {
+            checkSelected();
+        });
+
+        function checkSelected() {
+            let selectSupplier = $('#supplier');
+            let selected = selectSupplier.val();
+
+            if(selected == 'new') {
+                $('.supplier-row').removeClass('hide');
+            } else {
+                $('.supplier-row').addClass('hide');
+            }
+        }
     </script>
 {% endblock %}

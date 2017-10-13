@@ -28,58 +28,6 @@ class SuppliersController extends Controller
     }
 
     /**
-     * @Route("/varejista/fornecedor/novo", name="novofornecedor")
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function addSupplierAction(Request $request)
-    {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $em = $this->getDoctrine()->getManager();
-        $states = $em->getRepository('AppBundle:State')->findAll();
-
-        if($request->getMethod() == "POST"){
-            $state = $em->getRepository('AppBundle:State')->findOneById($request->get('state'));
-
-            $supplier = new Supplier();
-            $supplier->setName($request->get('name'));
-            $supplier->setCnpj($request->get('cnpj'));
-            $value = $request->get('minimumValue');
-            if(!empty($value)) {
-                $value = str_replace(".","", $value);
-                $value = str_replace(",",".", $value);
-
-                if(is_numeric($value))
-                    $supplier->setMinimumValue($value);
-            }
-            $supplier->setState($state);
-            $supplier->setRetailer($user);
-
-            $em->persist($supplier);
-
-            $em->flush();
-
-            $this->addFlash(
-                'success',
-                'Fornecedor adicionado!'
-            );
-
-            $this->addFlash(
-                'info',
-                'Adicione um representante para o fornecedor.'
-            );
-
-            return $this->redirectToRoute('novorepresentante');
-        }
-
-        return $this->render('Retailer/suppliers/addSuppliers.html.twig', [
-            'states' => $states,
-            'username' => $user->getFantasyName(),
-            'userIsRCA' => $user->isRCAVirtual(),
-        ]);
-    }
-
-    /**
      * @Route("/varejista/representante/novo", name="novorepresentante")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -89,10 +37,32 @@ class SuppliersController extends Controller
         $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user]);
+        $states = $em->getRepository('AppBundle:State')->findAll();
 
-        if($request->getMethod() == "POST"){
+        if($request->getMethod() == "POST") {
+            $supplierId = $request->get('supplier');
 
-            $supplier = $em->getRepository('AppBundle:Supplier')->findOneById($request->get('supplier'));
+            if($supplierId != 'new') {
+                $supplier = $em->getRepository('AppBundle:Supplier')->findOneById($supplierId);
+            } else {
+                $stateId = $request->get('supplierState');
+
+                $supplierState = $states[0];
+                foreach($states as $state)
+                    if($state->getId() == $stateId)
+                        $supplierState = $state;
+
+                $supplier = (new Supplier())
+                    ->setName($request->get('supplierName'))
+                    ->setCnpj($request->get('supplierCnpj'))
+                    ->setState($supplierState)
+                    ->setRetailer($user);
+
+                if($request->get('supplierMinimumValue'))
+                    $supplier->setMinimumValue($request->get('supplierMinimumValue'));
+
+                $em->persist($supplier);
+            }
 
             $representative = new Representative();
             $representative->setName($request->get('name'));
@@ -114,6 +84,7 @@ class SuppliersController extends Controller
         }
 
         return $this->render('Retailer/suppliers/addRepresentatives.html.twig', [
+            'states' => $states,
             'suppliers' => $suppliers,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
