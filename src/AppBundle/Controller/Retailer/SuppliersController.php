@@ -59,7 +59,7 @@ class SuppliersController extends Controller
                     ->setRetailer($user);
 
                 if($request->get('supplierMinimumValue'))
-                    $supplier->setMinimumValue($request->get('supplierMinimumValue'));
+                    $supplier->setMinimumValue(str_replace(['.', ','], ['', '.'], $request->get('supplierMinimumValue')));
 
                 $em->persist($supplier);
             }

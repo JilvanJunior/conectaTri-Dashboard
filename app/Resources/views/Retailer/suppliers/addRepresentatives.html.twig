@@ -260,9 +260,9 @@
                                                                         <div class="col-lg-4 col-lg-offset-5">
                                                                             <div class="">
                                                                                 <div class="form-group supplierName text ">
-                                                                                    <label for="supplierName">Fornecedor*</label>
-                                                                                    <input class="form-control" type="text" name="supplierName"
-                                                                                        id="supplierName" required />
+                                                                                    <label for="supplierName">Nome do Fornecedor*</label>
+                                                                                    <input class="form-control isrequired" type="text"
+                                                                                        name="supplierName" id="supplierName"/>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -272,8 +272,8 @@
                                                                             <div class="">
                                                                                 <div class="form-group cnpj text ">
                                                                                     <label for="supplierCnpj">CNPJ*</label>
-                                                                                    <input class="form-control" type="text" name="supplierCnpj"
-                                                                                        id="supplierCnpj" required />
+                                                                                    <input class="form-control isrequired" type="text"
+                                                                                        name="supplierCnpj" id="supplierCnpj"/>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -310,7 +310,7 @@
                                                                             <div class="">
                                                                                 <div class="form-group name text">
                                                                                     <label for="name">Nome do Representante*</label>
-                                                                                    <input class="form-control" value="{% if representative is defined %}{{ representative.name }}{% endif %}" type="text" name="name" id="name" required />
+                                                                                    <input class="form-control" value="{% if representative is defined %}{{ representative.name }}{% endif %}" type="text" name="name" id="name" required/>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -320,7 +320,7 @@
                                                                             <div class="">
                                                                                 <div class="form-group email text">
                                                                                     <label for="email">E-mail*</label>
-                                                                                    <input class="form-control" type="text" id="email" name="email" value="{% if representative is defined %}{{ representative.email }}{% endif %}"  required/>
+                                                                                    <input class="form-control" type="email" id="email" name="email" value="{% if representative is defined %}{{ representative.email }}{% endif %}"  required/>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -380,6 +380,7 @@
                     }
                 };
 
+            $('#supplierMinimumValue').mask('00.000.000,00', {reverse: true});
             $('#phone').mask(SPMaskBehavior, spOptions);
             checkSelected();
         });
@@ -438,8 +439,10 @@
 
             if(selected == 'new') {
                 $('.supplier-row').removeClass('hide');
+                $('.supplier-row input.isrequired').addProp('required', true);
             } else {
                 $('.supplier-row').addClass('hide');
+                $('.supplier-row input.isrequired').removeProp('required');
             }
         }
     </script>
