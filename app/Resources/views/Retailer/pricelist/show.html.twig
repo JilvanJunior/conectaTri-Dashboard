@@ -371,7 +371,11 @@
                                                 <img width='24px' src="{{ asset('assets/pages/img/logos/Prancheta.jpg') }}"/>
                                                 <span class="caption-subject bold uppercase">Status</span>
                                             </div>
-                                            <div class="tools"></div>
+                                            <div style='float: right;'>
+                                                <button id='sendLink' class='btn btn-outline btn-circle btn-sm purple'>
+                                                    Enviar link aos fornecedores.
+                                                </button>
+                                            </div>
                                         </div>
                                         <div class="portlet-body">
                                             <table class="table table-striped table-bordered table-hover" id="status_datatable">
@@ -431,11 +435,6 @@
                                                 {% endfor %}
                                             </tbody>
                                         </table>
-                                        <div>
-                                            <button id='sendLink' class='btn btn-outline btn-circle btn-sm purple'>
-                                                Enviar link aos fornecedores.
-                                            </button>
-                                        </div>
                                     </div>
                                     </div>
                                     <!-- END SAMPLE TABLE PORTLET-->
