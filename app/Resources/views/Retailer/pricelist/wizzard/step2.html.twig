@@ -30,7 +30,7 @@
                                 <td>
                                     <label class="mt-checkbox mt-checkbox-outline">
                                         <input type="checkbox" name="chkSupplier"
-                                            value="{{ supplier.id }}" {{ quote.hasSupplier(supplier)?'checked="true"':'' }}/>
+                                            value="{{ supplier.id }}" {{ (quote is defined and quote.hasSupplier(supplier))?'checked="true"':'' }}/>
                                         <span></span>
                                     </label>
                                 </td>

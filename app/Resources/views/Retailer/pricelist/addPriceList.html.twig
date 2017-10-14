@@ -899,17 +899,14 @@
         } );
 
         $('#salvar_lista').on('click', function() {
-
             /*
              listingModal
              lista
              descricao
              tipo
-
              */
 
             var $this = $(this);
-
             var lista = $('#lista').val();
             var descricao = $('#descricao').val();
             var tipo = $('#tipo').val();
@@ -928,40 +925,36 @@
             var validationState = listingForm.valid();
 
             if(validationState) {
-
-                $.ajax(
-                    {
-                        url: "{{ path('post_api_listing') }}",
-                        type: 'POST',
-                        contentType: "application/json",
-                        dataType: "json",
-                        headers: {'Api-Token': token},
-                        data:  JSON.stringify({
-                            name: lista,
-                            type: tipo,
-                            description: descricao
-                        }),
-                        success: function (response) {
-                            console.log(response);
-                            $('#listing-datatable').DataTable().ajax.reload();
-                            $this.button('reset');
-                            $('#listingModal').modal('toggle');
-                            $("#list_form").trigger("reset")
-                        },
-                        error: function (error) {
-                            alert(error.responseJSON.error.exception["0"].message);
-                            $this.button('reset');
-                            $('#listingModal').modal('toggle');
-                            $("#list_form").trigger("reset")
-                        }
-
-                    }).done(function () {
-                    $this.button('reset');
+                $.ajax({
+                    url: "{{ path('post_api_listing') }}",
+                    type: 'POST',
+                    contentType: "application/json",
+                    dataType: "json",
+                    headers: {'Api-Token': token},
+                    data:  JSON.stringify({
+                        name: lista,
+                        type: tipo,
+                        listing_products: [],
+                        representatives: [],
+                        description: descricao
+                    }),
+                    success: function (response) {
+                        console.log(response);
+                        $('#listing-datatable').DataTable().ajax.reload();
+                        $this.button('reset');
+                        $('#listingModal').modal('toggle');
+                        $("#list_form").trigger("reset")
+                    },
+                    error: function (error) {
+                        alert(error.responseJSON.error.exception["0"].message);
+                        $this.button('reset');
+                        $('#listingModal').modal('toggle');
+                        $("#list_form").trigger("reset")
+                    }
                 });
-            }else{
+            } else {
                 $this.button('reset');
             }
-
         });
 
 
