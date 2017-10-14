@@ -362,6 +362,13 @@
             $('#cnpj').mask('00.000.000/0000-00');
             $('#valor_minimo').mask('000.000.000.000.000,00', {reverse: true});
             $('#codigo').mask('0000000000000', {reverse: true});
+            $('input').each(function() {
+                if($(this).val() == '') {
+                    $(this).parent('div:first').removeClass('typing');
+                } else {
+                    $(this).parent('div:first').addClass('typing');
+                }
+            });
         });
 
         var SPMaskBehavior = function (val) {
