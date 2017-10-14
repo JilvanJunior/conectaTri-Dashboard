@@ -17501,7 +17501,8 @@ body[ng-controller] .modal {
 }
 
 .table.table-light.table-hover > tbody > tr > td:hover, .table.table-light.table-hover > tbody > tr > th:hover, .table.table-light.table-hover > tbody > tr:hover > td {
-    background: #318231 !important
+    background: #318231 !important;
+    color: #ffffff;
 }
 
 .table-hover > tbody > tr:hover, .table-hover > tbody > tr:hover > td {
