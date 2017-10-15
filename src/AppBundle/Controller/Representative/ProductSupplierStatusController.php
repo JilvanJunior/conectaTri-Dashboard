@@ -7,6 +7,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProductSupplierStatusController extends Controller {
+    /**
+     * @Route("/representante/cotacao", name="representative_quotes")
+     */
+    public function showQuotesAction(Request $request)
+    {
+        /** @var RepresentativeUser $user */
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $quotes = $em->getRepository('AppBundle:Quote')->getAllQuotesFromRepresentative($user->getEmail());
+
+        //quote status
+        $status['0'] = "Em Andamento";
+        $status['1'] = "Encerrada";
+
+        return $this->render('Representative/quote/index.html.twig', [
+            'quotes' => $quotes,
+            'status' => $status,
+        ]);
+    }
 
     /**
      * @Route("/representante/cotacao/{id}/update", name="quote_representative_observation")
