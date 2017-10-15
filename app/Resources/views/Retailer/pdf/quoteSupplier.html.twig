@@ -68,23 +68,39 @@
     <table>
         <thead>
         <tr>
-            <th colspan="2">DADOS DO FORNECEDOR</th>
+            <th colspan="4">DADOS DO CLIENTE</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>RAZÃO SOCIAL</td>
+            <td>{{ retailer.companyName }}</td>
+            <td>CNPJ</td>
+            <td>{{ retailer.cnpj }}</td>
+        </tr>
+        <tr>
+            <td>NOME DE USUÁRIO</td>
+            <td>{{ retailer.fantasyName }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <table>
+        <thead>
+        <tr>
+            <th colspan="4">DADOS DO FORNECEDOR</th>
         </tr>
         </thead>
         <tbody>
         <tr>
             <td>NOME</td>
             <td>{{ representative.supplier.name }}</td>
-        </tr>
-        <tr>
             <td>REPR.:</td>
             <td>{{ representative.name }}</td>
         </tr>
         <tr>
             <td>CNPJ</td>
             <td>{{ representative.supplier.cnpj }}</td>
-        </tr>
-        <tr>
             <td>EMAIL</td>
             <td>{{ representative.email }}</td>
         </tr>
@@ -94,47 +110,25 @@
     <table>
         <thead>
         <tr>
-            <th colspan="2">DADOS DO USUÁRIO</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>RAZÃO SOCIAL</td>
-            <td>{{ retailer.companyName }}</td>
-        </tr>
-        <tr>
-            <td>FANTASIA</td>
-            <td>{{ retailer.fantasyName }}</td>
-        </tr>
-        <tr>
-            <td>CNPJ</td>
-            <td>{{ retailer.cnpj }}</td>
-        </tr>
-        </tbody>
-    </table>
-    <br>
-    <table>
-        <thead>
-        <tr>
-            <th colspan="2">DADOS DA COTAÇÃO</th>
+            <th colspan="4">DADOS DA COTAÇÃO</th>
         </tr>
         </thead>
         <tbody>
         <tr>
             <td>NOME</td>
             <td>{{ quote.name }}</td>
-        </tr>
-        <tr>
             <td>ID</td>
             <td>{{ quote.id }}</td>
         </tr>
         <tr>
             <td>INÍCIO</td>
             <td>{{ quote.beginsAt|date('d/m/Y - H:i') }}</td>
+            <td>ENCERRAMENTO</td>
+            <td>{{ quote.expiresAt|date('d/m/Y - H:i') }}</td>
         </tr>
         <tr>
-            <td>ENCERRA</td>
-            <td>{{ quote.expiresAt|date('d/m/Y - H:i') }}</td>
+            <td>PAGAMENTO</td>
+            <td colspan="3">{{ quote.paymentDate }}</td>
         </tr>
         </tbody>
     </table>
@@ -142,12 +136,12 @@
     <table>
         <thead>
         <tr>
-            <th colspan="6">COTAÇÃO</th>
+            <th colspan="6">LISTA DE ITENS</th>
         </tr>
         <tr>
             <td>PRODUTO</td>
-            <td>MARCA</td>
-            <td>EMBALAGEM</td>
+            <td>CÓDIGO</td>
+            <td colspan="2">EMBALAGEM</td>
             <td>QTD.</td>
             <td>PREÇO UN.</td>
             <td>TOTAL</td>
@@ -158,8 +152,9 @@
             {% for quoteSupplier in quoteProduct.winners if quoteSupplier.representative.id == representative.id %}
                 <tr>
                     <td>{{ quoteSupplier.quoteProduct.product.name }}</td>
-                    <td>{{ quoteSupplier.quoteProduct.product.brand }}</td>
-                    <td>{{ quoteSupplier.quoteProduct.product.unit }} {{ quoteSupplier.quoteProduct.product.quantity }}</td>
+                    <td>{{ quoteSupplier.quoteProduct.product.ean}}</td>
+                    <td>{{ quoteSupplier.quoteProduct.product.unit }}</td>
+                    <td>{{ quoteSupplier.quoteProduct.product.quantity }}</td>
                     <td>{{ quoteSupplier.quantity }}</td>
                     <td>R$ {{ quoteSupplier.price|number_format(2, ',', '.') }}</td>
                     <td>R$ {{ (quoteSupplier.quantity * quoteSupplier.price)|number_format(2, ',', '.') }}</td>
