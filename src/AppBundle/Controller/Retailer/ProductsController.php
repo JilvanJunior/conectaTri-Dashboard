@@ -27,6 +27,34 @@ class ProductsController extends Controller
     }
 
     /**
+     * @Route("/varejista/produtos/ajax", name="ajax_produtos")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getProductsAjaxAction(Request $request)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $term = $request->query->get('term');
+
+        $repo = $this->getDoctrine()->getRepository('AppBundle:Product');
+        $products = $repo->createQueryBuilder('p')
+                   ->where('p.name LIKE :name')
+                   ->setParameter('name', "%$term%")
+                   ->getQuery()->getResult();
+
+        $productsNames = [];
+        foreach($products as $i => $product) {
+            $productsNames[] = [
+                'id' => $i,
+                'label' => $product->getName(),
+                'value' => $product->getName(),
+            ];
+        }
+
+        return $this->json($productsNames);
+    }
+
+    /**
      * @Route("/varejista/produtos/novo", name="novoproduto")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response

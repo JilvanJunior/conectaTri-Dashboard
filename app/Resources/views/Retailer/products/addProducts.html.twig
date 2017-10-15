@@ -4,7 +4,7 @@
 {% block menu_products %} active {% endblock %}
 
 {% block page %}
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
 
 
@@ -333,10 +333,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
                                                                     </div>
-
-
 
                                                                     <div class="row ">
                                                                         <div class="col-lg-4 col-lg-offset-5">
@@ -401,8 +398,25 @@
 {% endblock %}
 {% block script %}
     <script src="{{ asset('assets/pages/scripts/jquery.mask.min.js') }}" type="text/javascript"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
-        $(function(){
+        $(function() {
+            $("#product").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ path('ajax_produtos') }}",
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 3
+            });
+
             var dataList = document.getElementById('product-datalist');
 
             $.ajax("{{ path('get_produtos') }}", {
@@ -432,40 +446,40 @@
         });
 
 
-        //BEGIN FLOAT LABEL METHODS
-        $('#product').keyup(function(){
-            $('.product.text').addClass('typing');
-            if( $(this).val().length == 0 ) {
-                $('.product.text').removeClass('typing');
-            }
-        });
+//BEGIN FLOAT LABEL METHODS
+$('#product').keyup(function(){
+    $('.product.text').addClass('typing');
+    if( $(this).val().length == 0 ) {
+        $('.product.text').removeClass('typing');
+    }
+});
 
 
-        $('#ean').keyup(function(){
-            $('.ean.text').addClass('typing');
-            if( $(this).val().length == 0 ) {
-                $('.ean.text').removeClass('typing');
-            }
-        });
-        $('#brand').keyup(function(){
-            $('.brand.text').addClass('typing');
-            if( $(this).val().length == 0 ) {
-                $('.brand.text').removeClass('typing');
-            }
-        });
+$('#ean').keyup(function(){
+    $('.ean.text').addClass('typing');
+    if( $(this).val().length == 0 ) {
+        $('.ean.text').removeClass('typing');
+    }
+});
+$('#brand').keyup(function(){
+    $('.brand.text').addClass('typing');
+    if( $(this).val().length == 0 ) {
+        $('.brand.text').removeClass('typing');
+    }
+});
 
 
-        $('#quantity').keyup(function(){
-            $('.quantity.text').addClass('typing');
-            if( $(this).val().length == 0 ) {
-                $('.quantity.text').removeClass('typing');
-            }
-        });
-        $('#full-description').keyup(function(){
-            $('.full-description.text').addClass('typing');
-            if( $(this).val().length == 0 ) {
-                $('.full-description.text').removeClass('typing');
-            }
-        });
+$('#quantity').keyup(function(){
+    $('.quantity.text').addClass('typing');
+    if( $(this).val().length == 0 ) {
+        $('.quantity.text').removeClass('typing');
+    }
+});
+$('#full-description').keyup(function(){
+    $('.full-description.text').addClass('typing');
+    if( $(this).val().length == 0 ) {
+        $('.full-description.text').removeClass('typing');
+    }
+});
     </script>
-{% endblock %}
+    {% endblock %}
