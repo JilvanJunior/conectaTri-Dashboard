@@ -400,6 +400,15 @@
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/localization/messages_pt_BR.min.js') }}" type="text/javascript"></script>
 
     <script>
+        $(document).ready(function() {
+            $('input').each(function() {
+                if($(this).val() == '') {
+                    $(this).parent('div:first').removeClass('typing');
+                } else {
+                    $(this).parent('div:first').addClass('typing');
+                }
+            });
+        });
 
         var token = "{{ token }}";
 
