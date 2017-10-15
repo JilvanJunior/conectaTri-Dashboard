@@ -515,8 +515,13 @@ class ApiController extends FOSRestController {
                 ->setCreatedAt(new \DateTime())
                 ->setUpdatedAt(new \DateTime())
                 ->setDeleted(false);
-            if(!is_null($representative->minimum_value))
-                $supplier->setMinimumValue($representative->minimum_value);
+            if(!is_null($representative->minimum_value)) {
+                if(strpos($representative->minimum_value, ','))
+                    $min = $str_replace(['.', ','], ['', '.'], $representative->minimum_value);
+                else
+                    $min = $representative->minimum_value;
+                $supplier->setMinimumValue($min);
+            }
             $em->persist($supplier);
         }
         $dbRepresentative = new Representative();
