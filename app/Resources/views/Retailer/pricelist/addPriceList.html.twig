@@ -504,18 +504,8 @@
                     case 2 :
                         $("#wizardStepLabel").text(" Selecionar Lista");
                         $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/minhas-listas/24x24.png') }}")
-                        $("#advance a").addClass('disabled');
 
                         var listingTable = $('#listing-datatable');
-
-                        listingTable.mouseout(function() {
-                            if( listingTable.find('tr').find("input").is(":checked") ) {
-                                $("#advance").find("a").removeClass('disabled');
-                            return;
-                            }
-                            $("#advance").find("a").addClass('disabled');
-                        });
-
                         break;
                     case 3 :
                         $("#wizardStepLabel").text(" Selecionar Produtos");
