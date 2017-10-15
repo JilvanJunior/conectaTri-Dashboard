@@ -548,21 +548,13 @@
                 pagingType: "simple_numbers",
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
                 iDisplayLength: -1,
-                buttons: [
-                    { extend: 'print', className: 'btn dark btn-outline', text: 'Imprimir'},
-                    { extend: 'copy', className: 'btn red btn-outline', text: 'Copiar' },
-                    { extend: 'pdf', className: 'btn green btn-outline', text: 'PDF' },
-                    { extend: 'excel', className: 'btn yellow btn-outline ', text: 'Excel' },
-                    { extend: 'csv', className: 'btn purple btn-outline ', text: 'CSV' },
-                    { extend: 'colvis', className: 'btn dark btn-outline', text: 'Colunas'}
-                ],
                 columnDefs: [
                     { orderable: false,
                         targets: 3 },
                     { orderable: false,
                         targets: 4 }
                 ],
-                dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>"
+                dom: "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>"
             });
 
             selectAll("selectAllStatus","chkStatus");
