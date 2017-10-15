@@ -1103,17 +1103,26 @@
 
         });
 
+        function set2Digits(number) {
+            let numberString = "" + number;
+
+            if(numberString.length == 2)
+                return numberString;
+            else
+                return "0" + numberString;
+        }
+
         function saveQuote(type, force) {
             var name = $("#cotacao").val();
             var paymentDate = $('#prazoRCA').val();
 
             var startDate = $("#datetimepicker1").data("datetimepicker").getDate();
-            startDate = startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + "-" + startDate.getDate() + "T"
-                + startDate.getHours() + ":" + startDate.getMinutes() + ":00+00:00";
+            startDate = startDate.getFullYear() + "-" + set2Digits(startDate.getMonth() + 1) + "-" + set2Digits(startDate.getDate()) + "T"
+                + set2Digits(startDate.getHours()) + ":" + set2Digits(startDate.getMinutes()) + ":00+00:00";
 
             var endDate = $("#datetimepicker2").data("datetimepicker").getDate();
-            endDate = endDate.getFullYear() + "-" + (endDate.getMonth() + 1) + "-" + endDate.getDate() + "T"
-                + endDate.getHours() + ":" + endDate.getMinutes() + ":00+00:00";
+            endDate = endDate.getFullYear() + "-" + set2Digits(endDate.getMonth() + 1) + "-" + set2Digits(endDate.getDate()) + "T"
+                + set2Digits(endDate.getHours()) + ":" + set2Digits(endDate.getMinutes()) + ":00+00:00";
 
             var productsId = [];
             var suppliersId = [];
