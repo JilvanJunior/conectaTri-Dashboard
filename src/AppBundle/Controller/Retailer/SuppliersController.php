@@ -102,10 +102,32 @@ class SuppliersController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user]);
         $representative = $em->getRepository('AppBundle:Representative')->find($id);
+        $states = $em->getRepository('AppBundle:State')->findAll();
 
         if($request->getMethod() == "POST"){
+            $supplierId = $request->get('supplier');
 
-            $supplier = $em->getRepository('AppBundle:Supplier')->findOneById($request->get('supplier'));
+            if($supplierId != 'new') {
+                $supplier = $em->getRepository('AppBundle:Supplier')->findOneById($supplierId);
+            } else {
+                $stateId = $request->get('supplierState');
+
+                $supplierState = $states[0];
+                foreach($states as $state)
+                    if($state->getId() == $stateId)
+                        $supplierState = $state;
+
+                $supplier = (new Supplier())
+                    ->setName($request->get('supplierName'))
+                    ->setCnpj($request->get('supplierCnpj'))
+                    ->setState($supplierState)
+                    ->setRetailer($user);
+
+                if($request->get('supplierMinimumValue'))
+                    $supplier->setMinimumValue(str_replace(['.', ','], ['', '.'], $request->get('supplierMinimumValue')));
+
+                $em->persist($supplier);
+            }
 
             /** @var Representative $representative */
             $representative->setName($request->get('name'));
@@ -128,6 +150,7 @@ class SuppliersController extends Controller
         }
 
         return $this->render('Retailer/suppliers/addRepresentatives.html.twig', [
+            'states' => $states,
             'suppliers' => $suppliers,
             'representative' => $representative,
             'username' => $user->getFantasyName(),
