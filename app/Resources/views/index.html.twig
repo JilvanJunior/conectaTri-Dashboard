@@ -206,6 +206,10 @@
 </div>
 
 <script>
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+        document.location.href = "{{ path('play_store') }}";
+    }
+
     /* Simple VanillaJS to toggle class */
 
     document.getElementById('toggleProfile').addEventListener('click', function () {
