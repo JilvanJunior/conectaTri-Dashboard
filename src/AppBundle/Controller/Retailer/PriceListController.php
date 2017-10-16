@@ -362,10 +362,11 @@ class PriceListController extends Controller
 
         $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
         $quote = $quoteProduct->getQuote();
-        $prev = $curr = null;
+        $prevPrev = $prev = $curr = null;
         foreach($quote->getQuoteProducts() as $quoteProduct) {
             $idQuoteProduct = $quoteProduct->getId();
 
+            $prevPrev = $prev;
             $prev = $curr;
             $curr = $idQuoteProduct;
 
@@ -377,6 +378,7 @@ class PriceListController extends Controller
             return $this->redirectToRoute('editar_cotacao_produto', ['id' => $id]);
 
         return $this->render('Retailer/pricelist/showQuoteProduct.html.twig', [
+            'prev' => is_null($prevPrev)?0:$prevPrev,
             'next' => ($curr == $id)?0:$curr,
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
@@ -398,10 +400,11 @@ class PriceListController extends Controller
 
         $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
         $quote = $quoteProduct->getQuote();
-        $prev = $curr = null;
+        $prevPrev = $prev = $curr = null;
         foreach($quote->getQuoteProducts() as $quoteProduct) {
             $idQuoteProduct = $quoteProduct->getId();
 
+            $prevPrev = $prev;
             $prev = $curr;
             $curr = $idQuoteProduct;
 
@@ -418,6 +421,7 @@ class PriceListController extends Controller
         );
 
         return $this->render('Retailer/pricelist/editQuoteProduct.html.twig', [
+            'prev' => is_null($prevPrev)?0:$prevPrev,
             'next' => ($curr == $id)?0:$curr,
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,

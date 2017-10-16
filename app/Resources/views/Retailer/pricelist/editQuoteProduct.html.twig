@@ -64,6 +64,12 @@
                                                 <span class="caption-subject bold uppercase">{{ quoteProduct.product.name }}</span>
                                             </div>
                                             <div style='float: right;'>
+                                                {% if prev != 0 %}
+                                                    <a href='{{ path('editar_cotacao_produto', { 'id': prev }) }}'
+                                                        class='btn btn-outline btn-circle btn-sm purple'>
+                                                        Anterior
+                                                    </a>
+                                                {% endif %}
                                                 {% if next != 0 %}
                                                     <a href='{{ path('editar_cotacao_produto', { 'id': next }) }}'
                                                         class='btn btn-outline btn-circle btn-sm purple'>
