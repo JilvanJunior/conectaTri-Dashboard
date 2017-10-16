@@ -348,7 +348,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {% for supplierStatus in supplierStatuses %}
+                                                {% for supplierStatus in supplierStatuses %}
                                                     <tr>
                                                         <td> {{ supplierStatus.supplierName }} </td>
                                                         <td> {{ supplierStatus.representativeName }} </td>
@@ -358,12 +358,12 @@
                                                         <td> {{ supplierStatus.observation }} </td>
                                                         <td>
                                                             <a class='btn btn-outline btn-circle btn-sm purple'
-                                                                href='{{ path('cotacao_fornecedor_pdf', { idQuote: quote.id, idRepresentative: supplierStatus.representativeId }) }}'>
+                                                               href='{{ path('cotacao_fornecedor_pdf', { idQuote: quote.id, idRepresentative: supplierStatus.representativeId }) }}'>
                                                                 Exportar
                                                             </a>
                                                         </td>
                                                     </tr>
-                                                    {% endfor %}
+                                                {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -376,7 +376,7 @@
                                         <div class="portlet-title">
                                             <div class="caption font-dark">
                                                 <img width='24px' src="{{ asset('assets/pages/img/logos/Prancheta.jpg') }}"/>
-                                                <span class="caption-subject bold uppercase">Status</span>
+                                                <span class="caption-subject bold uppercase">Status 2</span>
                                             </div>
                                             <div style='float: right;'>
                                                 <button id='sendLink' class='btn btn-outline btn-circle btn-sm purple'>
@@ -398,7 +398,9 @@
                                                     {% endif %}
                                                     <th>Fornecedor</th>
                                                     <th>Representante</th>
-                                                    <th>Status</th>
+                                                    {% if quote.getType == 1 %}
+                                                        <th>Status</th>
+                                                    {% endif %}
                                                     {% if userIsRCA or quote.closed == 1 %}
                                                         {% if quote.getType == 1 %}
                                                             <th>Ação</th>
@@ -410,39 +412,41 @@
                                                 {% for supplierStatus in supplierStatuses %}
                                                     <tr>
                                                         {% if userIsRCA or quote.closed == 1 %}
-                                                        <td>
-                                                            <label class="mt-checkbox mt-checkbox-outline">
-                                                                <input type="checkbox" value="{{ quote.id }}" name="chkStatus" />
-                                                                <span></span>
-                                                            </label>
-                                                        </td>
+                                                            <td>
+                                                                <label class="mt-checkbox mt-checkbox-outline">
+                                                                    <input type="checkbox" value="{{ quote.id }}" name="chkStatus" />
+                                                                    <span></span>
+                                                                </label>
+                                                            </td>
                                                         {% endif %}
                                                         <td> {{ supplierStatus.supplierName }} </td>
                                                         <td> {{ supplierStatus.representativeName }} </td>
-                                                        <td> {{ supplierStatus.filledIn }} </td>
+                                                        {% if quote.getType == 1 %}
+                                                            <td> {{ supplierStatus.filledIn }} </td>
+                                                        {% endif %}
                                                         {% if userIsRCA or quote.closed == 1 %}
                                                             {% if quote.getType == 1 %}
-                                                            <td>
-                                                                {% if quote.closed == 1 %}
-                                                                    <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': supplierStatus.representativeId}) }}"
-                                                                        class="btn btn-outline btn-circle btn-sm purple">
-                                                                        <i class="fa fa-file"></i> Exportar Pedido de Cotação
-                                                                    </a>
-                                                                {% endif %}
-                                                                {% if userIsRCA and supplierStatus.countWins > 0 and supplierStatus.supplierIsRCA and (not quote.hasIdOrder) %}
-                                                                    <a href="{{ path('novo_pedido', {'idQuote': quote.id}) }}"
-                                                                        class="btn btn-outline btn-circle btn-sm purple">
-                                                                        <i class="fa fa-file"></i> Novo Pedido Martins
-                                                                    </a>
-                                                                {% endif %}
-                                                            </td>
+                                                                <td>
+                                                                    {% if quote.closed == 1 %}
+                                                                        <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': supplierStatus.representativeId}) }}"
+                                                                           class="btn btn-outline btn-circle btn-sm purple">
+                                                                            <i class="fa fa-file"></i> Exportar Pedido de Cotação
+                                                                        </a>
+                                                                    {% endif %}
+                                                                    {% if userIsRCA and supplierStatus.countWins > 0 and supplierStatus.supplierIsRCA and (not quote.hasIdOrder) %}
+                                                                        <a href="{{ path('novo_pedido', {'idQuote': quote.id}) }}"
+                                                                           class="btn btn-outline btn-circle btn-sm purple">
+                                                                            <i class="fa fa-file"></i> Novo Pedido Martins
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </td>
                                                             {% endif %}
                                                         {% endif %}
                                                     </tr>
                                                 {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                     <!-- END SAMPLE TABLE PORTLET-->
                                 </div>
@@ -472,11 +476,11 @@
                                                         <td> {{ quoteProduct.product.name }} </td>
                                                         <td>
                                                             <a href="{{ path('acompanhar_cotacao_produto', {'id': quoteProduct.id}) }}"
-                                                                class="btn btn-outline btn-circle btn-sm purple">
+                                                               class="btn btn-outline btn-circle btn-sm purple">
                                                                 Ver
                                                             </a>
                                                             <a href="{{ path('vencedor_cotacao_produto', {'id': quoteProduct.id}) }}"
-                                                                class="btn btn-outline btn-circle btn-sm purple">
+                                                               class="btn btn-outline btn-circle btn-sm purple">
                                                                 Editar Vencedores
                                                             </a>
                                                         </td>
@@ -547,37 +551,37 @@
             });
         });
 
-            $('#status_datatable').DataTable({
-                responsive: true,
-                language: {
-                    url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
-                },
-                pagingType: "simple_numbers",
-                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
-                iDisplayLength: -1,
-                columnDefs: [
-                    { orderable: false,
-                        targets: 3 },
-                    { orderable: false,
-                        targets: 4 }
-                ],
-                dom: "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>"
-            });
+        $('#status_datatable').DataTable({
+            responsive: true,
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
+            },
+            pagingType: "simple_numbers",
+            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
+            iDisplayLength: -1,
+            columnDefs: [
+                { orderable: false,
+                    targets: 3 },
+                { orderable: false,
+                    targets: 4 }
+            ],
+            dom: "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>"
+        });
 
-            selectAll("selectAllStatus","chkStatus");
+        selectAll("selectAllStatus","chkStatus");
 
-            $('#listing_datatable').DataTable({
-                responsive: true,
-                language: {
-                    url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
-                },
-                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
-                iDisplayLength: -1,
-                columnDefs: [
-                    { orderable: false,
-                        targets: 1 }
-                ],
-                pagingType: "simple_numbers"
-            });
+        $('#listing_datatable').DataTable({
+            responsive: true,
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
+            },
+            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
+            iDisplayLength: -1,
+            columnDefs: [
+                { orderable: false,
+                    targets: 1 }
+            ],
+            pagingType: "simple_numbers"
+        });
     </script>
 {% endblock %}
