@@ -157,4 +157,40 @@ class SuppliersController extends Controller
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
+
+    /**
+     * @Route("/varejista/representante/{id}/deletar", name="deletar_representante")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function deleteRepresentativeAction(Request $request, $id)
+    {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+
+        /** @var Representative $dbRepresentative */
+        $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($id);
+        if (is_null($dbRepresentative)) {
+            $this->addFlash(
+                'warning',
+                'Representante inválido!'
+            );
+
+            return $this->redirectToRoute('fornecedores');
+        }
+        $dbRepresentative->setDeleted(true)
+            ->setUpdatedAt(new \DateTime());
+        $reps = $d->getRepository("AppBundle:Representative")->findBy(["supplier" => $dbRepresentative->getSupplier(), "deleted" => false]);
+        if (count($reps) == 0) {
+            $dbRepresentative->getSupplier()->setDeleted(true);
+        }
+        $em->flush();
+
+        $this->addFlash(
+            'success',
+            'Representante deletado!'
+        );
+
+        return $this->redirectToRoute('fornecedores');
+    }
 }
