@@ -17,7 +17,7 @@ class ProductsController extends Controller
     public function indexAction(Request $request)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $products = $user->getProducts();
+        $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['retailer' => $user, 'deleted' => false]);
 
         return $this->render('Retailer/products/index.html.twig', [
             'products' => $products,
@@ -149,5 +149,37 @@ class ProductsController extends Controller
 
         echo json_encode($products);
         exit();
+    }
+
+    /**
+     * @Route("/varejista/produtos/{id}/deletar", name="deletar_produto")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function deleteProductAction(Request $request, $id)
+    {
+        $d = $this->getDoctrine();
+        $em = $d->getManager();
+
+        /** @var Representative $dbRepresentative */
+        $dbProduct = $d->getRepository("AppBundle:Product")->find($id);
+        if (is_null($dbProduct)) {
+            $this->addFlash(
+                'warning',
+                'Produto inválido!'
+            );
+
+            return $this->redirectToRoute('produtos');
+        }
+        $dbProduct->setDeleted(true)
+            ->setUpdatedAt(new \DateTime());
+        $em->flush();
+
+        $this->addFlash(
+            'success',
+            'Produto deletado!'
+        );
+
+        return $this->redirectToRoute('produtos');
     }
 }
