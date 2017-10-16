@@ -1763,7 +1763,7 @@ class ApiController extends FOSRestController {
             ->setFantasyName($retailer->fantasy_name)
             ->setAddress($retailer->address)
             ->setNumber($retailer->number)
-            ->setDistricit($retailer->district)
+            ->setDistrict($retailer->district)
             ->setCity($retailer->city)
             ->setState($dbState)
             ->setCep($retailer->cep)
