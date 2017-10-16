@@ -527,7 +527,6 @@ class ApiController extends FOSRestController {
         $dbRepresentative = new Representative();
         $dbRepresentative->setName($representative->contact_name)
             ->setPhone($representative->contact_phone)
-            ->setCellphone($representative->contact_cellphone)
             ->setEmail($representative->contact_email)
             ->setSupplier($supplier)
             ->setRetailer($dbToken->getRetailer())
