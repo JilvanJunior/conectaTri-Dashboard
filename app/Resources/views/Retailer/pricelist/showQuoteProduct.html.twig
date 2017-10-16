@@ -127,5 +127,31 @@
     <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $('#sample_1').dataTable({
+            "language": {
+                "aria": {
+                    "sortAscending": ": activate to sort column ascending",
+                    "sortDescending": ": activate to sort column descending"
+                },
+                "emptyTable": "No data available in table",
+                "info": "Mostrando _START_ até _END_ de _TOTAL_ dados",
+                "infoEmpty": "Nenhum dado encontrado",
+                "infoFiltered": "(filtrado de _MAX_ dados)",
+                "lengthMenu": "_MENU_ linhas",
+                "search": "Pesquisar:",
+                "zeroRecords": "Nenhum dados com esse valor encontrado"
+            },
+            responsive: true,
+            "order": [
+                [0, 'asc']
+            ],
+            "lengthMenu": [
+                [5, 10, 15, 20, 50, 100, -1],
+                [5, 10, 15, 20, 50, 100, "Todos"] // change per page values here
+            ],
+            "pageLength": 50,
+            "dom": "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
+        });
+    </script>
 {% endblock %}
