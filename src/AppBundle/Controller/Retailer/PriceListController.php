@@ -414,7 +414,7 @@ class PriceListController extends Controller
 
         $this->addFlash(
             'info',
-            'Edite os valores da cotação e selecione os vencedores da cotação.'
+            'Edite os valores da cotação para cada fornecedor e clique em próximo.'
         );
 
         return $this->render('Retailer/pricelist/editQuoteProduct.html.twig', [
