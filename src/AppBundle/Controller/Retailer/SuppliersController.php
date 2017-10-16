@@ -45,12 +45,7 @@ class SuppliersController extends Controller
             if($supplierId != 'new') {
                 $supplier = $em->getRepository('AppBundle:Supplier')->findOneById($supplierId);
             } else {
-                $stateId = $request->get('supplierState');
-
                 $supplierState = $states[0];
-                foreach($states as $state)
-                    if($state->getId() == $stateId)
-                        $supplierState = $state;
 
                 $supplier = (new Supplier())
                     ->setName($request->get('supplierName'))
