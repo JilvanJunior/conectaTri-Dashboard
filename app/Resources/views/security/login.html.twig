@@ -269,6 +269,11 @@
 <script src="{{ asset('assets/global/plugins/jquery.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/pages/scripts/jquery.mask.min.js') }}" type="text/javascript"></script>
 <script>
+
+    if(screen.width <= 978) {
+        document.location.href = "{{ path('play_store') }}";
+    }
+
     /* Simple VanillaJS to toggle class */
     var toggleRetailer = function(){
         [].map.call(document.querySelectorAll('.retailer'), function(el) {
