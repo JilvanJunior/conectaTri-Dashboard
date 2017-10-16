@@ -846,12 +846,6 @@ class ApiController extends FOSRestController {
                     if (!$quoteProduct->isDeleted()) {
                         foreach ($quoteProduct->getQuoteSuppliers() as $supplier) {
                             $em->detach($supplier);
-                            if ($supplier->getRepresentative()->isDeleted())
-                                $quoteProduct->removeQuoteSupplier($supplier);
-                            /* TODO: Add this
-                            else
-                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
-                            */
                         }
                     } else {
                         $quote->removeQuoteProduct($quoteProduct);
@@ -903,12 +897,6 @@ class ApiController extends FOSRestController {
                         /** @var QuoteSupplier $quoteSupplier */
                         foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                             $em->detach($quoteSupplier);
-                            if ($quoteSupplier->getRepresentative()->isDeleted())
-                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
-                            /* TODO: Add this
-                            else
-                                $quoteSupplier->setRepresentative(new ApiSupplier($quoteSupplier->getRepresentative()));
-                            */
                         }
                     } else {
                         $quote->removeQuoteProduct($quoteProduct);
@@ -962,12 +950,6 @@ class ApiController extends FOSRestController {
                         /** @var QuoteSupplier $quoteSupplier */
                         foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                             $em->detach($quoteSupplier);
-                            if ($quoteSupplier->getRepresentative()->isDeleted())
-                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
-                            /* TODO: Add this
-                            else
-                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
-                            */
                         }
                     } else {
                         $quote->removeQuoteProduct($quoteProduct);
@@ -1032,12 +1014,6 @@ class ApiController extends FOSRestController {
                         /** @var quoteSupplier $quoteSupplier */
                         foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                             $em->detach($quoteSupplier);
-                            if ($quoteSupplier->getRepresentative()->isDeleted())
-                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
-                            /* TODO: Add this
-                            else
-                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
-                            */
                         }
                     } else {
                         $quote->removeQuoteProduct($quoteProduct);
@@ -1104,12 +1080,6 @@ class ApiController extends FOSRestController {
                         /** @var QuoteSupplier $quoteSupplier */
                         foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                             $em->detach($quoteSupplier);
-                            if ($quoteSupplier->getRepresentative()->isDeleted())
-                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
-                            /* TODO: Add this
-                            else
-                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
-                            */
                         }
                     } else {
                         $quote->removeQuoteProduct($quoteProduct);
