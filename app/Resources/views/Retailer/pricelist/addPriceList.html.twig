@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block page %}
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         .ProgressBar {
             margin: 0 auto;
@@ -352,7 +352,7 @@
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/localization/messages_pt_BR.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/jquery.mask.min.js') }}" type="text/javascript"></script>
-
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
         var supplierTable = $('#supplier-datatable');
@@ -601,11 +601,13 @@
         var hours = d.getHours()
         var minutes = d.getMinutes()
 
-        var output = "Cotação " + ((''+day).length<2 ? '0' : '') + day + '/' +
-            ((''+month).length<2 ? '0' : '') + month + ", " +
-            hours + ":" + minutes;
+        {% if quote is not defined %}
+            var output = "Cotação " + ((''+day).length<2 ? '0' : '') + day + '/' +
+                ((''+month).length<2 ? '0' : '') + month + ", " +
+                hours + ":" + minutes;
 
-        $("#cotacao").val(output);
+            $("#cotacao").val(output);
+        {% endif %}
         $('.cotacao.text').addClass('typing');
 
         //BEGIN FLOAT LABEL METHODS
@@ -702,6 +704,22 @@
             }
         })
 
+        $("#produto").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "{{ path('ajax_produtos') }}",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 3
+        });
+
         $('#codigo').keyup(function(){
             $('.codigo.text').addClass('typing');
             if( $(this).val().length == 0 ) {
@@ -770,7 +788,6 @@
                 "oPaginate": {
                     "sNext": '<i class="fa fa-angle-right"></i>',
                     "sPrevious": '<i class="fa fa-angle-left"></i>',
-
                 },
                 "oAria": {
                     "sSortAscending": ": Ordenar colunas de forma ascendente",
@@ -800,6 +817,7 @@
 
         $('#salvar_fornecedor').on('click', function() {
 
+            debugger;
             var $this = $(this);
 
             var name = $('#fornecedor').val();
@@ -986,7 +1004,6 @@
             }
         });
 
-
         //select all function
         selectAll("selectAllListing","chkListing");
         // END LISTING TABLE
@@ -1162,7 +1179,7 @@
                     representative: {
                         id: $(this).val()
                     },
-                    quantity: 0,
+                    quantity: 1,
                     price: 0
                 });
             });

@@ -755,21 +755,6 @@ class ApiController extends FOSRestController {
             $em->persist($newProduct);
             $dbListing->addListingProduct($newProduct);
         }
-        $tmp = [];
-        foreach ($dbListing->getRepresentatives() as $representative) {
-            $rcvRepresentative = self::arrayContains($listing->representatives, $representative);
-            if ($rcvRepresentative == false) {
-                $dbListing->removeRepresentative($representative);
-            } else {
-                $tmp[] = $rcvRepresentative;
-            }
-        }
-        self::array_diff($listing->suppliers, $tmp);
-        foreach ($listing->suppliers as $representative) {
-            /** @var Representative $dbRepresentative */
-            $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($representative->id);
-            $dbListing->addRepresentative($dbRepresentative);
-        }
         $dbListing->setUpdatedAt(new \DateTime())
             ->setName($listing->name)
             ->setType($listing->type)

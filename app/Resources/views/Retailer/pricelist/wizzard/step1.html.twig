@@ -21,7 +21,8 @@
                             <div class="form-group datetimepicker1 text ">
                                 <label for="datetimepicker1">Validade de</label>
                                 <input class="form-control " type="text" autocomplete="off" id="beginsAtTimePicker"
-                                    value="{{ quote is defined?quote.beginsAt|date('d/m/Y H:i'):'' }}" name="begins-at" required />
+                                    value="{{ quote is defined?quote.beginsAt|date('d/m/Y H:i'):"now"|date('d/m/Y H:i') }}"
+                                    name="begins-at" required />
                             </div>
                         </div>
                     </div>
