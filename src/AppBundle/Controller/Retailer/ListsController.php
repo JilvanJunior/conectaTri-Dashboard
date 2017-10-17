@@ -32,7 +32,6 @@ class ListsController extends Controller
             'listings' => $listings,
             'types' => $types,
             'username' => $user->getFantasyName(),
-            'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
