@@ -892,7 +892,7 @@
                                 response.cnpj,
                                 response.contact_phone,
                                 "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkProducts'/><span></span></label>"
-                            ]);
+                            ]).draw();
                             $('#myModal').modal('toggle');
                             $("#supplier_form").trigger("reset")
                         },
@@ -1002,7 +1002,7 @@
                             types[response.type],
                             0,
                             "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkListing' data-products='[]'/><span></span></label>"
-                        ]);
+                        ]).draw();
                         $('#listingModal').modal('toggle');
                         $("#list_form").trigger("reset")
                     },
@@ -1118,7 +1118,7 @@
                                 response.brand,
                                 response.unit,
                                 "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts'/><span></span></label>"
-                            ]);
+                            ]).draw();
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset")
 
