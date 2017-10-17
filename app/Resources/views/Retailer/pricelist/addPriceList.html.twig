@@ -894,7 +894,8 @@
                                 "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkProducts'/><span></span></label>"
                             ]).draw();
                             $('#myModal').modal('toggle');
-                            $("#supplier_form").trigger("reset")
+                            $("#supplier_form").trigger("reset");
+                            $("#supplier_form div").removeClass('typing');
                         },
                         error: function (error) {
                             alert(error.responseJSON.error.exception["0"].message);
@@ -1004,7 +1005,8 @@
                             "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkListing' data-products='[]'/><span></span></label>"
                         ]).draw();
                         $('#listingModal').modal('toggle');
-                        $("#list_form").trigger("reset")
+                        $("#list_form").trigger("reset");
+                        $("#list_form div").removeClass('typing');
                     },
                     error: function (error) {
                         alert(error.responseJSON.error.exception["0"].message);
@@ -1120,7 +1122,8 @@
                                 "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts'/><span></span></label>"
                             ]).draw();
                             $('#productModal').modal('toggle');
-                            $("#product_form").trigger("reset")
+                            $("#product_form").trigger("reset");
+                            $("#product_form div").removeClass('typing');
 
                         },
                         error: function (error) {
