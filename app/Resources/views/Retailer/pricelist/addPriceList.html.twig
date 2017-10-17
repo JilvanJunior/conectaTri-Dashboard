@@ -412,7 +412,7 @@
         function setItensSuplliers(id,elementId) {
             var count = 0;
 
-            $.each($("#" + id + " tr").find("input"), function(index, value) {
+            $.each($("#" + id + " tbody tr").find("input"), function(index, value) {
                 if($(this)["0"].checked) {
                     count = count + 1
                 }
@@ -1026,8 +1026,6 @@
          unidade
          peso
          descricao-produto
-
-
          */
 
         $('#salvar_produto').on('click', function() {
@@ -1049,8 +1047,6 @@
                 errorPlacement: function(){
                     return false;
                 }
-
-
             });
             var validationState = productForm.valid();
 
@@ -1109,15 +1105,11 @@
 
         // FINISH QUOTE
         $('#save-quote').on('click', function() {
-
             saveQuote(1, false);
-
         });
 
         $('#presential-quote').on('click', function() {
-
             saveQuote(2, false);
-
         });
 
         $('#sent-suppliers').on('click', function() {
