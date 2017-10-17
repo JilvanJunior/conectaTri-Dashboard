@@ -816,8 +816,6 @@
 
 
         $('#salvar_fornecedor').on('click', function() {
-
-            debugger;
             var $this = $(this);
 
             var name = $('#fornecedor').val();
@@ -834,7 +832,6 @@
             var contact_cellphone = $('#celular_representante').val()
             var contact_email = $('#email_representante').val();
 
-            $this.button('loading');
             var supplierForm = $( "#supplier_form" );
 
             $( "#supplier_form" ).validate({
