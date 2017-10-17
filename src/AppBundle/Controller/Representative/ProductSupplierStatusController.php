@@ -22,9 +22,17 @@ class ProductSupplierStatusController extends Controller {
         $status['0'] = "Em Andamento";
         $status['1'] = "Encerrada";
 
+        //type of listings
+        $types = [];
+        $types['0'] = 'Não Informado';
+        $types['1'] = 'Comum';
+        $types['2'] = 'Sazonal';
+        $types['3'] = 'Semanal';
+
         return $this->render('Representative/quote/index.html.twig', [
             'quotes' => $quotes,
             'status' => $status,
+            'types' => $types
         ]);
     }
 
