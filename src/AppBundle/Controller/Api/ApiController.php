@@ -517,7 +517,7 @@ class ApiController extends FOSRestController {
                 ->setDeleted(false);
             if(!is_null($representative->minimum_value)) {
                 if(strpos($representative->minimum_value, ','))
-                    $min = $str_replace(['.', ','], ['', '.'], $representative->minimum_value);
+                    $min = str_replace(['.', ','], ['', '.'], $representative->minimum_value);
                 else
                     $min = $representative->minimum_value;
                 $supplier->setMinimumValue($min);
