@@ -206,6 +206,10 @@
 </div>
 
 <script>
+    if(screen.width <= 978) {
+        document.location.href = "{{ path('play_store') }}";
+    }
+
     /* Simple VanillaJS to toggle class */
 
     document.getElementById('toggleProfile').addEventListener('click', function () {

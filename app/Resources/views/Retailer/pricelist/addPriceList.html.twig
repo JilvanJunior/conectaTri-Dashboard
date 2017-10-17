@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block page %}
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         .ProgressBar {
             margin: 0 auto;
@@ -352,22 +352,35 @@
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/localization/messages_pt_BR.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/jquery.mask.min.js') }}" type="text/javascript"></script>
-
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
+        var supplierTable = $('#supplier-datatable');
+        var listingTable = $('#listing-datatable');
+        var productTable = $('#product-datatable');
 
         //BEGIN MASKS
 
         $(function(){
             $('#cnpj').mask('00.000.000/0000-00');
             $('#valor_minimo').mask('000.000.000.000.000,00', {reverse: true});
-            $('#codigo').mask('0000000000000', {reverse: true});
+            $('#codigo').mask('00000000000000000');
             $('input').each(function() {
                 if($(this).val() == '') {
                     $(this).parent('div:first').removeClass('typing');
                 } else {
                     $(this).parent('div:first').addClass('typing');
                 }
+            });
+            $('tbody input[type=checkbox]').click(function() {
+                let table = $(this).parents('table:first');
+
+                let inputs = table.find('tbody input[type=checkbox]');
+                let inputsChecked = inputs.filter(':checked');
+
+                let checkar = (inputs.length == inputsChecked.length);
+
+                table.find('thead input[type=checkbox]').prop('checked', checkar);
             });
         });
 
@@ -399,11 +412,11 @@
         {% endif %}
 
         $(function () {
-            $('#datetimepicker1').datetimepicker({
+            $('#beginsAtTimePicker').datetimepicker({
                 format: 'dd/mm/yyyy hh:ii',
                 language: 'pt-BR'
             });
-            $('#datetimepicker2').datetimepicker({
+            $('#expiresAtTimePicker').datetimepicker({
                 format: 'dd/mm/yyyy hh:ii',
                 language: 'pt-BR'
             });
@@ -412,7 +425,7 @@
         function setItensSuplliers(id,elementId) {
             var count = 0;
 
-            $.each($("#" + id + " tr").find("input"), function(index, value) {
+            $.each($("#" + id + " tbody tr").find("input"), function(index, value) {
                 if($(this)["0"].checked) {
                     count = count + 1
                 }
@@ -449,6 +462,32 @@
             })
         }
 
+        function validateForm() {
+            var validationState = $('#cotacao_form').valid();
+
+            if(validationState) {
+                $("#advance").find("a").removeClass('disabled');
+            } else {
+                $("#advance").find("a").addClass('disabled');
+            }
+        }
+
+        function checkaStep1() {
+            if(supplierTable.find('tr').find("input").is(":checked")){
+                $("#advance").find("a").removeClass('disabled');
+                return;
+            }
+            $("#advance").find("a").addClass('disabled');
+        }
+
+        function checkaStep3() {
+            if( productTable.find('tr').find("input").is(":checked") ){
+                $("#advance").find("a").removeClass('disabled');
+                return;
+            }
+            $("#advance").find("a").addClass('disabled');
+        }
+
         $(document).ready(function() {
             //BEGIN WIZARD METHODS
             $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
@@ -471,17 +510,10 @@
                             }
                         });
 
-                        cotacaoForm.mouseout(function() {
-                            var validationState = $('#cotacao_form').valid();
-
-                            if(validationState) {
-                                $("#advance").find("a").removeClass('disabled');
-                            }
-                        });
-
-                        if($('#cotacao_form').valid()) {
-                            $("#advance").find("a").removeClass('disabled');
-                        }
+                        validateForm();
+                        cotacaoForm.mouseout(validateForm);
+                        cotacaoForm.keydown(validateForm);
+                        cotacaoForm.keyup(validateForm);
                         //END FORM VALIDATION
                         break;
                     case 1 :
@@ -490,22 +522,14 @@
                         $("#advance a").addClass('disabled');
                         $("#previous").show();
 
-                        var supplierTable = $('#supplier-datatable');
-
-                        supplierTable.mouseout(function() {
-                            if(supplierTable.find('tr').find("input").is(":checked")){
-                                $("#advance").find("a").removeClass('disabled');
-                            return;
-                            }
-                                $("#advance").find("a").addClass('disabled');
-                        });
+                        checkaStep1()
+                        supplierTable.find('input').change(checkaStep1);
 
                         break;
                     case 2 :
                         $("#wizardStepLabel").text(" Selecionar Lista");
                         $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/minhas-listas/24x24.png') }}")
 
-                        var listingTable = $('#listing-datatable');
                         break;
                     case 3 :
                         $("#wizardStepLabel").text(" Selecionar Produtos");
@@ -513,25 +537,18 @@
                         $("#advance a").addClass('disabled');
                         $("#advance").show();
 
-                        var productTable = $('#product-datatable');
-
-                        productTable.mouseout(function() {
-                            if( productTable.find('tr').find("input").is(":checked") ){
-                                $("#advance").find("a").removeClass('disabled');
-                            return;
-                            }
-                            $("#advance").find("a").addClass('disabled');
-                        });
+                        checkaStep3();
+                        productTable.find('input').change(checkaStep3);
 
                         break;
                     case 4 :
                         $("#wizardStepLabel").text(" Confirmação dos Dados");
                         $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/confirmacao-dos-dados/24x24.png') }}");
                         $("#advance").hide();
-                        setDateTime("datetimepicker1","quote_start","date");
-                        setDateTime("datetimepicker1","quote_start_time","time");
-                        setDateTime("datetimepicker2","quote_end","date");
-                        setDateTime("datetimepicker2","quote_end_time","time");
+                        setDateTime("beginsAtTimePicker","quote_start","date");
+                        setDateTime("beginsAtTimePicker","quote_start_time","time");
+                        setDateTime("expiresAtTimePicker","quote_end","date");
+                        setDateTime("expiresAtTimePicker","quote_end_time","time");
                         setItensSuplliers("product-datatable","quote_itens");
                         setItensSuplliers("supplier-datatable","quote_suppliers");
                         if($('#prazoRCA').length && $('#prazoRCA').val() != 'Outros') {
@@ -560,23 +577,19 @@
 
         //END WIZARD METHODS
 
-        $('#datetimepicker1').change(function(){
-            $('.datetimepicker1.text').addClass('typing');
+        $('#beginsAtTimePicker').change(function(){
+            $('.beginsAtTimePicker.text').addClass('typing');
             if( $(this).val().length == 0 ) {
-                $('.datetimepicker1.text').removeClass('typing');
+                $('.beginsAtTimePicker.text').removeClass('typing');
             }
         });
 
-        $('#datetimepicker1').datetimepicker(
-            'setDate', (new Date()),
-            {format: 'dd/mm/yyyy hh:ii'}
-        );
-        $('.datetimepicker1.text').addClass('typing');
+        $('.beginsAtTimePicker.text').addClass('typing');
 
-        $('#datetimepicker2').change(function(){
-            $('.datetimepicker2.text').addClass('typing');
+        $('#expiresAtTimePicker').change(function(){
+            $('.expiresAtTimePicker.text').addClass('typing');
             if( $(this).val().length == 0 ) {
-                $('.datetimepicker2.text').removeClass('typing');
+                $('.expiresAtTimePicker.text').removeClass('typing');
             }
         });
 
@@ -588,11 +601,13 @@
         var hours = d.getHours()
         var minutes = d.getMinutes()
 
-        var output = "Cotação " + ((''+day).length<2 ? '0' : '') + day + '/' +
-            ((''+month).length<2 ? '0' : '') + month + ", " +
-            hours + ":" + minutes;
+        {% if quote is not defined %}
+            var output = "Cotação " + ((''+day).length<2 ? '0' : '') + day + '/' +
+                ((''+month).length<2 ? '0' : '') + month + ", " +
+                hours + ":" + minutes;
 
-        $("#cotacao").val(output);
+            $("#cotacao").val(output);
+        {% endif %}
         $('.cotacao.text').addClass('typing');
 
         //BEGIN FLOAT LABEL METHODS
@@ -689,6 +704,22 @@
             }
         })
 
+        $("#produto").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "{{ path('ajax_produtos') }}",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 3
+        });
+
         $('#codigo').keyup(function(){
             $('.codigo.text').addClass('typing');
             if( $(this).val().length == 0 ) {
@@ -757,7 +788,6 @@
                 "oPaginate": {
                     "sNext": '<i class="fa fa-angle-right"></i>',
                     "sPrevious": '<i class="fa fa-angle-left"></i>',
-
                 },
                 "oAria": {
                     "sSortAscending": ": Ordenar colunas de forma ascendente",
@@ -786,7 +816,6 @@
 
 
         $('#salvar_fornecedor').on('click', function() {
-
             var $this = $(this);
 
             var name = $('#fornecedor').val();
@@ -803,7 +832,6 @@
             var contact_cellphone = $('#celular_representante').val()
             var contact_email = $('#email_representante').val();
 
-            $this.button('loading');
             var supplierForm = $( "#supplier_form" );
 
             $( "#supplier_form" ).validate({
@@ -973,7 +1001,6 @@
             }
         });
 
-
         //select all function
         selectAll("selectAllListing","chkListing");
         // END LISTING TABLE
@@ -1026,14 +1053,9 @@
          unidade
          peso
          descricao-produto
-
-
          */
 
         $('#salvar_produto').on('click', function() {
-
-
-
             var $this = $(this);
 
             var produto = $('#produto').val();
@@ -1052,8 +1074,6 @@
                 errorPlacement: function(){
                     return false;
                 }
-
-
             });
             var validationState = productForm.valid();
 
@@ -1112,21 +1132,15 @@
 
         // FINISH QUOTE
         $('#save-quote').on('click', function() {
-
             saveQuote(1, false);
-
         });
 
         $('#presential-quote').on('click', function() {
-
             saveQuote(2, false);
-
         });
 
         $('#sent-suppliers').on('click', function() {
-
-            saveQuote(1, true);
-
+            $('#sendSuppliers').modal('toggle');
         });
 
         function set2Digits(number) {
@@ -1142,11 +1156,11 @@
             var name = $("#cotacao").val();
             var paymentDate = $('#prazoRCA').val();
 
-            var startDate = $("#datetimepicker1").data("datetimepicker").getDate();
+            var startDate = $("#beginsAtTimePicker").data("datetimepicker").getDate();
             startDate = startDate.getFullYear() + "-" + set2Digits(startDate.getMonth() + 1) + "-" + set2Digits(startDate.getDate()) + "T"
                 + set2Digits(startDate.getHours()) + ":" + set2Digits(startDate.getMinutes()) + ":00+00:00";
 
-            var endDate = $("#datetimepicker2").data("datetimepicker").getDate();
+            var endDate = $("#expiresAtTimePicker").data("datetimepicker").getDate();
             endDate = endDate.getFullYear() + "-" + set2Digits(endDate.getMonth() + 1) + "-" + set2Digits(endDate.getDate()) + "T"
                 + set2Digits(endDate.getHours()) + ":" + set2Digits(endDate.getMinutes()) + ":00+00:00";
 
@@ -1154,10 +1168,25 @@
             var suppliersId = [];
 
             $.each($('#supplier-datatable tr input:checked'), function(i, v){
-                suppliersId.push({id:0, representative: {id: $(this).val()}, quantity: 0, price: 0});
+                if($(this).val() == 'on')
+                    return true;
+
+                suppliersId.push({
+                    id:0,
+                    representative: {
+                        id: $(this).val()
+                    },
+                    quantity: 1,
+                    price: 0
+                });
             });
 
+            console.log(suppliersId);
+
             $.each($('#product-datatable tr input:checked'), function(i, v){
+                if($(this).val() == 'on')
+                    return true;
+
                 productsId.push({
                     product: {id: $(this).val()},
                     winners: [],

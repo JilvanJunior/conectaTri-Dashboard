@@ -18,10 +18,11 @@
                 <div class="row ">
                     <div class="col-lg-4 col-lg-offset-5">
                         <div class="">
-                            <div class="form-group datetimepicker1 text ">
-                                <label for="datetimepicker1">Validade de</label>
-                                <input class="form-control " type="text" autocomplete="off" id="datetimepicker1"
-                                    value="{{ quote is defined?quote.beginsAt|date('d-m-Y H:i'):'' }}" name="begins-at" required />
+                            <div class="form-group beginsAtTimePicker text ">
+                                <label for="beginsAtTimePicker">Validade de</label>
+                                <input class="form-control " type="text" autocomplete="off" id="beginsAtTimePicker"
+                                    value="{{ quote is defined?quote.beginsAt|date('d/m/Y H:i'):"now"|date('d/m/Y H:i') }}"
+                                    name="begins-at" required />
                             </div>
                         </div>
                     </div>
@@ -30,9 +31,9 @@
                 <div class="row ">
                     <div class="col-lg-4 col-lg-offset-5">
                         <div class="">
-                            <div class="form-group datetimepicker2 text ">
-                                <label for="datetimepicker2">Validade Até</label>
-                                <input class="form-control " type="text" autocomplete="off" id="datetimepicker2"
+                            <div class="form-group expiresAtTimePicker text ">
+                                <label for="expiresAtTimePicker">Validade Até</label>
+                                <input class="form-control " type="text" autocomplete="off" id="expiresAtTimePicker"
                                     value="{{ quote is defined?quote.expiresAt|date('d/m/Y H:i'):'' }}" name="expires-at" required />
                             </div>
                         </div>

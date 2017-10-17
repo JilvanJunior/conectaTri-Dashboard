@@ -31,6 +31,16 @@ class AuthController extends Controller
     }
 
     /**
+     * @Route("/playstore", name="play_store")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function playStoreAction(Request $request)
+    {
+        return $this->render('security/playstore.html.twig');
+    }
+
+    /**
      * @Route("/login", name="login")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response

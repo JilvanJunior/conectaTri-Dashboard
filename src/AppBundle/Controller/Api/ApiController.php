@@ -517,7 +517,7 @@ class ApiController extends FOSRestController {
                 ->setDeleted(false);
             if(!is_null($representative->minimum_value)) {
                 if(strpos($representative->minimum_value, ','))
-                    $min = $str_replace(['.', ','], ['', '.'], $representative->minimum_value);
+                    $min = str_replace(['.', ','], ['', '.'], $representative->minimum_value);
                 else
                     $min = $representative->minimum_value;
                 $supplier->setMinimumValue($min);
@@ -527,7 +527,6 @@ class ApiController extends FOSRestController {
         $dbRepresentative = new Representative();
         $dbRepresentative->setName($representative->contact_name)
             ->setPhone($representative->contact_phone)
-            ->setCellphone($representative->contact_cellphone)
             ->setEmail($representative->contact_email)
             ->setSupplier($supplier)
             ->setRetailer($dbToken->getRetailer())
@@ -561,7 +560,7 @@ class ApiController extends FOSRestController {
 
         $representative = json_decode($request->getContent());
         /** @var Representative $dbRepresentative */
-        $dbRepresentative = $d->getRepository("AppBundle:Representative")->findOneBy(["email" => $representative->contactEmail, "retailer" => $dbToken->getRetailer()]);
+        $dbRepresentative = $d->getRepository("AppBundle:Representative")->findOneBy(["email" => $representative->contact_email, "retailer" => $dbToken->getRetailer()]);
         if (!is_null($dbRepresentative)) {
             if ($dbRepresentative->getId() != $id)
                 return View::create(new ApiError("Já existe um representante com o mesmo email"), Response::HTTP_CONFLICT);
@@ -581,7 +580,6 @@ class ApiController extends FOSRestController {
 
         $dbRepresentative->setName($representative->contact_name)
             ->setPhone($representative->contact_phone)
-            ->setCellphone($representative->contact_cellphone)
             ->setEmail($representative->contact_email)
             ->setUpdatedAt(new \DateTime())
             ->setDeleted(false);
@@ -757,21 +755,6 @@ class ApiController extends FOSRestController {
             $em->persist($newProduct);
             $dbListing->addListingProduct($newProduct);
         }
-        $tmp = [];
-        foreach ($dbListing->getRepresentatives() as $representative) {
-            $rcvRepresentative = self::arrayContains($listing->representatives, $representative);
-            if ($rcvRepresentative == false) {
-                $dbListing->removeRepresentative($representative);
-            } else {
-                $tmp[] = $rcvRepresentative;
-            }
-        }
-        self::array_diff($listing->suppliers, $tmp);
-        foreach ($listing->suppliers as $representative) {
-            /** @var Representative $dbRepresentative */
-            $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($representative->id);
-            $dbListing->addRepresentative($dbRepresentative);
-        }
         $dbListing->setUpdatedAt(new \DateTime())
             ->setName($listing->name)
             ->setType($listing->type)
@@ -847,12 +830,6 @@ class ApiController extends FOSRestController {
                     if (!$quoteProduct->isDeleted()) {
                         foreach ($quoteProduct->getQuoteSuppliers() as $supplier) {
                             $em->detach($supplier);
-                            if ($supplier->getRepresentative()->isDeleted())
-                                $quoteProduct->removeQuoteSupplier($supplier);
-                            /* TODO: Add this
-                            else
-                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
-                            */
                         }
                     } else {
                         $quote->removeQuoteProduct($quoteProduct);
@@ -904,12 +881,6 @@ class ApiController extends FOSRestController {
                         /** @var QuoteSupplier $quoteSupplier */
                         foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                             $em->detach($quoteSupplier);
-                            if ($quoteSupplier->getRepresentative()->isDeleted())
-                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
-                            /* TODO: Add this
-                            else
-                                $quoteSupplier->setRepresentative(new ApiSupplier($quoteSupplier->getRepresentative()));
-                            */
                         }
                     } else {
                         $quote->removeQuoteProduct($quoteProduct);
@@ -963,12 +934,6 @@ class ApiController extends FOSRestController {
                         /** @var QuoteSupplier $quoteSupplier */
                         foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                             $em->detach($quoteSupplier);
-                            if ($quoteSupplier->getRepresentative()->isDeleted())
-                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
-                            /* TODO: Add this
-                            else
-                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
-                            */
                         }
                     } else {
                         $quote->removeQuoteProduct($quoteProduct);
@@ -1033,12 +998,6 @@ class ApiController extends FOSRestController {
                         /** @var quoteSupplier $quoteSupplier */
                         foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                             $em->detach($quoteSupplier);
-                            if ($quoteSupplier->getRepresentative()->isDeleted())
-                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
-                            /* TODO: Add this
-                            else
-                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
-                            */
                         }
                     } else {
                         $quote->removeQuoteProduct($quoteProduct);
@@ -1105,12 +1064,6 @@ class ApiController extends FOSRestController {
                         /** @var QuoteSupplier $quoteSupplier */
                         foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                             $em->detach($quoteSupplier);
-                            if ($quoteSupplier->getRepresentative()->isDeleted())
-                                $quoteProduct->removeQuoteSupplier($quoteSupplier);
-                            /* TODO: Add this
-                            else
-                                $supplier->setRepresentative(new ApiSupplier($supplier->getRepresentative()));
-                            */
                         }
                     } else {
                         $quote->removeQuoteProduct($quoteProduct);
@@ -1500,8 +1453,10 @@ class ApiController extends FOSRestController {
             ->setBeginsAt($this->createATOMDateTime($quote->begins_at))
             ->setExpiresAt($this->createATOMDateTime($quote->expires_at))
             ->setSendToSupplier($quote->send_to_supplier);
-        if(!is_null($quote->payment_date))
+        if(property_exists($quote, 'payment_date'))
             $dbQuote->setPaymentDate($quote->payment_date);
+        else
+            $dbQuote->setPaymentDate('');
         if(property_exists($quote, 'codigo_martins'))
             $dbQuote->setCodeMartins($quote->codigo_martins);
         $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
