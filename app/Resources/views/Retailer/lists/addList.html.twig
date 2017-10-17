@@ -401,6 +401,13 @@
 
     <script>
         $(document).ready(function() {
+            $('input').keydown(function() {
+                if($(this).val() == '') {
+                    $(this).parent('div:first').removeClass('typing');
+                } else {
+                    $(this).parent('div:first').addClass('typing');
+                }
+            });
             $('input').each(function() {
                 if($(this).val() == '') {
                     $(this).parent('div:first').removeClass('typing');
