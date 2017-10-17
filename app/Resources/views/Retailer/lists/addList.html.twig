@@ -400,6 +400,13 @@
 
     <script>
         $(document).ready(function() {
+            $('input, textarea').keyup(function() {
+                if($(this).val() == '') {
+                    $(this).parent('div:first').removeClass('typing');
+                } else {
+                    $(this).parent('div:first').addClass('typing');
+                }
+            });
             $('input, textarea').keydown(function() {
                 if($(this).val() == '') {
                     $(this).parent('div:first').removeClass('typing');
@@ -644,7 +651,14 @@
                         }),
                         success: function (response) {
                             console.log(response);
-                            $('#product-datatable').DataTable().ajax.reload();
+                            $('#product-datatable').DataTable().row.add([
+                                response.id,
+                                response.name,
+                                response.type,
+                                response.brand,
+                                response.unit,
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts'/><span></span></label>"
+                            ]).draw();
                             $this.button('reset');
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset")
