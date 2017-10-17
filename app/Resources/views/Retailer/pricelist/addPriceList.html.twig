@@ -355,13 +355,16 @@
 
 
     <script>
+        var supplierTable = $('#supplier-datatable');
+        var listingTable = $('#listing-datatable');
+        var productTable = $('#product-datatable');
 
         //BEGIN MASKS
 
         $(function(){
             $('#cnpj').mask('00.000.000/0000-00');
             $('#valor_minimo').mask('000.000.000.000.000,00', {reverse: true});
-            $('#codigo').mask('0000000000000', {reverse: true});
+            $('#codigo').mask('00000000000000000');
             $('input').each(function() {
                 if($(this).val() == '') {
                     $(this).parent('div:first').removeClass('typing');
@@ -459,6 +462,32 @@
             })
         }
 
+        function validateForm() {
+            var validationState = $('#cotacao_form').valid();
+
+            if(validationState) {
+                $("#advance").find("a").removeClass('disabled');
+            } else {
+                $("#advance").find("a").addClass('disabled');
+            }
+        }
+
+        function checkaStep1() {
+            if(supplierTable.find('tr').find("input").is(":checked")){
+                $("#advance").find("a").removeClass('disabled');
+                return;
+            }
+            $("#advance").find("a").addClass('disabled');
+        }
+
+        function checkaStep3() {
+            if( productTable.find('tr').find("input").is(":checked") ){
+                $("#advance").find("a").removeClass('disabled');
+                return;
+            }
+            $("#advance").find("a").addClass('disabled');
+        }
+
         $(document).ready(function() {
             //BEGIN WIZARD METHODS
             $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
@@ -481,17 +510,10 @@
                             }
                         });
 
-                        cotacaoForm.mouseout(function() {
-                            var validationState = $('#cotacao_form').valid();
-
-                            if(validationState) {
-                                $("#advance").find("a").removeClass('disabled');
-                            }
-                        });
-
-                        if($('#cotacao_form').valid()) {
-                            $("#advance").find("a").removeClass('disabled');
-                        }
+                        validateForm();
+                        cotacaoForm.mouseout(validateForm);
+                        cotacaoForm.keydown(validateForm);
+                        cotacaoForm.keyup(validateForm);
                         //END FORM VALIDATION
                         break;
                     case 1 :
@@ -500,22 +522,14 @@
                         $("#advance a").addClass('disabled');
                         $("#previous").show();
 
-                        var supplierTable = $('#supplier-datatable');
-
-                        supplierTable.mouseout(function() {
-                            if(supplierTable.find('tr').find("input").is(":checked")){
-                                $("#advance").find("a").removeClass('disabled');
-                            return;
-                            }
-                                $("#advance").find("a").addClass('disabled');
-                        });
+                        checkaStep1()
+                        supplierTable.find('input').change(checkaStep1);
 
                         break;
                     case 2 :
                         $("#wizardStepLabel").text(" Selecionar Lista");
                         $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/minhas-listas/24x24.png') }}")
 
-                        var listingTable = $('#listing-datatable');
                         break;
                     case 3 :
                         $("#wizardStepLabel").text(" Selecionar Produtos");
@@ -523,15 +537,8 @@
                         $("#advance a").addClass('disabled');
                         $("#advance").show();
 
-                        var productTable = $('#product-datatable');
-
-                        productTable.mouseout(function() {
-                            if( productTable.find('tr').find("input").is(":checked") ){
-                                $("#advance").find("a").removeClass('disabled');
-                            return;
-                            }
-                            $("#advance").find("a").addClass('disabled');
-                        });
+                        checkaStep3();
+                        productTable.find('input').change(checkaStep3);
 
                         break;
                     case 4 :
@@ -1164,6 +1171,8 @@
                 });
             });
 
+            console.log(suppliersId);
+
             $.each($('#product-datatable tr input:checked'), function(i, v){
                 if($(this).val() == 'on')
                     return true;
@@ -1192,10 +1201,10 @@
                     quote_suppliers: suppliersId,
                 }),
                 success: function (response) {
-                    if(force)
-                        sendLink(response.id);
-                    else
-                        location.href = '{{ path('cotacoes') }}'
+                    //if(force)
+                    //    sendLink(response.id);
+                    //else
+                    //    location.href = '{{ path('cotacoes') }}'
                 },
                 error: function (error) {
                     alert(error.responseJSON.error.exception["0"].message);
