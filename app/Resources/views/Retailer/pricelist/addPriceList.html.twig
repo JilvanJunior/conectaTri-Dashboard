@@ -504,9 +504,23 @@
                         //BEGIN FORM VALIDATION
                         var cotacaoForm = $( "#cotacao_form" );
 
+                        $.validator.addMethod("greaterThan", 
+                            function(value, element, params) {
+                                debugger;
+
+                                if (!/Invalid|NaN/.test(new Date(value))) {
+                                    return new Date(value) > new Date($(params).val());
+                                }
+
+                                return isNaN(value) && isNaN($(params).val()) 
+                                    || (Number(value) > Number($(params).val())); 
+                            },'Must be greater than {0}.');
                         cotacaoForm.validate({
                             errorPlacement: function(){
                                 return false;
+                            },
+                            rules: {
+                                expiresAtTimePicker: { greaterThan: "#beginsAtTimePicker" }
                             }
                         });
 

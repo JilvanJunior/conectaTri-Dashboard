@@ -340,8 +340,7 @@
                                                                                                             <div class="">
                                                                                                                 <div class="form-group descricao-produto text ">
                                                                                                                     <label for="descricao-produto">Descrição Completa*</label>
-                                                                                                                    <textarea rows="3" class="form-control text-area" type="text" id="descricao-produto" name="descricao-produto"  >
-                                                                                                                </textarea>
+                                                                                                                    <textarea rows="3" class="form-control text-area" type="text" id="descricao-produto" name="descricao-produto"></textarea>
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
@@ -401,14 +400,14 @@
 
     <script>
         $(document).ready(function() {
-            $('input').keydown(function() {
+            $('input, textarea').keydown(function() {
                 if($(this).val() == '') {
                     $(this).parent('div:first').removeClass('typing');
                 } else {
                     $(this).parent('div:first').addClass('typing');
                 }
             });
-            $('input').each(function() {
+            $('input, textarea').each(function() {
                 if($(this).val() == '') {
                     $(this).parent('div:first').removeClass('typing');
                 } else {
