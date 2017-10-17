@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Representative;
 
+use AppBundle\Entity\RepresentativeUser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,7 +64,7 @@ class ProductSupplierStatusController extends Controller {
 
         try {
             $em->flush();
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             return $this->json(array('status' => 'error', 'message' => $e->getMessage()));
         }
 
