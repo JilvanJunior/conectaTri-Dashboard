@@ -870,22 +870,18 @@
                                 response.contact_phone,
                                 "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkProducts'/><span></span></label>"
                             ]);
-                            $this.button('reset');
                             $('#myModal').modal('toggle');
                             $("#supplier_form").trigger("reset")
                         },
                         error: function (error) {
                             alert(error.responseJSON.error.exception["0"].message);
-                            $this.button('reset');
                             $('#myModal').modal('toggle');
                             $("#supplier_form").trigger("reset")
                         }
 
                     }).done(function () {
-                    $this.button('reset');
                 });
             }else{
-                $this.button('reset');
             }
 
         });
@@ -951,7 +947,6 @@
             var tipo = $('#tipo').val();
             let types = [ "{{ listingTypes|join('","')|raw }}" ];
 
-            $this.button('loading');
             var listingForm = $( "#list_form" );
 
             listingForm.validate({
@@ -985,19 +980,16 @@
                             0,
                             "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkListing' data-products='[]'/><span></span></label>"
                         ]);
-                        $this.button('reset');
                         $('#listingModal').modal('toggle');
                         $("#list_form").trigger("reset")
                     },
                     error: function (error) {
                         alert(error.responseJSON.error.exception["0"].message);
-                        $this.button('reset');
                         $('#listingModal').modal('toggle');
                         $("#list_form").trigger("reset")
                     }
                 });
             } else {
-                $this.button('reset');
             }
         });
 
@@ -1067,7 +1059,6 @@
             var descricao = $('#descricao-produto').val();
 
 
-            $this.button('loading');
             var productForm = $( "#product_form" );
 
             productForm.validate({
@@ -1105,23 +1096,19 @@
                                 response.unit,
                                 "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts'/><span></span></label>"
                             ]);
-                            $this.button('reset');
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset")
 
                         },
                         error: function (error) {
                             alert(error.responseJSON.error.exception["0"].message);
-                            $this.button('reset');
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset")
                         }
 
                     }).done(function () {
-                    $this.button('reset');
                 });
             }else{
-                $this.button('reset');
             }
 
         });
