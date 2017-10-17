@@ -462,13 +462,36 @@
             })
         }
 
+        function createDate(valor) {
+            if(valor == '')
+                return false;
+
+            let partes = valor.split(' ');
+            let date = partes[0].split('/');
+            let hora = partes[1].split(':');
+
+            return new Date(date[2], date[1] - 1, date[0], hora[0], hora[1]);
+        }
+
         function validateForm() {
             var validationState = $('#cotacao_form').valid();
+            let btnNext = $("#advance").find("a");
 
             if(validationState) {
-                $("#advance").find("a").removeClass('disabled');
+                let begins = createDate($('#beginsAtTimePicker').val());
+                let expires = createDate($('#expiresAtTimePicker').val());
+                console.log(begins, expires);
+                if(begins < expires) {
+                    btnNext.removeClass('disabled');
+                    $('#expiresAtTimePicker').removeClass('error');
+                    $('#expiresAtTimePicker').addClass('valid');
+                } else {
+                    btnNext.addClass('disabled');
+                    $('#expiresAtTimePicker').removeClass('valid');
+                    $('#expiresAtTimePicker').addClass('error');
+                }
             } else {
-                $("#advance").find("a").addClass('disabled');
+                btnNext.addClass('disabled');
             }
         }
 
@@ -504,23 +527,9 @@
                         //BEGIN FORM VALIDATION
                         var cotacaoForm = $( "#cotacao_form" );
 
-                        $.validator.addMethod("greaterThan", 
-                            function(value, element, params) {
-                                debugger;
-
-                                if (!/Invalid|NaN/.test(new Date(value))) {
-                                    return new Date(value) > new Date($(params).val());
-                                }
-
-                                return isNaN(value) && isNaN($(params).val()) 
-                                    || (Number(value) > Number($(params).val())); 
-                            },'Must be greater than {0}.');
                         cotacaoForm.validate({
                             errorPlacement: function(){
                                 return false;
-                            },
-                            rules: {
-                                expiresAtTimePicker: { greaterThan: "#beginsAtTimePicker" }
                             }
                         });
 
