@@ -412,11 +412,11 @@
         {% endif %}
 
         $(function () {
-            $('#datetimepicker1').datetimepicker({
+            $('#beginsAtTimePicker').datetimepicker({
                 format: 'dd/mm/yyyy hh:ii',
                 language: 'pt-BR'
             });
-            $('#datetimepicker2').datetimepicker({
+            $('#expiresAtTimePicker').datetimepicker({
                 format: 'dd/mm/yyyy hh:ii',
                 language: 'pt-BR'
             });
@@ -545,10 +545,10 @@
                         $("#wizardStepLabel").text(" Confirmação dos Dados");
                         $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/confirmacao-dos-dados/24x24.png') }}");
                         $("#advance").hide();
-                        setDateTime("datetimepicker1","quote_start","date");
-                        setDateTime("datetimepicker1","quote_start_time","time");
-                        setDateTime("datetimepicker2","quote_end","date");
-                        setDateTime("datetimepicker2","quote_end_time","time");
+                        setDateTime("beginsAtTimePicker","quote_start","date");
+                        setDateTime("beginsAtTimePicker","quote_start_time","time");
+                        setDateTime("expiresAtTimePicker","quote_end","date");
+                        setDateTime("expiresAtTimePicker","quote_end_time","time");
                         setItensSuplliers("product-datatable","quote_itens");
                         setItensSuplliers("supplier-datatable","quote_suppliers");
                         if($('#prazoRCA').length && $('#prazoRCA').val() != 'Outros') {
@@ -577,23 +577,19 @@
 
         //END WIZARD METHODS
 
-        $('#datetimepicker1').change(function(){
-            $('.datetimepicker1.text').addClass('typing');
+        $('#beginsAtTimePicker').change(function(){
+            $('.beginsAtTimePicker.text').addClass('typing');
             if( $(this).val().length == 0 ) {
-                $('.datetimepicker1.text').removeClass('typing');
+                $('.beginsAtTimePicker.text').removeClass('typing');
             }
         });
 
-        $('#datetimepicker1').datetimepicker(
-            'setDate', (new Date()),
-            {format: 'dd/mm/yyyy hh:ii'}
-        );
-        $('.datetimepicker1.text').addClass('typing');
+        $('.beginsAtTimePicker.text').addClass('typing');
 
-        $('#datetimepicker2').change(function(){
-            $('.datetimepicker2.text').addClass('typing');
+        $('#expiresAtTimePicker').change(function(){
+            $('.expiresAtTimePicker.text').addClass('typing');
             if( $(this).val().length == 0 ) {
-                $('.datetimepicker2.text').removeClass('typing');
+                $('.expiresAtTimePicker.text').removeClass('typing');
             }
         });
 
@@ -1146,11 +1142,11 @@
             var name = $("#cotacao").val();
             var paymentDate = $('#prazoRCA').val();
 
-            var startDate = $("#datetimepicker1").data("datetimepicker").getDate();
+            var startDate = $("#beginsAtTimePicker").data("datetimepicker").getDate();
             startDate = startDate.getFullYear() + "-" + set2Digits(startDate.getMonth() + 1) + "-" + set2Digits(startDate.getDate()) + "T"
                 + set2Digits(startDate.getHours()) + ":" + set2Digits(startDate.getMinutes()) + ":00+00:00";
 
-            var endDate = $("#datetimepicker2").data("datetimepicker").getDate();
+            var endDate = $("#expiresAtTimePicker").data("datetimepicker").getDate();
             endDate = endDate.getFullYear() + "-" + set2Digits(endDate.getMonth() + 1) + "-" + set2Digits(endDate.getDate()) + "T"
                 + set2Digits(endDate.getHours()) + ":" + set2Digits(endDate.getMinutes()) + ":00+00:00";
 
@@ -1201,10 +1197,10 @@
                     quote_suppliers: suppliersId,
                 }),
                 success: function (response) {
-                    //if(force)
-                    //    sendLink(response.id);
-                    //else
-                    //    location.href = '{{ path('cotacoes') }}'
+                    if(force)
+                        sendLink(response.id);
+                    else
+                        location.href = '{{ path('cotacoes') }}'
                 },
                 error: function (error) {
                     alert(error.responseJSON.error.exception["0"].message);
