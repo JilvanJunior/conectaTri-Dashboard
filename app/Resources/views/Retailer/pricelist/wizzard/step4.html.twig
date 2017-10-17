@@ -67,6 +67,9 @@
                                             <div class="form-group codigo text ">
                                                 <label for="codigo">Código de Barras do Produto</label>
                                                 <input class="form-control" type="text" name="codigo" id="codigo" required/>
+                                                {% if userIsRCA %}
+                                                <small style="font-size: 65%;">*Produtos sem Código de barras não podem ser inclusos em Pedidos Martins</small>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
