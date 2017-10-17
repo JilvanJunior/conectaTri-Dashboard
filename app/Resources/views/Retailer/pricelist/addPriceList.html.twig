@@ -1031,9 +1031,6 @@
          */
 
         $('#salvar_produto').on('click', function() {
-
-
-
             var $this = $(this);
 
             var produto = $('#produto').val();
@@ -1152,10 +1149,23 @@
             var suppliersId = [];
 
             $.each($('#supplier-datatable tr input:checked'), function(i, v){
-                suppliersId.push({id:0, representative: {id: $(this).val()}, quantity: 0, price: 0});
+                if($(this).val() == 'on')
+                    return true;
+
+                suppliersId.push({
+                    id:0,
+                    representative: {
+                        id: $(this).val()
+                    },
+                    quantity: 0,
+                    price: 0
+                });
             });
 
             $.each($('#product-datatable tr input:checked'), function(i, v){
+                if($(this).val() == 'on')
+                    return true;
+
                 productsId.push({
                     product: {id: $(this).val()},
                     winners: [],

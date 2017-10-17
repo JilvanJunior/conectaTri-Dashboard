@@ -1469,8 +1469,10 @@ class ApiController extends FOSRestController {
             ->setBeginsAt($this->createATOMDateTime($quote->begins_at))
             ->setExpiresAt($this->createATOMDateTime($quote->expires_at))
             ->setSendToSupplier($quote->send_to_supplier);
-        if(!is_null($quote->payment_date))
+        if(property_exists($quote, 'payment_date'))
             $dbQuote->setPaymentDate($quote->payment_date);
+        else
+            $dbQuote->setPaymentDate('');
         if(property_exists($quote, 'codigo_martins'))
             $dbQuote->setCodeMartins($quote->codigo_martins);
         $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
