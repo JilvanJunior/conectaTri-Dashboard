@@ -369,6 +369,16 @@
                     $(this).parent('div:first').addClass('typing');
                 }
             });
+            $('tbody input[type=checkbox]').click(function() {
+                let table = $(this).parents('table:first');
+
+                let inputs = table.find('tbody input[type=checkbox]');
+                let inputsChecked = inputs.filter(':checked');
+
+                let checkar = (inputs.length == inputsChecked.length);
+
+                table.find('thead input[type=checkbox]').prop('checked', checkar);
+            });
         });
 
         var SPMaskBehavior = function (val) {
