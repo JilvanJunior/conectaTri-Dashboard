@@ -48,7 +48,6 @@ class ListsController extends Controller
 
         //type of listings
         $types = [];
-        $types['0'] = 'Não Informado';
         $types['1'] = 'Comum';
         $types['2'] = 'Sazonal';
         $types['3'] = 'Semanal';
