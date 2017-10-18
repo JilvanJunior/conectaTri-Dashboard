@@ -1857,7 +1857,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Post("/api/recovery/begin")
+     * @Rest\Post("/api/recovery/begin", name="post_retailer_recovery")
      * @param Request $request
      * @return View
      */

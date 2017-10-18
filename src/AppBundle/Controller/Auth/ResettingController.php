@@ -29,6 +29,15 @@ class ResettingController extends Controller
     }
 
     /**
+     * Request reset user password: show form.
+     * @Route("/vrecuperacao-senha", name="retailer_recover_password")
+     */
+    public function retailerRecoveryAction()
+    {
+        return $this->render('security/retailer_resetting.html.twig');
+    }
+
+    /**
      * Request reset user password: submit form and send email.
      *
      * @Route("/recuperacao-senha/email", name="recover_password_email")
