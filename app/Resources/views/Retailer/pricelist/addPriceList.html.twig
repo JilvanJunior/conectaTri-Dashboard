@@ -641,6 +641,20 @@
             }
         });
 
+        $('#beginsAtTimePicker').keyup(function(){
+            $('.beginsAtTimePicker.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.beginsAtTimePicker.text').removeClass('typing');
+            }
+        });
+
+        $('#expiresAtTimePicker').keyup(function(){
+            $('.expiresAtTimePicker.text').addClass('typing');
+            if( $(this).val().length == 0 ) {
+                $('.expiresAtTimePicker.text').removeClass('typing');
+            }
+        });
+
         $('#prazo').keyup(function(){
             $('.prazo.text').addClass('typing');
             if( $(this).val().length == 0 ) {
@@ -668,8 +682,6 @@
                 $('.valor_minimo.text').removeClass('typing');
             }
         })
-
-
 
         $('#representante').keyup(function(){
             $('.representante.text').addClass('typing');
