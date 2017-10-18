@@ -207,7 +207,7 @@
                         <input type="text" id="username" name="username" class="input" required="required" />
                     </div>
                     <div class="profile__footer">
-                        <button type="button" class="btn">Voltar</button>
+                        <a href="{{ path('index') }}"><button class="btn">Voltar</button></a>
                         <input id='recuperar' class="btn" type="button" value="Recuperar Senha" />
                     </div>
                 </form>
@@ -225,6 +225,11 @@
         el.classList.toggle('profile--open');
     });
     $('#recuperar').click(function() {
+        if($('#username').val() == "") {
+            alert('O campo CNPJ é necessáro!');
+            return;
+        }
+
         $.ajax({
             url: '{{ path('post_retailer_recovery') }}',
             type: 'POST',
