@@ -307,6 +307,7 @@ function validateAgree(){
     var check = $('#agree').is(':checked');
     if(!check)
         alert('É necessário aceitar os termos de uso e a política de privacidade');
+    $('#retailer_companyName').focus();
     return check;
 }
 
