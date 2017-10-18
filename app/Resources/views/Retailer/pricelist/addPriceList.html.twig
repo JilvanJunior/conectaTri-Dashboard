@@ -277,8 +277,9 @@
             color: #FFFFFF;
         }
 
-
-
+        .ui-autocomplete {
+            z-index: 100000;
+        }
     </style>
 
     <div class="page-wrapper-row full-height">
@@ -480,7 +481,6 @@
             if(validationState) {
                 let begins = createDate($('#beginsAtTimePicker').val());
                 let expires = createDate($('#expiresAtTimePicker').val());
-                console.log(begins, expires);
                 if(begins < expires) {
                     btnNext.removeClass('disabled');
                     $('#expiresAtTimePicker').removeClass('error');
@@ -754,6 +754,20 @@
             },
             minLength: 3
         });
+
+        $("#produto").on( "autocompleteselect", function( event, ui ) {
+            $('#codigo').val(ui.item.ean);
+            $('#marca').val(ui.item.brand);
+            $('#peso').val(ui.item.quantity);
+            $('#tipo-produto').val(ui.item.type);
+            $('#unidade').val(ui.item.unit);
+            $('#descricao-produto').val(ui.item.full_description);
+
+            $('.codigo.text').addClass('typing');
+            $('.marca.text').addClass('typing');
+            $('.peso.text').addClass('typing');
+            $('.descricao-produto.text').addClass('typing');
+        } );
 
         $('#codigo').keyup(function(){
             $('.codigo.text').addClass('typing');
