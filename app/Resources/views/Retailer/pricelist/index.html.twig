@@ -81,7 +81,7 @@
                                                         <td>{{ quote.quoteProducts|length }}</td>
                                                         <td>{{ types[quote.type] }}</td>
                                                         <td>{{ status[quote.closed] }}</td>
-                                                        <td>{{ quote.beginsAt|date('d/m/Y h:i') }}</td>
+                                                        <td>{{ quote.createdAt|date('d/m/Y h:i') }}</td>
                                                         <td>
                                                             <a href="{{ path('acompanhar_cotacao', {'id': quote.id}) }}"
                                                                class="btn btn-outline btn-circle btn-sm purple">

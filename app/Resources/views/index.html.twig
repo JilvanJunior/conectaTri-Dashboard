@@ -206,17 +206,17 @@
 </div>
 
 <script>
-    if(screen.width <= 978) {
+    if(screen.width <= 678) {
         document.location.href = "{{ path('play_store') }}";
     }
 
-    /* Simple VanillaJS to toggle class */
+/* Simple VanillaJS to toggle class */
 
-    document.getElementById('toggleProfile').addEventListener('click', function () {
-        [].map.call(document.querySelectorAll('.profile'), function(el) {
-            el.classList.toggle('profile--open');
-        });
+document.getElementById('toggleProfile').addEventListener('click', function () {
+    [].map.call(document.querySelectorAll('.profile'), function(el) {
+        el.classList.toggle('profile--open');
     });
+});
 </script>
 </body>
 
