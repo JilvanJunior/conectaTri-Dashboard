@@ -207,8 +207,8 @@
                         <input type="text" id="username" name="username" class="input" required="required" />
                     </div>
                     <div class="profile__footer">
-                        <a href="{{ path('index') }}"><button class="btn">Voltar</button></a>
-                        <input id='recuperar' class="btn" type="button" value="Recuperar Senha" />
+                        <button type="button" class="btn" onclick="window.location.replace('{{ path('login') }}')">Voltar</button>
+                        <input id="recuperar" class="btn" type="button" value="Recuperar Senha" />
                     </div>
                 </form>
             </div>
@@ -239,6 +239,9 @@
             success: function(res) {
                 alert(res.message);
                 location.href = "{{ path('index') }}";
+            },
+            error: function (res) {
+                alert(res.responseJSON.message);
             }
         });
     });

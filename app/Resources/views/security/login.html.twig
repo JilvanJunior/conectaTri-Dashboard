@@ -215,7 +215,7 @@
             Sou Fornecedor
         </button>
         {% if error %}
-            <div style="color: white !important;">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            <div id="error-msg" style="color: white !important;">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
     </div>
     <div class="retailer">
@@ -299,11 +299,13 @@
     document.getElementById('toggleBackRetailer').addEventListener('click', function () {
         toggleRetailer();
         document.getElementById('toggleBtn').style.display = 'block';
+        $('#error-msg').hide();
     });
 
     document.getElementById('toggleBackRepresentative').addEventListener('click', function () {
         toggleRepresentative();
         document.getElementById('toggleBtn').style.display = 'block';
+        $('#error-msg').hide();
     });
 
     $(function(){
