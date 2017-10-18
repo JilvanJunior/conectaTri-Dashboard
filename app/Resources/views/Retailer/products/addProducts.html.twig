@@ -7,18 +7,13 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
 
-
         /*
         Float label styles
          */
 
-
-
         label:hover {
             cursor: text;
         }
-
-
 
         @media (max-width: 500px) {
             .contact-form {
@@ -177,7 +172,6 @@
         }
 
 
-
     </style>
 
     <div class="page-wrapper-row full-height">
@@ -327,13 +321,13 @@
                                                                                         {% else %}
                                                                                             <option value="" disabled selected>Selecione uma Unidade de Medida</option>
                                                                                         {% endif %}
-                                                                                        <option value="Unidade">Unidade</option>
-                                                                                        <option value="Caixa">Caixa</option>
-                                                                                        <option value="Kg">Kg</option>
-                                                                                        <option value="Litro">Litro</option>
-                                                                                        <option value="Fardo">Fardo</option>
-                                                                                        <option value="Pacote">Pacote</option>
-                                                                                        <option value="Pack">Pack</option>
+                                                                                        <option value="UNIDADE">Unidade</option>
+                                                                                        <option value="CAIXA">Caixa</option>
+                                                                                        <option value="KG">Kg</option>
+                                                                                        <option value="LITRO">Litro</option>
+                                                                                        <option value="FARDO">Fardo</option>
+                                                                                        <option value="PACOTE">Pacote</option>
+                                                                                        <option value="PACK">Pack</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -422,6 +416,21 @@
                 minLength: 3
             });
 
+            $("#product").on( "autocompleteselect", function( event, ui ) {
+                $('#ean').val(ui.item.ean);
+                $('#brand').val(ui.item.brand);
+                $('#quantity').val(ui.item.quantity);
+                $('#type').val(ui.item.type);
+                $('#unit').val(ui.item.unit);
+                $('#full-description').val(ui.item.full_description);
+
+                $('.ean.text').addClass('typing');
+                $('.brand.text').addClass('typing');
+                $('.quantity.text').addClass('typing');
+                $('.full-description.text').addClass('typing');
+            } );
+
+
             var dataList = document.getElementById('product-datalist');
 
             $.ajax("{{ path('get_produtos') }}", {
@@ -431,6 +440,12 @@
                     jsonOptions.forEach(function(item) {
                         var option = document.createElement('option');
                         option.value = item.name;
+                        option.ean = item.ean;
+                        option.brand = item.brand;
+                        option.type = item.type;
+                        option.unit = item.unit;
+                        option.quantity = item.quantity;
+                        option.full_description = item.full_description;
                         dataList.appendChild(option);
                     });
                 },
@@ -442,7 +457,7 @@
             $('#ean').mask('0000000000000', {reverse: true});
 
             $('input').each(function() {
-                if($(this).val() == '') {
+                if($(this).val() === '') {
                     $(this).parent('div:first').removeClass('typing');
                 } else {
                     $(this).parent('div:first').addClass('typing');
@@ -454,7 +469,7 @@
 //BEGIN FLOAT LABEL METHODS
 $('#product').keyup(function(){
     $('.product.text').addClass('typing');
-    if( $(this).val().length == 0 ) {
+    if( $(this).val().length === 0 ) {
         $('.product.text').removeClass('typing');
     }
 });
@@ -462,13 +477,13 @@ $('#product').keyup(function(){
 
 $('#ean').keyup(function(){
     $('.ean.text').addClass('typing');
-    if( $(this).val().length == 0 ) {
+    if( $(this).val().length === 0 ) {
         $('.ean.text').removeClass('typing');
     }
 });
 $('#brand').keyup(function(){
     $('.brand.text').addClass('typing');
-    if( $(this).val().length == 0 ) {
+    if( $(this).val().length === 0 ) {
         $('.brand.text').removeClass('typing');
     }
 });
@@ -476,13 +491,13 @@ $('#brand').keyup(function(){
 
 $('#quantity').keyup(function(){
     $('.quantity.text').addClass('typing');
-    if( $(this).val().length == 0 ) {
+    if( $(this).val().length === 0 ) {
         $('.quantity.text').removeClass('typing');
     }
 });
 $('#full-description').keyup(function(){
     $('.full-description.text').addClass('typing');
-    if( $(this).val().length == 0 ) {
+    if( $(this).val().length === 0 ) {
         $('.full-description.text').removeClass('typing');
     }
 });
