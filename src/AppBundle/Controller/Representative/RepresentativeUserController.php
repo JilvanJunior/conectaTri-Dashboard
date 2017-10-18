@@ -46,7 +46,6 @@ class RepresentativeUserController extends Controller
 
                 $em->flush();
             }
-            return $this->redirectToRoute('access_denied');
         }
 
         $isIncluded = false;
