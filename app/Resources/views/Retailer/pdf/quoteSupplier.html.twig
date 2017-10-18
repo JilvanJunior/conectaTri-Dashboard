@@ -145,18 +145,16 @@
         </tr>
         </thead>
         <tbody>
-        {% for quoteProduct in quoteProducts %}
-            {% for quoteSupplier in quoteProduct.winners if quoteSupplier.representative.id == representative.id %}
-                <tr>
-                    <td>{{ quoteSupplier.quoteProduct.product.name }}</td>
-                    <td>{{ quoteSupplier.quoteProduct.product.ean}}</td>
-                    <td>{{ quoteSupplier.quoteProduct.product.unit }}</td>
-                    <td>{{ quoteSupplier.quoteProduct.product.quantity }}</td>
-                    <td>{{ quoteSupplier.quantity }}</td>
-                    <td>R$ {{ quoteSupplier.price|number_format(2, ',', '.') }}</td>
-                    <td>R$ {{ (quoteSupplier.quantity * quoteSupplier.price)|number_format(2, ',', '.') }}</td>
-                </tr>
-            {% endfor %}
+        {% for quoteSupplier in quotesSupplier %}
+            <tr>
+                <td>{{ quoteSupplier.quoteProduct.product.name }}</td>
+                <td>{{ quoteSupplier.quoteProduct.product.ean}}</td>
+                <td>{{ quoteSupplier.quoteProduct.product.unit }}</td>
+                <td>{{ quoteSupplier.quoteProduct.product.quantity }}</td>
+                <td>{{ quoteSupplier.quantity }}</td>
+                <td>R$ {{ quoteSupplier.price|number_format(2, ',', '.') }}</td>
+                <td>R$ {{ (quoteSupplier.quantity * quoteSupplier.price)|number_format(2, ',', '.') }}</td>
+            </tr>
         {% endfor %}
         </tbody>
     </table>

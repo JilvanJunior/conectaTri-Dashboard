@@ -297,7 +297,7 @@ class QuoteProduct
     }
 
     /**
-     * @return QuoteSupplier
+     * @return array
      */
     public function calculateWinners()
     {

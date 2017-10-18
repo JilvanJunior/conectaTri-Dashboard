@@ -571,10 +571,24 @@ class PriceListController extends Controller
         $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
+        /** @var Quote $quote */
         $quote = $em->getRepository('AppBundle:Quote')->find($idQuote);
+        /** @var Representative $representative */
         $representative = $em->getRepository('AppBundle:Representative')->find($idRepresentative);
         $supplier = $representative->getSupplier();
         $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $idQuote, 'deleted' => false]);
+
+        $quotesSupplier = array();
+
+        /** @var QuoteProduct $quoteProduct */
+        foreach($quoteProducts as $quoteProduct) {
+            /** @var QuoteSupplier $quoteSupplier */
+            foreach($quoteProduct->calculateWinners() as $quoteSupplier) {
+
+                if($representative->getId() == $quoteSupplier->getRepresentative()->getId())
+                    $quotesSupplier[] = $quoteSupplier;
+            }
+        }
 
 
         $html = $this->renderView('Retailer/pdf/quoteSupplier.html.twig', array(
@@ -583,6 +597,7 @@ class PriceListController extends Controller
             'representative' => $representative,
             'supplier' => $supplier,
             'quoteProducts' => $quoteProducts,
+            'quotesSupplier' => $quotesSupplier
         ));
 
         $fileName = str_replace(" ", "_", $quote->getName())
