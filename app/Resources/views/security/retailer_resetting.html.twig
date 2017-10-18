@@ -239,6 +239,9 @@
             success: function(res) {
                 alert(res.message);
                 location.href = "{{ path('index') }}";
+            },
+            error: function (res) {
+                alert(res.responseJSON.message);
             }
         });
     });
