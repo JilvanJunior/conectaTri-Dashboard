@@ -1449,6 +1449,7 @@ class ApiController extends FOSRestController {
         }
         $dbQuote->setDeleted(false)
             ->setName($quote->name)
+            ->setType($quote->type)
             ->setClosed(isset($quote->closed) ? $quote->closed : false)
             ->setBeginsAt($this->createATOMDateTime($quote->begins_at))
             ->setExpiresAt($this->createATOMDateTime($quote->expires_at))

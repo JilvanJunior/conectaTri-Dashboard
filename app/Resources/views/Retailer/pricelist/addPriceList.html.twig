@@ -462,13 +462,36 @@
             })
         }
 
+        function createDate(valor) {
+            if(valor == '')
+                return false;
+
+            let partes = valor.split(' ');
+            let date = partes[0].split('/');
+            let hora = partes[1].split(':');
+
+            return new Date(date[2], date[1] - 1, date[0], hora[0], hora[1]);
+        }
+
         function validateForm() {
             var validationState = $('#cotacao_form').valid();
+            let btnNext = $("#advance").find("a");
 
             if(validationState) {
-                $("#advance").find("a").removeClass('disabled');
+                let begins = createDate($('#beginsAtTimePicker').val());
+                let expires = createDate($('#expiresAtTimePicker').val());
+                console.log(begins, expires);
+                if(begins < expires) {
+                    btnNext.removeClass('disabled');
+                    $('#expiresAtTimePicker').removeClass('error');
+                    $('#expiresAtTimePicker').addClass('valid');
+                } else {
+                    btnNext.addClass('disabled');
+                    $('#expiresAtTimePicker').removeClass('valid');
+                    $('#expiresAtTimePicker').addClass('error');
+                }
             } else {
-                $("#advance").find("a").addClass('disabled');
+                btnNext.addClass('disabled');
             }
         }
 
@@ -504,23 +527,9 @@
                         //BEGIN FORM VALIDATION
                         var cotacaoForm = $( "#cotacao_form" );
 
-                        $.validator.addMethod("greaterThan", 
-                            function(value, element, params) {
-                                debugger;
-
-                                if (!/Invalid|NaN/.test(new Date(value))) {
-                                    return new Date(value) > new Date($(params).val());
-                                }
-
-                                return isNaN(value) && isNaN($(params).val()) 
-                                    || (Number(value) > Number($(params).val())); 
-                            },'Must be greater than {0}.');
                         cotacaoForm.validate({
                             errorPlacement: function(){
                                 return false;
-                            },
-                            rules: {
-                                expiresAtTimePicker: { greaterThan: "#beginsAtTimePicker" }
                             }
                         });
 
@@ -883,9 +892,10 @@
                                 response.cnpj,
                                 response.contact_phone,
                                 "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkProducts'/><span></span></label>"
-                            ]);
+                            ]).draw();
                             $('#myModal').modal('toggle');
-                            $("#supplier_form").trigger("reset")
+                            $("#supplier_form").trigger("reset");
+                            $("#supplier_form div").removeClass('typing');
                         },
                         error: function (error) {
                             alert(error.responseJSON.error.exception["0"].message);
@@ -993,9 +1003,10 @@
                             types[response.type],
                             0,
                             "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkListing' data-products='[]'/><span></span></label>"
-                        ]);
+                        ]).draw();
                         $('#listingModal').modal('toggle');
-                        $("#list_form").trigger("reset")
+                        $("#list_form").trigger("reset");
+                        $("#list_form div").removeClass('typing');
                     },
                     error: function (error) {
                         alert(error.responseJSON.error.exception["0"].message);
@@ -1109,9 +1120,10 @@
                                 response.brand,
                                 response.unit,
                                 "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts'/><span></span></label>"
-                            ]);
+                            ]).draw();
                             $('#productModal').modal('toggle');
-                            $("#product_form").trigger("reset")
+                            $("#product_form").trigger("reset");
+                            $("#product_form div").removeClass('typing');
 
                         },
                         error: function (error) {
@@ -1141,7 +1153,7 @@
         });
 
         $('#sent-suppliers').on('click', function() {
-            $('#sendSuppliers').modal('toggle');
+            saveQuote(1, true);
         });
 
         function set2Digits(number) {
