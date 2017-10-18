@@ -207,8 +207,8 @@
                         <input type="text" id="username" name="username" class="input" required="required" />
                     </div>
                     <div class="profile__footer">
-                        <button type="button" class="btn">Voltar</button>
-                        <input id='recuperar' class="btn" type="button" value="Recuperar Senha" />
+                        <button type="button" class="btn" onclick="window.location.replace('{{ path('login') }}')">Voltar</button>
+                        <input id="recuperar" class="btn" type="button" value="Recuperar Senha" />
                     </div>
                 </form>
             </div>
