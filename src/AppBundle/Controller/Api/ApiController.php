@@ -1683,7 +1683,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Put("/api/retailer")
+     * @Rest\Put("/api/retailer", name="put_retailer")
      * @param Request $request
      * @return View
      */

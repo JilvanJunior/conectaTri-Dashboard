@@ -67,9 +67,11 @@
                             <div class="page-content-inner">
                                 <div class="row">
                                     <div class="col-xs-12">
-                                        <div class="m-heading-1 border-green-conecta m-bordered">
-                                            Clique nos campos de quantidade e preço para editá-los.
-                                        </div>
+                                        {% if isCompleted or quote.isClosed %}
+                                            <div class="m-heading-1 border-green-conecta m-bordered">
+                                                Clique nos campos de quantidade e preço para editá-los.
+                                            </div>
+                                        {% endif %}
                                         <!-- BEGIN EXAMPLE TABLE PORTLET-->
                                         <div class="portlet light portlet-fit ">
                                             <div class="portlet-title">

@@ -251,7 +251,8 @@
                                                                             <div class="">
                                                                                 <div class="form-group ean text ">
                                                                                     <label for="ean">Código de Barras do Produto</label>
-                                                                                    <input class="form-control" type="text" name="ean" id="ean" value="{% if product is defined %}{{ product.ean }}{% endif %}" required/>
+                                                                                    <input class="form-control" type="text" name="ean" id="ean" 
+                                                                                        value="{% if product is defined %}{{ product.ean }}{% endif %}"/>
                                                                                     {% if userIsRCA %}
                                                                                     <div>
                                                                                         <small style="font-size: 65%;">*Produtos sem Código não serão inclusos em Pedidos</small>
@@ -267,7 +268,7 @@
                                                                             <div class="">
                                                                                 <div class="form-group brand text ">
                                                                                     <label for="brand">Marca do Produto</label>
-                                                                                    <input class="form-control" type="text" name="brand" id="brand" value="{% if product is defined %}{{ product.brand }}{% endif %}" required/>
+                                                                                    <input class="form-control" type="text" name="brand" id="brand" value="{% if product is defined %}{{ product.brand }}{% endif %}"/>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
