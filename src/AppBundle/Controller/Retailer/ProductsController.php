@@ -3,6 +3,8 @@
 namespace AppBundle\Controller\Retailer;
 
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Representative;
+use AppBundle\Entity\Retailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +18,7 @@ class ProductsController extends Controller
      */
     public function indexAction(Request $request)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['retailer' => $user, 'deleted' => false]);
 
@@ -43,11 +46,18 @@ class ProductsController extends Controller
                    ->getQuery()->getResult();
 
         $productsNames = [];
+        /** @var Product $product */
         foreach($products as $i => $product) {
             $productsNames[] = [
                 'id' => $i,
                 'label' => $product->getName(),
                 'value' => $product->getName(),
+                'ean' => $product->getEan(),
+                'brand' => $product->getBrand(),
+                'type' => $product->getType(),
+                'unit' => $product->getUnit(),
+                'quantity' => $product->getQuantity(),
+                'full_description' => $product->getFullDescription()
             ];
         }
 
@@ -61,6 +71,7 @@ class ProductsController extends Controller
      */
     public function addProductAction(Request $request)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('AppBundle:Product')->findBy(['deleted' => false]);
@@ -104,6 +115,7 @@ class ProductsController extends Controller
      */
     public function editProductAction(Request $request, $id)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
