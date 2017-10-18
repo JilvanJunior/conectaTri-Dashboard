@@ -66,4 +66,28 @@ class DashboardController extends Controller
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
+
+    /**
+     * @Route("/varejista/perfil", name="profile")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function profileAction(Request $request)
+    {
+        /** @var Retailer $user */
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $doctrine = $this->getDoctrine();
+
+        $token = $doctrine->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
+        $states = $doctrine->getRepository("AppBundle:State")->findAll();
+
+        return $this->render('Retailer/profile.html.twig', [
+            'states' => $states,
+            'token' => $token->getToken(),
+            'user' => $user,
+            'username' => $user->getFantasyName(),
+            'userIsRCA' => $user->isRCAVirtual(),
+        ]);
+    }
 }

@@ -1,0 +1,337 @@
+{% extends 'Retailer/base.html.twig' %}
+
+{% block title %}Meu Perfil{% endblock %}
+{% block description %}{% endblock %}
+
+{% block page_plugins %}
+    <link href="{{ asset('assets/global/plugins/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page %}
+    <div class="page-wrapper-middle">
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <!-- BEGIN PAGE HEAD-->
+                <div class="page-head">
+                    <div class="container">
+                        <!-- BEGIN PAGE TITLE -->
+                        <div class="page-title">
+                            <h1>Meu Perfil</h1>
+                        </div>
+                        <!-- END PAGE TITLE -->
+                    </div>
+                </div>
+                <!-- END PAGE HEAD-->
+                <!-- BEGIN PAGE CONTENT BODY -->
+                <div class="page-content">
+                    <div class="container">
+                        {% include '_partial/flashMessages.html.twig' %}
+                        <!-- BEGIN PAGE BREADCRUMBS -->
+                        <ul class="page-breadcrumb breadcrumb">
+                            <li>
+                                <a href="{{ path('dashboard') }}">Painel Inicial</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <a href="#">Perfil</a>
+                            </li>
+                        </ul>
+                        <!-- END PAGE BREADCRUMBS -->
+                        <!-- BEGIN PAGE CONTENT INNER -->
+                        <div class="page-content-inner">
+                            <div class="portlet light ">
+                                <form action="#" method="POST" id="retailer_form" class="form-horizontal contact-form">
+                                    <div class="form-body ">
+                                        <div class="row ">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group razao text ">
+                                                        <label for="razao">Razão Social*</label>
+                                                        <input class="form-control" type="text" name="razao" id="razao"
+                                                            value="{{ user.companyName }}" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group fantasy text ">
+                                                        <label for="fantasy">Nome de Usuário*</label>
+                                                        <input class="form-control" type="text" id="fantasy"
+                                                            value="{{ user.fantasyName }}" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group curPass text ">
+                                                        <label for="curPass">Senha Atual*</label>
+                                                        <input class="form-control" type="password" id="curPass" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <button id="mudar" type='button' class='btn green-conecta'
+                                                        style='margin-bottom: 1rem; margin-left: -15px;'>
+                                                        Mudar Senha
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row changePass hidden">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group newPass text ">
+                                                        <label for="newPass">Senha Nova*</label>
+                                                        <input class="form-control" type="password" id="newPass"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row changePass hidden">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group confPass text ">
+                                                        <label for="confPass">Confirmação Senha Nova*</label>
+                                                        <input class="form-control" type="password" id="confPass"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row ">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group cep text">
+                                                        <label for="cep">CEP*</label>
+                                                        <input class="form-control" type="text" id="cep"
+                                                            value="{{ user.cep }}" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row ">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group address text ">
+                                                        <label for="address">Endereço*</label>
+                                                        <input class="form-control" type="text" id="address"
+                                                            value="{{ user.address }}" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row ">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group number text ">
+                                                        <label for="number">Número*</label>
+                                                        <input class="form-control" type="text" id="number"
+                                                            value="{{ user.number }}" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row ">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group complemento text ">
+                                                        <label for="complemento">Complemento</label>
+                                                        <input class="form-control" type="text" id="complemento"
+                                                            value="{{ user.complement }}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row ">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group district text ">
+                                                        <label for="district">Bairro*</label>
+                                                        <input class="form-control" type="text" id="district"
+                                                            value="{{ user.district }}" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row ">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group city text ">
+                                                        <label for="city">Cidade*</label>
+                                                        <input class="form-control" type="text" id="city"
+                                                            value="{{ user.city }}" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row ">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group state text typing">
+                                                        <label for="state">Estado*</label>
+                                                        <select class="form-control" id="state" required>
+                                                            {% for state in states %}
+                                                                <option {{ state.id==user.state.id?'selected':'' }}>{{ state.uf }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row ">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group telefone text ">
+                                                        <label for="telefone">Telefone*</label>
+                                                        <input class="form-control" type="text" id="telefone"
+                                                            value="{{ user.phone }}" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row ">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group celular text">
+                                                        <label for="celular">Celular*</label>
+                                                        <input class="form-control" type="text" id="celular"
+                                                            value="{{ user.cellphone }}" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <div class="row">
+                                            <div class="col-md-offset-3 col-md-9">
+                                                <button id="salvar" type="submit" class="btn btn-circle green-conecta">
+                                                    Salvar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{{ asset('assets/pages/scripts/jquery.mask.min.js') }}" type="text/javascript"></script>
+    <script>
+        function verifyTyping() {
+            let $this = $(this);
+            let parent = $this.parent('div');
+
+            if($this.val() != '') {
+                parent.addClass('typing');
+            } else {
+                parent.removeClass('typing');
+            }
+        }
+
+        $(document).ready(function() {
+            var SPMaskBehavior = function (val) {
+                    return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+                },
+                spOptions = {
+                    onKeyPress: function(val, e, field, options) {
+                        field.mask(SPMaskBehavior.apply({}, arguments), options);
+                    }
+                };
+
+            $('#cep').mask('00000-000');
+            $('#telefone').mask(SPMaskBehavior, spOptions);
+            $('#celular').mask(SPMaskBehavior, spOptions);
+
+            $('input').each(function() {
+                verifyTyping.call(this);
+            });
+            $('input').keydown(verifyTyping);
+            $('input').keyup(verifyTyping);
+        });
+
+        $('#mudar').click(function() {
+            $(this).parents('div.row:first').addClass('hidden');
+            $('div.changePass').removeClass('hidden');
+        });
+
+        $('#retailer_form').submit(function(e) {
+            e.preventDefault();
+
+            if($('#newPass').is(':visible')) {
+                if($('#newPass').val().length < 8) {
+                    alert('A senha deve ter no mínimo 8 caracteres');
+                    return;
+                }
+
+                if($('#newPass').val() != $('#confPass').val()) {
+                    alert('Nova senha não confere com a confirmação!');
+                    return;
+                }
+            }
+
+            $.ajax({
+                url: "{{ path('put_retailer') }}",
+                type: 'PUT',
+                contentType: "application/json",
+                dataType: "json",
+                headers: {'Api-Token': '{{ token }}'},
+                data: JSON.stringify({
+                    password: $('#curPass').val(),
+                    retailer: {
+                        company_name: $('#razao').val(),
+                        fantasy_name: $('#fantasy').val(),
+                        password: $('#newPass').val(),
+                        address: $('#address').val(),
+                        number: $('#number').val(),
+                        district: $('#district').val(),
+                        complemento: $('#complemento').val(),
+                        city: $('#city').val(),
+                        state: $('#state').val(),
+                        cep: $('#cep').val(),
+                        phone: $('#telefone').val(),
+                        cellphone: $('#celular').val(),
+                    }
+                }),
+                success: function(res) {
+                    alert(res.message);
+                    location.reload();
+                },
+                error: function(jxhr) {
+                    let response = JSON.parse(jxhr.responseText);
+                    alert(response.message);
+                }
+            });
+        });
+    </script>
+{% endblock %}
