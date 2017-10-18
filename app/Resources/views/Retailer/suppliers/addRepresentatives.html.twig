@@ -313,7 +313,7 @@
                                                                         <div class="col-lg-4 col-lg-offset-5">
                                                                             <div class="">
                                                                                 <div class="form-group phone text">
-                                                                                    <label for="phone">Telefone</label>
+                                                                                    <label for="phone">Telefone*</label>
                                                                                     <input class="form-control" type="text" id="phone"
                                                                                         name="phone" value="{% if representative is defined %}{{ representative.phone }}{% endif %}"  required/>
                                                                                 </div>
@@ -432,7 +432,7 @@
 
             if(selected == 'new') {
                 $('.supplier-row').removeClass('hide');
-                $('.supplier-row input.isrequired').addProp('required', true);
+                $('.supplier-row input.isrequired').prop('required', true);
             } else {
                 $('.supplier-row').addClass('hide');
                 $('.supplier-row input.isrequired').removeProp('required');
