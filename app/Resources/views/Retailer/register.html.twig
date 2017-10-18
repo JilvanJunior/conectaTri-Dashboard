@@ -45,8 +45,7 @@
             margin: 0;
             font-family: 'Work Sans', Arial, Helvetica, sans-serif;
             min-height: 100%;
-            background: url({{ asset('assets/global/img/fundo-conecta-8.png') }});
-            background-position: center;
+            background: url({{ asset('assets/global/img/fundo-conecta-8.png') }}) center;
             color: #777;
         }
         img {
@@ -320,7 +319,7 @@ function ufToStateId(uf) {
 $('#retailer_cep').blur(function() {
     let cep = $(this).val().replace(/\D/g, '');
 
-    if(cep == '')
+    if(cep === '')
         return;
 
     let validacep = /^[0-9]{8}$/;
@@ -328,10 +327,6 @@ $('#retailer_cep').blur(function() {
         alert('CEP inválido!');
         return;
     }
-
-    $("#retailer_address").val("...");
-    $("#retailer_district").val("...");
-    $("#retailer_city").val("...");
 
     //Consulta o webservice viacep.com.br/
     $.getJSON("//viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
@@ -395,10 +390,8 @@ function validarCNPJ(cnpj) {
             pos = 9;
     }
     resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-    if (resultado != digitos.charAt(1))
-        return false;
 
-    return true;
+    return resultado == digitos.charAt(1);
 
 }
 
