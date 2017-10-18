@@ -276,7 +276,7 @@
                 <br>
 
                 <button type="button" class="btn" onclick="window.location.replace('{{ path('login') }}')">Voltar</button>
-                <button id="button" type="submit" class="btn" onclick="return validateAgree();">Cadastrar-se!</button>
+                <button id="button" type="submit" class="btn" onclick="return validate();">Cadastrar-se!</button>
                 {{ form_end(form) }}
             </div>
         </div>
@@ -303,12 +303,19 @@ $(document).ready(function() {
     $('#retailer_cep').mask('00000-000');
 });
 
-function validateAgree(){
+function validate(){
     var check = $('#agree').is(':checked');
-    if(!check)
-        alert('É necessário aceitar os termos de uso e a política de privacidade');
-    $('#retailer_companyName').focus();
-    return check;
+    if(!check){
+        alert('É necessário aceitar os termos de uso e a política de privacidade!');
+        $('#retailer_companyName').focus();
+        return check;
+    }
+    if($('#retailer_plainPassword_first').val() !== $('#retailer_plainPassword_second').val()){
+        alert("As senhas não são iguais!");
+        $('#retailer_plainPassword_first').focus();
+        return false;
+    }
+
 }
 
 function ufToStateId(uf) {
