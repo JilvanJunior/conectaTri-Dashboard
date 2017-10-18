@@ -280,6 +280,33 @@
             $('input').keyup(verifyTyping);
         });
 
+        $('#cep').blur(function() {
+            let cep = $(this).val().replace(/\D/g, '');
+
+            if(cep === '')
+                return;
+
+            let validacep = /^[0-9]{8}$/;
+            if(!validacep.test(cep)) {
+                alert('CEP inválido!');
+                return;
+            }
+
+            //Consulta o webservice viacep.com.br/
+            $.getJSON("//viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+                if("erro" in dados) {
+                    alert("CEP não encontrado.");
+                    return;
+                }
+
+                //Atualiza os campos com os valores da consulta.
+                $("#address").val(dados.logradouro);
+                $("#district").val(dados.bairro);
+                $("#city").val(dados.localidade);
+                $("#state").val(dados.uf);
+            });
+        });
+
         $('#mudar').click(function() {
             $(this).parents('div.row:first').addClass('hidden');
             $('div.changePass').removeClass('hidden');
