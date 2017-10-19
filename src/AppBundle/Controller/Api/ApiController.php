@@ -1264,6 +1264,7 @@ class ApiController extends FOSRestController {
                 continue;
             $quoteProduct = (new QuoteProduct())
                 ->setProduct($dbProduct)
+                ->setQuantity($product->quantity)
                 ->setQuote($dbQuote)
                 ->setQuantity(0);
             $em->persist($quoteProduct);
@@ -1279,10 +1280,9 @@ class ApiController extends FOSRestController {
                     $em->persist($supplierStatus);
                     $dbQuote->addSupplierStatus($supplierStatus);
                 }
-                $quoteProduct->setQuantity($supplier->quantity);
                 $quoteSupplier = new QuoteSupplier();
                 $quoteSupplier->setRepresentative($dbSupplier)
-                    ->setQuantity($supplier->quantity)
+                    ->setQuantity($product->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price))
                     ->setRepresentative($dbSupplier)
                     ->setQuoteProduct($quoteProduct);
@@ -1343,6 +1343,7 @@ class ApiController extends FOSRestController {
                 }
             } else { // if product in array
                 $quoteProduct
+                    ->setQuantity($rcvProduct->quantity)
                     ->setDeleted(false)
                     ->setUpdatedAt(new \DateTime());
                 $tmp3 = [];
@@ -1381,7 +1382,7 @@ class ApiController extends FOSRestController {
                         $quoteSupplier->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
                     } else { //if quote_supplier in array
-                        $quoteSupplier->setQuantity($rcvSupplier->quantity)
+                        $quoteSupplier->setQuantity($rcvProduct->quantity)
                             ->setPrice(str_replace(",", ".", $rcvSupplier->price))
                             ->setDeleted(false)
                             ->setUpdatedAt(new \DateTime());
@@ -1413,7 +1414,7 @@ class ApiController extends FOSRestController {
                     }
                     $quoteSupplier = new QuoteSupplier();
                     $quoteSupplier->setRepresentative($dbSupplier)
-                        ->setQuantity($supplier->quantity)
+                        ->setQuantity($rcvProduct->quantity)
                         ->setPrice(str_replace(",", ".", $supplier->price));
                     $quoteSupplier->setQuoteProduct($quoteProduct);
                     $em->persist($quoteSupplier);
@@ -1434,13 +1435,13 @@ class ApiController extends FOSRestController {
                 $newQuoteSupplier = new QuoteSupplier();
                 $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                 $newQuoteSupplier->setRepresentative($dbSupplier)
-                    ->setQuantity($supplier->quantity)
+                    ->setQuantity($product->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price));
                 $em->persist($newQuoteSupplier);
                 $em->flush();
                 $newQuoteProduct->addQuoteSupplier($newQuoteSupplier);
             }
-            $newQuoteProduct->setQuantity($supplier->quantity);
+            $newQuoteProduct->setQuantity($product->quantity);
             $newQuoteProduct->setProduct($dbProduct);
             $newQuoteProduct->setQuote($dbQuote);
             $em->persist($newQuoteProduct);
