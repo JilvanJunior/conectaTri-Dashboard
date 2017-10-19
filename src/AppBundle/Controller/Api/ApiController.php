@@ -1115,14 +1115,6 @@ class ApiController extends FOSRestController {
             if($quoteProduct->getDeleted()){
                 //remove quoteProduct if is deleted
                 $dbQuote->removeQuoteProduct($quoteProduct);
-            } else {
-                /** @var QuoteSupplier $quoteSupplier */
-                foreach($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
-                    if($quoteSupplier->getDeleted()){
-                        //remove quoteSupplier if is deleted
-                        $dbQuote->getQuoteProducts()[$k]->removeQuoteSupplier($quoteSupplier);
-                    }
-                }
             }
         }
         $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
