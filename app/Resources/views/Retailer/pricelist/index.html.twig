@@ -132,7 +132,15 @@
     <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
+    <script>
+        $.extend(true, $.fn.dataTable.defaults, {
+            columnDefs: [
+                { targets: [4], type: 'date-euro' }
+            ]
+        });
+    </script>
     <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/date-euro.js" type="text/javascript"></script>
     <script>
         $(document).ready(function() {
             $('#sample_1').DataTable().order([4, 'desc']).draw();
