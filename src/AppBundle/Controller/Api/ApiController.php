@@ -506,7 +506,7 @@ class ApiController extends FOSRestController {
         if (!is_null($dbRepresentative)) {
             return View::create(new ApiError("Já existe um representante com o mesmo email"), Response::HTTP_CONFLICT);
         }
-        $supplier = $d->getRepository("AppBundle:Supplier")->findOneBy(["cnpj" => $representative->cnpj, "deleted" => false]);
+        $supplier = $d->getRepository("AppBundle:Supplier")->findOneBy(["cnpj" => $representative->cnpj, "deleted" => false, "retailer" => $dbToken->getRetailer()]);
         if (is_null($supplier)) {
             $supplier = new Supplier();
             $supplier->setName($representative->name)
