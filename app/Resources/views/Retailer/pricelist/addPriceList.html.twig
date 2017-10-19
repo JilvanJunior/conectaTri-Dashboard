@@ -481,6 +481,16 @@
             if(validationState) {
                 let begins = createDate($('#beginsAtTimePicker').val());
                 let expires = createDate($('#expiresAtTimePicker').val());
+                if(begins < new Date()) {
+                    btnNext.addClass('disabled');
+                    $('#beginsAtTimePicker').removeClass('valid');
+                    $('#beginsAtTimePicker').addClass('error');
+                    return;
+                } else {
+                    $('#beginsAtTimePicker').removeClass('error');
+                    $('#beginsAtTimePicker').addClass('valid');
+                }
+
                 if(begins < expires) {
                     btnNext.removeClass('disabled');
                     $('#expiresAtTimePicker').removeClass('error');
