@@ -8,7 +8,7 @@
                         <div class="">
                             <div class="form-group cotacao text ">
                                 <label for="cotacao">Nome da Cotação*</label>
-                                <input class="form-control"  name="name" type="text" id="cotacao"
+                                <input class="form-control"  name="name" type="text" id="cotacao" maxlength="254"
                                     value="{{ quote is defined?quote.name:'' }}" autocomplete="off" required />
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                                         <option>Outros</option>
                                     </select>
                                 {% endif %}
-                                <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date" autocomplete="off" placeholder="Selecionando Outros não é possível realizar pedidos para o RCA virtual"></textarea>
+                                <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date" autocomplete="off" placeholder="Selecionando Outros não é possível realizar pedidos para o RCA virtual" maxlength="254"></textarea>
                             </div>
                         </div>
                     </div>
