@@ -1273,6 +1273,9 @@
                     quote_products: productsId,
                     quote_suppliers: suppliersId,
                 }),
+                beforeSend: function() {
+                    $('#save-quote, #sent-suppliers, #presential-quote').addClass('disabled');
+                },
                 success: function (response) {
                     if(force)
                         sendLink(response.id);
@@ -1281,9 +1284,10 @@
                 },
                 error: function (error) {
                     alert(error.responseJSON.error.exception["0"].message);
-
+                },
+                complete: function() {
+                    $('#save-quote, #sent-suppliers, #presential-quote').removeClass('disabled');
                 }
-
             });
         }
 
