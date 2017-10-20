@@ -439,9 +439,9 @@
             var date = $("#"+id).data("datetimepicker").getDate();
 
             if (format === "date") {
-                formatted = " " +  date.getDate() + "/" +(date.getMonth() + 1) + "/" +  date.getFullYear();
+                formatted = " " +  set2Digits(date.getDate()) + "/" + set2Digits(date.getMonth() + 1) + "/" +  date.getFullYear();
             } else {
-                formatted = " " +   date.getHours() + ":" + date.getMinutes() ;
+                formatted = " " +   set2Digits(date.getHours()) + ":" + set2Digits(date.getMinutes()) ;
             }
 
             $("#" + elementId ).text(formatted);
@@ -481,15 +481,18 @@
             if(validationState) {
                 let begins = createDate($('#beginsAtTimePicker').val());
                 let expires = createDate($('#expiresAtTimePicker').val());
-                if(begins < new Date()) {
-                    btnNext.addClass('disabled');
-                    $('#beginsAtTimePicker').removeClass('valid');
-                    $('#beginsAtTimePicker').addClass('error');
-                    return;
-                } else {
-                    $('#beginsAtTimePicker').removeClass('error');
-                    $('#beginsAtTimePicker').addClass('valid');
-                }
+
+                {% if quote is not defined %}
+                    if(begins < new Date()) {
+                        btnNext.addClass('disabled');
+                        $('#beginsAtTimePicker').removeClass('valid');
+                        $('#beginsAtTimePicker').addClass('error');
+                        return;
+                    } else {
+                        $('#beginsAtTimePicker').removeClass('error');
+                        $('#beginsAtTimePicker').addClass('valid');
+                    }
+                {% endif %}
 
                 if(begins < expires) {
                     btnNext.removeClass('disabled');
@@ -1199,17 +1202,29 @@
                 return "0" + numberString;
         }
 
+        function dateToATOM(date) {
+            let tzOffset = date.getTimezoneOffset();
+            let sign = (Math.sign(tzOffset) > 0)?"-":"+";
+            let tzHours = tzOffset/60;
+            let tzMinutes = tzOffset%60;
+
+            return date.getFullYear() + "-" +
+                set2Digits(date.getMonth() + 1) + "-" +
+                set2Digits(date.getDate()) + "T" +
+                set2Digits(date.getHours()) + ":" +
+                set2Digits(date.getMinutes()) + ":00" +
+                sign + set2Digits(tzHours) + ":" + set2Digits(tzMinutes);
+        }
+
         function saveQuote(type, force) {
             var name = $("#cotacao").val();
             var paymentDate = $('#prazoRCA').val();
 
             var startDate = $("#beginsAtTimePicker").data("datetimepicker").getDate();
-            startDate = startDate.getFullYear() + "-" + set2Digits(startDate.getMonth() + 1) + "-" + set2Digits(startDate.getDate()) + "T"
-                + set2Digits(startDate.getHours()) + ":" + set2Digits(startDate.getMinutes()) + ":00+00:00";
+            startDate = dateToATOM(startDate);
 
             var endDate = $("#expiresAtTimePicker").data("datetimepicker").getDate();
-            endDate = endDate.getFullYear() + "-" + set2Digits(endDate.getMonth() + 1) + "-" + set2Digits(endDate.getDate()) + "T"
-                + set2Digits(endDate.getHours()) + ":" + set2Digits(endDate.getMinutes()) + ":00+00:00";
+            endDate = dateToATOM(endDate);
 
             var productsId = [];
             var suppliersId = [];
