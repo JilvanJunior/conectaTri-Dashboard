@@ -11,7 +11,7 @@ var TableDatatablesButtons = function () {
                     "sortAscending": ": activate to sort column ascending",
                     "sortDescending": ": activate to sort column descending"
                 },
-                "emptyTable": "No data available in table",
+                "emptyTable": "Não há registros",
                 "info": "Mostrando _START_ até _END_ de _TOTAL_ dados",
                 "infoEmpty": "Nenhum dado encontrado",
                 "infoFiltered": "(filtrado de _MAX_ dados)",

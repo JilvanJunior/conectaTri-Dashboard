@@ -6924,11 +6924,19 @@ li [class^="fa-"].icon-large, li [class^="glyphicon-"].icon-large, li [class^="i
     color: #888
 }
 
-.dropdown-menu > li:hover > a, .dropdown-menu > li.active > a, .dropdown-menu > li.active:hover > a {
+.dropdown-menu > li.active > a {
     text-decoration: none;
     background-image: none;
-    background-color: #f6f6f6;
+    background-color: #f6f6f6 !important;
     color: #555;
+    filter: none
+}
+
+.dropdown-menu > li:hover > a, .dropdown-menu > li.active:hover > a, .dropdown-menu > li > a:focus, .dropdown-menu > li.active > a:focus {
+    text-decoration: none;
+    background-image: none;
+    background-color: #e5e5e5 !important;
+    color: #555 !important;
     filter: none
 }
 

@@ -246,18 +246,18 @@
             <div class="profile__fields">
                 {{ form_errors(form) }}
                 {{ form_start(form) }}
-                {{ form_row(form.cnpj, {'attr' : {'class' : 'input', 'onblur' : "if(!validarCNPJ(this.value)){alert('CNPJ Informado é inválido'); this.value='';}" }}) }}
-                {{ form_row(form.companyName, {'attr' : {'class' : 'input'}}) }}
-                {{ form_row(form.fantasyName, {'attr' : {'class' : 'input'}}) }}
-                {{ form_row(form.plainPassword.first, {'attr' : {'class' : 'input'}}) }}
-                {{ form_row(form.plainPassword.second, {'attr' : {'class' : 'input'}}) }}
-                {{ form_row(form.email, {'attr' : {'class' : 'input'}}) }}
-                {{ form_row(form.cep, {'attr' : {'class' : 'input'}}) }}
-                {{ form_row(form.address, {'attr' : {'class' : 'input'}}) }}
-                {{ form_row(form.number, {'attr' : {'class' : 'input'}}) }}
-                {{ form_row(form.complement, {'attr' : {'class' : 'input'}}) }}
-                {{ form_row(form.district, {'attr' : {'class' : 'input'}}) }}
-                {{ form_row(form.city, {'attr' : {'class' : 'input'}}) }}
+                {{ form_row(form.cnpj, {'attr': {'class': 'input' }}) }}
+                {{ form_row(form.companyName, {'attr' : {'class' : 'input', 'maxlength': 254 }}) }}
+                {{ form_row(form.fantasyName, {'attr' : {'class' : 'input', 'maxlength': 254 }}) }}
+                {{ form_row(form.plainPassword.first, {'attr' : {'class' : 'input', 'maxlength': 30 }}) }}
+                {{ form_row(form.plainPassword.second, {'attr' : {'class' : 'input', 'maxlength': 30 }}) }}
+                {{ form_row(form.email, {'attr' : {'class' : 'input', 'maxlength': 100 }}) }}
+                {{ form_row(form.cep, {'attr' : {'class' : 'input' }}) }}
+                {{ form_row(form.address, {'attr' : {'class' : 'input', 'maxlength': 254 }}) }}
+                {{ form_row(form.number, {'attr' : {'class' : 'input' }}) }}
+                {{ form_row(form.complement, {'attr' : {'class' : 'input', 'maxlength': 254 }}) }}
+                {{ form_row(form.district, {'attr' : {'class' : 'input', 'maxlength': 254 }}) }}
+                {{ form_row(form.city, {'attr' : {'class' : 'input', 'maxlength': 254 }}) }}
                 {{ form_row(form.state, {'attr' : {'class' : 'input'}}) }}
                 {{ form_row(form.phone, {'attr' : {'class' : 'input'}}) }}
                 {{ form_row(form.cellphone, {'attr' : {'class' : 'input'}}) }}
@@ -300,11 +300,16 @@ $(document).ready(function() {
     $('#retailer_phone').mask(SPMaskBehavior, spOptions);
     $('#retailer_cellphone').mask(SPMaskBehavior, spOptions);
     $('#retailer_cnpj').mask('00.000.000/0000-00');
+    $('#retailer_number').mask('000000');
     $('#retailer_cep').mask('00000-000');
 });
 
 function validate(){
     var check = $('#agree').is(':checked');
+    if(!validarCNPJ($('#retailer_cnpj').val())) {
+        alert('CNPJ informado inválido!');
+        return false;
+    }
     if(!check){
         alert('É necessário aceitar os termos de uso e a política de privacidade!');
         $('#retailer_companyName').focus();

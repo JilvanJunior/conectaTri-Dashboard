@@ -171,7 +171,7 @@ var TableDatatablesAjax = function () {
                 "language": {
                     "loadingRecords": "Please wait ...",
                     "zeroRecords": "No records",
-                    "emptyTable": "No data available in table",
+                    "emptyTable": "Não há registros",
                     "info": "Showing _START_ to _END_ of _TOTAL_ entries",
                 },
 
