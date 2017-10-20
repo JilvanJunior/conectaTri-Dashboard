@@ -76,12 +76,10 @@
                                                                 <td>{{ types[quote.type] }}</td>
                                                                 <td>{{ status[quote.closed] }}</td>
                                                                 <td>
-                                                                    {% if( quote.closed == 0) %}
-                                                                        <a href="{{ path('quote_representative', {'id': quote.id}) }}"
-                                                                            class="btn btn-outline btn-circle btn-sm purple">
-                                                                            <i class="fa fa-edit"></i> Editar
-                                                                        </a>
-                                                                    {% endif %}
+                                                                    <a href="{{ path('quote_representative', {'id': quote.id}) }}"
+                                                                        class="btn btn-outline btn-circle btn-sm purple">
+                                                                        <i class="fa fa-edit"></i> Editar
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                         {% endfor %}
