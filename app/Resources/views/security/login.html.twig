@@ -201,6 +201,10 @@
                 top: 50%;
             }
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 
@@ -217,11 +221,17 @@
         {% if error %}
             <div id="error-msg" style="color: white !important;">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
+        {% if needConfirm is defined and needConfirm%}
+            <div id="error-msg" style="color: white !important;">Por favor, verifique o seu email para continuar.</div>
+        {% endif %}
     </div>
     <div class="retailer">
         <div class="profile__form">
             <div class="profile__logo">
                 <img src="{{ asset('assets/pages/img/logos/bg-conectatri-04.png') }}" alt="ConectaTri">
+            </div>
+            <div id="registerMessage" class="hidden" style="margin-bottom: 1rem;">
+                Uma mensagem de confirmação foi enviada para o seu email. Por favor, verifique para continuar.
             </div>
             <div class="profile__fields">
                 <form id="retailer-form" action="{{ path('login') }}" method="post">
@@ -354,6 +364,9 @@
         } else if(retailer) {
             toggleRetailer();
             document.getElementById('toggleBtn').style.display = 'none';
+            if(getUrlParameter('register')) {
+                $('#registerMessage').removeClass('hidden');
+            }
         }
 
     });

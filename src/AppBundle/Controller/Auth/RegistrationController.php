@@ -126,7 +126,7 @@ class RegistrationController extends Controller
 
             $result = $mailer->send($message);
 
-            return $this->redirect($this->generateUrl('login') . "?varejista=1");
+            return $this->redirect($this->generateUrl('login') . "?varejista=1&regiter=1");
         }
 
         return $this->render(

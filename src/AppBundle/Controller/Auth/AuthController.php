@@ -20,8 +20,16 @@ class AuthController extends Controller
         if(!$this->_isLoggedIn())
             return $this->redirectToRoute('login');
 
-        if($this->get('security.authorization_checker')->isGranted('ROLE_USER'))
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            if(!$user->isVerified()) {
+                return $this->render('security/login.html.twig', [
+                    'error' => null,
+                    'needConfirm' => true
+                ]);
+            }
             return $this->redirectToRoute('dashboard', array('id' => $request->get('id')));
+        }
 
         if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->redirectToRoute('admin_dashboard');
@@ -47,8 +55,16 @@ class AuthController extends Controller
      */
     public function loginAction(Request $request)
     {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_USER'))
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            if(!$user->isVerified()) {
+                return $this->render('security/login.html.twig', [
+                    'error' => null,
+                    'needConfirm' => true
+                ]);
+            }
             return $this->redirectToRoute('dashboard', array('id' => $request->get('id')));
+        }
 
         if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
             return $this->redirectToRoute('admin_dashboard');
