@@ -546,7 +546,12 @@
                     force: true
                 }),
                 beforeSend : function(xhr) {
+                    $('#sendLink').addClass('disabled');
                     xhr.setRequestHeader('Api-Token', token);
+                },
+                success: function(res) {
+                    alert(res.message);
+                    $('#sendLink').removeClass('disabled');
                 }
             });
         });
