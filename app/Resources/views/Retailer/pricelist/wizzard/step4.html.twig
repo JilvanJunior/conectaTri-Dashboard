@@ -27,7 +27,7 @@
                             <td> {{ product.unit }} {{ product.quantity }} </td>
                             <td>
                                 <label class="mt-checkbox mt-checkbox-outline">
-                                    <input type="checkbox" value="{{ product.id }}" name="chkProducts" />
+                                    <input type="checkbox" value="{{ product.id }}" name="chkProducts" {{ (quote is defined and quote.hasProduct(product))?'checked="true"':'' }}/>
                                     <span></span>
                                 </label>
                             </td>

@@ -580,4 +580,13 @@ class Quote
 
         return false;
     }
+
+    public function hasProduct($product)
+    {
+        foreach($this->quoteProducts as $quoteProduct)
+            if($quoteProduct->getProduct()->getId() == $product->getId())
+                return true;
+
+        return false;
+    }
 }
