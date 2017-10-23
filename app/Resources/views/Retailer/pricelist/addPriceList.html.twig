@@ -359,6 +359,8 @@
         var supplierTable = $('#supplier-datatable');
         var listingTable = $('#listing-datatable');
         var productTable = $('#product-datatable');
+        var nowDate = new Date();
+        var minDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours(), nowDate.getMinutes()-5);
 
         //BEGIN MASKS
 
@@ -483,7 +485,7 @@
                 let expires = createDate($('#expiresAtTimePicker').val());
 
                 {% if quote is not defined %}
-                    if(begins < new Date()) {
+                    if(begins <= minDate) {
                         btnNext.addClass('disabled');
                         $('#beginsAtTimePicker').removeClass('valid');
                         $('#beginsAtTimePicker').addClass('error');
