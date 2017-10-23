@@ -291,7 +291,7 @@ class ApiController extends FOSRestController {
 
         $compareProduct = $d->getRepository("AppBundle:Product")->findOneBy(['name' => $product->name, 'brand' => $product->brand, 'type' => $product->type, 'ean' => $product->ean, 'quantity' => $product->quantity, 'unit' => $product->unit, 'retailer' => $dbToken->getRetailer() ]);
         if($compareProduct)
-            return View::create(new ApiError("Produto já cadastrado!"), Response::HTTP_NOT_ACCEPTABLE);
+            return View::create(new ApiError("Produto já cadastrado!"), Response::HTTP_EXPECTATION_FAILED);
 
         $dbProduct = new Product();
         $dbProduct
