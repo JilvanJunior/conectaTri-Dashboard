@@ -19,10 +19,7 @@ class DashboardController extends Controller
         $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['deleted' => false]);
         $activeRetailers = $em->getRepository('AppBundle:ActiveRetailer')->findAll();
         $qtyRetailer = ($activeRetailers == null ? 0 : end($activeRetailers)->getQuantity());
-        $activeQuotes = count($em->getRepository('AppBundle:QuoteSupplierStatus')
-            ->findBy(['status' => 0]));
-        $activeQuotes += count($em->getRepository('AppBundle:QuoteSupplierStatus')
-            ->findBy(['status' => 1]));
+        $activeQuotes = count($em->getRepository('AppBundle:Quote')->findBy(['closed' => 0]));
 
         $topSuppliers = $em->getRepository('AppBundle:Supplier')->findTopSuppliers();
 
