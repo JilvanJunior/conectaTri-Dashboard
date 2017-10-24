@@ -1262,8 +1262,7 @@ class ApiController extends FOSRestController {
             $quoteProduct = (new QuoteProduct())
                 ->setProduct($dbProduct)
                 ->setQuantity($product->quantity)
-                ->setQuote($dbQuote)
-                ->setQuantity(0);
+                ->setQuote($dbQuote);
             $em->persist($quoteProduct);
             foreach ($product->quote_suppliers as $supplier) {
                 /** @var Representative $dbSupplier */
@@ -1505,7 +1504,7 @@ class ApiController extends FOSRestController {
     }
 
     /**
-     * @Rest\Patch("/api/quote/{id}/suppliers")
+     * @Rest\Patch("/api/quote/{id}/suppliers", name="send_to_supplier_list")
      * @param Request $request
      * @param $id
      * @return View
