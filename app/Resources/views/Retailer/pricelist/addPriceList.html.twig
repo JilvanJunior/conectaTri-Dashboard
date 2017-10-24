@@ -399,6 +399,32 @@
         $('#telefone_representante').mask(SPMaskBehavior, spOptions);
         $('#celular_representante').mask(SPMaskBehavior, spOptions);
 
+        $('[name=chkSupplier]').change(function() {
+            let $this = $(this);
+            let checked = $this.prop('checked');
+            let id = $this.val();
+            let check = $('#sendSuppliersTable tbody input[value='+id+']');
+
+            if(checked) {
+                let row = $this.parents('tr:first');
+
+                if(check.length == 0) {
+                    let tr = $('<tr></tr>');
+                    let input = "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' name='chkSendSupplier' value='"+id+"' checked/><span></span></label>";
+
+                    tr.append($('<td>'+row.find('.rep-name').text()+'</td>'));
+                    tr.append($('<td>'+row.find('.rep-email').text()+'</td>'));
+                    tr.append($('<td>'+input+'</td>'));
+
+                    $('#sendSuppliersTable tbody').append(tr);
+                }
+            } else {
+                if(check.length > 0) {
+                    check.parents('tr:first').remove();
+                }
+            }
+        });
+
         //END MASKS
 
 
@@ -1182,16 +1208,22 @@
 
         // END PRODUCTS TABLE
 
+        selectAll("selectAllSendSupplier","chkSendSupplier");
+
         // FINISH QUOTE
-        $('#save-quote').on('click', function() {
+        $('#save-quote').click(function() {
             saveQuote(1, false);
         });
 
-        $('#presential-quote').on('click', function() {
+        $('#presential-quote').click(function() {
             saveQuote(2, false);
         });
 
-        $('#sent-suppliers').on('click', function() {
+        $('#sent-suppliers').click(function() {
+            $('#sendSupplier').modal('toggle');
+        });
+
+        $('#sendLinks').click(function() {
             saveQuote(1, true);
         });
 
@@ -1293,24 +1325,35 @@
             });
         }
 
-        function sendLink(quoteId){
+        function sendLink(quoteId) {
+            let url = '{{ path('send_to_supplier_list', { id: 0 }) }}';
+            let representatives = [];
 
-            var url = '{{ path("patch_api_send_quote", {'id': 0}) }}';
             url = url.replace(0, quoteId);
+
+            $('#sendSuppliersTable tbody input:checked').each(function(index, input) {
+                representatives.push({
+                    id: $(input).val()
+                });
+            });
+
             $.ajax({
                 url: url,
                 type: 'PATCH',
-                contentType: "application/json",
-                dataType: "json",
                 headers: {'Api-Token': token},
-                success: function (response) {
-                    location.href = '{{ path('cotacoes') }}'
+                data: JSON.stringify(representatives),
+                beforeSend: function() {
+                    $('#sendLinks').addClass('disabled');
                 },
-                error: function (error) {
-                    alert(error.responseJSON.error.exception["0"].message);
-
+                success: function(res) {
+                    alert(res.message);
+                },
+                error: function(jsXHR) {
+                    alert(jsXHR.responseJSON.message);
+                },
+                complete: function() {
+                    $('#sendLinks').removeClass('disabled');
                 }
-
             });
         }
 

@@ -572,10 +572,10 @@ class Quote
         }
     }
 
-    public function hasSupplier($supplier)
+    public function hasRepresentative($representative)
     {
         foreach($this->suppliersStatus as $quoteSupplierStatus)
-            if($quoteSupplierStatus->getRepresentative()->getSupplier()->getId() == $supplier->getId())
+            if($quoteSupplierStatus->getRepresentative()->getId() == $representative->getId())
                 return true;
 
         return false;

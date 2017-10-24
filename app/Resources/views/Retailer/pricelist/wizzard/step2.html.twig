@@ -23,14 +23,14 @@
                         {% for representative in supplier.representatives if representative.deleted == 0 %}
                             <tr>
                                 <td> {{ supplier.name }} </td>
-                                <td> {{ representative.name }} </td>
-                                <td class="numeric"> {{ representative.email }} </td>
+                                <td class="rep-name"> {{ representative.name }} </td>
+                                <td class="rep-email numeric"> {{ representative.email }} </td>
                                 <td class="numeric"> {{ supplier.cnpj }} </td>
                                 <td class="numeric"> {{ representative.phone }} </td>
                                 <td>
                                     <label class="mt-checkbox mt-checkbox-outline">
-                                        <input type="checkbox" name="chkSupplier"
-                                            value="{{ supplier.id }}" {{ (quote is defined and quote.hasSupplier(supplier))?'checked="true"':'' }}/>
+                                        <input type="checkbox" name="chkSupplier" value="{{ representative.id }}"
+                                            {{ (quote is defined and quote.hasRepresentative(representative))?'checked="true"':'' }}/>
                                         <span></span>
                                     </label>
                                 </td>
