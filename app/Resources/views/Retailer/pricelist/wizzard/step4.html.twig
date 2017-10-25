@@ -9,17 +9,13 @@
                     <th> Fabricante </th>
                     <th> Embalagem de Compra </th>
                     <th>
-                        <label class="mt-checkbox mt-checkbox-outline">
-                            <input  type="checkbox"  name="selectAllProducts" autocomplete='off'/>
-                            <span></span>
-                        </label>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {% if products is defined %}
                     {% for product in products %}
-                        <tr>
+                        <tr class="hidden">
                             <td> {{ product.id }} </td>
                             <td> {{ product.name }} </td>
                             <td> {{ product.type }} </td>

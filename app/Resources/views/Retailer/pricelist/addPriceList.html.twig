@@ -378,12 +378,15 @@
             $('tbody input[type=checkbox]').click(function() {
                 let table = $(this).parents('table:first');
 
-                let inputs = table.find('tbody input[type=checkbox]');
+                let inputs = table.find('tbody input[type=checkbox]:visible');
                 let inputsChecked = inputs.filter(':checked');
 
                 let checkar = (inputs.length == inputsChecked.length);
 
-                table.find('thead input[type=checkbox]').prop('checked', checkar);
+                table.find('thead input[type=checkbox]:visible').prop('checked', checkar);
+            });
+            $('#product-datatable tbody tr input:checked').each(function() {
+                $(this).parents('tr:first').removeClass('hidden');
             });
         });
 
@@ -398,6 +401,14 @@
 
         $('#telefone_representante').mask(SPMaskBehavior, spOptions);
         $('#celular_representante').mask(SPMaskBehavior, spOptions);
+
+        $('[name=chkProducts]').change(function() {
+
+            $('#product-datatable').DataTable().search('').draw();
+            $('#product-datatable tbody tr input:not(:checked)').each(function() {
+                $(this).parents('tr:first').addClass('hidden');
+            });
+        });
 
         $('[name=chkSupplier]').change(function() {
             let $this = $(this);
@@ -486,7 +497,7 @@
         function selectAll(topCheck, checks) {
             $("[name='" + topCheck + "']").click(function() {
                 let state = $(this).prop('checked');
-                let checkBoxes = $("[name='" + checks + "']");
+                let checkBoxes = $("[name='" + checks + "']:visible");
                 checkBoxes.prop("checked", state);
             })
         }
@@ -856,7 +867,12 @@
             });
 
             $(ids).each(function(index, id) {
-                $('[name=chkProducts][value='+id+']').prop('checked', state);
+                let check = $('[name=chkProducts][value='+id+']');
+                check.prop('checked', state);
+                if(state)
+                    check.parents('tr:first').removeClass('hidden');
+                else
+                    check.parents('tr:first').addClass('hidden');
             });
         });
 
@@ -1124,7 +1140,9 @@
                     }
                 }
             ]
-        } );
+        }).on('search.dt', function() {
+            $(this).find("tr").removeClass('hidden');
+        });
         /*
          product_form
          produto
@@ -1203,8 +1221,6 @@
             }
 
         });
-        //select all function
-        selectAll("selectAllProducts","chkProducts");
 
         // END PRODUCTS TABLE
 
