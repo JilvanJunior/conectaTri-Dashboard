@@ -391,6 +391,24 @@
             });
         });
 
+        $('input.quantidade').change(function() {
+            let value = $(this).val();
+
+            if(!$.isNumeric(value)) {
+                $(this).val(1);
+                return;
+            }
+
+            if(value < 1) {
+                $(this).val(1);
+                return;
+            }
+
+            if(value > 2147483646) { //MAX INT
+                $(this).val(2147483646);
+            }
+        });
+
         var SPMaskBehavior = function (val) {
                 return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
             },
@@ -1309,8 +1327,8 @@
                     return true;
 
                 productsId.push({
-                    product: {id: $(this).val()},
-                    quantity: 0,
+                    product: { id: $(this).val() },
+                    quantity: $(this).parents('tr:first').find('input.quantidade').val(),
                     winners: [],
                     quote_suppliers: suppliersId
                 });

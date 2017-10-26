@@ -8,6 +8,7 @@
                     <th> Tipo </th>
                     <th> Fabricante </th>
                     <th> Embalagem de Compra </th>
+                    <th> Quantidade </th>
                     <th>
                     </th>
                 </tr>
@@ -21,6 +22,10 @@
                             <td> {{ product.type }} </td>
                             <td> {{ product.brand }} </td>
                             <td> {{ product.unit }} {{ product.quantity }} </td>
+                            <td>
+                                <input type="number" min="1" class="form-control quantidade"
+                                    value="{{ (quote is defined and quote.hasProduct(product))?quote.getProductQuantity(product):'1' }}"/>
+                            </td>
                             <td>
                                 <label class="mt-checkbox mt-checkbox-outline">
                                     <input type="checkbox" value="{{ product.id }}" name="chkProducts" {{ (quote is defined and quote.hasProduct(product))?'checked="true"':'' }}/>

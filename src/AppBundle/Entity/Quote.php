@@ -589,4 +589,13 @@ class Quote
 
         return false;
     }
+
+    public function getProductQuantity($product)
+    {
+        foreach($this->quoteProducts as $quoteProduct)
+            if($quoteProduct->getProduct()->getId() == $product->getId())
+                return $quoteProduct->getQuantity();
+
+        return 0;
+    }
 }
