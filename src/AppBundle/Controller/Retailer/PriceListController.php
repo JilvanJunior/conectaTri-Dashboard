@@ -251,6 +251,15 @@ class PriceListController extends Controller
                 $conditions = [ $conditions->Descricao ];
             }
             $data['conditions'] = $conditions;
+            $data['prazoManual'] = $quote->getPaymentDate();
+            foreach($conditions as $condition) {
+                if($data['prazoManual'] == trim($condition)) {
+                    $data['prazoManual'] = '';
+                    break;
+                }
+            }
+        } else {
+            $data['prazoManual'] = $quote->getPaymentDate();
         }
 
         if (!is_null($token)) {

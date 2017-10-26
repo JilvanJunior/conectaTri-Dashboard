@@ -443,7 +443,9 @@
         var token = "{{ token }}";
 
         {% if userIsRCA %}
-        $("#prazo").hide();
+            {% if quote is defined and prazoManual == '' %}
+                $("#prazo").hide();
+            {% endif %}
         $("#prazoRCA").change(function() {
             if($(this).val() == "Outros")
                 $('#prazo').show();
@@ -1273,6 +1275,9 @@
         function saveQuote(type, force) {
             var name = $("#cotacao").val();
             var paymentDate = $('#prazoRCA').val();
+            if(paymentDate == "Outros") {
+                paymentDate = $('#prazo').val();
+            }
 
             var startDate = $("#beginsAtTimePicker").data("datetimepicker").getDate();
             startDate = dateToATOM(startDate);

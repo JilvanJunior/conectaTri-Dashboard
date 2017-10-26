@@ -48,14 +48,16 @@
                                 {% if userIsRCA %}
                                     <select class='form-control' style='margin-bottom: 3px;' id='prazoRCA' autocomplete="off">
                                         {% for cond in conditions %}
-                                            <option {{ (quote is defined and quote.paymentDate == cond)?'selected="true"':'' }}>
+                                            <option {{ (quote is defined and quote.paymentDate == cond|trim)?'selected="true"':'' }}>
                                                 {{ cond }}
                                             </option>
                                         {% endfor %}
-                                        <option>Outros</option>
+                                        <option {{ (quote is defined and prazoManual != '')?'selected="true"':'' }}>Outros</option>
                                     </select>
                                 {% endif %}
-                                <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date" autocomplete="off" placeholder="Selecionando Outros não é possível realizar pedidos para o RCA virtual" maxlength="254"></textarea>
+                                <textarea rows="3" class="form-control text-area" type="text" id="prazo" name="payment-date" autocomplete="off"
+                                    placeholder="Selecionando Outros não é possível realizar pedidos para o RCA virtual"
+                                    maxlength="254">{{ prazoManual }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -65,5 +67,4 @@
         </form>
         <!-- END FORM-->
     </div>
-
 </div>

@@ -1400,7 +1400,6 @@ class ApiController extends FOSRestController {
                 self::array_diff($rcvProduct->quote_suppliers, $tmp2);
                 /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
-                    file_put_contents('/var/www/html/conectaTri/var/logs/test.json', json_encode($supplier));
                     /** @var Representative $dbSupplier */
                     $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                     if ($isFirst) {
