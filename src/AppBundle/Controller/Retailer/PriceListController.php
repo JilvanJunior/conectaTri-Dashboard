@@ -77,6 +77,7 @@ class PriceListController extends Controller
         $quoteTypes['2'] = "Presencial";
 
         $data = [
+            'prazoManual' => '',
             'quoteTypes' => $quoteTypes,
             'listingTypes' => $listingTypes,
             'listings' => $user->getListings(),
