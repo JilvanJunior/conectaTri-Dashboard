@@ -84,6 +84,7 @@ class PriceListController extends Controller
             'products' => $user->getProducts(),
             'suppliers' => $user->getSuppliers(),
             'username' => $user->getFantasyName(),
+            'userid' => $user->getId(),
             'userIsRCA' => $user->isRCAVirtual(),
         ];
 
@@ -235,6 +236,7 @@ class PriceListController extends Controller
             'quoteTypes' => $quoteTypes,
             'suppliers' => $user->getSuppliers(),
             'username' => $user->getFantasyName(),
+            'userid' => $user->getId(),
             'userIsRCA' => $user->isRCAVirtual(),
         ];
 

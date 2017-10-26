@@ -20,7 +20,7 @@
             <tbody>
                 {% if suppliers is defined %}
                     {% for supplier in suppliers %}
-                        {% for representative in supplier.representatives if representative.deleted == 0 %}
+                        {% for representative in supplier.representatives if (representative.deleted == 0 and representative.retailer.id == userid) %}
                             <tr>
                                 <td> {{ supplier.name }} </td>
                                 <td class="rep-name"> {{ representative.name }} </td>
