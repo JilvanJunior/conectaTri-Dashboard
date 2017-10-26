@@ -1230,7 +1230,7 @@
                             ]).draw();
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset");
-                            $("#product_form div").removeClass('typing');
+                            $("#product_form div:not(.perm)").removeClass('typing');
 
                         },
                         error: function (error) {
