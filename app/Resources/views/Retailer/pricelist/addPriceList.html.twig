@@ -421,14 +421,6 @@
         $('#telefone_representante').mask(SPMaskBehavior, spOptions);
         $('#celular_representante').mask(SPMaskBehavior, spOptions);
 
-        $('[name=chkProducts]').change(function() {
-
-            $('#product-datatable').DataTable().search('').draw();
-            $('#product-datatable tbody tr input:not(:checked)').each(function() {
-                $(this).parents('tr:first').addClass('hidden');
-            });
-        });
-
         $('[name=chkSupplier]').change(function() {
             let $this = $(this);
             let checked = $this.prop('checked');
