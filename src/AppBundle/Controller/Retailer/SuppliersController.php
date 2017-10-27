@@ -3,6 +3,8 @@
 namespace AppBundle\Controller\Retailer;
 
 use AppBundle\Entity\Representative;
+use AppBundle\Entity\Retailer;
+use AppBundle\Entity\State;
 use AppBundle\Entity\Supplier;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,8 +19,14 @@ class SuppliersController extends Controller
      */
     public function indexAction(Request $request)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $suppliers = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
+        $supplierRepo = $this->getDoctrine()->getRepository('AppBundle:Supplier');
+        $suppliers = $supplierRepo->findBy(['retailer' => $user, 'deleted' => false]);
+        if($user->isRCAVirtual()){
+            $rca = $supplierRepo->findBy(['rca' => true, 'deleted' => false]);
+            $suppliers = array_merge($suppliers, $rca);
+        }
 
         return $this->render('Retailer/suppliers/index.html.twig', [
             'suppliers' => $suppliers,
@@ -35,8 +43,14 @@ class SuppliersController extends Controller
     public function addRepresentativeAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user]);
+        $supplierRepo = $this->getDoctrine()->getRepository('AppBundle:Supplier');
+        $suppliers = $supplierRepo->findBy(['retailer' => $user, 'deleted' => false]);
+        if($user->isRCAVirtual()){
+            $rca = $supplierRepo->findBy(['rca' => true, 'deleted' => false]);
+            $suppliers = array_merge($suppliers, $rca);
+        }
         $states = $em->getRepository('AppBundle:State')->findAll();
 
         if($request->getMethod() == "POST") {
@@ -94,8 +108,14 @@ class SuppliersController extends Controller
     public function editRepresentativeAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user]);
+        $supplierRepo = $this->getDoctrine()->getRepository('AppBundle:Supplier');
+        $suppliers = $supplierRepo->findBy(['retailer' => $user, 'deleted' => false]);
+        if($user->isRCAVirtual()){
+            $rca = $supplierRepo->findBy(['rca' => true, 'deleted' => false]);
+            $suppliers = array_merge($suppliers, $rca);
+        }
         $representative = $em->getRepository('AppBundle:Representative')->find($id);
         $states = $em->getRepository('AppBundle:State')->findAll();
 
@@ -108,6 +128,7 @@ class SuppliersController extends Controller
                 $stateId = $request->get('supplierState');
 
                 $supplierState = $states[0];
+                /** @var State $state */
                 foreach($states as $state)
                     if($state->getId() == $stateId)
                         $supplierState = $state;

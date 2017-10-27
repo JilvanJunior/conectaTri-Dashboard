@@ -185,15 +185,17 @@ class ClientsController extends Controller
     /**
      * @Route("/administrador/clientes/rcavirtual", name="admin_change_rca")
      * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function changeClientRCA(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent());
 
+        /** @var Retailer $client */
         $client = $em->getRepository('AppBundle:Retailer')->find($data->clientId);
         if($data->state) {
-            $martinsSupplier = $em->getRepository('AppBundle:Supplier')->findOneBy(['retailer' => $client, 'rca' => true]);
+            $martinsSupplier = $em->getRepository('AppBundle:Supplier')->findOneBy(['rca' => true]);
             if(empty($martinsSupplier)) {
                 $martinsSupplier = Supplier::newMartinsSupplier();
                 $martinsSupplier->setRetailer($client);

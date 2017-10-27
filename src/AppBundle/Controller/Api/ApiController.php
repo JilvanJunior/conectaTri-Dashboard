@@ -400,7 +400,13 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $suppliers = $d->getRepository("AppBundle:Supplier")->findBy(["retailer" => $dbToken->getRetailer()]);
+        $supplierRepo = $this->getDoctrine()->getRepository('AppBundle:Supplier');
+        $suppliers = $supplierRepo->findBy(['retailer' => $dbToken->getRetailer(), 'deleted' => false]);
+        if($dbToken->isRCAVirtual()){
+            $rca = $supplierRepo->findBy(['rca' => true, 'deleted' => false]);
+            $suppliers = array_merge($suppliers, $rca);
+        }
+
         return View::create($suppliers, Response::HTTP_OK);
     }
 
@@ -2180,7 +2186,7 @@ class ApiController extends FOSRestController {
             $precoAtual = $quantitiesAndPrices[$key]['price'];
             $quantidadeAtual = $quantitiesAndPrices[$key]['quantity'];
             $precoCalculado = $precoAtual * $quantidadeAtual;
-            if($precoCalculado != $mercadoria->PrecoNormal) {
+            if($precoCalculado != $mercadoria->PrecoNormal && $precoAtual != $mercadoria->PrecoNormal) {
                 $priceChange = true;
                 $codigoMercadoria = $mercadoria->CodigoMercadoria;
                 $precoNovo = $mercadoria->PrecoNormal;
