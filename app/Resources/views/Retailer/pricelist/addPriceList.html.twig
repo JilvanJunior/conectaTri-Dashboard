@@ -361,7 +361,7 @@
         var listingTable = $('#listing-datatable');
         var productTable = $('#product-datatable');
         var nowDate = new Date();
-        var minDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours(), nowDate.getMinutes()-5);
+        var minDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours(), nowDate.getMinutes()-15);
 
         //BEGIN MASKS
 
@@ -625,6 +625,7 @@
                     case 2 :
                         $("#wizardStepLabel").text(" Selecionar Lista");
                         $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/minhas-listas/24x24.png') }}")
+                        $("#advance a").removeClass('disabled');
 
                         break;
                     case 3 :
