@@ -386,7 +386,7 @@
 
                 table.find('thead input[type=checkbox]:visible').prop('checked', checkar);
             });
-            $('#product-datatable tbody tr input:checked').each(function() {
+            $('#product-datatable tbody tr input[type="checkbox"]:checked').each(function() {
                 $(this).parents('tr:first').removeClass('hidden');
             });
         });
@@ -420,6 +420,14 @@
 
         $('#telefone_representante').mask(SPMaskBehavior, spOptions);
         $('#celular_representante').mask(SPMaskBehavior, spOptions);
+
+        $('[name=chkProducts]').change(function() {
+
+            $('#product-datatable').DataTable().search('').draw();
+            $('#product-datatable tbody tr input[type="checkbox"]:not(:checked)').each(function() {
+                $(this).parents('tr:first').addClass('hidden');
+            });
+        });
 
         $('[name=chkSupplier]').change(function() {
             let $this = $(this);
