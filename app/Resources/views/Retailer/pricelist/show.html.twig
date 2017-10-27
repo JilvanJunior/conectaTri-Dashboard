@@ -533,7 +533,7 @@
             iDisplayLength: -1,
             columnDefs: [
                 { orderable: false,
-                    targets: 1 }
+                    targets: 6 }
             ],
             pagingType: "simple_numbers"
         });
@@ -557,7 +557,6 @@
         });
 
         $('#status_datatable').DataTable({
-            responsive: true,
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Portuguese-Brasil.json"
             },
@@ -566,11 +565,9 @@
             iDisplayLength: -1,
             columnDefs: [
                 { orderable: false,
-                    targets: 3 },
-                { orderable: false,
-                    targets: 4 }
+                    targets: 0 },
             ],
-            dom: "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>"
+            dom: "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
         });
 
         selectAll("selectAllStatus","chkStatus");
@@ -586,7 +583,8 @@
                 { orderable: false,
                     targets: 1 }
             ],
-            pagingType: "simple_numbers"
+            dom: "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+            pagingType: "simple_numbers",
         });
     </script>
 {% endblock %}

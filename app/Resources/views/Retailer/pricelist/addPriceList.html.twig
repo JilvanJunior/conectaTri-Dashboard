@@ -1226,12 +1226,12 @@
                                 response.type,
                                 response.brand,
                                 response.unit,
+                                "<input type='number' min='1' class='form-control quantidade' value='1'>",
                                 "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts'/><span></span></label>"
                             ]).draw();
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset");
                             $("#product_form div:not(.perm)").removeClass('typing');
-
                         },
                         error: function (error) {
                             alert(error.responseJSON.error.exception["0"].message);
