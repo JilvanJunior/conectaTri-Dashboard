@@ -229,7 +229,7 @@
                                                 <div class="scroller" style="height: 393px;" data-always-visible="1" data-rail-visible1="0" data-handle-color="#D7DCE2">
                                                     <div class="general-item-list">
                                                         {% for supplier in suppliers %}
-                                                            {% for representative in supplier.representatives if (representative.deleted == 0 and representative.retailer.id == userid) %}
+                                                            {% for representative in supplier.representatives if (representative.deleted == 0) %}
                                                                 <div class="item">
                                                                     <div class="item-head">
                                                                         <div class="item-details">
