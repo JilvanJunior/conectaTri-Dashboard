@@ -1110,12 +1110,13 @@
                         ]).draw();
                         $('#listingModal').modal('toggle');
                         $("#list_form").trigger("reset");
-                        $("#list_form div").removeClass('typing');
+                        $("#list_form div:not(.perm)").removeClass('typing');
                     },
                     error: function (error) {
                         alert(error.responseJSON.error.exception["0"].message);
                         $('#listingModal').modal('toggle');
                         $("#list_form").trigger("reset")
+                        $("#list_form div:not(.perm)").removeClass('typing');
                     }
                 });
             } else {
@@ -1237,6 +1238,7 @@
                             alert(error.responseJSON.error.exception["0"].message);
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset")
+                            $("#product_form div:not(.perm)").removeClass('typing');
                         }
 
                     }).done(function () {
