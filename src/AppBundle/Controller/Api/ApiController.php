@@ -400,7 +400,13 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $suppliers = $d->getRepository("AppBundle:Supplier")->findBy(["retailer" => $dbToken->getRetailer()]);
+        $supplierRepo = $this->getDoctrine()->getRepository('AppBundle:Supplier');
+        $suppliers = $supplierRepo->findBy(['retailer' => $dbToken->getRetailer(), 'deleted' => false]);
+        if($dbToken->isRCAVirtual()){
+            $rca = $supplierRepo->findBy(['rca' => true, 'deleted' => false]);
+            $suppliers = array_merge($suppliers, $rca);
+        }
+
         return View::create($suppliers, Response::HTTP_OK);
     }
 
