@@ -377,6 +377,9 @@ class PriceListController extends Controller
         $quote = $thisQuoteProduct->getQuote();
         $prevPrev = $prev = $curr = null;
         foreach($quote->getQuoteProducts() as $quoteProduct) {
+            if($quoteProduct->isDeleted())
+                continue;
+
             $idQuoteProduct = $quoteProduct->getId();
 
             $prevPrev = $prev;
@@ -415,6 +418,9 @@ class PriceListController extends Controller
         $quote = $thisQuoteProduct->getQuote();
         $prevPrev = $prev = $curr = null;
         foreach($quote->getQuoteProducts() as $quoteProduct) {
+            if($quoteProduct->isDeleted())
+                continue;
+
             $idQuoteProduct = $quoteProduct->getId();
 
             $prevPrev = $prev;
@@ -452,7 +458,7 @@ class PriceListController extends Controller
     public function editQuoteProductDataAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $quoteSuppliers = $em->getRepository('AppBundle:QuoteSupplier')->findBy(['quoteProduct' => $id]);
+        $quoteSuppliers = $em->getRepository('AppBundle:QuoteSupplier')->findBy(['quoteProduct' => $id, 'deleted' => 0]);
         $data = [];
 
         if($request->getMethod() == "POST"){
