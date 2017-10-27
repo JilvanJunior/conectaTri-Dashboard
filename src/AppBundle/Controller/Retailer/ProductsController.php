@@ -41,9 +41,10 @@ class ProductsController extends Controller
 
         $repo = $this->getDoctrine()->getRepository('AppBundle:Product');
         $products = $repo->createQueryBuilder('p')
-                   ->where('p.name LIKE :name')
-                   ->setParameter('name', "%$term%")
-                   ->getQuery()->getResult();
+            ->where('p.name LIKE :name')
+            ->setParameter('name', "%$term%")
+            ->distinct()
+            ->getQuery()->getResult();
 
         $productsNames = [];
         /** @var Product $product */
