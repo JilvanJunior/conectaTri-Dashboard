@@ -361,7 +361,7 @@
         var listingTable = $('#listing-datatable');
         var productTable = $('#product-datatable');
         var nowDate = new Date();
-        var minDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours(), nowDate.getMinutes()-5);
+        var minDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours(), nowDate.getMinutes()-15);
 
         //BEGIN MASKS
 
@@ -600,6 +600,7 @@
 
                         validateForm();
                         cotacaoForm.mouseout(validateForm);
+                        cotacaoForm.change(validateForm);
                         cotacaoForm.keydown(validateForm);
                         cotacaoForm.keyup(validateForm);
                         //END FORM VALIDATION
@@ -617,6 +618,7 @@
                     case 2 :
                         $("#wizardStepLabel").text(" Selecionar Lista");
                         $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/minhas-listas/24x24.png') }}")
+                        $("#advance a").removeClass('disabled');
 
                         break;
                     case 3 :
