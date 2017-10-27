@@ -2180,7 +2180,7 @@ class ApiController extends FOSRestController {
             $precoAtual = $quantitiesAndPrices[$key]['price'];
             $quantidadeAtual = $quantitiesAndPrices[$key]['quantity'];
             $precoCalculado = $precoAtual * $quantidadeAtual;
-            if($precoCalculado != $mercadoria->PrecoNormal) {
+            if($precoCalculado != $mercadoria->PrecoNormal && $precoAtual != $mercadoria->PrecoNormal) {
                 $priceChange = true;
                 $codigoMercadoria = $mercadoria->CodigoMercadoria;
                 $precoNovo = $mercadoria->PrecoNormal;
