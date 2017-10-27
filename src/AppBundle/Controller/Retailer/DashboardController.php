@@ -47,6 +47,7 @@ class DashboardController extends Controller
             'status' => $status,
             'types' => $types,
             'username' => $user->getFantasyName(),
+            'userid' => $user->getId(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
     }
