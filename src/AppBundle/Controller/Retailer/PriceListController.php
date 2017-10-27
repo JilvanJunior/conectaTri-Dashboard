@@ -373,8 +373,8 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
-        $quote = $quoteProduct->getQuote();
+        $thisQuoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
+        $quote = $thisQuoteProduct->getQuote();
         $prevPrev = $prev = $curr = null;
         foreach($quote->getQuoteProducts() as $quoteProduct) {
             $idQuoteProduct = $quoteProduct->getId();
@@ -393,7 +393,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/showQuoteProduct.html.twig', [
             'prev' => is_null($prevPrev)?0:$prevPrev,
             'next' => ($curr == $id)?0:$curr,
-            'quoteProduct' => $quoteProduct,
+            'quoteProduct' => $thisQuoteProduct,
             'quote' => $quote,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
@@ -411,8 +411,8 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
-        $quote = $quoteProduct->getQuote();
+        $thisQuoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
+        $quote = $thisQuoteProduct->getQuote();
         $prevPrev = $prev = $curr = null;
         foreach($quote->getQuoteProducts() as $quoteProduct) {
             $idQuoteProduct = $quoteProduct->getId();
@@ -436,7 +436,7 @@ class PriceListController extends Controller
         return $this->render('Retailer/pricelist/editQuoteProduct.html.twig', [
             'prev' => is_null($prevPrev)?0:$prevPrev,
             'next' => ($curr == $id)?0:$curr,
-            'quoteProduct' => $quoteProduct,
+            'quoteProduct' => $thisQuoteProduct,
             'quote' => $quote,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
