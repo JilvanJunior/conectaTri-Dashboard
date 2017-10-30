@@ -182,28 +182,23 @@
                                                                             id="product-datatable">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th width="20%"> Código </th>
-                                                                                    <th> Nome do Produto </th>
-                                                                                    <th> Tipo </th>
-                                                                                    <th> Fabricante </th>
-                                                                                    <th> Embalagem de Compra </th>
                                                                                     <th>
                                                                                         <label class="mt-checkbox mt-checkbox-outline">
                                                                                             <input  type="checkbox"  name="selectAllProducts" />
                                                                                             <span></span>
                                                                                         </label>
                                                                                     </th>
+                                                                                    <th width="20%"> Código </th>
+                                                                                    <th> Nome do Produto </th>
+                                                                                    <th> Tipo </th>
+                                                                                    <th> Fabricante </th>
+                                                                                    <th> Embalagem de Compra </th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
                                                                                 {% if products is defined %}
                                                                                 {% for product in products %}
                                                                                 <tr>
-                                                                                    <td> {{ product.id }} </td>
-                                                                                    <td> {{ product.name }} </td>
-                                                                                    <td> {{ product.type }} </td>
-                                                                                    <td> {{ product.brand }} </td>
-                                                                                    <td> {{ product.unit }} {{ product.quantity }} </td>
                                                                                     <td>
                                                                                         <label class="mt-checkbox mt-checkbox-outline">
                                                                                             <input type="checkbox"
@@ -213,7 +208,11 @@
                                                                                             <span></span>
                                                                                         </label>
                                                                                     </td>
-
+                                                                                    <td> {{ product.id }} </td>
+                                                                                    <td> {{ product.name }} </td>
+                                                                                    <td> {{ product.type }} </td>
+                                                                                    <td> {{ product.brand }} </td>
+                                                                                    <td> {{ product.unit }} {{ product.quantity }} </td>
                                                                                 </tr>
                                                                                 {% endfor %}
                                                                                 {% endif %}
