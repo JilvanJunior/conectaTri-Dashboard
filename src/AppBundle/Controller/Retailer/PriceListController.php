@@ -76,13 +76,19 @@ class PriceListController extends Controller
         $quoteTypes['1'] = "Remota";
         $quoteTypes['2'] = "Presencial";
 
+        $suppliers = $user->getSuppliers();
+        if($user->isRCAVirtual()){
+            $rca = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['rca' => true, 'deleted' => false]);
+            $suppliers = array_merge($suppliers->toArray(), $rca);
+        }
+
         $data = [
             'prazoManual' => '',
             'quoteTypes' => $quoteTypes,
             'listingTypes' => $listingTypes,
             'listings' => $user->getListings(),
             'products' => $user->getProducts(),
-            'suppliers' => $user->getSuppliers(),
+            'suppliers' => $suppliers,
             'username' => $user->getFantasyName(),
             'userid' => $user->getId(),
             'userIsRCA' => $user->isRCAVirtual(),
@@ -228,13 +234,19 @@ class PriceListController extends Controller
         $quoteTypes['1'] = "Remota";
         $quoteTypes['2'] = "Presencial";
 
+        $suppliers = $user->getSuppliers();
+        if($user->isRCAVirtual()){
+            $rca = $this->getDoctrine()->getRepository('AppBundle:Supplier')->findBy(['rca' => true, 'deleted' => false]);
+            $suppliers = array_merge($suppliers->toArray(), $rca);
+        }
+
         $data = [
             'listingTypes' => $listingTypes,
             'listings' => $user->getListings(),
             'products' => $user->getProducts(),
             'quote' => $quote,
             'quoteTypes' => $quoteTypes,
-            'suppliers' => $user->getSuppliers(),
+            'suppliers' => $suppliers,
             'username' => $user->getFantasyName(),
             'userid' => $user->getId(),
             'userIsRCA' => $user->isRCAVirtual(),
