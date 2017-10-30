@@ -421,15 +421,14 @@
         $('#telefone_representante').mask(SPMaskBehavior, spOptions);
         $('#celular_representante').mask(SPMaskBehavior, spOptions);
 
-        $('[name=chkProducts]').change(function() {
-
+        function changeChkProduct() {
             $('#product-datatable').DataTable().search('').draw();
             $('#product-datatable tbody tr input[type="checkbox"]:not(:checked)').each(function() {
                 $(this).parents('tr:first').addClass('hidden');
             });
-        });
+        }
 
-        $('[name=chkSupplier]').change(function() {
+        function changeChkSupplier() {
             let $this = $(this);
             let checked = $this.prop('checked');
             let id = $this.val();
@@ -453,7 +452,7 @@
                     check.parents('tr:first').remove();
                 }
             }
-        });
+        };
 
         //END MASKS
 
@@ -996,7 +995,7 @@
                                 response.contact_email,
                                 response.cnpj,
                                 response.contact_phone,
-                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkProducts'/><span></span></label>"
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkSupplier' onchange='changeChkSupplier.call(this);'/><span></span></label>"
                             ]).draw();
                             $('#myModal').modal('toggle');
                             $("#supplier_form").trigger("reset");
@@ -1230,7 +1229,7 @@
                                 response.brand,
                                 response.unit,
                                 "<input type='number' min='1' class='form-control quantidade' value='1'>",
-                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts'/><span></span></label>"
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts' onchange='changeChkProduct.call(this);'/><span></span></label>"
                             ]).draw();
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset");
@@ -1315,7 +1314,7 @@
                     return true;
 
                 suppliersId.push({
-                    id:0,
+                    id: $(this).data('suppid'),
                     representative: {
                         id: $(this).val()
                     },
@@ -1324,18 +1323,26 @@
                 });
             });
 
-            console.log(suppliersId);
-
             $.each($('#product-datatable tr input:checked'), function(i, v){
-                if($(this).val() == 'on')
+                let $this = $(this);
+
+                if($this.val() == 'on')
                     return true;
 
-                productsId.push({
-                    product: { id: $(this).val() },
-                    quantity: $(this).parents('tr:first').find('input.quantidade').val(),
-                    winners: [],
-                    quote_suppliers: suppliersId
-                });
+                let quoteProduct = {
+                    product: { id: $this.val() },
+                    quantity: $this.parents('tr:first').find('input.quantidade').val(),
+                    winners: []
+                };
+                let quoteSuppliers = $this.data('quotesuppliers');
+
+                if(quoteSuppliers == "") {
+                    quoteProduct.quote_suppliers = suppliersId;
+                } else {
+                    quoteProduct.quote_suppliers = quoteSuppliers;
+                }
+
+                productsId.push(quoteProduct);
             });
 
             $.ajax({

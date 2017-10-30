@@ -29,7 +29,8 @@
                                 <td class="numeric"> {{ representative.phone }} </td>
                                 <td>
                                     <label class="mt-checkbox mt-checkbox-outline">
-                                        <input type="checkbox" name="chkSupplier" value="{{ representative.id }}"
+                                        <input type="checkbox" name="chkSupplier" value="{{ representative.id }}" data-suppid="{{ supplier.id }}"
+                                            onchange="changeChkSupplier.call(this);"
                                             {{ (quote is defined and quote.hasRepresentative(representative))?'checked="true"':'' }}/>
                                         <span></span>
                                     </label>

@@ -28,7 +28,9 @@
                             </td>
                             <td>
                                 <label class="mt-checkbox mt-checkbox-outline">
-                                    <input type="checkbox" value="{{ product.id }}" name="chkProducts" {{ (quote is defined and quote.hasProduct(product))?'checked="true"':'' }}/>
+                                    <input type="checkbox" value="{{ product.id }}" name="chkProducts" onchange="changeChkProduct.call(this);"
+                                        data-quotesuppliers='{{ (quote is defined)?quote.getQuoteSuppliersOf(product)|serialize:'' }}'
+                                        {{ (quote is defined and quote.hasProduct(product))?'checked="true"':'' }}/>
                                     <span></span>
                                 </label>
                             </td>

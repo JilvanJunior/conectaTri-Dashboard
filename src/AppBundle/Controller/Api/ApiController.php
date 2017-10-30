@@ -1462,9 +1462,11 @@ class ApiController extends FOSRestController {
             $dbQuote->setPaymentDate('');
         if(property_exists($quote, 'codigo_martins'))
             $dbQuote->setCodeMartins($quote->codigo_martins);
-        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
-
         $em->flush();
+
+        $dbQuote->checkForRCAQuote($this->getParameter('chave_martins'), $this->getParameter('url_martins'));
+        $em->flush();
+
         return View::create($dbQuote, Response::HTTP_ACCEPTED);
     }
 
