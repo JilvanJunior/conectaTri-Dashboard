@@ -22,11 +22,6 @@
                     {% for supplier in suppliers %}
                         {% for representative in supplier.representatives if (representative.deleted == 0) %}
                             <tr>
-                                <td> {{ supplier.name }} </td>
-                                <td class="rep-name"> {{ representative.name }} </td>
-                                <td class="rep-email numeric"> {{ representative.email }} </td>
-                                <td class="numeric"> {{ supplier.cnpj }} </td>
-                                <td class="numeric"> {{ representative.phone }} </td>
                                 <td>
                                     <label class="mt-checkbox mt-checkbox-outline">
                                         <input type="checkbox" name="chkSupplier" value="{{ representative.id }}" data-suppid="{{ supplier.id }}"
@@ -35,6 +30,11 @@
                                         <span></span>
                                     </label>
                                 </td>
+                                <td> {{ supplier.name }} </td>
+                                <td class="rep-name"> {{ representative.name }} </td>
+                                <td class="rep-email numeric"> {{ representative.email }} </td>
+                                <td class="numeric"> {{ supplier.cnpj }} </td>
+                                <td class="numeric"> {{ representative.phone }} </td>
                             </tr>
                         {% endfor %}
                     {% endfor %}
