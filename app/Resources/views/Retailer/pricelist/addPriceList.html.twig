@@ -1224,12 +1224,11 @@
                             console.log(response);
                             $('#product-datatable').DataTable().row.add([
                                 "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts' onchange='changeChkProduct.call(this);'/><span></span></label>",
-                                response.id,
+                                "<input type='number' min='1' class='form-control quantidade' value='1'>",
                                 response.name,
                                 response.type,
                                 response.brand,
                                 response.unit,
-                                "<input type='number' min='1' class='form-control quantidade' value='1'>"
                             ]).draw();
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset");

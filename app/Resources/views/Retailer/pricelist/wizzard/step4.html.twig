@@ -5,12 +5,11 @@
                 <tr>
                     <th>
                     </th>
-                    <th width="20%"> Código </th>
+                    <th> Quantidade </th>
                     <th> Nome do Produto </th>
                     <th> Tipo </th>
                     <th> Fabricante </th>
                     <th> Embalagem de Compra </th>
-                    <th> Quantidade </th>
                 </tr>
             </thead>
             <tbody>
@@ -25,15 +24,14 @@
                                     <span></span>
                                 </label>
                             </td>
-                            <td> {{ product.id }} </td>
-                            <td> {{ product.name }} </td>
-                            <td> {{ product.type }} </td>
-                            <td> {{ product.brand }} </td>
-                            <td> {{ product.unit }} {{ product.quantity }} </td>
                             <td>
                                 <input type="number" min="1" class="form-control quantidade"
                                     value="{{ (quote is defined and quote.hasProduct(product))?quote.getProductQuantity(product):'1' }}"/>
                             </td>
+                            <td> {{ product.name }} </td>
+                            <td> {{ product.type }} </td>
+                            <td> {{ product.brand }} </td>
+                            <td> {{ product.unit }} {{ product.quantity }} </td>
                         </tr>
                     {% endfor %}
                 {% endif %}
