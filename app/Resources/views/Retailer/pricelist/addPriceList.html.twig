@@ -1167,6 +1167,12 @@
             ]
         }).on('search.dt', function() {
             $(this).find("tr").removeClass('hidden');
+        }).on('draw.dt', function() {
+            if($('#product-datatable').DataTable().search() == '') {
+                $('#product-datatable tbody tr input[type="checkbox"]:not(:checked)').each(function() {
+                    $(this).parents('tr:first').addClass('hidden');
+                });
+            }
         });
         /*
          product_form
@@ -1229,6 +1235,7 @@
                                 response.brand,
                                 response.unit,
                             ]).draw();
+                            changeChkProduct();
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset");
                             $("#product_form div:not(.perm)").removeClass('typing');
