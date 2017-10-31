@@ -990,12 +990,12 @@
                         success: function (response) {
                             console.log(response);
                             $('#supplier-datatable').DataTable().row.add([
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkSupplier' data-suppid='"+ response.supplier_id +"' onchange='changeChkSupplier.call(this);'/><span></span></label>",
                                 response.name,
                                 response.contact_name,
                                 response.contact_email,
                                 response.cnpj,
-                                response.contact_phone,
-                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkSupplier' onchange='changeChkSupplier.call(this);'/><span></span></label>"
+                                response.contact_phone
                             ]).draw();
                             $('#myModal').modal('toggle');
                             $("#supplier_form").trigger("reset");
@@ -1103,11 +1103,11 @@
                     success: function (response) {
                         console.log(response);
                         $('#listing-datatable').DataTable().row.add([
+                            "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkListing' data-products='[]'/><span></span></label>",
                             response.name,
                             response.description,
                             types[response.type],
-                            0,
-                            "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkListing' data-products='[]'/><span></span></label>"
+                            0
                         ]).draw();
                         $('#listingModal').modal('toggle');
                         $("#list_form").trigger("reset");
@@ -1223,13 +1223,13 @@
                         success: function (response) {
                             console.log(response);
                             $('#product-datatable').DataTable().row.add([
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts' onchange='changeChkProduct.call(this);'/><span></span></label>",
                                 response.id,
                                 response.name,
                                 response.type,
                                 response.brand,
                                 response.unit,
-                                "<input type='number' min='1' class='form-control quantidade' value='1'>",
-                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts' onchange='changeChkProduct.call(this);'/><span></span></label>"
+                                "<input type='number' min='1' class='form-control quantidade' value='1'>"
                             ]).draw();
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset");
