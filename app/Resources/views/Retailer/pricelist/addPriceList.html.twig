@@ -1228,7 +1228,7 @@
                         success: function (response) {
                             console.log(response);
                             $('#product-datatable').DataTable().row.add([
-                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts' onchange='changeChkProduct.call(this);'/><span></span></label>",
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts' onchange='changeChkProduct.call(this);' checked/><span></span></label>",
                                 "<input type='number' min='1' class='form-control quantidade' value='1'>",
                                 response.name,
                                 response.type,
