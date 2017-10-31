@@ -2,9 +2,12 @@
 
 namespace AppBundle\Controller\Retailer;
 
+use AppBundle\Entity\ApiSession;
 use AppBundle\Entity\Listing;
 use AppBundle\Entity\ListingProduct;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Retailer;
+use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +21,7 @@ class ListsController extends Controller
      */
     public function indexAction(Request $request)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $listings = $this->getDoctrine()->getRepository('AppBundle:Listing')->findBy(['retailer' => $user, 'deleted' => false]);
 
@@ -43,6 +47,7 @@ class ListsController extends Controller
      */
     public function addListAction(Request $request)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
@@ -53,7 +58,6 @@ class ListsController extends Controller
         $types['3'] = 'Semanal';
 
         if($request->getMethod() == "POST"){
-
 
             $requestData = json_decode($request->getContent());
             $productsIds = $requestData->products;
@@ -108,6 +112,20 @@ class ListsController extends Controller
         $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user,'deleted' => false]);
         $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
+        if (is_null($token)) {
+            $d = $this->getDoctrine();
+            $em = $d->getManager();
+            /** @var Retailer $dbUser */
+            $dbUser = $this->get('security.token_storage')->getToken()->getUser();
+            $session = new ApiSession();
+            $uuid = Uuid::uuid5(Uuid::uuid1(), $dbUser->getCnpj());
+            $session->setToken($uuid->toString());
+            $session->setRetailer($dbUser);
+            $em->persist($session);
+            $em->flush();
+            $token = $session;
+        }
+
         return $this->render('Retailer/lists/addList.html.twig', [
             'types' => $types,
             'username' => $user->getFantasyName(),
@@ -151,7 +169,9 @@ class ListsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        /** @var Listing $list */
         $list = $em->getRepository('AppBundle:Listing')->findOneById($id);
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user,'deleted' => false]);
         $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
@@ -218,6 +238,7 @@ class ListsController extends Controller
      */
     public function addListingProductAction(Request $request, $id)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         $listing = $em->getRepository('AppBundle:Listing')->find($id);
@@ -253,6 +274,7 @@ class ListsController extends Controller
             $em->flush();
         }
 
+        /** @var ListingProduct $listingProduct */
         foreach ($listingProducts as $listingProduct) {
             $tmp['id'] = $listingProduct->getId();
             $tmp['product'] = $listingProduct->getProduct()->getName();
