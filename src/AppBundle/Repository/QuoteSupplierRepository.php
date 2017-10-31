@@ -17,11 +17,11 @@ class QuoteSupplierRepository extends EntityRepository
      * @param $id
      * @return array
      */
-    public function getQuotesAverage($id)
+    public function getQuotesTotal($id)
     {
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT (SUM(qs.price) / COUNT(qs)) AS average 
+                'SELECT SUM(qs.price * qs.quantity) AS total
                   FROM AppBundle:QuoteSupplier qs
                   WHERE qs.deleted = 0 AND qs.price > 0 
                   AND qs.quoteProduct IN (
