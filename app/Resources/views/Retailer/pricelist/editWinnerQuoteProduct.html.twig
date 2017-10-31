@@ -73,10 +73,10 @@
                                                 <thead>
                                                 <tr>
                                                     <th></th>
+                                                    <th> Unidades </th>
                                                     <th> Nome do Fornecedor </th>
                                                     <th> Nome do Representante </th>
                                                     <th> Preço por Unidade </th>
-                                                    <th> Unidades </th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -92,13 +92,13 @@
                                                                 <span></span>
                                                             </label>
                                                         </td>
+                                                        <td>
+                                                            <input class="form-control quantity" type="number" value="{{ quoteSupplier.quantity }}"/>
+                                                        </td>
                                                         <input class="id" type="hidden" value="{{ quoteSupplier.id }}">
                                                         <td> {{ quoteSupplier.representative.supplier.name }} </td>
                                                         <td> {{ quoteSupplier.representative.name }} </td>
                                                         <td> {{ quoteSupplier.price|number_format(2, ',', '.') }} </td>
-                                                        <td>
-                                                            <input class="form-control quantity" type="number" value="{{ quoteSupplier.quantity }}"/>
-                                                        </td>
                                                     </tr>
                                                 {% endfor %}
                                                 </tbody>
