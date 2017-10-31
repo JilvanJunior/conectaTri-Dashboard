@@ -25,7 +25,9 @@ class DashboardController extends Controller
         $listings = $em->getRepository('AppBundle:Listing')->findBy(['retailer' => $user, 'deleted' => false], ['createdAt' => 'DESC']);
         $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user, 'deleted' => false], ['createdAt' => 'DESC']);
         $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
-        $average = $em->getRepository('AppBundle:QuoteSupplier')->getQuotesAverage($user->getId())[0];
+        $supplierQuotesTotal = $em->getRepository('AppBundle:QuoteSupplier')->getQuotesTotal($user->getId())[0];
+        $qtyQuoteProducts = $em->getRepository('AppBundle:QuoteProduct')->countQuotesProduct($user->getId())[0];
+        $average = ($supplierQuotesTotal['total'] / $qtyQuoteProducts['qty']);
 
         //quote status
         $status['0'] = "Em Andamento";
@@ -43,7 +45,7 @@ class DashboardController extends Controller
             'listings' => $listings,
             'products' => $products,
             'suppliers' => $suppliers,
-            'average' => $average['average'],
+            'average' => $average,
             'status' => $status,
             'types' => $types,
             'username' => $user->getFantasyName(),
