@@ -10,8 +10,22 @@
 
 {% block page %}
     <style>
+        div.info {
+            display: inline;
+            margin-right: 1rem;
+        }
+        div.info h4 {
+            display: inline;
+            white-space: nowrap;
+        }
         td.editable {
             font-weight: bold;
+        }
+
+        @media (max-width: 991px) {
+            .m-heading-1 {
+                margin: 0 0 20px 0;
+            }
         }
     </style>
     <div class="page-wrapper-row full-height">
@@ -26,25 +40,35 @@
                         <div class="container">
                             <!-- BEGIN PAGE TITLE -->
                             <div class="page-title">
-                                <h4 style="display: inline">
-                                    {{ quote.name }}
-                                </h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <h4 style="display: inline">
-                                    <small>varejista</small>
-                                    {{ quote.retailer.fantasyName }}
-                                </h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <h4 style="display: inline">
-                                    <small>razão social</small>
-                                    {{ quote.retailer.companyName }}
-                                </h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <h4 style="display: inline">
-                                    <small>validade</small>
-                                    {{ quote.expiresAt|date("d/m/Y H:i") }}
-                                </h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <h4 style="display: inline">
-                                    <small>prazo de pagamento</small>
-                                    {{ quote.paymentDate }}
-                                </h4>
+                                <div class="info">
+                                    <h4>
+                                        {{ quote.name }}
+                                    </h4>
+                                </div>
+                                <div class="info">
+                                    <h4>
+                                        <small>varejista</small>
+                                        {{ quote.retailer.fantasyName }}
+                                    </h4>
+                                </div>
+                                <div class="info">
+                                    <h4>
+                                        <small>razão social</small>
+                                        {{ quote.retailer.companyName }}
+                                    </h4>
+                                </div>
+                                <div class="info">
+                                    <h4>
+                                        <small>validade</small>
+                                        {{ quote.expiresAt|date("d/m/Y H:i") }}
+                                    </h4>
+                                </div>
+                                <div class="info">
+                                    <h4>
+                                        <small>prazo de pagamento</small>
+                                        {{ quote.paymentDate }}
+                                    </h4>
+                                </div>
                             </div>
                             <!-- END PAGE TITLE -->
                         </div>
