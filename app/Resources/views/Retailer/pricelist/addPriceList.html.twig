@@ -1239,6 +1239,8 @@
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset");
                             $("#product_form div:not(.perm)").removeClass('typing');
+                            $("#advance a").removeClass('disabled');
+                            $("#advance").show();
                         },
                         error: function (error) {
                             alert(error.responseJSON.error.exception["0"].message);
