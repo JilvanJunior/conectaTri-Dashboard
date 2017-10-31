@@ -620,4 +620,14 @@ class Quote
 
         return 0;
     }
+
+    public function countValidProducts()
+    {
+        $i = 0;
+        foreach($this->quoteProducts as $quoteProduct)
+            if(!$quoteProduct->isDeleted())
+                $i++;
+
+        return $i;
+    }
 }
