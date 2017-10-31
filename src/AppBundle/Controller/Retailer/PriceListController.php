@@ -123,7 +123,7 @@ class PriceListController extends Controller
             $session->setRetailer($dbUser);
             $em->persist($session);
             $em->flush();
-            $data['token'] = $token->getToken();
+            $data['token'] = $session->getToken();
         }
 
 
