@@ -529,15 +529,16 @@ class PriceListController extends Controller
                 $quoteProduct->removeWinner($quoteSupplier);
             }
 
-            $quoteSupplierIds = $request->get('quoteSuppliers');
+            $quoteSuppliersInfos = $request->get('quoteSuppliers');
 
             //add new winnerQuoteProducts
-            foreach ($quoteSupplierIds as $quoteSupplierId) {
+            foreach ($quoteSuppliersInfos as $quoteSupplierInfo) {
 
                 /** @var QuoteSupplier $product */
-                $quoteSupplier = $em->getRepository('AppBundle:QuoteSupplier')->findOneBy(['id' => $quoteSupplierId, 'deleted' => false]);
+                $quoteSupplier = $em->getRepository('AppBundle:QuoteSupplier')->findOneBy(['id' => $quoteSupplierInfo['id'], 'deleted' => false]);
 
                 if($quoteSupplier != null) {
+                    $quoteSupplier->setQuantity($quoteSupplierInfo['quantity']);
                     $quoteProduct->addWinner($quoteSupplier);
                 }
 

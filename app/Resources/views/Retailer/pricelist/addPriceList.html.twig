@@ -421,15 +421,14 @@
         $('#telefone_representante').mask(SPMaskBehavior, spOptions);
         $('#celular_representante').mask(SPMaskBehavior, spOptions);
 
-        $('[name=chkProducts]').change(function() {
-
+        function changeChkProduct() {
             $('#product-datatable').DataTable().search('').draw();
             $('#product-datatable tbody tr input[type="checkbox"]:not(:checked)').each(function() {
                 $(this).parents('tr:first').addClass('hidden');
             });
-        });
+        }
 
-        $('[name=chkSupplier]').change(function() {
+        function changeChkSupplier() {
             let $this = $(this);
             let checked = $this.prop('checked');
             let id = $this.val();
@@ -453,7 +452,7 @@
                     check.parents('tr:first').remove();
                 }
             }
-        });
+        };
 
         //END MASKS
 
@@ -991,12 +990,12 @@
                         success: function (response) {
                             console.log(response);
                             $('#supplier-datatable').DataTable().row.add([
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkSupplier' data-suppid='"+ response.supplier_id +"' onchange='changeChkSupplier.call(this);'/><span></span></label>",
                                 response.name,
                                 response.contact_name,
                                 response.contact_email,
                                 response.cnpj,
-                                response.contact_phone,
-                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkProducts'/><span></span></label>"
+                                response.contact_phone
                             ]).draw();
                             $('#myModal').modal('toggle');
                             $("#supplier_form").trigger("reset");
@@ -1104,11 +1103,11 @@
                     success: function (response) {
                         console.log(response);
                         $('#listing-datatable').DataTable().row.add([
+                            "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkListing' data-products='[]'/><span></span></label>",
                             response.name,
                             response.description,
                             types[response.type],
-                            0,
-                            "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkListing' data-products='[]'/><span></span></label>"
+                            0
                         ]).draw();
                         $('#listingModal').modal('toggle');
                         $("#list_form").trigger("reset");
@@ -1132,7 +1131,7 @@
         // BEGIN PRODUCTS TABLE
         $('#product-datatable').dataTable({
             autoWidth: false,
-            pageLength: 100,
+            paging: false,
             language: {
                 "sEmptyTable": "Nenhum registro encontrado",
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -1154,7 +1153,6 @@
                     "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
-            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
             iDisplayLength: -1,
             responsive: true,
             dom: '<"top"<"pull-left"l><"pull-right"fB>><"table-scrollable"t><"bottom"p><"clear">',
@@ -1224,13 +1222,12 @@
                         success: function (response) {
                             console.log(response);
                             $('#product-datatable').DataTable().row.add([
-                                response.id,
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts' onchange='changeChkProduct.call(this);'/><span></span></label>",
+                                "<input type='number' min='1' class='form-control quantidade' value='1'>",
                                 response.name,
                                 response.type,
                                 response.brand,
                                 response.unit,
-                                "<input type='number' min='1' class='form-control quantidade' value='1'>",
-                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts'/><span></span></label>"
                             ]).draw();
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset");
@@ -1315,7 +1312,7 @@
                     return true;
 
                 suppliersId.push({
-                    id:0,
+                    id: $(this).data('suppid'),
                     representative: {
                         id: $(this).val()
                     },
@@ -1324,18 +1321,26 @@
                 });
             });
 
-            console.log(suppliersId);
-
             $.each($('#product-datatable tr input:checked'), function(i, v){
-                if($(this).val() == 'on')
+                let $this = $(this);
+
+                if($this.val() == 'on')
                     return true;
 
-                productsId.push({
-                    product: { id: $(this).val() },
-                    quantity: $(this).parents('tr:first').find('input.quantidade').val(),
-                    winners: [],
-                    quote_suppliers: suppliersId
-                });
+                let quoteProduct = {
+                    product: { id: $this.val() },
+                    quantity: $this.parents('tr:first').find('input.quantidade').val(),
+                    winners: []
+                };
+                let quoteSuppliers = $this.data('quotesuppliers');
+
+                if(quoteSuppliers == "") {
+                    quoteProduct.quote_suppliers = suppliersId;
+                } else {
+                    quoteProduct.quote_suppliers = quoteSuppliers;
+                }
+
+                productsId.push(quoteProduct);
             });
 
             $.ajax({

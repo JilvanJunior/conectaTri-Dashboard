@@ -85,11 +85,13 @@
                                                     {% else %}
                                                         <tr>
                                                     {% endfor %}
-                                                        <input type="hidden" value="{{ quoteSupplier.id }}">
+                                                        <input class="id" type="hidden" value="{{ quoteSupplier.id }}">
                                                         <td> {{ quoteSupplier.representative.supplier.name }} </td>
                                                         <td> {{ quoteSupplier.representative.name }} </td>
                                                         <td> {{ quoteSupplier.price|number_format(2, ',', '.') }} </td>
-                                                        <td> {{ quoteSupplier.quantity }} </td>
+                                                        <td>
+                                                            <input class="form-control quantity" type="number" value="{{ quoteSupplier.quantity }}"/>
+                                                        </td>
                                                     </tr>
                                                 {% endfor %}
                                                 </tbody>
@@ -147,8 +149,13 @@
 
             $('#button').click( function () {
                 var data = [];
-                $.each($('.selected > input:first-child'), function(i, v) {
-                    data.push(v.value.trim());
+                $.each($('.selected'), function(index, tr) {
+                    let $tr = $(tr);
+
+                    data.push({
+                        id: $tr.find('input.id').val(),
+                        quantity: $tr.find('input.quantity').val()
+                    });
                 });
 
                 $.ajax({

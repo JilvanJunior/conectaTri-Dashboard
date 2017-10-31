@@ -232,6 +232,28 @@ class Quote
         return $this->quoteProducts;
     }
 
+
+    public function getQuoteSuppliersOf($product) {
+        $searchResult = null;
+
+        foreach($this->quoteProducts as $quoteProduct) {
+            if($quoteProduct->getProduct()->getId() == $product->getId()) {
+                $searchResult = $quoteProduct;
+                break;
+            }
+        }
+
+        if(is_null($searchResult))
+            return "";
+
+        $result = [];
+        foreach($searchResult->getQuoteSuppliers() as $quoteSupplier)
+            if(!$quoteSupplier->isDeleted())
+                $result[] = $quoteSupplier;
+
+        return $result;
+    }
+
     /**
      * @param QuoteProduct $quoteProduct
      * @return Quote
@@ -597,5 +619,15 @@ class Quote
                 return $quoteProduct->getQuantity();
 
         return 0;
+    }
+
+    public function countValidProducts()
+    {
+        $i = 0;
+        foreach($this->quoteProducts as $quoteProduct)
+            if(!$quoteProduct->isDeleted())
+                $i++;
+
+        return $i;
     }
 }
