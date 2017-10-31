@@ -515,6 +515,7 @@ class PriceListController extends Controller
      */
     public function editWinnerQuoteProductAction(Request $request, $id)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
@@ -600,6 +601,7 @@ class PriceListController extends Controller
     public function quoteSupplierPdfAction(Request $request, $idQuote, $idRepresentative)
     {
         $em = $this->getDoctrine()->getManager();
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         /** @var Quote $quote */
@@ -621,6 +623,12 @@ class PriceListController extends Controller
             }
         }
 
+        //format cnpj
+        $cnpj = $user->getCnpj();
+        $cnpj = substr($cnpj, 0, 2).".".substr($cnpj, 2, 3).".".
+            substr($cnpj, 5, 3)."/".substr($cnpj, 8, 4)."-".
+            substr($cnpj, 12, 2);
+        $user->setCnpj($cnpj);
 
         $html = $this->renderView('Retailer/pdf/quoteSupplier.html.twig', array(
             'quote' => $quote,
