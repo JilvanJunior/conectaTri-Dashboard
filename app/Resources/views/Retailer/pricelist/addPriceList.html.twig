@@ -441,9 +441,9 @@
                     let tr = $('<tr></tr>');
                     let input = "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' name='chkSendSupplier' value='"+id+"' checked/><span></span></label>";
 
+                    tr.append($('<td>'+input+'</td>'));
                     tr.append($('<td>'+row.find('.rep-name').text()+'</td>'));
                     tr.append($('<td>'+row.find('.rep-email').text()+'</td>'));
-                    tr.append($('<td>'+input+'</td>'));
 
                     $('#sendSuppliersTable tbody').append(tr);
                 }
