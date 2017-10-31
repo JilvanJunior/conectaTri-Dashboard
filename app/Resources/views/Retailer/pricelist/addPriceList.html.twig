@@ -1131,7 +1131,7 @@
         // BEGIN PRODUCTS TABLE
         $('#product-datatable').dataTable({
             autoWidth: false,
-            pageLength: 100,
+            paging: false,
             language: {
                 "sEmptyTable": "Nenhum registro encontrado",
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -1153,7 +1153,6 @@
                     "sSortDescending": ": Ordenar colunas de forma descendente"
                 }
             },
-            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
             iDisplayLength: -1,
             responsive: true,
             dom: '<"top"<"pull-left"l><"pull-right"fB>><"table-scrollable"t><"bottom"p><"clear">',
