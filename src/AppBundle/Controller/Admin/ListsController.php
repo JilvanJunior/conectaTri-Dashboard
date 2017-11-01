@@ -11,7 +11,7 @@ class ListsController extends Controller
     /**
      * @Route("/administrador/listas", name="admin_listas")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
@@ -34,7 +34,7 @@ class ListsController extends Controller
      * @Route("/administrador/listas/por-data/{date}", name="admin_listas_date")
      * @param Request $request
      * @param $date
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function dateAction(Request $request, $date)
     {
@@ -56,7 +56,7 @@ class ListsController extends Controller
     /**
      * @Route("/administrador/listas/criadas", name="admin_lists_created")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart1Action(Request $request)
     {

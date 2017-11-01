@@ -151,16 +151,17 @@ class ClientsController extends Controller
     public function chart4DataSaveAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $clients = $em->getRepository('AppBundle:Retailer')->findBy(['deleted' => 0, 'verified' => true]);
+        $retailers = $em->getRepository('AppBundle:Retailer')->findBy(['deleted' => 0, 'verified' => true]);
 
         $today = new \DateTime();
         $interval = new \DateInterval("P1M"); // 1 month
         $date = $today->sub($interval);
 
-        //count active clients
+        //count active retailers
         $total = 0;
-        foreach($clients as $client) {
-            $quotes = $client->getQuotes();
+        /** @var Retailer $retailer */
+        foreach($retailers as $retailer) {
+            $quotes = $retailer->getQuotes();
 
             if(count($quotes) > 0) {
 

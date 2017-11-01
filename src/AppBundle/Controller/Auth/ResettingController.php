@@ -90,28 +90,6 @@ class ResettingController extends Controller
     }
 
     /**
-     * Tell the user to check his email provider.
-     *
-     * @Route("/igor", name="igor")
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function checkIgorAction(Request $request)
-    {
-//        $username = $request->query->get('username');
-//
-//        if (empty($username)) {
-//            // the user does not come from the sendEmail action
-//            return new RedirectResponse($this->generateUrl('recover_password'));
-//        }
-//
-        return $this->render('security/check_email.html.twig', array(
-            'tokenLifetime' => 2,
-        ));
-    }
-
-    /**
      * Reset user password.
      *
      * @Route("/recuperacao-senha/token/{token}", name="recover_password_token")

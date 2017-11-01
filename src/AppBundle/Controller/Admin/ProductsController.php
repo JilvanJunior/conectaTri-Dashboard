@@ -11,7 +11,7 @@ class ProductsController extends Controller
     /**
      * @Route("/administrador/produtos", name="admin_produtos")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
@@ -25,7 +25,7 @@ class ProductsController extends Controller
      * @Route("/administrador/produtos/por-cotacao/{id}", name="admin_produtos_quote")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function productsByQuoteAction(Request $request, $id)
     {
@@ -39,7 +39,7 @@ class ProductsController extends Controller
      * @Route("/administrador/produtos/por-lista/{id}", name="admin_produtos_list")
      * @param Request $request
      * @param $id
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function productsByListAction(Request $request, $id)
     {
@@ -53,7 +53,7 @@ class ProductsController extends Controller
      * @Route("/administrador/produtos/por-data/{date}", name="admin_produtos_date")
      * @param Request $request
      * @param $date
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function productsByDateAction(Request $request, $date)
     {
@@ -66,7 +66,7 @@ class ProductsController extends Controller
     /**
      * @Route("/administrador/produtos/criados", name="admin_chart_line_createdproductsXtime")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart1Action(Request $request)
     {
@@ -83,7 +83,7 @@ class ProductsController extends Controller
     /**
      * @Route("/administrador/produtos/historico", name="admin_table_bestprices")
      * @param Request $request
-     * @return
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function chart2Action(Request $request)
     {

@@ -103,6 +103,7 @@ class SuppliersController extends Controller
     /**
      * @Route("/varejista/representante/{id}/editar", name="editar_representante")
      * @param Request $request
+     * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editRepresentativeAction(Request $request, $id)

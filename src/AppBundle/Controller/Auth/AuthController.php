@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Auth;
 
+use AppBundle\Entity\Retailer;
 use AppBundle\Utils\Utils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,7 +14,7 @@ class AuthController extends Controller
     /**
      * @Route("/", name="index")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
@@ -21,6 +22,7 @@ class AuthController extends Controller
             return $this->redirectToRoute('login');
 
         if($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            /** @var Retailer $user */
             $user = $this->get('security.token_storage')->getToken()->getUser();
             if(!$user->isVerified()) {
                 return $this->render('security/login.html.twig', [
@@ -41,7 +43,7 @@ class AuthController extends Controller
     /**
      * @Route("/playstore", name="play_store")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function playStoreAction(Request $request)
     {
@@ -56,6 +58,7 @@ class AuthController extends Controller
     public function loginAction(Request $request)
     {
         if($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            /** @var Retailer $user */
             $user = $this->get('security.token_storage')->getToken()->getUser();
             if(!$user->isVerified()) {
                 return $this->render('security/login.html.twig', [

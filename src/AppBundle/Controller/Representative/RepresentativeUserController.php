@@ -26,13 +26,14 @@ class RepresentativeUserController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $quote = $em->getRepository('AppBundle:Quote')->getQuoteByRepresentative($user->getEmail(), $id);
+        /** @var Quote $quote */
+        $quote = $em->getRepository('AppBundle:Quote')->getQuoteByRepresentative($user->getEmail(), $id)[0];
         if($quote == null)
             return $this->redirectToRoute('access_denied');
         $now = new \DateTime();
-        if($now > $quote[0]->getExpiresAt() || $quote[0]->isClosed()) {
-            if ($now > $quote[0]->getExpiresAt() && !$quote[0]->isClosed()) {
-                $quote[0]->setClosed(true);
+        if($now > $quote->getExpiresAt() || $quote->isClosed()) {
+            if ($now > $quote->getExpiresAt() && !$quote->isClosed()) {
+                $quote->setClosed(true);
                 //TODO: send notification
                 $defaultUrl = 'https://kidsplace.firebaseio.com/';
                 $defaultToken = 'MqL0c8tKCtheLSYcygYNtGhU8Z2hULOFs9OKPdEp';
@@ -50,7 +51,7 @@ class RepresentativeUserController extends Controller
 
         $isIncluded = false;
 
-        foreach ($quote[0]->getQuoteProducts() as $quoteProduct) {
+        foreach ($quote->getQuoteProducts() as $quoteProduct) {
             foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                 /** @var QuoteSupplier $quoteSupplier */
                 if ($quoteSupplier->getRepresentative()->getEmail() == $user->getEmail() && !$quoteSupplier->isDeleted()) {
@@ -65,7 +66,7 @@ class RepresentativeUserController extends Controller
         }
 
         $representative = $em->getRepository('AppBundle:Representative')
-            ->getRepresentativeByQuote($user->getEmail(), $id);
+            ->getRepresentativeByQuote($user->getEmail(), $id)[0];
 
         $isCompleted = false;
         $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
@@ -75,8 +76,8 @@ class RepresentativeUserController extends Controller
             $isCompleted = true;
 
         return $this->render('Representative/quote.html.twig', array(
-            'quote' => $quote[0],
-            'representative' => $representative[0],
+            'quote' => $quote,
+            'representative' => $representative,
             'observation' => $quoteSupplierStatus->getObservation(),
             'isCompleted' => $isCompleted,
         ));
@@ -97,6 +98,7 @@ class RepresentativeUserController extends Controller
         $quote = $em->getRepository('AppBundle:Quote')->find($quoteId);
         $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $quote]);
 
+        /** @var Representative $representative */
         $representative = $em->getRepository('AppBundle:Representative')->find($representativeId);
 
         if($request->getMethod() == "POST"){
