@@ -17,7 +17,7 @@
 
         @media (max-width: 500px) {
             .contact-form {
-                margin: 0px;
+                margin: 0;
                 width: 100%;
             }
         }
@@ -41,6 +41,9 @@
             color: #40ae40;
             font-size: 10px;
             top: 2px;
+        }
+        .contact-form .text.typing label.text-area-label{
+            margin-top: -15px;
         }
 
         .text input {
@@ -249,12 +252,12 @@
                                                                             <div class="">
                                                                                 <div class="form-group ean text ">
                                                                                     <label for="ean">Código de Barras do Produto</label>
-                                                                                    <input class="form-control" type="text" name="ean" id="ean" 
-                                                                                        value="{% if product is defined %}{{ product.ean }}{% endif %}"/>
+                                                                                    <input class="form-control" type="text" name="ean" id="ean"
+                                                                                           value="{% if product is defined %}{{ product.ean }}{% endif %}"/>
                                                                                     {% if userIsRCA %}
-                                                                                    <div>
-                                                                                        <small style="font-size: 65%;">*Produtos sem Código não serão inclusos em Pedidos</small>
-                                                                                    </div>
+                                                                                        <div>
+                                                                                            <small style="font-size: 65%;">*Produtos sem Código não serão inclusos em Pedidos</small>
+                                                                                        </div>
                                                                                     {% endif %}
                                                                                 </div>
                                                                             </div>
@@ -340,12 +343,12 @@
                                                                                     <label for="quantity">Peso / Quantidade*</label>
                                                                                     {% if product is defined %}
                                                                                         <input class="form-control" type="text" name="quantity"
-                                                                                            id="quantity" value="{{ product.quantity }}"
-                                                                                            required/>
+                                                                                               id="quantity" value="{{ product.quantity }}"
+                                                                                               required/>
                                                                                     {% else %}
                                                                                         <input class="form-control" type="text" name="quantity"
-                                                                                            id="quantity"
-                                                                                            required/>
+                                                                                               id="quantity"
+                                                                                               required/>
                                                                                     {% endif %}
                                                                                 </div>
                                                                             </div>
@@ -357,8 +360,8 @@
                                                                         <div class="col-sm-4 col-sm-offset-4">
                                                                             <div class="">
                                                                                 <div class="form-group full-description text ">
-                                                                                    <label for="full-description">Descrição Completa</label>
-                                                                                    <textarea rows="7" class="form-control text-area" type="text" id="full-description" name="full-description"></textarea>
+                                                                                    <label for="full-description" class="text-area-label">Descrição Completa</label>
+                                                                                    <textarea rows="7" class="form-control text-area" id="full-description" name="full-description"></textarea>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -398,8 +401,9 @@
     <script src="{{ asset('assets/pages/scripts/jquery.mask.min.js') }}" type="text/javascript"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
+        var product = $("#product");
         $(function() {
-            $("#product").autocomplete({
+            product.autocomplete({
                 source: function(request, response) {
                     $.ajax({
                         url: "{{ path('ajax_produtos') }}",
@@ -415,7 +419,7 @@
                 minLength: 3
             });
 
-            $("#product").on( "autocompleteselect", function( event, ui ) {
+            product.on( "autocompleteselect", function( event, ui ) {
                 $('#ean').val(ui.item.ean);
                 $('#brand').val(ui.item.brand);
                 $('#quantity').val(ui.item.quantity);
@@ -465,40 +469,40 @@
         });
 
 
-//BEGIN FLOAT LABEL METHODS
-$('#product').keyup(function(){
-    $('.product.text').addClass('typing');
-    if( $(this).val().length === 0 ) {
-        $('.product.text').removeClass('typing');
-    }
-});
+        //BEGIN FLOAT LABEL METHODS
+        product.keyup(function(){
+            $('.product.text').addClass('typing');
+            if( $(this).val().length === 0 ) {
+                $('.product.text').removeClass('typing');
+            }
+        });
 
 
-$('#ean').keyup(function(){
-    $('.ean.text').addClass('typing');
-    if( $(this).val().length === 0 ) {
-        $('.ean.text').removeClass('typing');
-    }
-});
-$('#brand').keyup(function(){
-    $('.brand.text').addClass('typing');
-    if( $(this).val().length === 0 ) {
-        $('.brand.text').removeClass('typing');
-    }
-});
+        $('#ean').keyup(function(){
+            $('.ean.text').addClass('typing');
+            if( $(this).val().length === 0 ) {
+                $('.ean.text').removeClass('typing');
+            }
+        });
+        $('#brand').keyup(function(){
+            $('.brand.text').addClass('typing');
+            if( $(this).val().length === 0 ) {
+                $('.brand.text').removeClass('typing');
+            }
+        });
 
 
-$('#quantity').keyup(function(){
-    $('.quantity.text').addClass('typing');
-    if( $(this).val().length === 0 ) {
-        $('.quantity.text').removeClass('typing');
-    }
-});
-$('#full-description').keyup(function(){
-    $('.full-description.text').addClass('typing');
-    if( $(this).val().length === 0 ) {
-        $('.full-description.text').removeClass('typing');
-    }
-});
+        $('#quantity').keyup(function(){
+            $('.quantity.text').addClass('typing');
+            if( $(this).val().length === 0 ) {
+                $('.quantity.text').removeClass('typing');
+            }
+        });
+        $('#full-description').keyup(function(){
+            $('.full-description.text').addClass('typing');
+            if( $(this).val().length === 0 ) {
+                $('.full-description.text').removeClass('typing');
+            }
+        });
     </script>
-    {% endblock %}
+{% endblock %}

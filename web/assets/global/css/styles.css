@@ -370,6 +370,10 @@ label:hover {
     top: 2px;
 }
 
+.contact-form .text.typing label.text-area-label{
+    margin-top: -15px;
+}
+
 .text input, .text select {
     margin: 0 auto;
     height: 44px;

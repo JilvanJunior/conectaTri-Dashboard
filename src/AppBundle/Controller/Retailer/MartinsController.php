@@ -3,6 +3,9 @@
 namespace AppBundle\Controller\Retailer;
 
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Quote;
+use AppBundle\Entity\QuoteSupplier;
+use AppBundle\Entity\Retailer;
 use AppBundle\Service\MartinsConnector;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,6 +20,7 @@ class MartinsController extends Controller
      */
     public function boletosAction(Request $request)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if(!$user->isRCAVirtual())
             return $this->redirectToRoute('dashboard');
@@ -40,6 +44,7 @@ class MartinsController extends Controller
      */
     public function pedidosAction(Request $request)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if(!$user->isRCAVirtual())
             return $this->redirectToRoute('dashboard');
@@ -67,11 +72,13 @@ class MartinsController extends Controller
      */
     public function addPedidoAction(Request $request, $idQuote)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if(!$user->isRCAVirtual())
             return $this->redirectToRoute('dashboard');
 
         $em = $this->getDoctrine()->getManager();
+        /** @var Quote $quote */
         $quote = $em->getRepository('AppBundle:Quote')->findOneById($idQuote);
         $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
@@ -82,6 +89,7 @@ class MartinsController extends Controller
             $products[$idProduct] = $quoteProduct->getProduct();
 
             $usableQuoteSupplier = null;
+            /** @var QuoteSupplier $quoteSupplier */
             foreach($quoteProduct->getWinners() as $quoteSupplier) {
                 if($quoteSupplier->getRepresentative()->getSupplier()->isRCA()) {
                     $usableQuoteSupplier = $quoteSupplier;
