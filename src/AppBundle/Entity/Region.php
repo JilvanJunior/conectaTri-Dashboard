@@ -97,7 +97,9 @@ class Region
     public function getSuppliers()
     {
         $suppliers = new ArrayCollection();
+        /** @var State $state */
         foreach ($this->states->toArray() as $state) {
+            /** @var Supplier $supplier */
             foreach ($state->getSuppliers() as $supplier) {
                 $suppliers->add($supplier);
             }
@@ -113,7 +115,9 @@ class Region
     public function getRetailers()
     {
         $retailers = new ArrayCollection();
+        /** @var State $state */
         foreach ($this->states->toArray() as $state) {
+            /** @var Retailer $retailer */
             foreach ($state->getRetailers() as $retailer) {
                 $retailers->add($retailer);
             }

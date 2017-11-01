@@ -233,9 +233,14 @@ class Quote
     }
 
 
+    /**
+     * @param Product $product
+     * @return array|string
+     */
     public function getQuoteSuppliersOf($product) {
         $searchResult = null;
 
+        /** @var QuoteProduct $quoteProduct */
         foreach($this->quoteProducts as $quoteProduct) {
             if($quoteProduct->getProduct()->getId() == $product->getId()) {
                 $searchResult = $quoteProduct;
@@ -247,6 +252,7 @@ class Quote
             return "";
 
         $result = [];
+        /** @var QuoteSupplier $quoteSupplier */
         foreach($searchResult->getQuoteSuppliers() as $quoteSupplier)
             if(!$quoteSupplier->isDeleted())
                 $result[] = $quoteSupplier;
@@ -518,6 +524,8 @@ class Quote
     /**
      * Verify if quote is made by a RCA flagged Retailer
      * and generate the RCA quote if needed
+     * @param $chave
+     * @param $url
      */
     public function checkForRCAQuote($chave, $url)
     {
@@ -525,6 +533,7 @@ class Quote
             return;
 
         foreach($this->suppliersStatus as $suppliersStatus) {
+            /** @var Representative $representative */
             $representative = $suppliersStatus->getRepresentative();
             if(is_null($representative))
                 continue;
@@ -537,11 +546,17 @@ class Quote
         }
     }
 
+    /**
+     * @param $chave
+     * @param $url
+     * @param Supplier $supplier
+     */
     private function makeRCAQuote($chave, $url, $supplier)
     {
         $products = [];
         $quantitiesByProduct = [];
 
+        /** @var QuoteProduct $quoteProduct */
         foreach($this->quoteProducts as $quoteProduct) {
             $product = $quoteProduct->getProduct();
             
@@ -594,6 +609,10 @@ class Quote
         }
     }
 
+    /**
+     * @param Representative $representative
+     * @return bool
+     */
     public function hasRepresentative($representative)
     {
         foreach($this->suppliersStatus as $quoteSupplierStatus)
@@ -603,6 +622,10 @@ class Quote
         return false;
     }
 
+    /**
+     * @param Product $product
+     * @return bool
+     */
     public function hasProduct($product)
     {
         foreach($this->quoteProducts as $quoteProduct)
@@ -612,6 +635,10 @@ class Quote
         return false;
     }
 
+    /**
+     * @param Product $product
+     * @return int
+     */
     public function getProductQuantity($product)
     {
         foreach($this->quoteProducts as $quoteProduct)
@@ -621,6 +648,9 @@ class Quote
         return 0;
     }
 
+    /**
+     * @return int
+     */
     public function countValidProducts()
     {
         $i = 0;

@@ -292,11 +292,11 @@ class Representative
     /**
      * Set retailer
      *
-     * @param \AppBundle\Entity\Retailer $retailer
+     * @param Retailer $retailer
      *
      * @return Representative
      */
-    public function setRetailer(\AppBundle\Entity\Retailer $retailer = null)
+    public function setRetailer(Retailer $retailer = null)
     {
         $this->retailer = $retailer;
 
@@ -306,7 +306,7 @@ class Representative
     /**
      * Get retailer
      *
-     * @return \AppBundle\Entity\Retailer
+     * @return Retailer
      */
     public function getRetailer()
     {

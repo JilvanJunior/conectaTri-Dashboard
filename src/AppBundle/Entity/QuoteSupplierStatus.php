@@ -41,7 +41,7 @@ class QuoteSupplierStatus
     private $representative;
 
     /**
-     * @var observation
+     * @var string
      *
      * @ORM\Column(name="observation", type="text", nullable=true)
      */

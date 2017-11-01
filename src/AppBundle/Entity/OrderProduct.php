@@ -26,7 +26,7 @@ class OrderProduct
     private $id;
 
     /**
-     * @var Quote
+     * @var MartinsOrder
      *
      * @ORM\ManyToOne(targetEntity="MartinsOrder", inversedBy="orderProducts")
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id")

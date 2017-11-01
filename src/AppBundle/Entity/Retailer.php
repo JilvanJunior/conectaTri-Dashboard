@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use JMS\Serializer\Annotation as Serializer;
@@ -646,6 +647,8 @@ class Retailer implements UserInterface, \Serializable
 
     /**
      * @param bool $rcaVirtual
+     * @param $martinsSupplier
+     * @param $em
      * @return Retailer
      */
     public function setRCAVirtual($rcaVirtual, $martinsSupplier, $em)
@@ -916,9 +919,14 @@ class Retailer implements UserInterface, \Serializable
         return $this->apiSessions;
     }
 
+    /**
+     * @param $martinsSupplier
+     * @param ObjectManager $em
+     */
     private function addMartinsRepresentative($martinsSupplier, $em)
     {
         $hasMartinsRepresentative = false;
+        /** @var Representative $representative */
         foreach($this->getRepresentatives() as $representative) {
             $supplier = $representative->getSupplier();
             if(!$supplier->isRca())
@@ -946,6 +954,7 @@ class Retailer implements UserInterface, \Serializable
 
     private function removeMartinsRepresentative()
     {
+        /** @var Representative $representative */
         foreach($this->getRepresentatives() as $representative) {
             $supplier = $representative->getSupplier();
             if(!$supplier->isRca())

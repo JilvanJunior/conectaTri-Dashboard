@@ -207,7 +207,7 @@ class Listing
 
     /**
      * @param Product $product
-     * @return $this
+     * @return bool
      */
     public function hasProduct($product) {
         foreach($this->listingProducts as $listingProduct)
