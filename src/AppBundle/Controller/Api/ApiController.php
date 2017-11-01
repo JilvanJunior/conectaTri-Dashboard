@@ -2237,6 +2237,7 @@ class ApiController extends FOSRestController {
             $em->persist($martinsOrder);
             $em->flush();
 
+            /** @var Quote $quote */
             $quote = $em->getRepository('AppBundle:Quote')->findOneById($this->productsData->quoteId);
             $quote->setIdOrder($martinsOrder->getId());
             $em->flush();

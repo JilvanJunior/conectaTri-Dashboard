@@ -96,7 +96,12 @@ class MartinsConnector
 
         $params['produtos'] = array_values($products);
 
-        $infos = $this->soap->consultarPreco($params)->consultarPrecoResult->Mercadorias->Mercadoria;
+        $infos = $this->soap->consultarPreco($params)->consultarPrecoResult;
+        if(!property_exists($infos, "Mercadorias")){
+            return [];
+        }
+
+        $infos = $infos->Mercadorias->Mercadoria;
         if(!is_array($infos))
             $infos = [$infos];
         $infosById = [];

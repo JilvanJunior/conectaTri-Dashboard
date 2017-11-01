@@ -138,6 +138,7 @@ class PriceListController extends Controller
      */
     public function addPresentialAction(Request $request)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         if($request->getMethod() == "POST"){
@@ -220,6 +221,7 @@ class PriceListController extends Controller
         /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
+        /** @var Quote $quote */
         $quote = $em->getRepository('AppBundle:Quote')->findOneById($id);
 
         //type of listings
@@ -282,6 +284,7 @@ class PriceListController extends Controller
         } else {
             $d = $this->getDoctrine();
             $em = $d->getManager();
+            /** @var Retailer $dbUser */
             $dbUser = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $this->get('security.token_storage')->getToken()->getUser()]);
             $session = new ApiSession();
             $uuid = Uuid::uuid5(Uuid::uuid1(), $dbUser->getCnpj());
@@ -303,16 +306,19 @@ class PriceListController extends Controller
      */
     public function showAction(Request $request, $id)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
         $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
+        /** @var Quote $quote */
         $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
         $data = [];
 
-        $products = $quote->getQuoteProducts();
-        foreach($products as $product) {
-            foreach($product->getQuoteSuppliers() as $quoteSupplier) {
+        $quoteProducts = $quote->getQuoteProducts();
+        foreach($quoteProducts as $quoteProduct) {
+            /** @var QuoteSupplier $quoteSupplier */
+            foreach($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
                 if($quoteSupplier->isDeleted())
                     continue;
 
@@ -355,8 +361,8 @@ class PriceListController extends Controller
             }
         }
 
-        foreach($products as $product) {
-            foreach($product->calculateWinners() as $quoteSupplier) {
+        foreach($quoteProducts as $quoteProduct) {
+            foreach($quoteProduct->calculateWinners() as $quoteSupplier) {
                 $supplier = $quoteSupplier->getRepresentative()->getSupplier();
                 $idSupplier = $supplier->getId();
 
@@ -382,9 +388,11 @@ class PriceListController extends Controller
      */
     public function showQuoteProductAction(Request $request, $id)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
+        /** @var QuoteProduct $thisQuoteProduct */
         $thisQuoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
         $quote = $thisQuoteProduct->getQuote();
         $prevPrev = $prev = $curr = null;
@@ -423,9 +431,11 @@ class PriceListController extends Controller
      */
     public function editQuoteProductAction(Request $request, $id)
     {
+        /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
+        /** @var QuoteProduct $thisQuoteProduct */
         $thisQuoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
         $quote = $thisQuoteProduct->getQuote();
         $prevPrev = $prev = $curr = null;
@@ -519,6 +529,7 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
+        /** @var QuoteProduct $quoteProduct */
         $quoteProduct = $em->getRepository('AppBundle:QuoteProduct')->find($id);
         $quote = $quoteProduct->getQuote();
 
@@ -526,6 +537,7 @@ class PriceListController extends Controller
 
             $quoteSuppliers = $em->getRepository('AppBundle:QuoteSupplier')->findBy(['quoteProduct' => $quoteProduct, 'deleted' => false]);
 
+            /** @var QuoteSupplier $quoteSupplier */
             foreach ($quoteSuppliers as $quoteSupplier) {
                 $quoteProduct->removeWinner($quoteSupplier);
             }
@@ -535,7 +547,7 @@ class PriceListController extends Controller
             //add new winnerQuoteProducts
             foreach ($quoteSuppliersInfos as $quoteSupplierInfo) {
 
-                /** @var QuoteSupplier $product */
+                /** @var QuoteSupplier $quoteSupplier*/
                 $quoteSupplier = $em->getRepository('AppBundle:QuoteSupplier')->findOneBy(['id' => $quoteSupplierInfo['id'], 'deleted' => false]);
 
                 if($quoteSupplier != null) {
@@ -558,11 +570,32 @@ class PriceListController extends Controller
             exit();
         }
 
+        $multiplier = 1;
+        $quantityRCA = 1;
+        if($user->isRCAVirtual()){
+            $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
+            $mc->login();
+
+            $product = $quoteProduct->getProduct();
+            $infos = $mc->getProductInfoByEan([$product]);
+            $multiplier = $infos[$product->getId()]->IND_QDE_MULTIPLA_VND;
+            $multiplier = ($multiplier != 0 ? $multiplier : 1);
+            /** @var QuoteSupplier $quoteSupplier */
+            foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier){
+                if($quoteSupplier->getRepresentative()->getSupplier()->isRca()){
+                    $quantityRCA = $quoteSupplier->getQuantity();
+                    break;
+                }
+            }
+        }
+
         return $this->render('Retailer/pricelist/editWinnerQuoteProduct.html.twig', [
             'quoteProduct' => $quoteProduct,
             'quote' => $quote,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
+            'multiplier' => $multiplier,
+            'quantityRCA' => $quantityRCA,
         ]);
     }
 
@@ -576,6 +609,7 @@ class PriceListController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        /** @var Quote $quote */
         $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
         $quote->setUpdatedAt(new \DateTime());
         $quote->setDeleted(true);

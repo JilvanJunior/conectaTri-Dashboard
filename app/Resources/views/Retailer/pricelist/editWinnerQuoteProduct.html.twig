@@ -170,6 +170,14 @@
                     }
                 });
             } );
+
+            var quantity = {{ quantityRCA }};
+            var multiplier = {{ multiplier }};
+
+            if(quantity % multiplier !== 0){
+                alert("A quantidade de produto para o RCA Virtual deve ser múltiplo de " + multiplier);
+            }
+
         } );
     </script>
 {% endblock %}

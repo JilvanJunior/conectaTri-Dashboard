@@ -131,7 +131,7 @@ class QuoteSupplier
     }
 
     /**
-     * @return mixed
+     * @return Representative
      */
     public function getRepresentative()
     {
@@ -139,7 +139,7 @@ class QuoteSupplier
     }
 
     /**
-     * @param mixed $representative
+     * @param Representative $representative
      * @return QuoteSupplier
      */
     public function setRepresentative($representative)
