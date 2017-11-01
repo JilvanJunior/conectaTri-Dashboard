@@ -167,7 +167,7 @@ class PriceListController extends Controller
                 'Selecione as listas de produtos para adicionar à cotação.'
             );
 
-            return $this->redirectToRoute('cotacao_listas', ['id' => $quote->getId()]);
+            return $this->redirectToRoute('cotacoes');
         }
 
         return $this->render('Retailer/pricelist/addPriceList.html.twig', [
@@ -188,6 +188,7 @@ class PriceListController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
+        /** @var Quote $newQuote */
         $newQuote = clone($quote);
 
         $tomorrow = (new \DateTime())->add(new \DateInterval('P1D'));

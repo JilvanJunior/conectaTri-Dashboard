@@ -121,13 +121,13 @@
             });
 
             $.ajax({
-                url: '{{ absolute_url('/api/martins/pedido') }}',
+                url: '{{ path('post_martins_pedido') }}',
                 type: 'POST',
                 headers: {
                     "Api-Token": token
                 },
                 data: JSON.stringify({
-                    code: 111,
+                    code: {{ prazo|split(" ")[0] }},
                     products: products,
                 }),
                 success: function(res) {

@@ -332,6 +332,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
 
         $product = json_decode($request->getContent());
+        /** @var Product $dbProduct */
         $dbProduct = $d->getRepository("AppBundle:Product")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
         if (is_null($dbProduct)) {
             return View::create(new ApiError("Este produto não está cadastrado"), Response::HTTP_NOT_FOUND);
@@ -371,6 +372,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
+        /** @var Product $product */
         $product = $d->getRepository("AppBundle:Product")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
         if (is_null($product)) {
             return View::create(new ApiError("Este produto não está cadastrado"), Response::HTTP_NOT_FOUND);
@@ -795,6 +797,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
+        /** @var Listing $dbListing */
         $dbListing = $d->getRepository("AppBundle:Listing")->find($id);
         if (is_null($dbListing)) {
             return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
@@ -1147,6 +1150,7 @@ class ApiController extends FOSRestController {
         if (is_null($token)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
+        /** @var ApiSession $dbToken */
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
@@ -1490,6 +1494,7 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
+        /** @var Quote $dbQuote */
         $dbQuote = $d->getRepository("AppBundle:Quote")->find($id);
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Esta listagem não está cadastrada"), Response::HTTP_NOT_FOUND);
@@ -1523,6 +1528,7 @@ class ApiController extends FOSRestController {
         if (is_null($token)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
+        /** @var ApiSession $dbToken */
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
@@ -1623,6 +1629,7 @@ class ApiController extends FOSRestController {
         $d = $this->getDoctrine();
         $em = $d->getManager();
         $retailer = json_decode($request->getContent());
+        /** @var Retailer $dbRetailer */
         $dbRetailer = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $retailer->cnpj]);
         if (!is_null($dbRetailer)) {
             if (!$dbRetailer->isVerified() || $dbRetailer->isDeleted()) {
@@ -2127,7 +2134,7 @@ class ApiController extends FOSRestController {
 
 
     /**
-     * @Rest\Post("/api/martins/pedido")
+     * @Rest\Post("/api/martins/pedido", name="post_martins_pedido")
      * @param Request $request
      * @return View
      */
@@ -2343,6 +2350,7 @@ class ApiController extends FOSRestController {
         $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
 
+        /** @var MartinsOrder $martinsOrder */
         $martinsOrder = $d->getRepository('AppBundle:MartinsOrder')->findOneBy(['id' => $id, 'retailer' => $user, 'deleted' => 0]);
 
         if(is_null($martinsOrder))

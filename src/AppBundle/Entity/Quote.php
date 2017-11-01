@@ -607,6 +607,8 @@ class Quote
             $supplierStatus->setStatus(1);
             break;
         }
+
+        $this->setWinners();
     }
 
     /**
@@ -659,5 +661,22 @@ class Quote
                 $i++;
 
         return $i;
+    }
+
+    public function setWinners()
+    {
+        $quoteProducts = $this->getQuoteProducts();
+        /** @var QuoteProduct $quoteProduct */
+        foreach ($quoteProducts as $quoteProduct){
+            /** @var QuoteSupplier $quoteSupplier */
+            foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier){
+                $quoteProduct->removeWinner($quoteSupplier);
+            }
+
+            foreach($quoteProduct->calculateWinners() as $quoteSupplier) {
+                $quoteProduct->addWinner($quoteSupplier);
+            }
+        }
+
     }
 }
