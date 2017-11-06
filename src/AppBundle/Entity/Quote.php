@@ -577,7 +577,9 @@ class Quote
             $quantitiesByProduct[$key]['idMartins'] = $code;
         }
 
-        $infos = $mc->getMartinsInfos($quantitiesByProduct);
+        $code = explode($quoteProduct->getQuote()->getPaymentDate(), " ")[0];
+
+        $infos = $mc->getMartinsInfos($quantitiesByProduct, $code);
         foreach($this->quoteProducts as $quoteProduct) {
             $product = $quoteProduct->getProduct();
             if(!key_exists($product->getId(), $infos))
@@ -604,7 +606,7 @@ class Quote
             if($supplier->getId() != $supplierStatus->getRepresentative()->getSupplier()->getId())
                 continue;
 
-            $supplierStatus->setStatus(1);
+            $supplierStatus->setStatus(2);
             break;
         }
 
