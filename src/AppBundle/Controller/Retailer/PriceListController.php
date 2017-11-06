@@ -257,6 +257,7 @@ class PriceListController extends Controller
             'username' => $user->getFantasyName(),
             'userid' => $user->getId(),
             'userIsRCA' => $user->isRCAVirtual(),
+            'user' => $user,
         ];
 
         if($user->isRCAVirtual()) {
