@@ -876,6 +876,11 @@
             let state = $(this).prop('checked');
             $('[name=selectAllProducts]').prop('checked', state);
             $('[name=chkProducts]').prop('checked', state);
+
+            if(state)
+                $('#product-datatable tbody tr').removeClass('hidden');
+            else
+                $('#product-datatable tbody tr').addClass('hidden');
         });
         $('[name=chkListing]').click(function() {
             let state = $(this).prop('checked');
