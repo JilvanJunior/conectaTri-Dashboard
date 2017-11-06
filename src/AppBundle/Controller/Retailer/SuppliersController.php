@@ -32,6 +32,7 @@ class SuppliersController extends Controller
             'suppliers' => $suppliers,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
+            'user' => $user,
         ]);
     }
 

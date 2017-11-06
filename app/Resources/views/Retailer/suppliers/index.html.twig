@@ -76,7 +76,8 @@
                                                     </thead>
                                                     <tbody>
                                                     {% for supplier in suppliers %}
-                                                        {% for representative in supplier.representatives if representative.deleted == 0 %}
+                                                        {% for representative in supplier.representatives
+                                                        if representative.deleted == false and representative.retailer.id == user.id %}
                                                             <tr>
                                                                 <td> {{ supplier.name }} </td>
                                                                 <td> {{ representative.name }} </td>
@@ -85,11 +86,11 @@
                                                                 <td class="numeric"> {{ representative.phone }} </td>
                                                                 <td>
                                                                     <a href="{{ path('editar_representante', {'id': representative.id}) }}"
-                                                                        class="btn btn-outline btn-circle btn-sm purple">
+                                                                       class="btn btn-outline btn-circle btn-sm purple">
                                                                         <i class="fa fa-edit"></i> Editar
                                                                     </a>
                                                                     <a href="{{ path('deletar_representante', {'id': representative.id}) }}"
-                                                                        class="btn btn-outline btn-circle btn-sm purple">
+                                                                       class="btn btn-outline btn-circle btn-sm purple">
                                                                         <i class="fa fa-trash"></i> Deletar
                                                                     </a>
                                                                 </td>
