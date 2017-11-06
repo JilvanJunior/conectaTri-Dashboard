@@ -312,7 +312,7 @@ function validate(){
     }
     if(!check){
         alert('É necessário aceitar os termos de uso e a política de privacidade!');
-        $('#retailer_companyName').focus();
+        $('#button').focus();
         return check;
     }
     if($('#retailer_plainPassword_first').val() !== $('#retailer_plainPassword_second').val()){
@@ -338,6 +338,7 @@ $('#retailer_cep').blur(function() {
     let validacep = /^[0-9]{8}$/;
     if(!validacep.test(cep)) {
         alert('CEP inválido!');
+        $('#retailer_address').focus();
         return;
     }
 
@@ -345,6 +346,7 @@ $('#retailer_cep').blur(function() {
     $.getJSON("//viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
         if("erro" in dados) {
             alert("CEP não encontrado.");
+            $('#retailer_address').focus();
             return;
         }
 
