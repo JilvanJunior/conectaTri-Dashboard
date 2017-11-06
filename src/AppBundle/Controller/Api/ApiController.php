@@ -2221,9 +2221,12 @@ class ApiController extends FOSRestController {
                 ->setCode($order->Pedido->Codigo)
                 ->setPaymentDue($productsData->payment_due)
                 ->setTotal($total)
-                ->setLinkToBill($order->LinkBoleto)
+                ->setStatus($order->Status)
                 ->setUpdatedAt(new \DateTime())
                 ->setRetailer($user);
+
+            if(property_exists($order, 'LinkBoleto'))
+                $martinsOrder->setLinkToBill($order->LinkBoleto);
 
             $productsById = [];
             /** @var Product $product */
@@ -2245,7 +2248,12 @@ class ApiController extends FOSRestController {
             $em->flush();
 
             /** @var Quote $quote */
-            $quote = $em->getRepository('AppBundle:Quote')->findOneById($this->productsData->quoteId);
+            $quote = null;
+            if(property_exists($this, 'productsData'))
+                $quote = $em->getRepository('AppBundle:Quote')->findOneById($this->productsData->quoteId);
+            else
+                $quote = $em->getRepository('AppBundle:Quote')->findOneById($productsData->quote_id);
+
             $quote->setIdOrder($martinsOrder->getId());
             $em->flush();
         } else {

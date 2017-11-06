@@ -149,6 +149,7 @@ class MartinsController extends Controller
             'userIsRCA' => $user->isRCAVirtual(),
             'token' => $token->getToken(),
             'total' => $total,
+            'quoteId' => $idQuote,
         ]);
     }
 }
