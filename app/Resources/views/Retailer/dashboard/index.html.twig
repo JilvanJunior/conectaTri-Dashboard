@@ -230,7 +230,8 @@
                                                     <div class="general-item-list">
                                                         {% for supplier in suppliers %}
                                                             {% for representative in supplier.representatives
-                                                            if representative.deleted == false and representative.retailer.id == user.id %}
+                                                            if representative.deleted == false
+                                                            and (supplier.rca or representative.retailer.id == user.id) %}
                                                                 <div class="item">
                                                                     <div class="item-head">
                                                                         <div class="item-details">

@@ -20,7 +20,8 @@
             {% if suppliers is defined %}
                 {% for supplier in suppliers %}
                     {% for representative in supplier.representatives
-                    if representative.deleted == false and representative.retailer.id == user.id %}
+                    if representative.deleted == false
+                    and (supplier.rca or representative.retailer.id == user.id) %}
                         <tr>
                             <td>
                                 <label class="mt-checkbox mt-checkbox-outline">

@@ -580,8 +580,10 @@ class PriceListController extends Controller
 
             $product = $quoteProduct->getProduct();
             $infos = $mc->getProductInfoByEan([$product]);
-            $multiplier = $infos[$product->getId()]->IND_QDE_MULTIPLA_VND;
-            $multiplier = ($multiplier != 0 ? $multiplier : 1);
+            if(array_key_exists($product->getId(), $infos)){
+                $multiplier = $infos[$product->getId()]->IND_QDE_MULTIPLA_VND;
+                $multiplier = ($multiplier != 0 ? $multiplier : 1);
+            }
             /** @var QuoteSupplier $quoteSupplier */
             foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier){
                 if($quoteSupplier->getRepresentative()->getSupplier()->isRca()){
