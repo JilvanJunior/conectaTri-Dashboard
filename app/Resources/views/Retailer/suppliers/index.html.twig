@@ -90,10 +90,12 @@
                                                                        class="btn btn-outline btn-circle btn-sm purple">
                                                                         <i class="fa fa-edit"></i> Editar
                                                                     </a>
+                                                                    {% if supplier.isRca == false %}
                                                                     <a href="{{ path('deletar_representante', {'id': representative.id}) }}"
                                                                        class="btn btn-outline btn-circle btn-sm purple">
                                                                         <i class="fa fa-trash"></i> Deletar
                                                                     </a>
+                                                                    {% endif %}
                                                                 </td>
                                                             </tr>
                                                         {% endfor %}
