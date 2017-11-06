@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class PriceListController extends Controller
 {
@@ -32,6 +33,8 @@ class PriceListController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $quotes = $em->getRepository('AppBundle:Quote')->findBy(['retailer' => $user, 'deleted' => false]);
+
+        $quotes = $this->_updateClosedQuotes($quotes);
 
         //quotes types
         $types = [];
@@ -688,5 +691,20 @@ class PriceListController extends Controller
                 'Content-Disposition'   => 'attachment; filename="'.$fileName.'.pdf"'
             )
         );
+    }
+
+    private function _updateClosedQuotes($quotes){
+        $em = $this->getDoctrine()->getManager();
+        /** @var Quote $quote */
+        $now = new \DateTime();
+        foreach ($quotes as $k => $quote) {
+            if(!$quote->isClosed() && $quote->getExpiresAt() < $now){
+                $quote->setClosed(true);
+                $quotes[$k] = $quote;
+            }
+        }
+        $em->flush();
+
+        return $quotes;
     }
 }
