@@ -17,7 +17,7 @@
             </thead>
             <tbody>
                 {% if listings is defined %}
-                    {% for listing in listings %}
+                    {% for listing in listings if listing.deleted == false %}
                         <tr>
                             <input type="hidden" value="{{ listing.id }}">
                             <td>

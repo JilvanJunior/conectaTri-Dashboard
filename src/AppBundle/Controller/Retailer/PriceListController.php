@@ -197,7 +197,7 @@ class PriceListController extends Controller
 
         $tomorrow = (new \DateTime())->add(new \DateInterval('P1D'));
         $expireDate = $newQuote->getExpiresAt();
-        
+
         $newQuote
             ->setIdOrder(0)
             ->setCreatedAt(new \DateTime())
