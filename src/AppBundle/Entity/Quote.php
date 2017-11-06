@@ -559,7 +559,7 @@ class Quote
         /** @var QuoteProduct $quoteProduct */
         foreach($this->quoteProducts as $quoteProduct) {
             $product = $quoteProduct->getProduct();
-            
+
             $products[] = $product;
             $quantitiesByProduct[$product->getId()] = [
                 'idMartins' => 0,
@@ -577,7 +577,7 @@ class Quote
             $quantitiesByProduct[$key]['idMartins'] = $code;
         }
 
-        $code = explode($quoteProduct->getQuote()->getPaymentDate(), " ")[0];
+        $code = explode(" ", $quoteProduct->getQuote()->getPaymentDate())[0];
 
         $infos = $mc->getMartinsInfos($quantitiesByProduct, $code);
         foreach($this->quoteProducts as $quoteProduct) {

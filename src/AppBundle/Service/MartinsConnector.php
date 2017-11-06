@@ -69,12 +69,15 @@ class MartinsConnector
 
     /**
      * @param array $quantitiesByProduct
+     * @param $code
      * @return array
      */
-    public function getMartinsInfos(array $quantitiesByProduct)
+    public function getMartinsInfos(array $quantitiesByProduct, $code)
     {
         $params = $this->getDefaultParams();
         $params += $this->getExtraParams();
+
+        $params['CondicaoPagamento'] = $code;
 
         $products = [];
         $idsByMartins = [];
@@ -140,7 +143,12 @@ class MartinsConnector
 
         $params['produtos'] = array_values($products);
 
+        print_r($params);
+        echo "<br>";
+
         $infos = $this->soap->cadastrarPedido($params)->cadastrarPedidoResult;
+
+        print_r($infos);exit();
 
         return $infos;
     }
@@ -290,14 +298,8 @@ class MartinsConnector
             $this->login();
 
         $login = $this->acesso->Login;
-        $condicoes = $login->CondicoesPagamento->CondPgto;
-        if(is_array($condicoes))
-            $condicao = $condicoes[0]->Codigo;
-        else
-            $condicao = $condicoes->Codigo;
 
         $params = [
-            'CondicaoPagamento' => $condicao,
             'FilialExpedicao' => $login->FilialExpedicao,
             'FilialFaturamento' => $login->FilialFaturamento
         ];

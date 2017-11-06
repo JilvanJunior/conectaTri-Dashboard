@@ -125,7 +125,9 @@ class MartinsController extends Controller
             $quantitiesByProduct[$idProduct]['idMartins'] = $codes[$idProduct];
         }
 
-        $mercadorias = $mc->getMartinsInfos($quantitiesByProduct);
+        $code = explode(" ", $quote->getPaymentDate())[0];
+
+        $mercadorias = $mc->getMartinsInfos($quantitiesByProduct, $code);
         
         $total = 0.0;
         $mercadoriasSaida = [];

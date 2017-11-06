@@ -2079,7 +2079,8 @@ class ApiController extends FOSRestController {
             $quantitiesByProduct[$key]['idMartins'] = $code;
         }
 
-        $infos = $mc->getMartinsInfos($quantitiesByProduct);
+        //TODO pegar codigo da cotacao
+        $infos = $mc->getMartinsInfos($quantitiesByProduct, 111);
         $saidaInfos = [];
         foreach($infos as $id => $info) {
             $saida = [];
@@ -2186,11 +2187,20 @@ class ApiController extends FOSRestController {
             $quantitiesByProduct[$key]['idMartins'] = $code;
         }
 
+        /** @var Quote $quote */
+        $quote = null;
+        if(property_exists($this, 'productsData'))
+            $quote = $em->getRepository('AppBundle:Quote')->findOneById($this->productsData->quoteId);
+        else
+            $quote = $em->getRepository('AppBundle:Quote')->findOneById($productsData->quote_id);
+
+        $code = explode(" ", $quote->getPaymentDate())[0];
+
         //check if product has stock and price not changed
         $hasStock = true;
         $priceChange = false;
         $productsChange = array();
-        $mercadorias = $mc->getMartinsInfos($quantitiesByProduct);
+        $mercadorias = $mc->getMartinsInfos($quantitiesByProduct, $code);
         foreach($mercadorias as $key => $mercadoria) {
             $precoAtual = $quantitiesAndPrices[$key]['price'];
             $quantidadeAtual = $quantitiesAndPrices[$key]['quantity'];
@@ -2246,13 +2256,6 @@ class ApiController extends FOSRestController {
 
             $em->persist($martinsOrder);
             $em->flush();
-
-            /** @var Quote $quote */
-            $quote = null;
-            if(property_exists($this, 'productsData'))
-                $quote = $em->getRepository('AppBundle:Quote')->findOneById($this->productsData->quoteId);
-            else
-                $quote = $em->getRepository('AppBundle:Quote')->findOneById($productsData->quote_id);
 
             $quote->setIdOrder($martinsOrder->getId());
             $em->flush();
