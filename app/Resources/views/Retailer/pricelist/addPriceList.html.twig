@@ -480,6 +480,21 @@
                 format: 'dd/mm/yyyy hh:ii',
                 language: 'pt-BR'
             });
+
+            $('#beginsAtTimePicker').on("dp.change", function (e) {
+                $(this).data("datetimepicker").hide();
+            });
+            $('#beginsAtTimePicker').on("click", function (e) {
+                $(this).data("datetimepicker").show();
+            });
+
+            $('#expiresAtTimePicker').on("dp.change", function (e) {
+                $(this).data("datetimepicker").hide();
+            });
+            $('#expiresAtTimePicker').on("click", function (e) {
+                $(this).data("datetimepicker").show();
+            });
+
         });
 
         function setItensSuplliers(id,elementId) {
