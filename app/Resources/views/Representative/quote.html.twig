@@ -287,15 +287,31 @@
                     });
                 });
 
+                var translated = false;
                 $(document).on('change', '#DTE_Field_quantity', function(){
-
                     $('.DTE_Inline_Field').bind("DOMNodeInserted",function(){
-                        if($('.DTE_Form_Error').text() != "") {
-                            $('.DTE_Form_Error').html('Ocorreu um erro. Tente alterar o valor.');
-                        }
+                        translateMsg();
                     });
 
                 });
+
+                $(document).on('change', '#DTE_Field_price', function(){
+                    $('.DTE_Inline_Field').bind("DOMNodeInserted",function(){
+                        translateMsg();
+                    });
+
+                });
+
+                function translateMsg(){
+                    if(!translated){
+                        if($('.DTE_Form_Error').text() != "") {
+                            $('.DTE_Form_Error').html('Ocorreu um erro. Tente alterar o valor.');
+                            translated = true;
+                        }
+                    }else{
+                        translated = false;
+                    }
+                }
             } );
 
         }(jQuery));
