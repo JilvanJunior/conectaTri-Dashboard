@@ -125,8 +125,10 @@ class RepresentativeUserController extends Controller
                     $price = str_replace(".","", $item['price']);
                     $price = str_replace(",",".", $price);
 
-                    if(is_numeric($price))
+                    if(is_numeric($price)){
+                        $price = number_format($price, 2, ".", "");
                         $quoteSupplier->setPrice($price);
+                    }
                 }
 
                 $quantity = $item['quantity'];
