@@ -286,6 +286,16 @@
                         }
                     });
                 });
+
+                $(document).on('change', '#DTE_Field_quantity', function(){
+
+                    $('.DTE_Inline_Field').bind("DOMNodeInserted",function(){
+                        if($('.DTE_Form_Error').text() != "") {
+                            $('.DTE_Form_Error').html('Ocorreu um erro. Tente alterar o valor.');
+                        }
+                    });
+
+                });
             } );
 
         }(jQuery));
