@@ -460,9 +460,9 @@
         var token = "{{ token }}";
 
         {% if userIsRCA %}
-            {% if prazoManual == '' %}
-                $("#prazo").hide();
-            {% endif %}
+        {% if prazoManual == '' %}
+        $("#prazo").hide();
+        {% endif %}
         $("#prazoRCA").change(function() {
             if($(this).val() == "Outros")
                 $('#prazo').show();
@@ -474,25 +474,13 @@
         $(function () {
             $('#beginsAtTimePicker').datetimepicker({
                 format: 'dd/mm/yyyy hh:ii',
-                language: 'pt-BR'
+                language: 'pt-BR',
+                autoclose: true
             });
             $('#expiresAtTimePicker').datetimepicker({
                 format: 'dd/mm/yyyy hh:ii',
-                language: 'pt-BR'
-            });
-
-            $('#beginsAtTimePicker').on("dp.change", function (e) {
-                $(this).data("datetimepicker").hide();
-            });
-            $('#beginsAtTimePicker').on("click", function (e) {
-                $(this).data("datetimepicker").show();
-            });
-
-            $('#expiresAtTimePicker').on("dp.change", function (e) {
-                $(this).data("datetimepicker").hide();
-            });
-            $('#expiresAtTimePicker').on("click", function (e) {
-                $(this).data("datetimepicker").show();
+                language: 'pt-BR',
+                autoclose: true
             });
 
         });
@@ -557,15 +545,15 @@
                 let expires = createDate($('#expiresAtTimePicker').val());
 
                 {% if quote is not defined %}
-                    if(begins <= minDate) {
-                        btnNext.addClass('disabled');
-                        $('#beginsAtTimePicker').removeClass('valid');
-                        $('#beginsAtTimePicker').addClass('error');
-                        return;
-                    } else {
-                        $('#beginsAtTimePicker').removeClass('error');
-                        $('#beginsAtTimePicker').addClass('valid');
-                    }
+                if(begins <= minDate) {
+                    btnNext.addClass('disabled');
+                    $('#beginsAtTimePicker').removeClass('valid');
+                    $('#beginsAtTimePicker').addClass('error');
+                    return;
+                } else {
+                    $('#beginsAtTimePicker').removeClass('error');
+                    $('#beginsAtTimePicker').addClass('valid');
+                }
                 {% endif %}
 
                 if(begins < expires) {
@@ -714,11 +702,11 @@
         var minutes = set2Digits(d.getMinutes());
 
         {% if quote is not defined %}
-            var output = "Cotação " + ((''+day).length<2 ? '0' : '') + day + '/' +
-                ((''+month).length<2 ? '0' : '') + month + ", " +
-                hours + ":" + minutes;
+        var output = "Cotação " + ((''+day).length<2 ? '0' : '') + day + '/' +
+            ((''+month).length<2 ? '0' : '') + month + ", " +
+            hours + ":" + minutes;
 
-            $("#cotacao").val(output);
+        $("#cotacao").val(output);
         {% endif %}
         $('.cotacao.text').addClass('typing');
 
