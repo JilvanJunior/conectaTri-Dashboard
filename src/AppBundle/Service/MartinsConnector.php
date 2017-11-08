@@ -3,6 +3,7 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Retailer;
+use SimpleXMLElement;
 
 class MartinsConnector
 {
@@ -143,12 +144,7 @@ class MartinsConnector
 
         $params['produtos'] = array_values($products);
 
-        print_r($params);
-        echo "<br>";
-
         $infos = $this->soap->cadastrarPedido($params)->cadastrarPedidoResult;
-
-        print_r($infos);exit();
 
         return $infos;
     }
