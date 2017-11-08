@@ -196,7 +196,7 @@ class ClientsController extends Controller
         /** @var Retailer $client */
         $client = $em->getRepository('AppBundle:Retailer')->find($data->clientId);
         if($data->state) {
-            $martinsSupplier = $em->getRepository('AppBundle:Supplier')->findOneBy(['rca' => true]);
+            $martinsSupplier = $em->getRepository('AppBundle:Supplier')->findOneBy(['retailer' => $client, 'rca' => true]);
             if(empty($martinsSupplier)) {
                 $martinsSupplier = Supplier::newMartinsSupplier();
                 $martinsSupplier->setRetailer($client);
