@@ -468,8 +468,10 @@ class ApiController extends FOSRestController {
         if($retailer->isRCAVirtual()){
             $rcas = $d->getRepository('AppBundle:Supplier')->findBy(['rca' => true, 'deleted' => false]);
             foreach ($rcas as $rca) {
+                /** @var Representative $representative */
                 foreach ($rca->getRepresentatives() as $representative) {
-                    $apiRepresentatives[] = new ApiSupplier($representative);
+                    if(!$representative->isDeleted())
+                        $apiRepresentatives[] = new ApiSupplier($representative);
                 }
             }
         }
