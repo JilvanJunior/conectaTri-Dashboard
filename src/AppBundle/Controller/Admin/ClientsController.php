@@ -196,7 +196,7 @@ class ClientsController extends Controller
         /** @var Retailer $client */
         $client = $em->getRepository('AppBundle:Retailer')->find($data->clientId);
         if($data->state) {
-            $martinsSupplier = $em->getRepository('AppBundle:Supplier')->findOneBy(['retailer' => $client, 'rca' => true]);
+            $martinsSupplier = $em->getRepository('AppBundle:Supplier')->findOneBy(['rca' => true]);
             if(empty($martinsSupplier)) {
                 $martinsSupplier = Supplier::newMartinsSupplier();
                 $martinsSupplier->setRetailer($client);
@@ -205,7 +205,7 @@ class ClientsController extends Controller
         } else {
             $martinsSupplier = false;
         }
-        $client->setRCAVirtual($data->state, $martinsSupplier, $em);
+        $client->setRCAVirtual($data->state);
 
         try {
             $em->flush();

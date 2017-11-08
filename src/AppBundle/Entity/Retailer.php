@@ -647,18 +647,11 @@ class Retailer implements UserInterface, \Serializable
 
     /**
      * @param bool $rcaVirtual
-     * @param $martinsSupplier
-     * @param $em
      * @return Retailer
      */
-    public function setRCAVirtual($rcaVirtual, $martinsSupplier, $em)
+    public function setRCAVirtual($rcaVirtual)
     {
         $this->rcaVirtual = $rcaVirtual;
-        if($this->rcaVirtual) {
-            $this->addMartinsRepresentative($martinsSupplier, $em);
-        } else {
-            $this->removeMartinsRepresentative();
-        }
 
         return $this;
     }
