@@ -998,7 +998,7 @@
                         success: function (response) {
                             console.log(response);
                             $('#supplier-datatable').DataTable().row.add([
-                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.supplier_id+"' name='chkSupplier' data-suppid='"+ response.supplier_id +"' onchange='changeChkSupplier.call(this);'/><span></span></label>",
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkSupplier' data-suppid='"+ response.supplier_id +"' onchange='changeChkSupplier.call(this);'/><span></span></label>",
                                 response.name,
                                 response.contact_name,
                                 response.contact_email,
