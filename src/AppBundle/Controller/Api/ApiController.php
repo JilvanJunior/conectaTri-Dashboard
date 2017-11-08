@@ -458,8 +458,22 @@ class ApiController extends FOSRestController {
         $dbToken->setLastUsed(new \DateTime());
         $em->flush();
 
-        $representatives = $d->getRepository("AppBundle:Representative")->findBy(["retailer" => $dbToken->getRetailer(), "deleted" => false]);
+        /** @var Retailer $retailer */
+        $retailer = $dbToken->getRetailer();
+
+        $representatives = $d->getRepository("AppBundle:Representative")->findBy(["retailer" => $retailer, "deleted" => false]);
         $apiRepresentatives = [];
+
+        //add rca representatives
+        if($retailer->isRCAVirtual()){
+            $rcas = $d->getRepository('AppBundle:Supplier')->findBy(['rca' => true, 'deleted' => false]);
+            foreach ($rcas as $rca) {
+                foreach ($rca->getRepresentatives() as $representative) {
+                    $apiRepresentatives[] = new ApiSupplier($representative);
+                }
+            }
+        }
+
         foreach ($representatives as $representative) {
             $apiRepresentatives[] = new ApiSupplier($representative);
         }

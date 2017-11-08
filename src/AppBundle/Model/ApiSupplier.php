@@ -63,6 +63,7 @@ class ApiSupplier
 
     /**
      * ApiSupplier constructor.
+     * @param Representative $representative
      */
     public function __construct(Representative $representative)
     {
