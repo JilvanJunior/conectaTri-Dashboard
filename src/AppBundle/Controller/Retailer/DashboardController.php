@@ -27,7 +27,9 @@ class DashboardController extends Controller
         $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
         $supplierQuotesTotal = $em->getRepository('AppBundle:QuoteSupplier')->getQuotesTotal($user->getId())[0];
         $qtyQuoteProducts = $em->getRepository('AppBundle:QuoteProduct')->countQuotesProduct($user->getId())[0];
-        $average = ($supplierQuotesTotal['total'] / $qtyQuoteProducts['qty']);
+        $average = 0;
+        if($qtyQuoteProducts['qty'] > 0)
+            $average = ($supplierQuotesTotal['total'] / $qtyQuoteProducts['qty']);
 
         //quote status
         $status['0'] = "Em Andamento";
