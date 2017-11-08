@@ -353,7 +353,7 @@
                                                         <td> {{ supplierStatus.supplierName }} </td>
                                                         <td> {{ supplierStatus.representativeName }} </td>
                                                         <td> {{ supplierStatus.countWins }} </td>
-                                                        <td> {{ supplierStatus.total }} </td>
+                                                        <td> {{ supplierStatus.total|number_format(2, ',', '.') }} </td>
                                                         <td> {{ supplierStatus.moreThanMinimum }} </td>
                                                         <td> {{ supplierStatus.observation }} </td>
                                                         <td>

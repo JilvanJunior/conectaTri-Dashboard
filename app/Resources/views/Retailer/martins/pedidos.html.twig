@@ -78,8 +78,8 @@
                                                     <tr>
                                                         <td>{{ pedido.createdAt|date('d/m/Y') }}</td>
                                                         <td>{{ pedido.orderProducts|length }}</td>
-                                                        <td>{{ pedido.total }}</td>
-                                                        <td><a href="{{ pedido.linkToBill }}" style="color:green">Link</a></td>
+                                                        <td>{{ pedido.total|number_format(2, ',', '.') }}</td>
+                                                        <td><a href="{{ pedido.linkToBill }}" style="color:green" target="_blank">Link</a></td>
                                                         <td>{{ pedido.paymentDue }}</td>
                                                     </tr>
                                                 {% endfor %}

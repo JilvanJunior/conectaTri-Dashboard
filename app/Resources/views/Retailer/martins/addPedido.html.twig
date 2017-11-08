@@ -81,12 +81,12 @@
                                                     <td>{{ mercadoria.nome }}</td>
                                                     <td>{{ mercadoria.estoque?'Sim':'Não' }}</td>
                                                     <td>{{ mercadoria.quantidade }}</td>
-                                                    <td>{{ mercadoria.preco }}</td>
+                                                    <td>{{ mercadoria.preco|number_format(2, ',', '.') }}</td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
                                         </table>
-                                        Total do Pedido: {{ total }}
+                                        Total do Pedido: {{ total|number_format(2, ',', '.') }}
                                     </div>
                                     <div class='form-actions'>
                                         <button id='enviar' class="btn btn-circle green-conecta">Enviar Pedido</button>
