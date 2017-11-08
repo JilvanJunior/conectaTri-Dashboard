@@ -146,7 +146,8 @@
                                                                             <td>
                                                                                 <a href="{{ path('acompanhar_cotacao', {'id': quote.id}) }}">{{ quote.name }}</a>
                                                                             </td>
-                                                                            <td>{{ quote.quoteProducts|length }}</td>
+                                                                            {% set i=0 %}{% for prod in quote.quoteProducts %}{% if prod.deleted == false %}{% set i=i+1 %}{% endif %}{% endfor %}
+                                                                            <td>{{ i }}</td>
                                                                             <td>{{ status[quote.closed] }}</td>
                                                                             <td>
                                                                                 <a href="{{ path('acompanhar_cotacao', {'id': quote.id}) }}"
@@ -266,46 +267,6 @@
         <a href="#" class="page-quick-sidebar-toggler">
             <i class="icon-login"></i>
         </a>
-        <div class="page-quick-sidebar-wrapper" data-close-on-body-click="false">
-            <div class="page-quick-sidebar">
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="#" data-target="#quick_sidebar_tab_1" data-toggle="tab"> Users
-                            <span class="badge badge-danger">2</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-target="#quick_sidebar_tab_2" data-toggle="tab"> Alerts
-                            <span class="badge badge-success">7</span>
-                        </a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> More
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                        <ul class="dropdown-menu pull-right">
-                            <li>
-                                <a href="#" data-target="#quick_sidebar_tab_3" data-toggle="tab">
-                                    <i class="icon-bell"></i> Alerts </a>
-                            </li>
-                            <li>
-                                <a href="#" data-target="#quick_sidebar_tab_3" data-toggle="tab">
-                                    <i class="icon-info"></i> Notifications </a>
-                            </li>
-                            <li>
-                                <a href="#" data-target="#quick_sidebar_tab_3" data-toggle="tab">
-                                    <i class="icon-speech"></i> Activities </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#" data-target="#quick_sidebar_tab_3" data-toggle="tab">
-                                    <i class="icon-settings"></i> Settings </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
         <!-- END QUICK SIDEBAR -->
     </div>
 {% endblock %}

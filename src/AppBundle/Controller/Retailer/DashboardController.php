@@ -24,7 +24,12 @@ class DashboardController extends Controller
         $martinsOrders = $em->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user, 'deleted' => false], ['createdAt' => 'DESC']);
         $listings = $em->getRepository('AppBundle:Listing')->findBy(['retailer' => $user, 'deleted' => false], ['createdAt' => 'DESC']);
         $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user, 'deleted' => false], ['createdAt' => 'DESC']);
-        $suppliers = $em->getRepository('AppBundle:Supplier')->findBy(['retailer' => $user, 'deleted' => false]);
+        $supplierRepo = $this->getDoctrine()->getRepository('AppBundle:Supplier');
+        $suppliers = $supplierRepo->findBy(['retailer' => $user, 'deleted' => false]);
+        if($user->isRCAVirtual()){
+            $rca = $supplierRepo->findBy(['rca' => true, 'deleted' => false]);
+            $suppliers = array_merge($suppliers, $rca);
+        }
         $supplierQuotesTotal = $em->getRepository('AppBundle:QuoteSupplier')->getQuotesTotal($user->getId())[0];
         $qtyQuoteProducts = $em->getRepository('AppBundle:QuoteProduct')->countQuotesProduct($user->getId())[0];
         $average = 0;

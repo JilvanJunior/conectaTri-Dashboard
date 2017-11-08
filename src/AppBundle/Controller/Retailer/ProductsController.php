@@ -41,24 +41,24 @@ class ProductsController extends Controller
 
         $repo = $this->getDoctrine()->getRepository('AppBundle:Product');
         $products = $repo->createQueryBuilder('p')
-            ->where('p.name LIKE :name')
-            ->setParameter('name', "%$term%")
+            ->select('p.name, p.ean, p.brand, p.type, p.unit, p.quantity, p.fullDescription')
             ->distinct()
+            ->where('p.name LIKE :name')
+            ->setParameter('name', "$term%")
             ->getQuery()->getResult();
 
         $productsNames = [];
-        /** @var Product $product */
         foreach($products as $i => $product) {
             $productsNames[] = [
                 'id' => $i,
-                'label' => $product->getName(),
-                'value' => $product->getName(),
-                'ean' => $product->getEan(),
-                'brand' => $product->getBrand(),
-                'type' => $product->getType(),
-                'unit' => $product->getUnit(),
-                'quantity' => $product->getQuantity(),
-                'full_description' => $product->getFullDescription()
+                'label' => $product['name'],
+                'value' => $product['name'],
+                'ean' => $product['ean'],
+                'brand' => $product['brand'],
+                'type' => $product['type'],
+                'unit' => $product['unit'],
+                'quantity' => $product['quantity'],
+                'full_description' => $product['fullDescription']
             ];
         }
 
