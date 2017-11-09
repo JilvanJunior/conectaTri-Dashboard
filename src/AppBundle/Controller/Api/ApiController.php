@@ -2331,7 +2331,7 @@ class ApiController extends FOSRestController {
             if(!property_exists($order, 'trackingData'))
                 continue;
 
-            $trackingData = $order->trackingData->trackingData;
+            $trackingData = $order->trackingData;
 
             if(property_exists($trackingData, 'DataVenda'))
                 $martinsOrder->setSaleDate($trackingData->DataVenda);
@@ -2398,11 +2398,10 @@ class ApiController extends FOSRestController {
 
         /** @var \stdClass $order */
         $order = $mc->trackMartinsPedido($martinsOrder->getCode());
-        $trackingData = $order->trackingData;
-        if(!property_exists($trackingData, 'trackingData'))
+        if(!property_exists($order, 'trackingData'))
             return View::create(new ApiError("Pedido Martins inválido"), Response::HTTP_BAD_REQUEST);
 
-        $trackingData = $trackingData->trackingData;
+        $trackingData = $order->trackingData;
 
         //update MartinsOrder
         if(property_exists($trackingData, 'DataVenda'))
