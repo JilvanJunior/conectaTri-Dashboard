@@ -342,11 +342,8 @@ class PriceListController extends Controller
                     else
                         $observation = $quoteSupplierStatus->getObservation();
 
-                    if($quoteSupplierStatus->getStatus() == 1){
-                        $filledIn = 'Preencheu a Cotação';
-                    }else{
-                        $filledIn = 'Pendente';
-                    }
+                    $statusQuote = [0 => 'Pendente', 1 => 'Preencheu a Cotação', 2 => 'Encerrado'];
+                    $filledIn = $statusQuote[$quoteSupplierStatus->getStatus()];
 
                     if($quoteSupplier->isFilledIn()) {
                         $moreThanMinimum = ($supplier->getMinimumValue() <= $sum)?'Sim':'Não';
