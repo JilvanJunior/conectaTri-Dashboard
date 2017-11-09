@@ -2333,13 +2333,20 @@ class ApiController extends FOSRestController {
 
             $trackingData = $order->trackingData->trackingData;
 
-            $martinsOrder->setSaleDate($trackingData->DataVenda)
-                ->setPaymentDate($trackingData->DataPagamento)
-                ->setBillingDate($trackingData->DataFaturamento)
-                ->setDeliveryDate($trackingData->DataEntrega)
-                ->setCompletionDate($trackingData->DataConclusao)
-                ->setStatus($order->PedidoStatus)
-                ->setUpdatedAt(new \DateTime());
+            if(property_exists($trackingData, 'DataVenda'))
+                $martinsOrder->setSaleDate($trackingData->DataVenda);
+            if(property_exists($trackingData, 'DataPagamento'))
+                $martinsOrder->setPaymentDate($trackingData->DataPagamento);
+            if(property_exists($trackingData, 'DataFaturamento'))
+                $martinsOrder->setBillingDate($trackingData->DataFaturamento);
+            if(property_exists($trackingData, 'DataEntrega'))
+                $martinsOrder->setDeliveryDate($trackingData->DataEntrega);
+            if(property_exists($trackingData, 'DataConclusao'))
+                $martinsOrder->setCompletionDate($trackingData->DataConclusao);
+            if(property_exists($order, 'PedidoStatus'))
+                $martinsOrder->setStatus($order->PedidoStatus);
+
+            $martinsOrder->setUpdatedAt(new \DateTime());
 
         }
 
@@ -2398,13 +2405,20 @@ class ApiController extends FOSRestController {
         $trackingData = $trackingData->trackingData;
 
         //update MartinsOrder
-        $martinsOrder->setSaleDate($trackingData->DataVenda)
-            ->setPaymentDate($trackingData->DataPagamento)
-            ->setBillingDate($trackingData->DataFaturamento)
-            ->setDeliveryDate($trackingData->DataEntrega)
-            ->setCompletionDate($trackingData->DataConclusao)
-            ->setStatus($order->PedidoStatus)
-            ->setUpdatedAt(new \DateTime());
+        if(property_exists($trackingData, 'DataVenda'))
+            $martinsOrder->setSaleDate($trackingData->DataVenda);
+        if(property_exists($trackingData, 'DataPagamento'))
+            $martinsOrder->setPaymentDate($trackingData->DataPagamento);
+        if(property_exists($trackingData, 'DataFaturamento'))
+            $martinsOrder->setBillingDate($trackingData->DataFaturamento);
+        if(property_exists($trackingData, 'DataEntrega'))
+            $martinsOrder->setDeliveryDate($trackingData->DataEntrega);
+        if(property_exists($trackingData, 'DataConclusao'))
+            $martinsOrder->setCompletionDate($trackingData->DataConclusao);
+        if(property_exists($order, 'PedidoStatus'))
+            $martinsOrder->setStatus($order->PedidoStatus);
+
+        $martinsOrder->setUpdatedAt(new \DateTime());
 
         $martinsOrder->setUpdating(false);
 
