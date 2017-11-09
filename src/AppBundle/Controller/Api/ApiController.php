@@ -2205,8 +2205,8 @@ class ApiController extends FOSRestController {
 
         /** @var Quote $quote */
         $quote = null;
-        if(property_exists($this, 'productsData'))
-            $quote = $em->getRepository('AppBundle:Quote')->find($this->productsData->quoteId);
+        if(property_exists($productsData, 'quoteId'))
+            $quote = $em->getRepository('AppBundle:Quote')->find($productsData->quoteId);
         else
             $quote = $em->getRepository('AppBundle:Quote')->find($productsData->quote_id);
 
