@@ -68,7 +68,6 @@
                                                     <tr>
                                                         <th>Código</th>
                                                         <th>Valor</th>
-                                                        <th>Data</th>
                                                         <th>Status</th>
                                                     </tr>
                                                 </thead>
@@ -76,8 +75,25 @@
                                                     <tr>
                                                         <th>{{ pedido.code }}</th>
                                                         <th>{{ pedido.total }}</th>
+                                                        <th>{{ status[pedido.status] }}</th>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <table class="table table-striped table-bordered table-hover" id="pedidos_datatable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Data da Venda</th>
+                                                        <th>Data de Pagamento</th>
+                                                        <th>Data de faturamento</th>
+                                                        <th>Data de entrega</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
                                                         <th>{{ pedido.saleDate }}</th>
-                                                        <th>{{ pedido.status }}</th>
+                                                        <th>{{ pedido.paymentDate }}</th>
+                                                        <th>{{ pedido.billingDate }}</th>
+                                                        <th>{{ pedido.deliveryDate }}</th>
                                                     </tr>
                                                 </tbody>
                                             </table>

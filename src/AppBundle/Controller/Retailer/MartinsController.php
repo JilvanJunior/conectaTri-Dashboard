@@ -81,8 +81,11 @@ class MartinsController extends Controller
         $pedido = $em->getRepository('AppBundle:MartinsOrder')->findOneById($id);
 
         $status = [
-            '1' => "Remota",
-            '2' => "Presencial"
+            '0' => 'Pedido',
+            '1' => 'Pagamento',
+            '2' => 'Armazém',
+            '3' => 'Enviado',
+            '4' => 'Entregue',
         ];
 
         return $this->render('Retailer/martins/show.html.twig', [
