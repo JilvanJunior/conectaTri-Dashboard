@@ -127,25 +127,17 @@ class SuppliersController extends Controller
             if($supplierId != 'new') {
                 $supplier = $em->getRepository('AppBundle:Supplier')->findOneById($supplierId);
             } else {
-                $stateId = $request->get('supplierState');
-
-                $supplierState = $states[0];
-                /** @var State $state */
-                foreach($states as $state)
-                    if($state->getId() == $stateId)
-                        $supplierState = $state;
-
-                $supplier = (new Supplier())
-                    ->setName($request->get('supplierName'))
-                    ->setCnpj($request->get('supplierCnpj'))
-                    ->setState($supplierState)
-                    ->setRetailer($user);
-
-                if($request->get('supplierMinimumValue'))
-                    $supplier->setMinimumValue(str_replace(['.', ','], ['', '.'], $request->get('supplierMinimumValue')));
-
-                $em->persist($supplier);
+                $supplier = new Supplier();
             }
+
+            $supplier->setName($request->get('supplierName'))
+                ->setCnpj($request->get('supplierCnpj'))
+                ->setRetailer($user);
+
+            if($request->get('supplierMinimumValue'))
+                $supplier->setMinimumValue(str_replace(['.', ','], ['', '.'], $request->get('supplierMinimumValue')));
+
+            $em->persist($supplier);
 
             /** @var Representative $representative */
             $representative->setName($request->get('name'));
