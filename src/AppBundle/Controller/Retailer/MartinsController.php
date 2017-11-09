@@ -66,6 +66,34 @@ class MartinsController extends Controller
     }
 
     /**
+     * @Route("/varejista/martins/pedido/{id}", name="acompanhar_pedido")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showPedidoAction(Request $request, $id)
+    {
+        /** @var Retailer $user */
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if(!$user->isRCAVirtual())
+            return $this->redirectToRoute('dashboard');
+
+        $em = $this->getDoctrine()->getManager();
+        $pedido = $em->getRepository('AppBundle:MartinsOrder')->findOneById($id);
+
+        $status = [
+            '1' => "Remota",
+            '2' => "Presencial"
+        ];
+
+        return $this->render('Retailer/martins/show.html.twig', [
+            'pedido' => $pedido,
+            'status' => $status,
+            'username' => $user->getFantasyName(),
+            'userIsRCA' => $user->isRCAVirtual(),
+        ]);
+    }
+
+    /**
      * @Route("/varejista/martins/pedido/novo/{idQuote}", name="novo_pedido")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response

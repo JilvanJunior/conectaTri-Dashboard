@@ -1,8 +1,8 @@
-{% extends 'Retailer/base.html.twig' %}
+{% extends "Retailer/base.html.twig" %}
 
-{% block title %}Meus Pedidos Martins{% endblock %}
+{% block title %}Cotações{% endblock %}
 {% block description %}{% endblock %}
-{% block menu_martins %} active {% endblock %}
+{% block menu_pricelist %} active {% endblock %}
 
 {% block page_plugins %}
     <link href="{{ asset('assets/global/plugins/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
@@ -22,8 +22,8 @@
                     <div class="container">
                         <!-- BEGIN PAGE TITLE -->
                         <div class="page-title">
-                            <h1>Pedidos Martins
-                                <small>Tabela de Pedidos cadastrados</small>
+                            <h1>Pedido
+                                <small>Acompanhamento de pedido Martins</small>
                             </h1>
                         </div>
                         <!-- END PAGE TITLE -->
@@ -41,11 +41,11 @@
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
-                                <a href="#">Martins</a>
+                                <a href="{{ path('pedidos_martins') }}">Pedidos</a>
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
-                                <span>Pedidos</span>
+                                <span>Acompanhamento</span>
                             </li>
                         </ul>
                         <!-- END PAGE BREADCRUMBS -->
@@ -57,44 +57,28 @@
                                     <div class="portlet light ">
                                         <div class="portlet-title">
                                             <div class="caption font-dark">
-                                                <i class="fa fa-group font-dark"></i>
-                                                <span class="caption-subject bold uppercase">Pedidos</span>
+                                                <img width='24px' src="{{ asset('assets/pages/img/logos/Prancheta.jpg') }}"/>
+                                                <span class="caption-subject bold uppercase">Status</span>
                                             </div>
-                                            <div class="tools"> </div>
+                                            <div class="tools"></div>
                                         </div>
                                         <div class="portlet-body">
-                                            <table class="table table-striped table-bordered table-hover" id="sample_1">
+                                            <table class="table table-striped table-bordered table-hover" id="pedidos_datatable">
                                                 <thead>
-                                                <tr>
-                                                    <th> Feito em </th>
-                                                    <th> Qtd. Produtos </th>
-                                                    <th> Total </th>
-                                                    <th> Boleto </th>
-                                                    <th> Pagamento </th>
-                                                    <th> Ações </th>
-                                                </tr>
+                                                    <tr>
+                                                        <th>Código</th>
+                                                        <th>Valor</th>
+                                                        <th>Data</th>
+                                                        <th>Status</th>
+                                                    </tr>
                                                 </thead>
                                                 <tbody>
-                                                {% for pedido in pedidos %}
                                                     <tr>
-                                                        <td>{{ pedido.createdAt|date('d/m/Y') }}</td>
-                                                        <td>{{ pedido.orderProducts|length }}</td>
-                                                        <td>{{ pedido.total|number_format(2, ',', '.') }}</td>
-                                                        <td>{% if "http" in pedido.linkToBill %}
-                                                                <a href="{{ pedido.linkToBill }}" style="color:green" target="_blank">Link</a>
-                                                            {% else %}
-                                                                {{ pedido.linkToBill }}
-                                                            {% endif %}
-                                                        </td>
-                                                        <td>{{ pedido.paymentDue }}</td>
-                                                        <td>
-                                                            <a href="{{ path('acompanhar_pedido', {'id': pedido.id}) }}"
-                                                               class="btn btn-outline btn-circle btn-sm purple">
-                                                                <i class="fa fa-eye"></i> Ver
-                                                            </a>
-                                                        </td>
+                                                        <th>{{ pedido.code }}</th>
+                                                        <th>{{ pedido.total }}</th>
+                                                        <th>{{ pedido.saleDate }}</th>
+                                                        <th>{{ pedido.status }}</th>
                                                     </tr>
-                                                {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -104,6 +88,43 @@
                             </div>
                         </div>
                         <!-- END PAGE CONTENT INNER -->
+                        <div class="page-content-inner">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!-- BEGIN SAMPLE TABLE PORTLET-->
+                                    <div class="portlet light ">
+                                        <div class="portlet-title">
+                                            <div class="caption font-dark">
+                                                <img width='24px' src="{{ asset('assets/pages/img/logos/Prancheta.jpg') }}"/>
+                                                <span class="caption-subject bold uppercase">Itens do Pedido</span>
+                                            </div>
+                                            <div class="tools"></div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <table class="table table-striped table-bordered table-hover" id="pedidos_datatable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Produto</th>
+                                                        <th>Preço</th>
+                                                        <th>Quantidade</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for orderProduct in pedido.orderProducts %}
+                                                        <tr>
+                                                            <td>{{ orderProduct.product.name }}</td>
+                                                            <td>{{ orderProduct.price }}</td>
+                                                            <td>{{ orderProduct.quantity }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- END SAMPLE TABLE PORTLET-->
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- END PAGE CONTENT BODY -->
