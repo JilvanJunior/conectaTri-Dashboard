@@ -1252,11 +1252,13 @@
         selectAll("selectAllSendSupplier","chkSendSupplier");
 
         // FINISH QUOTE
-        $('#save-quote').click(function() {
+        $('#save-quote').one("click", function() {
+            $('#save-quote, #sent-suppliers, #presential-quote').addClass('disabled');
             saveQuote(1, false);
         });
 
-        $('#presential-quote').click(function() {
+        $('#presential-quote').one("click", function() {
+            $('#save-quote, #sent-suppliers, #presential-quote').addClass('disabled');
             saveQuote(2, false);
         });
 
@@ -1359,9 +1361,6 @@
                     quote_products: productsId,
                     quote_suppliers: suppliersId,
                 }),
-                beforeSend: function() {
-                    $('#save-quote, #sent-suppliers, #presential-quote').addClass('disabled');
-                },
                 success: function (response) {
                     if(force)
                         sendLink(response.id);
