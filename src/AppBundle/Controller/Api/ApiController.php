@@ -2193,7 +2193,7 @@ class ApiController extends FOSRestController {
             $total += $productData->price;
         }
 
-        $products = $d->getRepository('AppBundle:Product')->findById($productsIds);
+        $products = $d->getRepository('AppBundle:Product')->findBy(['id' => $productsIds]);
 
         $codes = $mc->getMartinsCodeByEan($products);
         if(empty($codes))
@@ -2206,17 +2206,17 @@ class ApiController extends FOSRestController {
         /** @var Quote $quote */
         $quote = null;
         if(property_exists($this, 'productsData'))
-            $quote = $em->getRepository('AppBundle:Quote')->findOneById($this->productsData->quoteId);
+            $quote = $em->getRepository('AppBundle:Quote')->find($this->productsData->quoteId);
         else
-            $quote = $em->getRepository('AppBundle:Quote')->findOneById($productsData->quote_id);
+            $quote = $em->getRepository('AppBundle:Quote')->find($productsData->quote_id);
 
-        $code = explode(" ", $quote->getPaymentDate())[0];
+        $paymentCode = explode(" ", $productsData->payment_due)[0];
 
         //check if product has stock and price not changed
         $hasStock = true;
         $priceChange = false;
         $productsChange = array();
-        $mercadorias = $mc->getMartinsInfos($quantitiesByProduct, $code);
+        $mercadorias = $mc->getMartinsInfos($quantitiesByProduct, $paymentCode);
         foreach($mercadorias as $key => $mercadoria) {
             $precoAtual = $quantitiesAndPrices[$key]['price'];
             $quantidadeAtual = $quantitiesAndPrices[$key]['quantity'];
