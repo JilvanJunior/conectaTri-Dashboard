@@ -1404,7 +1404,7 @@ class ApiController extends FOSRestController {
                         $quoteSupplier->setDeleted(true)
                             ->setUpdatedAt(new \DateTime());
                     } else { //if quote_supplier in array
-                        $quoteSupplier->setQuantity($rcvProduct->quantity)
+                        $quoteSupplier->setQuantity($rcvSupplier->quantity)
                             ->setPrice(str_replace(",", ".", $rcvSupplier->price))
                             ->setDeleted(false)
                             ->setUpdatedAt(new \DateTime());
@@ -1423,6 +1423,7 @@ class ApiController extends FOSRestController {
                         $tmp2[] = $quoteSupplier;
                     }
                 }
+
                 self::array_diff($rcvProduct->quote_suppliers, $tmp2);
                 /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
@@ -1435,7 +1436,7 @@ class ApiController extends FOSRestController {
                     }
                     $quoteSupplier = new QuoteSupplier();
                     $quoteSupplier->setRepresentative($dbSupplier)
-                        ->setQuantity($rcvProduct->quantity)
+                        ->setQuantity($supplier->quantity)
                         ->setPrice(str_replace(",", ".", $supplier->price));
                     $quoteSupplier->setQuoteProduct($quoteProduct);
                     $em->persist($quoteSupplier);
@@ -1456,7 +1457,7 @@ class ApiController extends FOSRestController {
                 $newQuoteSupplier = new QuoteSupplier();
                 $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                 $newQuoteSupplier->setRepresentative($dbSupplier)
-                    ->setQuantity($product->quantity)
+                    ->setQuantity($supplier->quantity)
                     ->setPrice(str_replace(",", ".", $supplier->price));
                 $em->persist($newQuoteSupplier);
                 $em->flush();
