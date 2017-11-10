@@ -90,7 +90,7 @@
                                                             <td>{{ product.name }}</td>
                                                             <td>{{ product.brand }}</td>
                                                             <td>{{ product.unit }} {{ product.quantity }}</td>
-                                                            <td>{{ product.minPrice }}</td>
+                                                            <td>{{ product.minPrice|number_format(2, ',', '.') }}</td>
                                                             <td>
                                                                 {#<a href="#" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-eye"></i> Ver

@@ -129,7 +129,7 @@
                                                     {% for orderProduct in pedido.orderProducts %}
                                                         <tr>
                                                             <td>{{ orderProduct.product.name }}</td>
-                                                            <td>{{ orderProduct.price }}</td>
+                                                            <td>{{ orderProduct.price|number_format(2, ',', '.') }}</td>
                                                             <td>{{ orderProduct.quantity }}</td>
                                                         </tr>
                                                     {% endfor %}
