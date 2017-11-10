@@ -50,10 +50,8 @@ class MartinsConnector
      */
     public function login()
     {
-        //TODO change $params['email']
         $params = $this->getDefaultParams();
-        $params['email'] = 'aline@martins.com.br';
-        //$params['email'] = $this->user->getEmail();
+        $params['email'] = $this->user->getEmail();
 
         $acesso = $this->soap->logarUsuario($params)->logarUsuarioResult;
         $this->acesso = $acesso;
@@ -274,11 +272,9 @@ class MartinsConnector
 
     private function getDefaultParams()
     {
-        //TODO change cnpj
         $params = [
             'chpac' => $this->chave,
-            'cnpj' => '11822193000182',
-            //$this->user->getCnpj(),
+            'cnpj' => $this->user->getCnpj(),
             'token' => ''
         ];
 
