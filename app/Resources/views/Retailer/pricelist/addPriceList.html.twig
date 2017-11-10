@@ -1398,6 +1398,7 @@
                 },
                 success: function(res) {
                     alert(res.message);
+                    location.href = '{{ path('cotacoes') }}'
                 },
                 error: function(jsXHR) {
                     alert(jsXHR.responseJSON.message);

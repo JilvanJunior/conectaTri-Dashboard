@@ -101,17 +101,21 @@ class PriceListController extends Controller
         if($user->isRCAVirtual()) {
             $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
             $acesso = $mc->login();
-            $conditions = $acesso->Login->CondicoesPagamento->CondPgto;
-            if(is_array($conditions)) {
-                $conds = [];
-                foreach($conditions as $condition) {
-                    $conds[] = $condition->Descricao;
+            if($acesso->Status != 0){
+                $data['conditions'] = '';
+            }else{
+                $conditions = $acesso->Login->CondicoesPagamento->CondPgto;
+                if(is_array($conditions)) {
+                    $conds = [];
+                    foreach($conditions as $condition) {
+                        $conds[] = $condition->Descricao;
+                    }
+                    $conditions = $conds;
+                } else {
+                    $conditions = [ $conditions->Descricao ];
                 }
-                $conditions = $conds;
-            } else {
-                $conditions = [ $conditions->Descricao ];
+                $data['conditions'] = $conditions;
             }
-            $data['conditions'] = $conditions;
         }
 
         if (!is_null($token)) {
@@ -227,7 +231,7 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
         /** @var Quote $quote */
-        $quote = $em->getRepository('AppBundle:Quote')->findOneById($id);
+        $quote = $em->getRepository('AppBundle:Quote')->find($id);
 
         //type of listings
         $listingTypes = [];
@@ -263,22 +267,27 @@ class PriceListController extends Controller
         if($user->isRCAVirtual()) {
             $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
             $acesso = $mc->login();
-            $conditions = $acesso->Login->CondicoesPagamento->CondPgto;
-            if(is_array($conditions)) {
-                $conds = [];
-                foreach($conditions as $condition) {
-                    $conds[] = $condition->Descricao;
+            if($acesso->Status != 0) {
+                $data['conditions'] = '';
+                $data['prazoManual'] = $quote->getPaymentDate();
+            }else{
+                $conditions = $acesso->Login->CondicoesPagamento->CondPgto;
+                if(is_array($conditions)) {
+                    $conds = [];
+                    foreach($conditions as $condition) {
+                        $conds[] = $condition->Descricao;
+                    }
+                    $conditions = $conds;
+                } else {
+                    $conditions = [ $conditions->Descricao ];
                 }
-                $conditions = $conds;
-            } else {
-                $conditions = [ $conditions->Descricao ];
-            }
-            $data['conditions'] = $conditions;
-            $data['prazoManual'] = $quote->getPaymentDate();
-            foreach($conditions as $condition) {
-                if($data['prazoManual'] == trim($condition)) {
-                    $data['prazoManual'] = '';
-                    break;
+                $data['conditions'] = $conditions;
+                $data['prazoManual'] = $quote->getPaymentDate();
+                foreach($conditions as $condition) {
+                    if($data['prazoManual'] == trim($condition)) {
+                        $data['prazoManual'] = '';
+                        break;
+                    }
                 }
             }
         } else {
@@ -581,14 +590,17 @@ class PriceListController extends Controller
         $quantityRCA = 1;
         if($user->isRCAVirtual()){
             $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
-            $mc->login();
+            $acesso = $mc->login();
 
             $product = $quoteProduct->getProduct();
-            $infos = $mc->getProductInfoByEan([$product]);
-            if(array_key_exists($product->getId(), $infos)){
-                $multiplier = $infos[$product->getId()]->IND_QDE_MULTIPLA_VND;
-                $multiplier = ($multiplier != 0 ? $multiplier : 1);
+            if($acesso->Status == 0) {
+                $infos = $mc->getProductInfoByEan([$product]);
+                if(array_key_exists($product->getId(), $infos)){
+                    $multiplier = $infos[$product->getId()]->IND_QDE_MULTIPLA_VND;
+                    $multiplier = ($multiplier != 0 ? $multiplier : 1);
+                }
             }
+
             /** @var QuoteSupplier $quoteSupplier */
             foreach ($quoteProduct->getQuoteSuppliers() as $quoteSupplier){
                 if($quoteSupplier->getRepresentative()->getSupplier()->isRca()){
