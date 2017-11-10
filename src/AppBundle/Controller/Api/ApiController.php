@@ -113,6 +113,10 @@ class ApiController extends FOSRestController {
         if($dbUser->isRCAVirtual()) {
             $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $dbUser);
             $acesso = $mc->login();
+            if($acesso->Status != 0){
+                $retorno['condicoesMartins'] = '';
+                $retorno['previsao'] = '';
+            }
 
             if(property_exists($acesso, 'Login')) {
                 $saidaAcesso = [];
@@ -1993,6 +1997,8 @@ class ApiController extends FOSRestController {
         $user = $dbToken->getRetailer();
         $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
+        if($acesso->Status != 0)
+            return View::create(new ApiError($acesso->Mensagem), Response::HTTP_NOT_ACCEPTABLE);
 
         $boletos = $mc->getMartinsBoletos();
         $saidaBoletos = [];
@@ -2029,6 +2035,8 @@ class ApiController extends FOSRestController {
         $user = $dbToken->getRetailer();
         $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
+        if($acesso->Status != 0)
+            return View::create(new ApiError($acesso->Mensagem), Response::HTTP_NOT_ACCEPTABLE);
 
         $productsData = json_decode($request->getContent());
         $productsIds = [];
@@ -2073,6 +2081,8 @@ class ApiController extends FOSRestController {
         $user = $dbToken->getRetailer();
         $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
+        if($acesso->Status != 0)
+            return View::create(new ApiError($acesso->Mensagem), Response::HTTP_NOT_ACCEPTABLE);
 
         $productsData = json_decode($request->getContent());
 
@@ -2096,8 +2106,8 @@ class ApiController extends FOSRestController {
             $quantitiesByProduct[$key]['idMartins'] = $code;
         }
 
-        //TODO pegar codigo da cotacao
-        $infos = $mc->getMartinsInfos($quantitiesByProduct, 111);
+        $paymentCode = explode(" ", $productsData->payment_due)[0];
+        $infos = $mc->getMartinsInfos($quantitiesByProduct, $paymentCode);
         $saidaInfos = [];
         foreach($infos as $id => $info) {
             $saida = [];
@@ -2173,6 +2183,8 @@ class ApiController extends FOSRestController {
         $user = $dbToken->getRetailer();
         $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
+        if($acesso->Status != 0)
+            return View::create(new ApiError($acesso->Mensagem), Response::HTTP_NOT_ACCEPTABLE);
 
         $productsData = json_decode($request->getContent());
 
@@ -2310,6 +2322,8 @@ class ApiController extends FOSRestController {
         $user = $dbToken->getRetailer();
         $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
+        if($acesso->Status != 0)
+            return View::create(new ApiError($acesso->Mensagem), Response::HTTP_NOT_ACCEPTABLE);
 
         $martinsOrders = $d->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user, 'deleted' => 0, 'updating' => false]);
 
@@ -2384,6 +2398,8 @@ class ApiController extends FOSRestController {
         $user = $dbToken->getRetailer();
         $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
+        if($acesso->Status != 0)
+            return View::create(new ApiError($acesso->Mensagem), Response::HTTP_NOT_ACCEPTABLE);
 
         /** @var MartinsOrder $martinsOrder */
         $martinsOrder = $d->getRepository('AppBundle:MartinsOrder')->findOneBy(['id' => $id, 'retailer' => $user, 'deleted' => 0]);
