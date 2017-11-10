@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller\Retailer;
 
+use AppBundle\Entity\ApiSession;
 use AppBundle\Entity\Retailer;
+use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,8 +92,22 @@ class DashboardController extends Controller
 
         $doctrine = $this->getDoctrine();
 
-        $token = $doctrine->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
         $states = $doctrine->getRepository("AppBundle:State")->findAll();
+        $token = $doctrine->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
+
+        if (is_null($token)) {
+            $d = $this->getDoctrine();
+            $em = $d->getManager();
+            /** @var Retailer $dbUser */
+            $dbUser = $this->get('security.token_storage')->getToken()->getUser();
+            $session = new ApiSession();
+            $uuid = Uuid::uuid5(Uuid::uuid1(), $dbUser->getCnpj());
+            $session->setToken($uuid->toString());
+            $session->setRetailer($dbUser);
+            $em->persist($session);
+            $em->flush();
+            $token = $session;
+        }
 
         return $this->render('Retailer/profile.html.twig', [
             'states' => $states,
