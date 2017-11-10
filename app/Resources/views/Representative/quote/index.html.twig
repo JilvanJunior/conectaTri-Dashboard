@@ -65,6 +65,7 @@
                                                             <th> Itens </th>
                                                             <th> Tipo </th>
                                                             <th> Status </th>
+                                                            <th> Criado Em </th>
                                                             <th> Ação </th>
                                                         </tr>
                                                     </thead>
@@ -75,6 +76,7 @@
                                                                 <td>{{ quote.quoteProducts|length }}</td>
                                                                 <td>{{ types[quote.type] }}</td>
                                                                 <td>{{ status[quote.closed] }}</td>
+                                                                <td>{{ quote.createdAt|date('d/m/Y H:i') }}</td>
                                                                 <td>
                                                                     <a href="{{ path('quote_representative', {'id': quote.id}) }}"
                                                                         class="btn btn-outline btn-circle btn-sm purple">
@@ -153,6 +155,14 @@
     <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
+    <script>
+        $.extend(true, $.fn.dataTable.defaults, {
+            columnDefs: [
+                { targets: [4], type: 'date-euro' }
+            ]
+        });
+        $(document).ready(function() {
+            $('#sample_1').DataTable().order([4, 'desc']).draw();
+        });
+    </script>
 {% endblock %}
-
-
