@@ -27,9 +27,10 @@ class RepresentativeUserController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         /** @var Quote $quote */
-        $quote = $em->getRepository('AppBundle:Quote')->getQuoteByRepresentative($user->getEmail(), $id)[0];
+        $quote = $em->getRepository('AppBundle:Quote')->getQuoteByRepresentative($user->getEmail(), $id);
         if($quote == null)
             return $this->redirectToRoute('access_denied');
+        $quote = $quote[0];
         $now = new \DateTime();
         if($now > $quote->getExpiresAt() || $quote->isClosed()) {
             if ($now > $quote->getExpiresAt() && !$quote->isClosed()) {

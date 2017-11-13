@@ -78,7 +78,9 @@ class MartinsController extends Controller
             return $this->redirectToRoute('dashboard');
 
         $em = $this->getDoctrine()->getManager();
-        $pedido = $em->getRepository('AppBundle:MartinsOrder')->findOneById($id);
+        $pedido = $em->getRepository('AppBundle:MartinsOrder')->findOneBy(['id' => $id, 'retailer' => $user]);
+        if($pedido == null)
+            return $this->redirectToRoute('access_denied');
 
         $status = [
             '0' => 'Pedido',

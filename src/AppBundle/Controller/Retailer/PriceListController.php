@@ -195,7 +195,9 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
+        $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id, 'retailer' => $user]);
+        if($quote == null)
+            return $this->redirectToRoute('access_denied');
         /** @var Quote $newQuote */
         $newQuote = clone($quote);
 
@@ -231,7 +233,9 @@ class PriceListController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
         /** @var Quote $quote */
-        $quote = $em->getRepository('AppBundle:Quote')->find($id);
+        $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id, 'retailer' => $user]);
+        if($quote == null)
+            return $this->redirectToRoute('access_denied');
 
         //type of listings
         $listingTypes = [];
@@ -327,7 +331,9 @@ class PriceListController extends Controller
 
         $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
         /** @var Quote $quote */
-        $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
+        $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id, 'retailer' => $user]);
+        if($quote == null)
+            return $this->redirectToRoute('access_denied');
         $data = [];
 
         $quoteProducts = $quote->getQuoteProducts();
@@ -630,8 +636,11 @@ class PriceListController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         /** @var Quote $quote */
-        $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id]);
+        $quote = $em->getRepository('AppBundle:Quote')->findOneBy(['id' => $id, 'retailer' => $user]);
+        if($quote == null)
+            return $this->redirectToRoute('access_denied');
         $quote->setUpdatedAt(new \DateTime());
         $quote->setDeleted(true);
 

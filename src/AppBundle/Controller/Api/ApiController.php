@@ -1337,6 +1337,7 @@ class ApiController extends FOSRestController {
         if (is_null($token)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_UNAUTHORIZED);
         }
+        /** @var ApiSession $dbToken */
         $dbToken = $d->getRepository("AppBundle:ApiSession")->findOneBy(["token" => $token]);
         if (is_null($dbToken)) {
             return View::create(new ApiError("Token de sessão inválido"), Response::HTTP_NOT_ACCEPTABLE);
@@ -1345,7 +1346,7 @@ class ApiController extends FOSRestController {
         $em->flush();
 
         /** @var Quote $dbQuote */
-        $dbQuote = $d->getRepository("AppBundle:Quote")->find($id);
+        $dbQuote = $d->getRepository("AppBundle:Quote")->findOneBy(['id' => $id, 'retailer' => $dbToken->getRetailer()]);
         if (is_null($dbQuote)) {
             return View::create(new ApiError("Esta cotação não está cadastrada"), Response::HTTP_NOT_FOUND);
         }

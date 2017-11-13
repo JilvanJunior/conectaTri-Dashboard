@@ -58,7 +58,7 @@ class SuppliersController extends Controller
             $supplierId = $request->get('supplier');
 
             if($supplierId != 'new') {
-                $supplier = $em->getRepository('AppBundle:Supplier')->findOneById($supplierId);
+                $supplier = $em->getRepository('AppBundle:Supplier')->find($supplierId);
             } else {
                 $supplierState = $states[0];
 
@@ -118,14 +118,17 @@ class SuppliersController extends Controller
             $rca = $supplierRepo->findBy(['rca' => true, 'deleted' => false]);
             $suppliers = array_merge($suppliers, $rca);
         }
-        $representative = $em->getRepository('AppBundle:Representative')->find($id);
+        $representative = $em->getRepository('AppBundle:Representative')->findOneBy(['id' => $id, 'retailer' => $user]);
+        if($representative == null)
+            return $this->redirectToRoute('access_denied');
+
         $states = $em->getRepository('AppBundle:State')->findAll();
 
         if($request->getMethod() == "POST"){
             $supplierId = $request->get('supplier');
 
             if($supplierId != 'new') {
-                $supplier = $em->getRepository('AppBundle:Supplier')->findOneById($supplierId);
+                $supplier = $em->getRepository('AppBundle:Supplier')->find($supplierId);
             } else {
                 $supplier = new Supplier();
             }
@@ -178,8 +181,11 @@ class SuppliersController extends Controller
         $d = $this->getDoctrine();
         $em = $d->getManager();
 
+        /** @var Retailer $user */
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
         /** @var Representative $dbRepresentative */
-        $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($id);
+        $dbRepresentative = $d->getRepository("AppBundle:Representative")->findOneBy(['id' => $id, 'retailer' => $user]);
         if (is_null($dbRepresentative)) {
             $this->addFlash(
                 'warning',

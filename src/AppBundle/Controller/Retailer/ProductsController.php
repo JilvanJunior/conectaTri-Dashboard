@@ -120,7 +120,9 @@ class ProductsController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $product = $em->getRepository('AppBundle:Product')->findOneBy(['id' => $id]);
+        $product = $em->getRepository('AppBundle:Product')->findOneBy(['id' => $id, 'retailer' => $user]);
+        if($product == null)
+            return $this->redirectToRoute('access_denied');
 
         if($request->getMethod() == "POST"){
             $product->setEan('');
@@ -174,8 +176,10 @@ class ProductsController extends Controller
         $d = $this->getDoctrine();
         $em = $d->getManager();
 
-        /** @var Representative $dbRepresentative */
-        $dbProduct = $d->getRepository("AppBundle:Product")->find($id);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        /** @var Product $dbProduct */
+        $dbProduct = $d->getRepository("AppBundle:Product")->findOneBy(['id' => $id, 'retailer' => $user]);
         if (is_null($dbProduct)) {
             $this->addFlash(
                 'warning',

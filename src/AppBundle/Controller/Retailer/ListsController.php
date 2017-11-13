@@ -145,7 +145,13 @@ class ListsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $listing = $em->getRepository('AppBundle:Listing')->findOneBy(['id' => $id]);
+        /** @var Retailer $user */
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $listing = $em->getRepository('AppBundle:Listing')->findOneBy(['id' => $id, 'retailer' => $user]);
+        if($listing == null)
+            return $this->redirectToRoute('access_denied');
+
         $listing->setUpdatedAt(new \DateTime());
         $listing->setDeleted(true);
 
@@ -169,10 +175,13 @@ class ListsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        /** @var Listing $list */
-        $list = $em->getRepository('AppBundle:Listing')->findOneById($id);
         /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        /** @var Listing $list */
+        $list = $em->getRepository('AppBundle:Listing')->findOneBy(['id' => $id, 'retailer' => $user]);
+        if($list == null)
+            return $this->redirectToRoute('access_denied');
+
         $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user,'deleted' => false]);
         $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
