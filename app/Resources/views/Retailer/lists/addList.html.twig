@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block page %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         .contact-form .text {
             float: none;
@@ -21,6 +22,9 @@
         .text-area {
             margin-left: 2.5%;
             width: 95%;
+        }
+        .ui-autocomplete {
+            z-index: 100000;
         }
     </style>
     <div class="page-wrapper-row full-height">
@@ -233,12 +237,8 @@
 
 
                                                                                         <form action="#" method="POST" id="product_form" class="form-horizontal contact-form">
-
-
                                                                                             <div class="form-body ">
-
                                                                                                 <div class="row ">
-
                                                                                                     <div class="col-lg-6 col-lg-offset-3">
                                                                                                         <div class="">
                                                                                                             <div class="form-group produto text ">
@@ -247,15 +247,16 @@
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
-
                                                                                                 </div>
-
                                                                                                 <div class="row ">
                                                                                                     <div class="col-lg-6 col-lg-offset-3">
                                                                                                         <div class="">
                                                                                                             <div class="form-group codigo text ">
                                                                                                                 <label for="codigo">Código de Barras do Produto</label>
-                                                                                                                <input class="form-control" type="text" name="codigo" id="codigo" required/>
+                                                                                                                <input class="form-control" type="text" name="codigo" id="codigo"/>
+                                                                                                                {% if userIsRCA %}
+                                                                                                                    <small style="font-size: 65%;display: block;padding: 10px">*Produtos sem Código de barras não podem ser inclusos em Pedidos Martins</small>
+                                                                                                                {% endif %}
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
@@ -266,7 +267,7 @@
                                                                                                         <div class="">
                                                                                                             <div class="form-group marca text ">
                                                                                                                 <label for="marca">Marca do Produto</label>
-                                                                                                                <input class="form-control" type="text" name="marca" id="marca" required/>
+                                                                                                                <input class="form-control" type="text" name="marca" id="marca"/>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
@@ -407,6 +408,7 @@
     <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery-validation/js/localization/messages_pt_BR.min.js') }}" type="text/javascript"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -578,7 +580,35 @@
 
         //END WIZARD METHODS
 
+        $("#produto").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "{{ path('ajax_produtos') }}",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 3
+        });
 
+        $("#produto").on( "autocompleteselect", function( event, ui ) {
+            $('#codigo').val(ui.item.ean);
+            $('#marca').val(ui.item.brand);
+            $('#peso').val(ui.item.quantity);
+            $('#tipo-produto').val(ui.item.type);
+            $('#unidade').val(ui.item.unit);
+            $('#descricao-produto').val(ui.item.full_description);
+
+            $('.codigo.text').addClass('typing');
+            $('.marca.text').addClass('typing');
+            $('.peso.text').addClass('typing');
+            $('.descricao-produto.text').addClass('typing');
+        } );
 
         //BEGIN FLOAT LABEL METHODS
         $('#name').keyup(function(){
@@ -644,7 +674,7 @@
             var codigo = $('#codigo').val();
             var unidade = $('#unidade').val();;
             var peso = $('#peso').val();
-            var descricao = $('#descricao-produto').val();;
+            var descricao = $('#descricao-produto').val();
 
 
             $this.button('loading');
