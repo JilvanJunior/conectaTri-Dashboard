@@ -114,7 +114,7 @@ class ApiController extends FOSRestController {
             $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $dbUser);
             $acesso = $mc->login();
             if($acesso->Status != 0){
-                $retorno['condicoesMartins'] = '';
+                $retorno['condicoesMartins'] = [];
                 $retorno['previsao'] = '';
             }
 
