@@ -232,6 +232,9 @@
                     },
                     success: function(res) {
                         controle.bootstrapSwitch('state', res.newState, true);
+                        if(res.message != "") {
+                            alert(res.message);
+                        }
                     },
                     complete: function() {
                         $(window).unbind('beforeunload');
