@@ -46,6 +46,8 @@ class RepresentativeUserController extends Controller
                 $firebase = new \Firebase\FirebaseLib($defaultUrl, $defaultToken);
                 $firebase->set($defaultPath . '/conectatri', $data);
 
+                $quote->updateWinners();
+
                 $em->flush();
             }
         }
@@ -224,6 +226,10 @@ class RepresentativeUserController extends Controller
             $firebase = new \Firebase\FirebaseLib($defaultUrl, $defaultToken);
             $firebase->set($defaultPath . '/conectatri', $data);
             $em->persist($quoteSupplierStatus);
+
+            $em->flush();
+
+            $quote->updateWinners();
 
             $em->flush();
 

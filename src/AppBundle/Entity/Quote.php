@@ -610,7 +610,7 @@ class Quote
             break;
         }
 
-        $this->setWinners();
+        $this->updateWinners();
     }
 
     /**
@@ -665,7 +665,7 @@ class Quote
         return $i;
     }
 
-    public function setWinners()
+    public function updateWinners()
     {
         $quoteProducts = $this->getQuoteProducts();
         /** @var QuoteProduct $quoteProduct */
