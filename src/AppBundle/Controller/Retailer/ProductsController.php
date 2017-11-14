@@ -75,7 +75,7 @@ class ProductsController extends Controller
         /** @var Retailer $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
-        $products = $em->getRepository('AppBundle:Product')->findBy(['deleted' => false]);
+        $products = $em->getRepository('AppBundle:Product')->findBy(['retailer' => $user, 'deleted' => false]);
 
         if($request->getMethod() == "POST"){
             $product = new Product();
