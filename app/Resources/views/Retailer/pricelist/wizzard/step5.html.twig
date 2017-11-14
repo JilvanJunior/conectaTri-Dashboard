@@ -66,39 +66,59 @@
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered table-hover" id="sendSuppliersTable">
                         <thead>
-                            <tr>
-                                <th>
-                                    <label class="mt-checkbox mt-checkbox-outline">
-                                        <input name="selectAllSendSupplier" type="checkbox" autocomplete='off' checked/>
-                                        <span></span>
-                                    </label>
-                                </th>
-                                <th>Representante</th>
-                                <th>E-mail</th>
-                            </tr>
+                        <tr>
+                            <th>
+                                <label class="mt-checkbox mt-checkbox-outline">
+                                    <input name="selectAllSendSupplier" type="checkbox" autocomplete='off' checked/>
+                                    <span></span>
+                                </label>
+                            </th>
+                            <th>Representante</th>
+                            <th>E-mail</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {% if quote is defined %}
-                                {% for supplierStatus in quote.suppliersStatus %}
-                                    <tr>
-                                        <td>
-                                            <label class="mt-checkbox mt-checkbox-outline">
-                                                <input type="checkbox" name="chkSendSupplier"
-                                                value="{{ supplierStatus.representative.id }}" checked/>
-                                                <span></span>
-                                            </label>
-                                        </td>
-                                        <td> {{ supplierStatus.representative.name }} </td>
-                                        <td class="numeric"> {{ supplierStatus.representative.email }} </td>
-                                    </tr>
+                        {% if quote is defined %}
+                            {% for supplierStatus in quote.suppliersStatus %}
+                                <tr>
+                                    <td>
+                                        <label class="mt-checkbox mt-checkbox-outline">
+                                            <input type="checkbox" name="chkSendSupplier"
+                                                   value="{{ supplierStatus.representative.id }}" checked/>
+                                            <span></span>
+                                        </label>
+                                    </td>
+                                    <td> {{ supplierStatus.representative.name }} </td>
+                                    <td class="numeric"> {{ supplierStatus.representative.email }} </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            {% if suppliers is defined %}
+                                {% for supplier in suppliers %}
+                                    {% for representative in supplier.representatives
+                                    if representative.deleted == false
+                                    and (supplier.rca or representative.retailer.id == user.id) %}
+                                        <tr>
+                                            <td>
+                                                <label class="mt-checkbox mt-checkbox-outline">
+                                                    <input type="checkbox" name="chkSendSupplier"
+                                                           value="{{ representative.id }}" checked/>
+                                                    <span></span>
+                                                </label>
+                                            </td>
+                                            <td> {{ representative.name }} </td>
+                                            <td class="numeric"> {{ representative.email }} </td>
+                                        </tr>
+                                    {% endfor %}
                                 {% endfor %}
                             {% endif %}
+                        {% endif %}
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button"  id="sendLinks" class="btn green-conecta btn-circle" data-style="expand-right">
+                <button type="button" id="sendLinks" class="btn green-conecta btn-circle" data-style="expand-right">
                     Enviar
                 </button>
             </div>

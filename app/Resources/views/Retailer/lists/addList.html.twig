@@ -207,7 +207,7 @@
                                                                                             <label class="mt-checkbox mt-checkbox-outline">
                                                                                                 <input type="checkbox" value="{{ product.id }}"
                                                                                                         {{ (list is defined and list.hasProduct(product)?'checked="checked"':'') }}
-                                                                                                       name="chkProducts" onchange="changeChkProduct.call(this);" />
+                                                                                                       name="chkProducts" />
                                                                                                 <span></span>
                                                                                             </label>
                                                                                         </td>
@@ -461,7 +461,7 @@
                 switch(index) {
                     case 0 :
                         $("#wizardStepLabel").text(" Informação");
-                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/dados-da-cotacao/24x24.png') }}")
+                        $("#wizardStepImage").attr("src","{{ asset('assets/global/img/icons/dados-da-cotacao/24x24.png') }}");
                         $("#advance a").addClass('disabled');
                         $("#previous").hide();
                         $("#advance").show();
@@ -522,13 +522,6 @@
             }});
         });
 
-        function changeChkProduct() {
-            $('#product-datatable').DataTable().search('').draw();
-            $('#product-datatable tbody tr input[type="checkbox"]:not(:checked)').each(function() {
-                $(this).parents('tr:first').addClass('hidden');
-            });
-        }
-
         $("#advance").on("click", function() {
             var $bar = $(".ProgressBar");
             stepFoward($bar);
@@ -537,7 +530,6 @@
         $("#salvar_lista").on("click", function() {
 
             var $this = $(this);
-            $this.button('loading');
 
             var name = $('#name').val();
             var description = $('#description').val();
@@ -566,7 +558,6 @@
                     },
                     error: function (error) {
                         console.log(error);
-                        $this.button('reset');
                     }
                 })
         });
@@ -674,12 +665,11 @@
             var marca = $('#marca').val();
             var tipo = $('#tipo-produto').val();
             var codigo = $('#codigo').val();
-            var unidade = $('#unidade').val();;
+            var unidade = $('#unidade').val();
             var peso = $('#peso').val();
             var descricao = $('#descricao-produto').val();
 
 
-            $this.button('loading');
             var productForm = $( "#product_form" );
 
             productForm.validate({
@@ -693,7 +683,7 @@
 
                 $.ajax(
                     {
-                        url: '/api/product',
+                        url: '{{ path('post_api_product') }}',
                         type: 'POST',
                         contentType: "application/json",
                         dataType: "json",
@@ -708,32 +698,26 @@
                             unit: unidade
                         }),
                         success: function (response) {
-                            console.log(response);
                             $('#product-datatable').DataTable().row.add([
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts' checked/><span></span></label>",
                                 response.id,
                                 response.name,
                                 response.type,
                                 response.brand,
-                                response.unit,
-                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts'/><span></span></label>"
+                                response.unit
                             ]).draw();
-                            $this.button('reset');
                             $('#productModal').modal('toggle');
-                            $("#product_form").trigger("reset")
-
+                            $("#product_form").trigger("reset");
                         },
                         error: function (error) {
                             alert(error.responseJSON.error.exception["0"].message);
-                            $this.button('reset');
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset")
                         }
 
                     }).done(function () {
-                    $this.button('reset');
+                    $("#last").find("button").removeClass('disabled');
                 });
-            }else{
-                $this.button('reset');
             }
 
         });

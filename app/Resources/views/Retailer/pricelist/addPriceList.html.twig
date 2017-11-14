@@ -421,13 +421,6 @@
         $('#telefone_representante').mask(SPMaskBehavior, spOptions);
         $('#celular_representante').mask(SPMaskBehavior, spOptions);
 
-        function changeChkProduct() {
-            $('#product-datatable').DataTable().search('').draw();
-            $('#product-datatable tbody tr input[type="checkbox"]:not(:checked)').each(function() {
-                $(this).parents('tr:first').addClass('hidden');
-            });
-        }
-
         function changeChkSupplier() {
             let $this = $(this);
             let checked = $this.prop('checked');
@@ -970,7 +963,7 @@
 
             var supplierForm = $( "#supplier_form" );
 
-            $( "#supplier_form" ).validate({
+            supplierForm.validate({
                 errorPlacement: function(){
                     return false;
                 }
@@ -1008,6 +1001,7 @@
                             $('#myModal').modal('toggle');
                             $("#supplier_form").trigger("reset");
                             $("#supplier_form div").removeClass('typing');
+                            $("#sendSuppliersTable").find("tr:last").after("<tr><td><label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' name='chkSendSupplier' value='"+response.id+"' checked><span></span></label></td><td>"+response.name+"</td><td class='numeric'>"+response.contact_email+"</td></tr>");
                         },
                         error: function (error) {
                             alert(error.responseJSON.error.exception["0"].message);
@@ -1219,14 +1213,13 @@
                         success: function (response) {
                             console.log(response);
                             $('#product-datatable').DataTable().row.add([
-                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts' onchange='changeChkProduct.call(this);' checked data-quotesuppliers/><span></span></label>",
+                                "<label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='"+response.id+"' name='chkProducts' checked data-quotesuppliers/><span></span></label>",
                                 "<input type='number' min='1' class='form-control quantidade' value='1'>",
                                 response.name,
                                 response.type,
                                 response.brand,
                                 response.unit,
                             ]).draw();
-                            changeChkProduct();
                             $('#productModal').modal('toggle');
                             $("#product_form").trigger("reset");
                             $("#product_form div:not(.perm)").removeClass('typing');
