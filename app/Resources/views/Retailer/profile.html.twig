@@ -71,6 +71,18 @@
                                             </div>
                                         </div>
 
+                                        <div class="row">
+                                            <div class="col-lg-4 col-lg-offset-4">
+                                                <div class="">
+                                                    <div class="form-group email text ">
+                                                        <label for="fantasy">Email*</label>
+                                                        <input class="form-control" type="email" id="email"
+                                                            value="{{ user.email }}" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="row ">
                                             <div class="col-lg-4 col-lg-offset-4">
                                                 <div class="">
@@ -339,6 +351,7 @@
                     retailer: {
                         company_name: $('#razao').val(),
                         fantasy_name: $('#fantasy').val(),
+                        email: $('#email').val(),
                         password: $('#newPass').val(),
                         address: $('#address').val(),
                         number: $('#number').val(),
