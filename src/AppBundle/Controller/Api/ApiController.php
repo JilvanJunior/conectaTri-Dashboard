@@ -1461,6 +1461,11 @@ class ApiController extends FOSRestController {
             $newQuoteProduct = new QuoteProduct();
             /** @var Product $dbProduct */
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
+            $newQuoteProduct->setQuantity($product->quantity);
+            $newQuoteProduct->setProduct($dbProduct);
+            $newQuoteProduct->setQuote($dbQuote);
+            $em->persist($newQuoteProduct);
+            $em->flush();
             if(is_array($product->quote_suppliers)){
                 foreach ($product->quote_suppliers as $supplier) {
                     $newQuoteSupplier = new QuoteSupplier();
@@ -1468,17 +1473,23 @@ class ApiController extends FOSRestController {
                     $newQuoteSupplier->setRepresentative($dbSupplier)
                         ->setQuantity($supplier->quantity)
                         ->setPrice(str_replace(",", ".", $supplier->price));
+                    $newQuoteSupplier->setQuoteProduct($newQuoteProduct);
                     $em->persist($newQuoteSupplier);
                     $em->flush();
                     $newQuoteProduct->addQuoteSupplier($newQuoteSupplier);
+                    $em->flush();
+
+                    $newQuoteSupplierStatus = new QuoteSupplierStatus();
+                    $newQuoteSupplierStatus->setStatus(0)
+                        ->setRepresentative($dbSupplier)
+                        ->setQuote($dbQuote);
+                    $em->persist($newQuoteSupplierStatus);
+                    $em->flush();
                 }
             }
-            $newQuoteProduct->setQuantity($product->quantity);
-            $newQuoteProduct->setProduct($dbProduct);
-            $newQuoteProduct->setQuote($dbQuote);
-            $em->persist($newQuoteProduct);
-            $em->flush();
             $dbQuote->addQuoteProduct($newQuoteProduct);
+            $em->flush();
+
         }
         $dbQuote->setDeleted(false)
             ->setName($quote->name)

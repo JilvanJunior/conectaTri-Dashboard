@@ -1245,7 +1245,7 @@
         selectAll("selectAllSendSupplier","chkSendSupplier");
 
         // FINISH QUOTE
-        $('#save-quote').one("click", function() {
+        $('#save-quote').on("click", function() {
             $('#save-quote, #sent-suppliers, #presential-quote').addClass('disabled');
             saveQuote(1, false);
         });
@@ -1344,6 +1344,8 @@
                 quote_suppliers: suppliersId,
             });
 
+            console.log(data);
+
             $.ajax({
                 url: "{{ quote is defined?path('put_api_quote', {id: quote.id}):path('post_api_quote') }}",
                 type: '{{ quote is defined?'PUT':'POST' }}',
@@ -1354,8 +1356,8 @@
                 success: function (response) {
                     if(force)
                         sendLink(response.id);
-                    else
-                        location.href = '{{ path('cotacoes') }}'
+//                    else
+                        {#location.href = '{{ path('cotacoes') }}'#}
                 },
                 error: function (error) {
                     alert(error.responseJSON.error.exception["0"].message);
