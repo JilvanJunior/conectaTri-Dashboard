@@ -1287,23 +1287,23 @@
         }
 
         function saveQuote(type, force) {
-            var name = $("#cotacao").val();
-            var paymentDate = $('#prazoRCA').val();
-            if(paymentDate == "Outros") {
+            let name = $("#cotacao").val();
+            let paymentDate = $('#prazoRCA').val();
+            if(paymentDate === "Outros") {
                 paymentDate = $('#prazo').val();
             }
 
-            var startDate = $("#beginsAtTimePicker").data("datetimepicker").getDate();
+            let startDate = $("#beginsAtTimePicker").data("datetimepicker").getDate();
             startDate = dateToATOM(startDate);
 
-            var endDate = $("#expiresAtTimePicker").data("datetimepicker").getDate();
+            let endDate = $("#expiresAtTimePicker").data("datetimepicker").getDate();
             endDate = dateToATOM(endDate);
 
             var productsId = [];
             var suppliersId = [];
 
-            $.each($('#supplier-datatable tr input:checked'), function(i, v){
-                if($(this).val() == 'on')
+            $.each($('#supplier-datatable').find('tr input:checked'), function(i, v){
+                if($(this).val() === 'on')
                     return true;
 
                 suppliersId.push({
@@ -1316,10 +1316,10 @@
                 });
             });
 
-            $.each($('#product-datatable tr input:checked'), function(i, v){
+            $.each($('#product-datatable').find('tr input:checked'), function(i, v){
                 let $this = $(this);
 
-                if($this.val() == 'on')
+                if($this.val() === 'on')
                     return true;
 
                 let quoteProduct = {
@@ -1328,14 +1328,20 @@
                     winners: []
                 };
                 let quoteSuppliers = $this.data('quotesuppliers');
-
-                if(quoteSuppliers == "") {
-                    quoteProduct.quote_suppliers = suppliersId;
-                } else {
-                    quoteProduct.quote_suppliers = quoteSuppliers;
-                }
+                quoteProduct.quote_suppliers = suppliersId;
 
                 productsId.push(quoteProduct);
+            });
+
+            let data = JSON.stringify({
+                name: name,
+                type: type,
+                begins_at: startDate,
+                expires_at: endDate,
+                send_to_supplier: false,
+                payment_date: paymentDate,
+                quote_products: productsId,
+                quote_suppliers: suppliersId,
             });
 
             $.ajax({
@@ -1344,16 +1350,7 @@
                 contentType: "application/json",
                 dataType: "json",
                 headers: {'Api-Token': token},
-                data:  JSON.stringify({
-                    name: name,
-                    type: type,
-                    begins_at: startDate,
-                    expires_at: endDate,
-                    send_to_supplier: false,
-                    payment_date: paymentDate,
-                    quote_products: productsId,
-                    quote_suppliers: suppliersId,
-                }),
+                data:  data,
                 success: function (response) {
                     if(force)
                         sendLink(response.id);

@@ -1429,9 +1429,11 @@ class ApiController extends FOSRestController {
                     }
                 }
 
+                //check new supplier
                 self::array_diff($rcvProduct->quote_suppliers, $tmp2);
                 /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
+                    //create new quoteSupplier
                     /** @var Representative $dbSupplier */
                     $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                     if ($isFirst) {
@@ -1452,21 +1454,24 @@ class ApiController extends FOSRestController {
             }
             $isFirst = false;
         }
+        //check new products
         self::array_diff_product($quote->quote_products, $tmp);
         /** @var \stdClass $product */
         foreach ($quote->quote_products as $product) {
             $newQuoteProduct = new QuoteProduct();
             /** @var Product $dbProduct */
             $dbProduct = $d->getRepository("AppBundle:Product")->find($product->product->id);
-            foreach ($product->quote_suppliers as $supplier) {
-                $newQuoteSupplier = new QuoteSupplier();
-                $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
-                $newQuoteSupplier->setRepresentative($dbSupplier)
-                    ->setQuantity($supplier->quantity)
-                    ->setPrice(str_replace(",", ".", $supplier->price));
-                $em->persist($newQuoteSupplier);
-                $em->flush();
-                $newQuoteProduct->addQuoteSupplier($newQuoteSupplier);
+            if(is_array($product->quote_suppliers)){
+                foreach ($product->quote_suppliers as $supplier) {
+                    $newQuoteSupplier = new QuoteSupplier();
+                    $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
+                    $newQuoteSupplier->setRepresentative($dbSupplier)
+                        ->setQuantity($supplier->quantity)
+                        ->setPrice(str_replace(",", ".", $supplier->price));
+                    $em->persist($newQuoteSupplier);
+                    $em->flush();
+                    $newQuoteProduct->addQuoteSupplier($newQuoteSupplier);
+                }
             }
             $newQuoteProduct->setQuantity($product->quantity);
             $newQuoteProduct->setProduct($dbProduct);

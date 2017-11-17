@@ -632,8 +632,10 @@ class Quote
      */
     public function hasProduct($product)
     {
+        /** @var QuoteProduct $quoteProduct */
         foreach($this->quoteProducts as $quoteProduct)
-            if($quoteProduct->getProduct()->getId() == $product->getId())
+            if(!$quoteProduct->isDeleted()
+                && $quoteProduct->getProduct()->getId() == $product->getId())
                 return true;
 
         return false;
