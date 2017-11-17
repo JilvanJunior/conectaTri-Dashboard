@@ -1266,7 +1266,7 @@
         function set2Digits(number) {
             let numberString = "" + number;
 
-            if(numberString.length == 2)
+            if(numberString.length === 2)
                 return numberString;
             else
                 return "0" + numberString;
@@ -1372,7 +1372,7 @@
 
             url = url.replace(0, quoteId);
 
-            $('#sendSuppliersTable tbody input:checked').each(function(index, input) {
+            $('#sendSuppliersTable').find('tbody input:checked').each(function(index, input) {
                 representatives.push({
                     id: $(input).val()
                 });

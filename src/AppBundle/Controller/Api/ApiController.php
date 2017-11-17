@@ -1579,27 +1579,30 @@ class ApiController extends FOSRestController {
         /** @var \stdClass $representative */
         foreach ($representatives as $representative) {
 
+            /** @var Representative $dbRepresentative */
             $dbRepresentative = $d->getRepository('AppBundle:Representative')->findOneBy(['id' => $representative->id]);
 
-            if (\Swift_Validate::email($dbRepresentative->getEmail())) {
-                $message = (new \Swift_Message('Cotação - Conecta Tri'))
-                    ->setFrom('noreply@conectatri.com.br')
-                    ->setTo($dbRepresentative->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'email/quote_representative.html.twig',
-                            array('link' => $link,
-                                'companyName' => $dbToken->getRetailer()->getCompanyName(),
-                                'fantasyName' => $dbToken->getRetailer()->getFantasyName(),
-                                'expiresAt' => $dbQuote->getExpiresAt())
-                        ),
-                        'text/html'
-                    );
-                if (!$mailer->send($message)) {
-                    $hasFailed = true;
-                    $failed .= "<li>".$dbRepresentative->getName()." &lt;".$dbRepresentative->getEmail()."&gt;</li>";
-                } else {
-                    $total++;
+            if(!$dbRepresentative->getSupplier()->isRca()){
+                if (\Swift_Validate::email($dbRepresentative->getEmail())) {
+                    $message = (new \Swift_Message('Cotação - Conecta Tri'))
+                        ->setFrom('noreply@conectatri.com.br')
+                        ->setTo($dbRepresentative->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'email/quote_representative.html.twig',
+                                array('link' => $link,
+                                    'companyName' => $dbToken->getRetailer()->getCompanyName(),
+                                    'fantasyName' => $dbToken->getRetailer()->getFantasyName(),
+                                    'expiresAt' => $dbQuote->getExpiresAt())
+                            ),
+                            'text/html'
+                        );
+                    if (!$mailer->send($message)) {
+                        $hasFailed = true;
+                        $failed .= "<li>".$dbRepresentative->getName()." &lt;".$dbRepresentative->getEmail()."&gt;</li>";
+                    } else {
+                        $total++;
+                    }
                 }
             }
 
