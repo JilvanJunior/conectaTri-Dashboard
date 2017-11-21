@@ -27,6 +27,7 @@ class ExportClientsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
+        /** @var Retailer $retailer */
         $retailer = $em->getRepository("AppBundle:Retailer")->find($input->getArgument('retailerId'));
 
         $logger = $this->getContainer()->get('logger');
@@ -67,7 +68,7 @@ class ExportClientsCommand extends ContainerAwareCommand
 
     protected function registerOnMartins(Retailer $retailer, $chave)
     {
-        $soap = new \SoapClient('http://service.martins.com.br/b2bservice.asmx?WSDL');
+        $soap = new \SoapClient($this->getParameter('chave_martins'));
 
         $params = [
             'chpac' => $chave,
