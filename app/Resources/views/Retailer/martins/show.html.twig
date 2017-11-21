@@ -74,7 +74,7 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>{{ pedido.code }}</td>
-                                                        <td>{{ pedido.total }}</td>
+                                                        <td>{{ pedido.total|number_format(2, ',', '.') }}</td>
                                                         <td>{{ status[pedido.status] }}</td>
                                                     </tr>
                                                 </tbody>

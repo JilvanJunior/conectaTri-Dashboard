@@ -68,7 +68,7 @@ class ExportClientsCommand extends ContainerAwareCommand
 
     protected function registerOnMartins(Retailer $retailer, $chave)
     {
-        $soap = new \SoapClient($this->getParameter('chave_martins'));
+        $soap = new \SoapClient($this->getParameter('url_martins').'?WSDL');
 
         $params = [
             'chpac' => $chave,

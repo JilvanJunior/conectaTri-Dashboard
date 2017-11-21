@@ -82,6 +82,34 @@ class MartinsController extends Controller
         if($pedido == null)
             return $this->redirectToRoute('access_denied');
 
+        $mc = new MartinsConnector($this->getParameter('chave_martins'),
+            $this->getParameter('url_martins'), $user);
+
+        if($pedido->getStatus() != 4){
+            /** @var \stdClass $order */
+            $order = $mc->trackMartinsPedido($pedido->getCode());
+            if(property_exists($order, 'trackingData')){
+                $trackingData = $order->trackingData;
+
+                if(property_exists($trackingData, 'DataVenda'))
+                    $pedido->setSaleDate($trackingData->DataVenda);
+                if(property_exists($trackingData, 'DataPagamento'))
+                    $pedido->setPaymentDate($trackingData->DataPagamento);
+                if(property_exists($trackingData, 'DataFaturamento'))
+                    $pedido->setBillingDate($trackingData->DataFaturamento);
+                if(property_exists($trackingData, 'DataEntrega'))
+                    $pedido->setDeliveryDate($trackingData->DataEntrega);
+                if(property_exists($trackingData, 'DataConclusao'))
+                    $pedido->setCompletionDate($trackingData->DataConclusao);
+                if(property_exists($order, 'PedidoStatus'))
+                    $pedido->setStatus($order->PedidoStatus);
+
+                $pedido->setUpdatedAt(new \DateTime());
+            }
+        }
+
+        $em->flush();
+
         $status = [
             '0' => 'Pedido',
             '1' => 'Pagamento',
