@@ -357,7 +357,7 @@ class PriceListController extends Controller
                     else
                         $observation = $quoteSupplierStatus->getObservation();
 
-                    $statusQuote = [0 => 'Pendente', 1 => 'Preencheu a Cotação', 2 => 'Encerrado'];
+                    $statusQuote = [0 => 'Pendente', 1 => 'Em Andamento', 2 => 'Encerrado'];
                     $filledIn = $statusQuote[$quoteSupplierStatus->getStatus()];
 
                     if($quoteSupplier->isFilledIn() || $supplier->isRca()) {
