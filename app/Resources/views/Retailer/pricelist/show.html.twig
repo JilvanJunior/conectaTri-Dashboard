@@ -371,86 +371,88 @@
                                     <!-- END SAMPLE TABLE PORTLET-->
                                 </div>
                                 {% if quote.type == 1 %}
-                                <div class="col-md-12">
-                                    <!-- BEGIN SAMPLE TABLE PORTLET-->
-                                    <div class="portlet light ">
-                                        <div class="portlet-title">
-                                            <div class="caption font-dark">
-                                                <img width='24px' src="{{ asset('assets/pages/img/logos/Prancheta.jpg') }}"/>
-                                                <span class="caption-subject bold uppercase">Status</span>
+                                    <div class="col-md-12">
+                                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                                        <div class="portlet light ">
+                                            <div class="portlet-title">
+                                                <div class="caption font-dark">
+                                                    <img width='24px' src="{{ asset('assets/pages/img/logos/Prancheta.jpg') }}"/>
+                                                    <span class="caption-subject bold uppercase">Status</span>
+                                                </div>
+                                                <div style='float: right;'>
+                                                    <button id='sendLink' class='btn btn-outline btn-circle btn-sm purple'>
+                                                        Enviar link aos fornecedores.
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div style='float: right;'>
-                                                <button id='sendLink' class='btn btn-outline btn-circle btn-sm purple'>
-                                                    Enviar link aos fornecedores.
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="portlet-body">
-                                            <table class="table table-striped table-bordered table-hover" id="status_datatable">
-                                                <thead>
+                                            <div class="portlet-body">
+                                                <table class="table table-striped table-bordered table-hover" id="status_datatable">
+                                                    <thead>
                                                     <tr>
                                                         {% if userIsRCA or quote.closed == 1 %}
-                                                        <th>
-                                                            <label class="mt-checkbox mt-checkbox-outline">
-                                                                <input  type="checkbox" name="selectAllStatus" />
-                                                                <span></span>
-                                                            </label>
-                                                        </th>
+                                                            <th>
+                                                                <label class="mt-checkbox mt-checkbox-outline">
+                                                                    <input  type="checkbox" name="selectAllStatus" />
+                                                                    <span></span>
+                                                                </label>
+                                                            </th>
                                                         {% endif %}
                                                         <th>Fornecedor</th>
                                                         <th>Representante</th>
                                                         {% if quote.getType == 1 %}
-                                                        <th>Status</th>
+                                                            <th>Status</th>
                                                         {% endif %}
                                                         {% if userIsRCA or quote.closed == 1 %}
-                                                        {% if quote.getType == 1 %}
-                                                        <th>Ação</th>
-                                                        {% endif %}
+                                                            {% if quote.getType == 1 %}
+                                                                <th>Ação</th>
+                                                            {% endif %}
                                                         {% endif %}
                                                     </tr>
-                                                </thead>
-                                                <tbody>
+                                                    </thead>
+                                                    <tbody>
                                                     {% for supplierStatus in supplierStatuses %}
-                                                    <tr>
-                                                        {% if userIsRCA or quote.closed == 1 %}
-                                                        <td>
-                                                            <label class="mt-checkbox mt-checkbox-outline">
-                                                                <input type="checkbox" value="{{ quote.id }}" name="chkStatus" />
-                                                                <span></span>
-                                                            </label>
-                                                        </td>
-                                                        {% endif %}
-                                                        <td> {{ supplierStatus.supplierName }} </td>
-                                                        <td> {{ supplierStatus.representativeName }} </td>
-                                                        {% if quote.getType == 1 %}
-                                                        <td> {{ supplierStatus.filledIn }} </td>
-                                                        {% endif %}
-                                                        {% if userIsRCA or quote.closed == 1 %}
-                                                        {% if quote.getType == 1 %}
-                                                        <td>
-                                                            {% if quote.closed == 1 %}
-                                                            <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': supplierStatus.representativeId}) }}"
-                                                                class="btn btn-outline btn-circle btn-sm purple">
-                                                                <i class="fa fa-file"></i> Exportar Pedido de Cotação
-                                                            </a>
+                                                        <tr>
+                                                            {% if userIsRCA or quote.closed == 1 %}
+                                                                <td>
+                                                                    <label class="mt-checkbox mt-checkbox-outline">
+                                                                        <input type="checkbox" value="{{ quote.id }}" name="chkStatus" />
+                                                                        <span></span>
+                                                                    </label>
+                                                                </td>
                                                             {% endif %}
-                                                            {% if userIsRCA and supplierStatus.countWins > 0 and supplierStatus.supplierIsRCA and (not quote.hasIdOrder) %}
-                                                            <a href="{{ path('novo_pedido', {'idQuote': quote.id}) }}"
-                                                                class="btn btn-outline btn-circle btn-sm purple">
-                                                                <i class="fa fa-file"></i> Novo Pedido Martins
-                                                            </a>
+                                                            <td> {{ supplierStatus.supplierName }} </td>
+                                                            <td> {{ supplierStatus.representativeName }} </td>
+                                                            {% if quote.getType == 1 %}
+                                                                <td> {{ supplierStatus.filledIn }} </td>
                                                             {% endif %}
-                                                        </td>
-                                                        {% endif %}
-                                                        {% endif %}
-                                                    </tr>
+                                                            {% if userIsRCA or quote.closed == 1 %}
+                                                                {% if quote.getType == 1 %}
+                                                                    <td>
+                                                                        {% if quote.closed == 1 %}
+                                                                            <a href="{{ path('cotacao_fornecedor_pdf', {'idQuote': quote.id, 'idRepresentative': supplierStatus.representativeId}) }}"
+                                                                               class="btn btn-outline btn-circle btn-sm purple">
+                                                                                <i class="fa fa-file"></i> Exportar Pedido de Cotação
+                                                                            </a>
+                                                                        {% endif %}
+                                                                        {% if userIsRCA and supplierStatus.countWins > 0
+                                                                        and supplierStatus.supplierIsRCA and (not quote.hasIdOrder)
+                                                                        and supplierStatus.moreThanMinimum == "Sim" %}
+                                                                            <a href="{{ path('novo_pedido', {'idQuote': quote.id}) }}"
+                                                                               class="btn btn-outline btn-circle btn-sm purple">
+                                                                                <i class="fa fa-file"></i> Novo Pedido Martins
+                                                                            </a>
+                                                                        {% endif %}
+                                                                    </td>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        </tr>
                                                     {% endfor %}
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
+                                        <!-- END SAMPLE TABLE PORTLET-->
                                     </div>
-                                    <!-- END SAMPLE TABLE PORTLET-->
-                                </div>
                                 {% endif %}
 
 

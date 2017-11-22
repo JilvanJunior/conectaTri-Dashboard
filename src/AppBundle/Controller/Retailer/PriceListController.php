@@ -360,7 +360,7 @@ class PriceListController extends Controller
                     $statusQuote = [0 => 'Pendente', 1 => 'Preencheu a Cotação', 2 => 'Encerrado'];
                     $filledIn = $statusQuote[$quoteSupplierStatus->getStatus()];
 
-                    if($quoteSupplier->isFilledIn()) {
+                    if($quoteSupplier->isFilledIn() || $supplier->isRca()) {
                         $moreThanMinimum = ($supplier->getMinimumValue() <= $sum)?'Sim':'Não';
                     } else {
                         $moreThanMinimum = '-';

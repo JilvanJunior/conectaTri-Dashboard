@@ -140,7 +140,7 @@ class MartinsController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         /** @var Quote $quote */
-        $quote = $em->getRepository('AppBundle:Quote')->findOneById($idQuote);
+        $quote = $em->getRepository('AppBundle:Quote')->find($idQuote);
         $token = $this->getDoctrine()->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
 
         $products = [];
@@ -203,6 +203,9 @@ class MartinsController extends Controller
                 'preco' => $mercadoria->PrecoNormal,
             ];
         }
+
+        if($total < $usableQuoteSupplier->getRepresentative()->getSupplier()->getMinimumValue())
+            return $this->redirectToRoute('acompanhar_cotacao', ['id' => $idQuote]);
 
         return $this->render('Retailer/martins/addPedido.html.twig', [
             'mercadorias' => $mercadoriasSaida,
