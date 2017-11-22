@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Command;
 
+use AppBundle\Service\MartinsConnector;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -45,15 +46,24 @@ class ExportClientsCommand extends ContainerAwareCommand
             $output->writeln('Conectando com a API Martins');
             $logger->info('Conectando com a API Martins');
             $response = $this->registerOnMartins($retailer, $this->getContainer()->getParameter('chave_martins'));
-            if($response->Status != 0 && $response->Status != 6) {
+            $mc = new MartinsConnector($this->getContainer()->getParameter('chave_martins'),
+                $this->getContainer()->getParameter('url_martins'), $retailer);
+
+            if($response->Status == 0 || $response->Status == 6) {
+                $retailer->setRegisteredOnMartins(true);
+
+                $acesso = $mc->login();
+                if($acesso->Status != 0){
+                    $output->writeln($acesso->Mensagem);
+                    $logger->info($acesso->Mensagem);
+                }
+            } else {
                 $retailer->setRegisteredOnMartins(false);
                 $output->writeln($response->Status.' - '.$response->Mensagem);
                 $logger->info($response->Status.' - '.$response->Mensagem);
 
                 $em->flush();
                 return;
-            } else {
-                $retailer->setRegisteredOnMartins(true);
             }
         } else {
             $output->writeln('Este Retailer já está cadastrado na API Martins!');
@@ -68,7 +78,7 @@ class ExportClientsCommand extends ContainerAwareCommand
 
     protected function registerOnMartins(Retailer $retailer, $chave)
     {
-        $soap = new \SoapClient($this->getParameter('url_martins').'?WSDL');
+        $soap = new \SoapClient(($this->getContainer()->getParameter('url_martins').'?WSDL'));
 
         $params = [
             'chpac' => $chave,
@@ -77,7 +87,7 @@ class ExportClientsCommand extends ContainerAwareCommand
             'nome' => substr($retailer->getCompanyName(), 0, 35),
             'cep' => $retailer->getCep(),
             'logradouro' => $retailer->getAddress(),
-            'numero' => $retailer->getNumber(), 
+            'numero' => $retailer->getNumber(),
             'complemento' => $retailer->getComplement()??'',
             'bairro' => $retailer->getDistrict(),
             'cidade' => $retailer->getCity(),
