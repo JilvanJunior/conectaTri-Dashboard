@@ -229,7 +229,7 @@ class ClientsController extends Controller
             //});
         }
 
-        $response = $this->json(['newState' => $newState, 'message' => $message]);
+        $response = $this->json(['newState' => $newState && empty($message), 'message' => $message]);
         $response->headers->set('Connection', 'close'); //Em teoria força a conexão a fechar assim que a resposta é enviada
 
         return $response;
