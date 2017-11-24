@@ -167,6 +167,15 @@ class OrderProduct
     }
 
     /**
+     * Get total value
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->getPrice() * $this->getQuantity();
+    }
+
+    /**
      * @return DateTime
      */
     public function getCreatedAt()

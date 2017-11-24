@@ -253,7 +253,11 @@ class MartinsOrder
      */
     public function getTotal()
     {
-        return $this->total;
+        $total = 0.0;
+        foreach($this->orderProducts as $product)
+            $total += $product->getTotal();
+
+        return $total;
     }
     
     /**

@@ -2164,7 +2164,7 @@ class ApiController extends FOSRestController {
 
         $orders = array();
         /** @var MartinsOrder $martinsOrder */
-        foreach ($martinsOrders as $k => $martinsOrder){
+        foreach ($martinsOrders as $k => $martinsOrder) {
             $orders[$k]['code'] = $martinsOrder->getCode();
             $orders[$k]['venda'] = $martinsOrder->getSaleDate();
             $orders[$k]['pagamento'] = $martinsOrder->getPaymentDate();
@@ -2223,7 +2223,7 @@ class ApiController extends FOSRestController {
                 'quantity' => $productData->quantity,
                 'price' => $productData->price
             ];
-            $total += $productData->price;
+            $total += $productData->price * $productsData->quantity;
         }
 
         $products = $d->getRepository('AppBundle:Product')->findBy(['id' => $productsIds]);
