@@ -45,6 +45,7 @@ class ProductsController extends Controller
             ->distinct()
             ->where('p.name LIKE :name')
             ->setParameter('name', "$term%")
+            ->setMaxResults(100)
             ->getQuery()->getResult();
 
         $productsNames = [];
