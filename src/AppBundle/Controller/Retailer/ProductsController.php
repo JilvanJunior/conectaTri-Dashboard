@@ -44,7 +44,7 @@ class ProductsController extends Controller
             ->select('p.name, p.ean, p.brand, p.type, p.unit, p.quantity, p.fullDescription')
             ->distinct()
             ->where('p.name LIKE :name')
-            ->setParameter('name', "$term%")
+            ->setParameter('name', "%$term%")
             ->setMaxResults(100)
             ->getQuery()->getResult();
 

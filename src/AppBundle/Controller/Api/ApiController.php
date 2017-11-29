@@ -2223,7 +2223,7 @@ class ApiController extends FOSRestController {
                 'quantity' => $productData->quantity,
                 'price' => $productData->price
             ];
-            $total += $productData->price * $productsData->quantity;
+            $total += $productData->price;
         }
 
         $products = $d->getRepository('AppBundle:Product')->findBy(['id' => $productsIds]);
@@ -2298,7 +2298,7 @@ class ApiController extends FOSRestController {
                     ->setOrder($martinsOrder)
                     ->setProduct($productsById[$productData->id])
                     ->setQuantity($productData->quantity)
-                    ->setPrice($productData->price);
+                    ->setPrice($productData->price/$productData->quantity);
                 $em->persist($orderProduct);
                 $martinsOrder->addOrderProduct($orderProduct);
             }
