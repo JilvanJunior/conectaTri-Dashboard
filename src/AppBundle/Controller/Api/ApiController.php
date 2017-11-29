@@ -1478,13 +1478,6 @@ class ApiController extends FOSRestController {
                     $em->flush();
                     $newQuoteProduct->addQuoteSupplier($newQuoteSupplier);
                     $em->flush();
-
-                    $newQuoteSupplierStatus = new QuoteSupplierStatus();
-                    $newQuoteSupplierStatus->setStatus(0)
-                        ->setRepresentative($dbSupplier)
-                        ->setQuote($dbQuote);
-                    $em->persist($newQuoteSupplierStatus);
-                    $em->flush();
                 }
             }
             $dbQuote->addQuoteProduct($newQuoteProduct);
