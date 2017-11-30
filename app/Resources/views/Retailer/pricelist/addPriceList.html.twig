@@ -1299,8 +1299,8 @@
             let endDate = $("#expiresAtTimePicker").data("datetimepicker").getDate();
             endDate = dateToATOM(endDate);
 
-            var productsId = [];
-            var suppliersId = [];
+            let productsId = [];
+            let suppliersId = [];
 
             $.each($('#supplier-datatable').find('tr input:checked'), function(i, v){
                 if($(this).val() === 'on')
@@ -1328,7 +1328,21 @@
                     winners: []
                 };
                 let quoteSuppliers = $this.data('quotesuppliers');
-                quoteProduct.quote_suppliers = suppliersId;
+                let cloneSuppsIds = [];
+                let supplierMap = [];
+
+                if(quoteSuppliers != "") {
+                    $.each(quoteSuppliers, function(index, value) {
+                        supplierMap[value.representative.supplier.id] = value.id;
+                    });
+
+                    $.each(suppliersId, function(index, value) {
+                        cloneSuppsIds[index] = Object.assign({}, value);
+                        cloneSuppsIds[index]["id"] = supplierMap[value.id];
+                    });
+                }
+
+                quoteProduct.quote_suppliers = cloneSuppsIds;
 
                 productsId.push(quoteProduct);
             });

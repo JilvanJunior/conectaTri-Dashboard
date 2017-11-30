@@ -1434,19 +1434,19 @@ class ApiController extends FOSRestController {
                 /** @var \stdClass $supplier */
                 foreach ($rcvProduct->quote_suppliers as $supplier) {
                     //create new quoteSupplier
-                    /** @var Representative $dbSupplier */
-                    $dbSupplier = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
+                    /** @var Representative $dbRepresentative */
+                    $dbRepresentative = $d->getRepository("AppBundle:Representative")->find($supplier->representative->id);
                     if ($isFirst) {
                         $supplierStatus = new QuoteSupplierStatus();
-                        $supplierStatus->setQuote($dbQuote)->setRepresentative($dbSupplier);
+                        $supplierStatus->setQuote($dbQuote)->setRepresentative($dbRepresentative);
                         $em->persist($supplierStatus);
                     }
                     $quoteSupplier = new QuoteSupplier();
-                    $quoteSupplier->setRepresentative($dbSupplier)
+                    $quoteSupplier->setRepresentative($dbRepresentative)
                         ->setQuantity($supplier->quantity)
                         ->setPrice(str_replace(",", ".", $supplier->price));
                     $quoteSupplier->setQuoteProduct($quoteProduct);
-                    $em->persist($quoteSupplier);
+                    $em->persist($quoteSupplie);
                     $em->flush();
                     $quoteProduct->addQuoteSupplier($quoteSupplier);
                 }
