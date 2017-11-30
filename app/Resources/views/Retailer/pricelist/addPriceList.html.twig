@@ -1340,9 +1340,11 @@
                         cloneSuppsIds[index] = Object.assign({}, value);
                         cloneSuppsIds[index]["id"] = supplierMap[value.id];
                     });
-                }
 
-                quoteProduct.quote_suppliers = cloneSuppsIds;
+                    quoteProduct.quote_suppliers = cloneSuppsIds;
+                } else {
+                    quoteProduct.quote_suppliers = suppliersId;
+                }
 
                 productsId.push(quoteProduct);
             });
