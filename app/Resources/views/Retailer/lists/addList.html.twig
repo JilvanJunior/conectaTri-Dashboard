@@ -163,8 +163,8 @@
                                                                                                     <option value="" disabled>
                                                                                                         Selecione um Tipo
                                                                                                     </option>
-                                                                                                    {% for type in types %}
-                                                                                                        <option value="{{ loop.index0 }}"
+                                                                                                    {% for key, type in types %}
+                                                                                                        <option value="{{ key }}"
                                                                                                                 {{ (list is defined and list.type == loop.index0)?'selected="true"':'' }}>
                                                                                                             {{ type }}
                                                                                                         </option>
