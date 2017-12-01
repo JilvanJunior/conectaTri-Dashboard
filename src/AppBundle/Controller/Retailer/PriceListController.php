@@ -336,7 +336,7 @@ class PriceListController extends Controller
             return $this->redirectToRoute('access_denied');
         $data = [];
 
-        $quoteProducts = $quote->getQuoteProducts();
+        $quoteProducts = $em->getRepository('AppBundle:QuoteProduct')->findBy(['quote' => $quote], ['id' => 'ASC']);
         foreach($quoteProducts as $quoteProduct) {
             /** @var QuoteSupplier $quoteSupplier */
             foreach($quoteProduct->getQuoteSuppliers() as $quoteSupplier) {
