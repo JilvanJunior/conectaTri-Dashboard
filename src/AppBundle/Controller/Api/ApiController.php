@@ -1691,6 +1691,7 @@ class ApiController extends FOSRestController {
             ->setState($dbState)
             ->setCep($retailer->cep)
             ->setPhone($retailer->phone)
+            ->setVerified(true)
             ->setCellphone($retailer->cellphone);
         if(property_exists($retailer, 'complement'))
             $dbRetailer->setComplement($retailer->complement);
@@ -1699,7 +1700,7 @@ class ApiController extends FOSRestController {
             ->setRoles("ROLE_USER");
         $em->persist($dbRetailer);
         $em->flush();
-        $data = [
+        /*$data = [
             "h" => $dbRetailer->getId(),
             "j" => (new \DateTime())->getTimestamp(),
             "p" => $dbRetailer->getEmail()
@@ -1723,8 +1724,8 @@ class ApiController extends FOSRestController {
 
         if ($result > 0) {
             return View::create(new ApiError("Cadastro efetuado com sucesso. Foi enviado um link de ativação no e-mail cadastrado."), Response::HTTP_CREATED);
-        }
-        return View::create(new ApiError("Usuário cadastrado com sucesso, porém houve um problema ao tentar enviar o e-mail de verificação."), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }*/
+        return View::create(new ApiError("Usuário cadastrado com sucesso."), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
