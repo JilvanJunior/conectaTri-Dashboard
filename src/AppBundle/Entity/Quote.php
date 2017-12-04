@@ -556,6 +556,7 @@ class Quote
         $products = [];
         $quantitiesByProduct = [];
 
+        return;
         /** @var QuoteProduct $quoteProduct */
         foreach($this->quoteProducts as $quoteProduct) {
             $product = $quoteProduct->getProduct();
