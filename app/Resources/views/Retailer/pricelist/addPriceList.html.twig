@@ -1338,7 +1338,8 @@
 
                     $.each(suppliersId, function(index, value) {
                         cloneSuppsIds[index] = Object.assign({}, value);
-                        cloneSuppsIds[index]["id"] = supplierMap[value.id];
+                        if(supplierMap[value.id] != undefined)
+                            cloneSuppsIds[index]["id"] = supplierMap[value.id];
                     });
 
                     quoteProduct.quote_suppliers = cloneSuppsIds;
