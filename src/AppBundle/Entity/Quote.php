@@ -543,7 +543,7 @@ class Quote
 
             if($supplier->isRca()) {
                 $this->makeRCAQuote($chave, $url, $supplier);
-                $supplierStatus->setStatus(2);
+                $suppliersStatus->setStatus(2);
             }
         }
     }
