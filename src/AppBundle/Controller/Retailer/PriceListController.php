@@ -432,12 +432,17 @@ class PriceListController extends Controller
                 break;
         }
 
+        if($curr == $id) {
+            $curr = 0;
+            $prevPrev = $prev;
+        }
+
         if($quote->getType() == 2)
             return $this->redirectToRoute('editar_cotacao_produto', ['id' => $id]);
 
         return $this->render('Retailer/pricelist/showQuoteProduct.html.twig', [
             'prev' => is_null($prevPrev)?0:$prevPrev,
-            'next' => ($curr == $id)?0:$curr,
+            'next' => $curr,
             'quoteProduct' => $thisQuoteProduct,
             'quote' => $quote,
             'username' => $user->getFantasyName(),
@@ -475,6 +480,11 @@ class PriceListController extends Controller
                 break;
         }
 
+        if($curr == $id) {
+            $curr = 0;
+            $prevPrev = $prev;
+        }
+
         if($quote->getType() == 1)
             return $this->redirectToRoute('acompanhar_cotacao_produto', ['id' => $id]);
 
@@ -485,7 +495,7 @@ class PriceListController extends Controller
 
         return $this->render('Retailer/pricelist/editQuoteProduct.html.twig', [
             'prev' => is_null($prevPrev)?0:$prevPrev,
-            'next' => ($curr == $id)?0:$curr,
+            'next' => $curr,
             'quoteProduct' => $thisQuoteProduct,
             'quote' => $quote,
             'username' => $user->getFantasyName(),

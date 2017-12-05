@@ -541,8 +541,10 @@ class Quote
             if(is_null($supplier))
                 continue;
 
-            if($supplier->isRca())
+            if($supplier->isRca()) {
                 $this->makeRCAQuote($chave, $url, $supplier);
+                $supplierStatus->setStatus(2);
+            }
         }
     }
 
@@ -601,14 +603,6 @@ class Quote
 
                 break;
             }
-        }
-
-        foreach($this->getSuppliersStatus() as $supplierStatus) {
-            if($supplier->getId() != $supplierStatus->getRepresentative()->getSupplier()->getId())
-                continue;
-
-            $supplierStatus->setStatus(2);
-            break;
         }
 
         $this->updateWinners();
