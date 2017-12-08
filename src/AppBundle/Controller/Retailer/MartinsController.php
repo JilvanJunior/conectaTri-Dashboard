@@ -25,7 +25,6 @@ class MartinsController extends Controller
         if(!$user->isRCAVirtual())
             return $this->redirectToRoute('dashboard');
 
-        $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
 
         $boletos = $mc->getMartinsBoletos();
@@ -50,7 +49,39 @@ class MartinsController extends Controller
             return $this->redirectToRoute('dashboard');
 
         $em = $this->getDoctrine()->getManager();
-        $pedidos = $em->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user]);
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
+
+        $martinsOrders = $em->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user, 'deleted' => false]);
+        foreach ($martinsOrders as $k => $martinsOrder){
+            if($martinsOrder->getStatus() == 4)
+                continue;
+
+            /** @var \stdClass $order */
+            $order = $mc->trackMartinsPedido($martinsOrder->getCode());
+            if(!property_exists($order, 'trackingData'))
+                continue;
+
+            $trackingData = $order->trackingData;
+
+            if(property_exists($trackingData, 'DataVenda'))
+                $martinsOrder->setSaleDate($trackingData->DataVenda);
+            if(property_exists($trackingData, 'DataPagamento'))
+                $martinsOrder->setPaymentDate($trackingData->DataPagamento);
+            if(property_exists($trackingData, 'DataFaturamento'))
+                $martinsOrder->setBillingDate($trackingData->DataFaturamento);
+            if(property_exists($trackingData, 'DataEntrega'))
+                $martinsOrder->setDeliveryDate($trackingData->DataEntrega);
+            if(property_exists($trackingData, 'DataConclusao'))
+                $martinsOrder->setCompletionDate($trackingData->DataConclusao);
+            if(property_exists($order, 'PedidoStatus'))
+                $martinsOrder->setStatus($order->PedidoStatus);
+            if(property_exists($order, 'Mensagem') && $order->Mensagem == "Pedido Cancelado")
+                $martinsOrder->setDeleted(true);
+
+            $martinsOrder->setUpdatedAt(new \DateTime());
+
+        }
+        $pedidos = $em->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user, 'deleted' => false]);
 
         $types = [
             '1' => "Remota",

@@ -2374,6 +2374,8 @@ class ApiController extends FOSRestController {
                 $martinsOrder->setCompletionDate($trackingData->DataConclusao);
             if(property_exists($order, 'PedidoStatus'))
                 $martinsOrder->setStatus($order->PedidoStatus);
+            if(property_exists($order, 'Mensagem') && $order->Mensagem == "Pedido Cancelado")
+                $martinsOrder->setDeleted(true);
 
             $martinsOrder->setUpdatedAt(new \DateTime());
 
