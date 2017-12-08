@@ -687,13 +687,16 @@ class PriceListController extends Controller
 
         $quotesSupplier = array();
 
+        $total = 0.0;
         /** @var QuoteProduct $quoteProduct */
         foreach($quoteProducts as $quoteProduct) {
             /** @var QuoteSupplier $quoteSupplier */
             foreach($quoteProduct->calculateWinners() as $quoteSupplier) {
 
-                if($representative->getId() == $quoteSupplier->getRepresentative()->getId())
+                if($representative->getId() == $quoteSupplier->getRepresentative()->getId()) {
                     $quotesSupplier[] = $quoteSupplier;
+                    $total += $quotesSupplier->getPrice();
+                }
             }
         }
 
@@ -710,7 +713,8 @@ class PriceListController extends Controller
             'representative' => $representative,
             'supplier' => $supplier,
             'quoteProducts' => $quoteProducts,
-            'quotesSupplier' => $quotesSupplier
+            'quotesSupplier' => $quotesSupplier,
+            'total' => $total
         ));
 
         $fileName = str_replace(" ", "_", $quote->getName())
