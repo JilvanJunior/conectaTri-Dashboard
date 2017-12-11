@@ -79,8 +79,9 @@ class MartinsController extends Controller
                 $martinsOrder->setDeleted(true);
 
             $martinsOrder->setUpdatedAt(new \DateTime());
-
         }
+        $em->flush();
+
         $pedidos = $em->getRepository('AppBundle:MartinsOrder')->findBy(['retailer' => $user, 'deleted' => false]);
 
         $types = [

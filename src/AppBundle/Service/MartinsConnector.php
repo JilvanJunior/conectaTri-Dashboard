@@ -190,8 +190,10 @@ class MartinsConnector
         $params['pedidoId'] = $orderId;
 
         $infos = $this->soap->trankingPedido($params)->trankingPedidoResult;
+        $mensagem = $infos->Mensagem;
         if(property_exists($infos, 'trackingData'))
             $infos = $infos->trackingData;
+        $infos->Mensagem = $mensagem;
 
         return $infos;
     }
