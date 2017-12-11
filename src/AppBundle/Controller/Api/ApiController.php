@@ -58,7 +58,7 @@ class ApiController extends FOSRestController {
             return View::create(new ApiError("Usuário ou senha inválidos"), Response::HTTP_BAD_REQUEST);
         }
 
-        if (!$dbUser->isVerified()) {
+        /*if (!$dbUser->isVerified()) {
             if (\Swift_Validate::email($dbUser->getEmail())) {
                 $data = [
                     "h" => $dbUser->getId(),
@@ -95,7 +95,7 @@ class ApiController extends FOSRestController {
             } else {
                 return View::create(new ApiError("O e-mail cadastrado parece ser inválido. Tente se recadastrar utilizando outro e-mail."), Response::HTTP_FAILED_DEPENDENCY);
             }
-        }
+        }*/
         $session = new ApiSession();
         $uuid = Uuid::uuid5(Uuid::uuid1(), $dbUser->getCnpj());
         $session->setToken($uuid->toString());
