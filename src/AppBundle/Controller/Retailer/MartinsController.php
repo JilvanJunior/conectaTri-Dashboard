@@ -25,6 +25,7 @@ class MartinsController extends Controller
         if(!$user->isRCAVirtual())
             return $this->redirectToRoute('dashboard');
 
+        $mc = new MartinsConnector($this->getParameter('chave_martins'), $this->getParameter('url_martins'), $user);
         $acesso = $mc->login();
 
         $boletos = $mc->getMartinsBoletos();
