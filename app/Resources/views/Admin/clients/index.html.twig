@@ -126,6 +126,7 @@
                                                 <table class="table table-striped table-bordered table-hover">
                                                     <thead>
                                                     <tr>
+                                                        <th>RCA Virtual</th>
                                                         <th>CNPJ</th>
                                                         <th>Nome do Cliente</th>
                                                         <th>Telefone</th>
@@ -133,12 +134,12 @@
                                                         <th>Listas</th>
                                                         <th>Cotações Realizadas</th>
                                                         <th>Pedidos Enviados</th>
-                                                        <th>RCA Virtual</th>
                                                         <th></th>
                                                     </tr>
                                                     </thead>
                                                     <tfoot>
                                                     <tr>
+                                                        <th>RCA Virtual</th>
                                                         <th>CNPJ</th>
                                                         <th>Nome do Cliente</th>
                                                         <th>Telefone</th>
@@ -146,7 +147,6 @@
                                                         <th>Listas</th>
                                                         <th>Cotações Realizadas</th>
                                                         <th>Pedidos Enviados</th>
-                                                        <th>RCA Virtual</th>
                                                         <th></th>
 
                                                     </tr>
@@ -154,6 +154,10 @@
                                                     <tbody>
                                                     {% for client in clients %}
                                                         <tr>
+                                                            <td>
+                                                                <input type='checkbox' class='makeSwitch' data-clientid='{{ client.0.id }}'
+                                                                    autocomplete='off' {{ client.0.isRCAVirtual?'checked':'' }}/>
+                                                            </td>
                                                             <td>{{ client.0.cnpj }}</td>
                                                             <td>{{ client.0.companyName }}</td>
                                                             <td>{{ client.0.phone }}</td>
@@ -161,10 +165,6 @@
                                                             <td>{{ client.0.listings|length }}</td>
                                                             <td>{{ client.0.quotes|length }}</td>
                                                             <td>{{ client.orders }}</td>
-                                                            <td>
-                                                                <input type='checkbox' class='makeSwitch' data-clientid='{{ client.0.id }}'
-                                                                    autocomplete='off' {{ client.0.isRCAVirtual?'checked':'' }}/>
-                                                            </td>
                                                             <td>
                                                                 <a href="{{ path('admin_pricelist_client', {'id': client.0.id}) }}" class="btn btn-outline btn-circle btn-sm grey-salsa">
                                                                     <i class="fa fa-line-chart"> Cotações</i>
