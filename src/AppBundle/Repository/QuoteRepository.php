@@ -81,9 +81,11 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
                   FROM AppBundle:Quote q
                   WHERE q.id = :id
                   AND q.deleted = 0
-                  AND q.retailer IN (
-                    SELECT IDENTITY(r.retailer)
-                    FROM AppBundle:Representative r
+                  AND q.id IN (
+                    SELECT IDENTITY(qss.quote)
+                    FROM AppBundle:QuoteSupplierStatus qss
+                    INNER JOIN AppBundle:representative r
+                     WITH qss.representative = r
                     WHERE r.email = :email
                     AND r.deleted = 0
                   )'
