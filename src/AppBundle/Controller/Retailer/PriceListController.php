@@ -373,7 +373,7 @@ class PriceListController extends Controller
                         'supplierIsRCA' => $supplier->isRCA(),
                         'moreThanMinimum' => $moreThanMinimum,
                         'countWins' => 0,
-                        'total' => 0,
+                        'total' => $sum,
                         'filledIn' => $filledIn,
                         'observation' => $observation
                     );
@@ -389,7 +389,6 @@ class PriceListController extends Controller
                 $idSupplier = $supplier->getId();
 
                 $data[$idSupplier]['countWins']++;
-                $data[$idSupplier]['total'] += $quoteSupplier->getPrice() * $quoteSupplier->getQuantity();
             }
         }
 
