@@ -695,7 +695,7 @@ class PriceListController extends Controller
 
                 if($representative->getId() == $quoteSupplier->getRepresentative()->getId()) {
                     $quotesSupplier[] = $quoteSupplier;
-                    $total += $quoteSupplier->getPrice();
+                    $total += $quoteSupplier->getPrice() * $quoteSupplier->getQuantity();
                 }
             }
         }
