@@ -348,7 +348,6 @@ class PriceListController extends Controller
                 $idSupplier = $supplier->getId();
 
                 if(!isset($data[$idSupplier])) {
-                    $sum = $em->getRepository('AppBundle:QuoteSupplier')->getQuoteSupplierSum($quote, $supplier);
                     $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
                         ->findOneBy(['quote' => $quote, 'representative' => $representative]);
 
@@ -360,20 +359,14 @@ class PriceListController extends Controller
                     $statusQuote = [0 => 'Pendente', 1 => 'Em Andamento', 2 => 'Encerrado'];
                     $filledIn = $statusQuote[$quoteSupplierStatus->getStatus()];
 
-                    if($quoteSupplier->isFilledIn() || $supplier->isRca()) {
-                        $moreThanMinimum = ($supplier->getMinimumValue() <= $sum)?'Sim':'Não';
-                    } else {
-                        $moreThanMinimum = '-';
-                    }
-
                     $status = array(
                         'representativeId' => $representative->getId(),
                         'representativeName' => $representative->getName(),
                         'supplierName' => $supplier->getName(),
                         'supplierIsRCA' => $supplier->isRCA(),
-                        'moreThanMinimum' => $moreThanMinimum,
+                        'moreThanMinimum' => '-',
                         'countWins' => 0,
-                        'total' => $sum,
+                        'total' => 0,
                         'filledIn' => $filledIn,
                         'observation' => $observation
                     );
@@ -389,6 +382,11 @@ class PriceListController extends Controller
                 $idSupplier = $supplier->getId();
 
                 $data[$idSupplier]['countWins']++;
+                $data[$idSupplier]['total'] += $quoteSupplier->getPrice() * $quoteSupplier->getQuantity();
+
+                if($quoteSupplier->isFilledIn() || $supplier->isRca()) {
+                    $moreThanMinimum = ($supplier->getMinimumValue() <= $data[$idSupplier]['total'])?'Sim':'Não';
+                }
             }
         }
 
