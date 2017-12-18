@@ -1142,6 +1142,9 @@ class ApiController extends FOSRestController {
 
         /** @var Quote $dbQuote */
         $dbQuote = $d->getRepository("AppBundle:Quote")->findOneBy(["id" => $id, "retailer" => $dbToken->getRetailer()]);
+        if(is_null($dbQuote)) {
+            return View::create(new ApiError("Cotação não encontrada"), Response::HTTP_NOT_FOUND);
+        }
 
         //foreach to remove all deleted quoteProducts and deleted quoteSuppliers
         /** @var QuoteProduct $quoteProduct */
