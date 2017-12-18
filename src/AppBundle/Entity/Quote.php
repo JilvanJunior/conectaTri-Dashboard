@@ -532,6 +532,9 @@ class Quote
         if(!$this->retailer->isRCAVirtual())
             return;
 
+        if($this->isClosed() || $this->expiresAt < (new \DateTime))
+            return;
+
         foreach($this->suppliersStatus as $suppliersStatus) {
             /** @var Representative $representative */
             $representative = $suppliersStatus->getRepresentative();

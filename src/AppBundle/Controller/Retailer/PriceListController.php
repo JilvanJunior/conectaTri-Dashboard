@@ -385,7 +385,7 @@ class PriceListController extends Controller
                 $data[$idSupplier]['total'] += $quoteSupplier->getPrice() * $quoteSupplier->getQuantity();
 
                 if($quoteSupplier->isFilledIn() || $supplier->isRca()) {
-                    $moreThanMinimum = ($supplier->getMinimumValue() <= $data[$idSupplier]['total'])?'Sim':'Não';
+                    $data[$idSupplier]['moreThanMinimum'] = ($supplier->getMinimumValue() <= $data[$idSupplier]['total'])?'Sim':'Não';
                 }
             }
         }
