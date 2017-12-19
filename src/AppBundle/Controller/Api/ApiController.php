@@ -2451,8 +2451,8 @@ class ApiController extends FOSRestController {
             $martinsOrder->setDeliveryDate($trackingData->DataEntrega);
         if(property_exists($trackingData, 'DataConclusao'))
             $martinsOrder->setCompletionDate($trackingData->DataConclusao);
-        if(property_exists($order, 'PedidoStatus'))
-            $martinsOrder->setStatus($order->PedidoStatus);
+        if(property_exists($order, 'Mensagem'))
+            $martinsOrder->setStatus($order->Mensagem);
 
         $martinsOrder->setUpdatedAt(new \DateTime());
 
@@ -2468,7 +2468,7 @@ class ApiController extends FOSRestController {
         $retOrder['conclusao'] = $order->trackingData->DataConclusao;
         $retOrder['due'] = $martinsOrder->getPaymentDue();
         $retOrder['value'] = $martinsOrder->getTotal();
-        $retOrder['status'] = $order->PedidoStatus;
+        $retOrder['status'] = $martinsOrder->getStatus();
         $retOrder['order'] = $martinsOrder;
 
         return View::create($retOrder, Response::HTTP_OK);
