@@ -76,6 +76,8 @@ class MartinsController extends Controller
                 $martinsOrder->setCompletionDate($trackingData->DataConclusao);
             if(property_exists($order, 'PedidoStatus'))
                 $martinsOrder->setStatus($order->PedidoStatus);
+            if(property_exists($order, 'Mensagem'))
+                $martinsOrder->setStatus($order->Mensagem);
             if(property_exists($order, 'Mensagem') && $order->Mensagem == "Pedido Cancelado")
                 $martinsOrder->setDeleted(true);
 
@@ -134,8 +136,8 @@ class MartinsController extends Controller
                     $pedido->setDeliveryDate($trackingData->DataEntrega);
                 if(property_exists($trackingData, 'DataConclusao'))
                     $pedido->setCompletionDate($trackingData->DataConclusao);
-                if(property_exists($order, 'PedidoStatus'))
-                    $pedido->setStatus($order->PedidoStatus);
+                if(property_exists($order, 'Mensagem'))
+                    $pedido->setStatus($order->Mensagem);
 
                 $pedido->setUpdatedAt(new \DateTime());
             }
@@ -143,17 +145,8 @@ class MartinsController extends Controller
 
         $em->flush();
 
-        $status = [
-            '0' => 'Pedido',
-            '1' => 'Pagamento',
-            '2' => 'Armazém',
-            '3' => 'Enviado',
-            '4' => 'Entregue',
-        ];
-
         return $this->render('Retailer/martins/show.html.twig', [
             'pedido' => $pedido,
-            'status' => $status,
             'username' => $user->getFantasyName(),
             'userIsRCA' => $user->isRCAVirtual(),
         ]);
