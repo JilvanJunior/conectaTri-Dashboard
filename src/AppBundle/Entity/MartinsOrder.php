@@ -99,7 +99,7 @@ class MartinsOrder
     /**
      * @var int
      *
-     * @ORM\Column(name="status", type="integer")
+     * @ORM\Column(name="status", type="string")
      */
     private $status;
 
@@ -509,7 +509,7 @@ class MartinsOrder
     /**
      * Set status
      *
-     * @param integer $status
+     * @param string $status
      *
      * @return MartinsOrder
      */
@@ -523,7 +523,7 @@ class MartinsOrder
     /**
      * Get status
      *
-     * @return int
+     * @return string
      */
     public function getStatus()
     {

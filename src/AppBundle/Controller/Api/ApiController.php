@@ -58,6 +58,7 @@ class ApiController extends FOSRestController {
             return View::create(new ApiError("Usuário ou senha inválidos"), Response::HTTP_BAD_REQUEST);
         }
 
+        // Seção de código que disparava emails de confirmação. Removido a pedido do cliente
         /*if (!$dbUser->isVerified()) {
             if (\Swift_Validate::email($dbUser->getEmail())) {
                 $data = [
@@ -2277,7 +2278,7 @@ class ApiController extends FOSRestController {
                 ->setCode($order->Pedido->Codigo)
                 ->setPaymentDue($productsData->payment_due)
                 ->setTotal($total)
-                ->setStatus($order->Status)
+                ->setStatus($order->Mensagem)
                 ->setUpdatedAt(new \DateTime())
                 ->setRetailer($user);
 
@@ -2375,8 +2376,8 @@ class ApiController extends FOSRestController {
                 $martinsOrder->setDeliveryDate($trackingData->DataEntrega);
             if(property_exists($trackingData, 'DataConclusao'))
                 $martinsOrder->setCompletionDate($trackingData->DataConclusao);
-            if(property_exists($order, 'PedidoStatus'))
-                $martinsOrder->setStatus($order->PedidoStatus);
+            if(property_exists($order, 'Mensagem'))
+                $martinsOrder->setStatus($order->Mensagem);
             if(property_exists($order, 'Mensagem') && $order->Mensagem == "Pedido Cancelado")
                 $martinsOrder->setDeleted(true);
 
