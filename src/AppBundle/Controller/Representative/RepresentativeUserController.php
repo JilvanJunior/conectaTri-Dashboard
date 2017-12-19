@@ -71,12 +71,9 @@ class RepresentativeUserController extends Controller
         $representative = $em->getRepository('AppBundle:Representative')
             ->getRepresentativeByQuote($user->getEmail(), $id)[0];
 
-        $isCompleted = false;
+        $isCompleted = $quote->isClosed();
         $quoteSupplierStatus = $em->getRepository('AppBundle:QuoteSupplierStatus')
             ->findOneBy(['quote' => $quote, 'representative' => $representative]);
-
-        if($quoteSupplierStatus != null && $quoteSupplierStatus->getStatus() == 2)
-            $isCompleted = true;
 
         return $this->render('Representative/quote.html.twig', array(
             'quote' => $quote,

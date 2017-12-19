@@ -115,9 +115,9 @@ class SupplierRepository extends EntityRepository
                   FROM AppBundle:Supplier s
                   WHERE s.deleted = 0 
                   AND s.cnpj = (
-                    SELECT s4.cnpj
-                    FROM AppBundle:Supplier s4
-                    WHERE s4.id = :id
+                    SELECT s5.cnpj
+                    FROM AppBundle:Supplier s5
+                    WHERE s5.id = :id
                   )
                   GROUP BY s.cnpj
                   ORDER BY s.createdAt ASC'
