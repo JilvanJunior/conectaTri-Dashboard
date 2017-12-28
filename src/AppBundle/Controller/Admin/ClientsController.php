@@ -228,8 +228,12 @@ class ClientsController extends Controller
                 //exec($command);
             //});
         }
+        
+        $newState = $newState && empty($message);
+        $client->setRCAVirtual($newState);
+        $em->flush();
 
-        $response = $this->json(['newState' => $newState && empty($message), 'message' => $message]);
+        $response = $this->json(['newState' => $newState, 'message' => $message]);
         $response->headers->set('Connection', 'close'); //Em teoria força a conexão a fechar assim que a resposta é enviada
 
         return $response;

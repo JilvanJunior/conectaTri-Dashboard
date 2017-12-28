@@ -89,7 +89,7 @@ class ExportClientsCommand extends ContainerAwareCommand
             'logradouro' => $retailer->getAddress(),
             'numero' => $retailer->getNumber(),
             'complemento' => $retailer->getComplement()??'',
-            'bairro' => $retailer->getDistrict(),
+            'bairro' => substr($retailer->getDistrict(), 0, 15),
             'cidade' => $retailer->getCity(),
             'estado' => $retailer->getState()->getUf(),
             'telefone' => $retailer->getPhone(),
