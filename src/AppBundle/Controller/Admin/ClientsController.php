@@ -229,7 +229,13 @@ class ClientsController extends Controller
             //});
         }
         
-        $newState = $newState && empty($message);
+        $confirmation = false;
+        if(strpos($message, "já faz parte da base"))
+            $confirmation = true;
+        if(strpos($message, "sucesso"))
+            $confirmation = true;
+
+        $newState = $newState && $confirmation;
         $client->setRCAVirtual($newState);
         $em->flush();
 

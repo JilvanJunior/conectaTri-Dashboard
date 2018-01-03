@@ -33,7 +33,7 @@ class ExportClientsCommand extends ContainerAwareCommand
 
         $logger = $this->getContainer()->get('logger');
 
-        $output->writeln('Exportando '.$retailer->getCompanyName());
+        //$output->writeln('Exportando '.$retailer->getCompanyName());
         $logger->info('Exportando '.$retailer->getCompanyName());
 
         if(!$retailer->isRCAVirtual()) {
@@ -43,7 +43,7 @@ class ExportClientsCommand extends ContainerAwareCommand
         }
 
         if(!$retailer->isRegisteredOnMartins()) {
-            $output->writeln('Conectando com a API Martins');
+            //$output->writeln('Conectando com a API Martins');
             $logger->info('Conectando com a API Martins');
             $response = $this->registerOnMartins($retailer, $this->getContainer()->getParameter('chave_martins'));
             $mc = new MartinsConnector($this->getContainer()->getParameter('chave_martins'),
@@ -58,7 +58,11 @@ class ExportClientsCommand extends ContainerAwareCommand
                     $logger->info($acesso->Mensagem);
                 }
             } else {
-                $retailer->setRegisteredOnMartins(false);
+                if(strpos($response->Mensagem, "já faz parte da base") === false)
+                    $retailer->setRegisteredOnMartins(false);
+                else
+                    $retailer->setRegisteredOnMartins(true);
+                
                 $output->writeln($response->Status.' - '.$response->Mensagem);
                 $logger->info($response->Status.' - '.$response->Mensagem);
 
@@ -66,8 +70,8 @@ class ExportClientsCommand extends ContainerAwareCommand
                 return;
             }
         } else {
-            $output->writeln('Este Retailer já está cadastrado na API Martins!');
-            $logger->info('Este Retailer já está cadastrado na API Martins!');
+            $output->writeln('Este Retailer já faz parte da base Martins!');
+            $logger->info('Este Retailer já faz parte da base Martins!');
             return;
         }
 
