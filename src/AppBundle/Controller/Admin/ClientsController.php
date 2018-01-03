@@ -230,6 +230,8 @@ class ClientsController extends Controller
         }
         
         $confirmation = false;
+        if(empty($message))
+            $confirmation = true;
         if(strpos($message, "já faz parte da base"))
             $confirmation = true;
         if(strpos($message, "sucesso"))
