@@ -230,8 +230,20 @@ class MartinsController extends Controller
             ];
         }
 
-        if($total < $usableQuoteSupplier->getRepresentative()->getSupplier()->getMinimumValue())
+        if(is_null($usableQuoteSupplier)) {
+            $this->addFlash(
+                'alert',
+                'Martins não é vencedor de nenhum produto!'
+            );
             return $this->redirectToRoute('acompanhar_cotacao', ['id' => $idQuote]);
+        }
+        if($total < $usableQuoteSupplier->getRepresentative()->getSupplier()->getMinimumValue()) {
+            $this->addFlash(
+                'alert',
+                'Valor mínimo não respeitado!'
+            );
+            return $this->redirectToRoute('acompanhar_cotacao', ['id' => $idQuote]);
+        }
 
         return $this->render('Retailer/martins/addPedido.html.twig', [
             'mercadorias' => $mercadoriasSaida,
