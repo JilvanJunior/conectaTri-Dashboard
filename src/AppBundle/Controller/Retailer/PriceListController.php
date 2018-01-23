@@ -331,11 +331,11 @@ class PriceListController extends Controller
 
         $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
         if(is_null($token)) {
-            $session = new ApiSession();
+            $token = new ApiSession();
             $uuid = Uuid::uuid5(Uuid::uuid1(), $user->getCnpj());
-            $session->setToken($uuid->toString());
-            $session->setRetailer($user);
-            $em->persist($session);
+            $token->setToken($uuid->toString());
+            $token->setRetailer($user);
+            $em->persist($token);
             $em->flush();
         }
         /** @var Quote $quote */
