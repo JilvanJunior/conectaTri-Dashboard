@@ -332,7 +332,7 @@ class PriceListController extends Controller
         $token = $em->getRepository('AppBundle:ApiSession')->findOneBy(['retailer' => $user->getId()]);
         if(is_null($token)) {
             /** @var Retailer $dbUser */
-            $dbUser = $d->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $this->get('security.token_storage')->getToken()->getUser()]);
+            $dbUser = $em->getRepository("AppBundle:Retailer")->findOneBy(["cnpj" => $this->get('security.token_storage')->getToken()->getUser()]);
             $session = new ApiSession();
             $uuid = Uuid::uuid5(Uuid::uuid1(), $dbUser->getCnpj());
             $session->setToken($uuid->toString());
