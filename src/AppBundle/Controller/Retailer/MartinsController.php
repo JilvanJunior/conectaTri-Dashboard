@@ -176,8 +176,11 @@ class MartinsController extends Controller
             $products[$idProduct] = $quoteProduct->getProduct();
 
             $usableQuoteSupplier = null;
+            $winners = $quoteProduct->getWinners();
+            if(is_null($winners))
+                $winners = $quoteProduct->calculateWinners()
             /** @var QuoteSupplier $quoteSupplier */
-            foreach($quoteProduct->getWinners() as $quoteSupplier) {
+            foreach($winners as $quoteSupplier) {
                 if($quoteSupplier->getRepresentative()->getSupplier()->isRCA()) {
                     $usableQuoteSupplier = $quoteSupplier;
                     break;
