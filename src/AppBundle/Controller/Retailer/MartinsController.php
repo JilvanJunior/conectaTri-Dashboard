@@ -232,14 +232,14 @@ class MartinsController extends Controller
 
         if(is_null($usableQuoteSupplier)) {
             $this->addFlash(
-                'alert',
+                'warning',
                 'Martins não é vencedor de nenhum produto!'
             );
             return $this->redirectToRoute('acompanhar_cotacao', ['id' => $idQuote]);
         }
         if($total < $usableQuoteSupplier->getRepresentative()->getSupplier()->getMinimumValue()) {
             $this->addFlash(
-                'alert',
+                'warning',
                 'Valor mínimo não respeitado!'
             );
             return $this->redirectToRoute('acompanhar_cotacao', ['id' => $idQuote]);
